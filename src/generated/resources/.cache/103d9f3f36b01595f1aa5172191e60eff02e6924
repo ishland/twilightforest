@@ -1,4 +1,4 @@
-// 1.21.1	2024-10-14T15:18:32.219312658	Registries
+// 1.21.1	2024-10-15T02:33:32.127678962	Registries
 9089ada9ce06fd30adf8b10e50f02233c7d5a76e data/minecraft/twilight/wood_palettes/acacia.json
 dca1ef01d0df4e956fd414782de57c25dfddd290 data/minecraft/twilight/wood_palettes/birch.json
 01becb45438b7f2bfdc77baba72bc986341510c8 data/minecraft/twilight/wood_palettes/crimson.json
@@ -310,7 +310,7 @@ c3fc67e79de094ff946f1ec84d4fd4ab92f5ec67 data/twilightforest/worldgen/placed_fea
 217561cafb8d2b0f498b72a07463ed85b50bf6cb data/twilightforest/worldgen/placed_feature/small_diorite.json
 55de6f980fe917425a411568dbae60ca2ea2caa2 data/twilightforest/worldgen/placed_feature/small_granite.json
 38028922ed95c74e215e3d73b03aba6f35d7bcf5 data/twilightforest/worldgen/placed_feature/smoker.json
-d0914a5b0f3a2ee56393aee240d07ef50d8cd0c0 data/twilightforest/worldgen/placed_feature/snow_under_trees.json
+ae12871905d6b984a4b742b87fe7973645c15a9d data/twilightforest/worldgen/placed_feature/snow_under_trees.json
 94c65233419c08cfb5f77cf4ca20233527ef30c7 data/twilightforest/worldgen/placed_feature/sparse_mushglooms.json
 ec487e589c0848f71eb9af87b55c15591514501e data/twilightforest/worldgen/placed_feature/spruce_fallen_log.json
 4208c165f5a2f75a47dffd8e133234648997c161 data/twilightforest/worldgen/placed_feature/stone_circle.json

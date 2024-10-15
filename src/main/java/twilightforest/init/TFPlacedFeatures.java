@@ -189,7 +189,7 @@ public class TFPlacedFeatures {
 		context.register(PLACED_WEBS, new PlacedFeature(features.getOrThrow(TFConfiguredFeatures.WEBS), ImmutableList.<PlacementModifier>builder().add(PlacementUtils.HEIGHTMAP_WORLD_SURFACE, CountPlacement.of(60), InSquarePlacement.spread(), BiomeFilter.biome()).build()));
 		context.register(PLACED_WOOD_ROOTS_SPREAD, new PlacedFeature(features.getOrThrow(TFConfiguredFeatures.WOOD_ROOTS_SPREAD), tfFeatureCheckArea(AvoidLandmarkModifier.checkUnderground(), 40, HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(0))).build()));
 
-		context.register(PLACED_SNOW_UNDER_TREES, new PlacedFeature(features.getOrThrow(TFConfiguredFeatures.SNOW_UNDER_TREES), ImmutableList.<PlacementModifier>builder().add(BiomeFilter.biome()).build()));
+		context.register(PLACED_SNOW_UNDER_TREES, new PlacedFeature(features.getOrThrow(TFConfiguredFeatures.SNOW_UNDER_TREES), ImmutableList.<PlacementModifier>builder().add(PlacementUtils.HEIGHTMAP_WORLD_SURFACE, BiomeFilter.biome()).build()));
 		context.register(PLACED_TF_OAK_FALLEN_LOG, new PlacedFeature(features.getOrThrow(TFConfiguredFeatures.TF_OAK_FALLEN_LOG), hollowLog(AvoidLandmarkModifier.checkSurface()).build()));
 		context.register(PLACED_CANOPY_FALLEN_LOG, new PlacedFeature(features.getOrThrow(TFConfiguredFeatures.CANOPY_FALLEN_LOG), hollowLog(AvoidLandmarkModifier.checkSurface()).build()));
 		context.register(PLACED_MANGROVE_FALLEN_LOG, new PlacedFeature(features.getOrThrow(TFConfiguredFeatures.MANGROVE_FALLEN_LOG), hollowLog(AvoidLandmarkModifier.checkSurface()).build()));
