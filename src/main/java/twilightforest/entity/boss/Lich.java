@@ -582,7 +582,6 @@ public class Lich extends BaseTFBoss {
 		// change position
 		this.teleportTo(destX, destY, destZ);
 
-		this.makeTeleportTrail(srcX, srcY, srcZ, destX, destY, destZ);
 		this.playSound(TFSounds.LICH_TELEPORT.get(), 0.75F, 0.75F);
 		this.gameEvent(GameEvent.TELEPORT);
 		if (this.level() instanceof ServerLevel serverLevel) serverLevel.broadcastEntityEvent(this, (byte)46);
@@ -624,32 +623,6 @@ public class Lich extends BaseTFBoss {
 				}
 			}
 
-			PacketDistributor.sendToPlayersTrackingEntity(this, particlePacket);
-		}
-	}
-
-	public void makeTeleportTrail(double srcX, double srcY, double srcZ, double destX, double destY, double destZ) {
-		if (true) return;
-		if (this.level() instanceof ServerLevel) {
-			// make particle trail
-			ParticlePacket particlePacket = new ParticlePacket();
-			if (!this.isShadowClone()) {
-				int particles = 128;
-				for (int i = 0; i < particles; i++) {
-					double trailFactor = i / (particles - 1.0D);
-					double tx = srcX + (destX - srcX) * trailFactor + (this.getRandom().nextDouble() - 0.5D) * this.getBbWidth() * 2D;
-					double ty = srcY + (destY - srcY) * trailFactor + this.getRandom().nextDouble() * this.getBbHeight();
-					double tz = srcZ + (destZ - srcZ) * trailFactor + (this.getRandom().nextDouble() - 0.5D) * this.getBbWidth() * 2D;
-					particlePacket.queueParticle(ColorParticleOption.create(TFParticleType.MAGIC_EFFECT.get(), 1.0F, 1.0F, 1.0F), false, tx, ty, tz, 0.0D, 0.0D, 0.0D);
-				}
-			}
-			ParticleOptions options = this.isShadowClone() ? ParticleTypes.SMOKE : TFParticleType.OMINOUS_FLAME.get();
-			for(int j = 0; j < 64; ++j) {
-				double x = this.getX((this.random.nextDouble() * this.random.nextDouble() * (this.random.nextBoolean() ? 1.0D : -1.0D)) * 1.5D);
-				double y = this.getY(this.random.nextDouble() * this.random.nextDouble() * 1.25D);
-				double z = this.getZ((this.random.nextDouble() * this.random.nextDouble() * (this.random.nextBoolean() ? 1.0D : -1.0D)) * 1.5D);
-				particlePacket.queueParticle(options, false, x, y, z, 0.0D, 0.0D, 0.0D);
-			}
 			PacketDistributor.sendToPlayersTrackingEntity(this, particlePacket);
 		}
 	}

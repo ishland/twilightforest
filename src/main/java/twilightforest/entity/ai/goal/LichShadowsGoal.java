@@ -128,8 +128,6 @@ public class LichShadowsGoal extends Goal {
 			newClone.setItemInHand(InteractionHand.MAIN_HAND, TFItems.TWILIGHT_SCEPTER.toStack());
 			newClone.setTeleportInvisibility(this.lich.getTeleportInvisibility());
 			this.lich.addClone(newClone.getUUID());
-			// make sparkles leading to it
-			this.lich.makeTeleportTrail(this.lich.getX(), this.lich.getY(), this.lich.getZ(), cloneSpot.x(), cloneSpot.y(), cloneSpot.z());
 		}
 	}
 
@@ -140,8 +138,6 @@ public class LichShadowsGoal extends Goal {
 				nearbyLich.addClone(this.lich.getUUID());
 
 				// animate our new linkage!
-				this.lich.makeTeleportTrail(this.lich.getX(), this.lich.getY(), this.lich.getZ(), nearbyLich.getX(), nearbyLich.getY(), nearbyLich.getZ());
-
 				this.lich.setTarget(nearbyLich.getTarget());
 				break;
 			}
