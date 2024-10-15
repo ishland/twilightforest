@@ -54,15 +54,13 @@ public class LichBolt extends TFThrowable {
 
 	@Override
 	public boolean hurt(DamageSource damagesource, float amount) {
-		super.hurt(damagesource, amount);
-
 		if (!this.level().isClientSide() && damagesource.getEntity() != null) {
+			super.hurt(damagesource, amount);
 			Vec3 vec3d = damagesource.getEntity().getLookAngle();
 			// reflect faster and more accurately
 			this.shoot(vec3d.x(), vec3d.y(), vec3d.z(), 1.5F, 0.1F);  // reflect faster and more accurately
 
-			if (damagesource.getDirectEntity() instanceof LivingEntity)
-				this.setOwner(damagesource.getDirectEntity());
+			if (damagesource.getDirectEntity() instanceof LivingEntity) this.setOwner(damagesource.getDirectEntity());
 
 			return true;
 		}
