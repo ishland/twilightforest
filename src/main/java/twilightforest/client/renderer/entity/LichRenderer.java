@@ -25,7 +25,7 @@ public class LichRenderer<T extends Lich, M extends LichModel<T>> extends Humano
 	@Nullable
 	@Override
 	protected RenderType getRenderType(T entity, boolean bodyVisible, boolean translucent, boolean glowing) {
-		if (entity.isShadowClone()) return TFRenderTypes.SHADOW_CLONE;
+		if (entity.isShadowClone() && bodyVisible) return TFRenderTypes.SHADOW_CLONE;
 		else return super.getRenderType(entity, bodyVisible, translucent, glowing);
 	}
 

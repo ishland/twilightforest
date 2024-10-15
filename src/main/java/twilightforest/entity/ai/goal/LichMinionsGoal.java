@@ -3,7 +3,9 @@ package twilightforest.entity.ai.goal;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -54,6 +56,7 @@ public class LichMinionsGoal extends Goal {
 
 	@Override
 	public void tick() {
+		if (this.lich.getTeleportInvisibility() > 0) return;
 		LivingEntity targetedEntity = this.lich.getTarget();
 		if (targetedEntity == null) return;
 		float dist = this.lich.distanceTo(targetedEntity);

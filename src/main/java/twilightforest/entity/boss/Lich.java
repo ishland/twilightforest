@@ -71,6 +71,7 @@ public class Lich extends BaseTFBoss {
 	protected static final EntityDataAccessor<Integer> SHIELD_STRENGTH = SynchedEntityData.defineId(Lich.class, EntityDataSerializers.INT);
 	protected static final EntityDataAccessor<Integer> MINIONS_LEFT = SynchedEntityData.defineId(Lich.class, EntityDataSerializers.INT);
 	protected static final EntityDataAccessor<Integer> ATTACK_TYPE = SynchedEntityData.defineId(Lich.class, EntityDataSerializers.INT);
+	protected static final EntityDataAccessor<Integer> TELEPORT_INVISIBILITY = SynchedEntityData.defineId(Lich.class, EntityDataSerializers.INT);
 
 	protected static final ItemParticleOption BONE_PARTICLE = new ItemParticleOption(ParticleTypes.ITEM, Items.BONE.getDefaultInstance());
 	public static final int MAX_ACTIVE_MINIONS = 3;
@@ -101,6 +102,7 @@ public class Lich extends BaseTFBoss {
 		this(TFEntities.LICH.get(), level);
 		this.setMasterUUID(otherLich.getUUID());
 		this.getBossBar().setVisible(false);
+		this.setRestrictionPoint(otherLich.getRestrictionPoint());
 	}
 
 	@Nullable
@@ -109,10 +111,10 @@ public class Lich extends BaseTFBoss {
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, @Nullable SpawnGroupData spawnGroupData) {
 		SpawnGroupData data = super.finalizeSpawn(level, difficulty, spawnType, spawnGroupData);
 		if (!this.isShadowClone()) {
-            this.setItemInHand(InteractionHand.MAIN_HAND, TFItems.FORTIFICATION_SCEPTER.toStack());
+			this.setItemInHand(InteractionHand.MAIN_HAND, TFItems.FORTIFICATION_SCEPTER.toStack());
 			this.playSound(TFSounds.SHIELD_ADD.get(), 1.5F, this.getVoicePitch());
 			this.swing(InteractionHand.MAIN_HAND);
-        }
+		}
 		return data;
 	}
 
@@ -134,6 +136,7 @@ public class Lich extends BaseTFBoss {
 		builder.define(SHIELD_STRENGTH, MAX_SHIELD_STRENGTH);
 		builder.define(MINIONS_LEFT, MAX_MINIONS_TO_SUMMON);
 		builder.define(ATTACK_TYPE, 0);
+		builder.define(TELEPORT_INVISIBILITY, 0);
 	}
 
 	@Override
@@ -153,6 +156,7 @@ public class Lich extends BaseTFBoss {
 
 			@Override
 			public void tick() {
+				if (Lich.this.getTeleportInvisibility() > 0) return;
 				if (Lich.this.getNavigation().getPath() == null || Lich.this.getNavigation().isStuck() || !Lich.this.getNavigation().getPath().canReach()) {
 					if (!Lich.this.teleportToSightOfEntity(Lich.this.getTarget())) Lich.this.teleportHome();
 				}
@@ -171,6 +175,7 @@ public class Lich extends BaseTFBoss {
 
 			@Override
 			public void tick() {
+				if (((Lich)this.mob).getTeleportInvisibility() > 0) return;
 				super.tick();
 				if (this.mob.getTarget() != null && !this.mob.isWithinMeleeAttackRange(this.mob.getTarget()) && this.mob.getNavigation().isDone()) {
 					this.mob.getNavigation().moveTo(this.mob.getTarget(), this.speedModifier);
@@ -236,6 +241,20 @@ public class Lich extends BaseTFBoss {
 	public void aiStep() {
 		super.aiStep();
 
+		int tpInvisibility = this.getTeleportInvisibility();
+		if (tpInvisibility > 0) {
+			if (this.getTarget() != null) {
+				this.getLookControl().setLookAt(this.getTarget());
+				this.getLookControl().tick();
+			}
+			this.setTeleportInvisibility(tpInvisibility - 1);
+			if (tpInvisibility - 1 <= 0) {
+				this.lichTeleportParticles(true);
+				this.playSound(TFSounds.LICH_TELEPORT.get(), 1.125F, 1.125F);
+			}
+			return;
+		}
+
 		if (this.isDeadOrDying()) return;
 
 		// determine the hand position
@@ -281,15 +300,15 @@ public class Lich extends BaseTFBoss {
 	public boolean isOutsideHomeRange(Vec3 pos) {
 		if (this.getRestrictionPoint() == null) return false;
 		BlockPos point = this.getRestrictionPoint().pos();
-        return point.distToCenterSqr(pos) > (this.getHomeRadius() * this.getHomeRadius()) || (this.getPhase() == 3 && this.getY() < point.below(3).getY());
-    }
+		return point.distToCenterSqr(pos) > (this.getHomeRadius() * this.getHomeRadius()) || (this.getPhase() == 3 && this.getY() < point.below(3).getY());
+	}
 
 	@Override
 	protected void customServerAiStep() {
 		super.customServerAiStep();
 
 		// Teleport home if we get too far away from it
-		if (this.isOutsideHomeRange(this.position())) this.teleportHome();
+		if (this.isOutsideHomeRange(this.position()) && this.getTeleportInvisibility() <= 0) this.teleportHome();
 
 		if (this.getAttackCooldown() > 0 && this.spawnTime <= 0) {
 			this.attackCooldown--;
@@ -318,6 +337,8 @@ public class Lich extends BaseTFBoss {
 
 	@Override
 	public boolean hurt(DamageSource src, float damage) {
+		if (this.getTeleportInvisibility() > 0 && !src.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) return false;
+
 		// if we're in a wall, teleport for gosh sakes
 		if (src.is(DamageTypes.IN_WALL) && this.getTarget() != null) {
 			this.teleportToSightOfEntity(this.getTarget());
@@ -479,6 +500,23 @@ public class Lich extends BaseTFBoss {
 	//-----------------------------------------//
 
 
+	@Override
+	public boolean isInvisible() {
+		return super.isInvisible() || this.getTeleportInvisibility() > 0 || (this.isShadowClone() && this.tickCount <= 10);
+	}
+
+	@Override
+	public ItemStack getMainHandItem() {
+		if (this.getTeleportInvisibility() > 0 && this.level().isClientSide) return ItemStack.EMPTY;
+		return super.getMainHandItem();
+	}
+
+	@Override
+	public boolean canBeSeenAsEnemy() {
+		if (this.getTeleportInvisibility() > 0) return false;
+		return super.canBeSeenAsEnemy();
+	}
+
 	public void teleportHome() {
 		if (this.getRestrictionPoint() != null) {
 			BlockPos pos = this.getRestrictionPoint().pos();
@@ -534,6 +572,8 @@ public class Lich extends BaseTFBoss {
 	 * Does not check that the teleport destination is valid, we just go there
 	 */
 	private void teleportToNoChecks(double destX, double destY, double destZ) {
+		this.lichTeleportParticles(false);
+
 		// save original position
 		double srcX = this.getX();
 		double srcY = this.getY();
@@ -543,9 +583,10 @@ public class Lich extends BaseTFBoss {
 		this.teleportTo(destX, destY, destZ);
 
 		this.makeTeleportTrail(srcX, srcY, srcZ, destX, destY, destZ);
-		this.playSound(TFSounds.LICH_TELEPORT.get(), 1.0F, 1.0F);
+		this.playSound(TFSounds.LICH_TELEPORT.get(), 0.75F, 0.75F);
 		this.gameEvent(GameEvent.TELEPORT);
 		if (this.level() instanceof ServerLevel serverLevel) serverLevel.broadcastEntityEvent(this, (byte)46);
+		this.setTeleportInvisibility(20);
 
 		// sometimes we need to do this
 		this.jumping = false;
@@ -561,7 +602,34 @@ public class Lich extends BaseTFBoss {
 		super.handleEntityEvent(b);
 	}
 
+	public void lichTeleportParticles(boolean appear) {
+		if (this.level() instanceof ServerLevel) {
+			ParticlePacket particlePacket = new ParticlePacket();
+
+			if (appear) {
+				for(int j = 0; j < 64; ++j) {
+					Vec3 pos = this.position().add(0.0D, this.getBbHeight() * 0.5D, 0.0D);
+					ParticleOptions options = this.isShadowClone() ? ParticleTypes.SMOKE : TFParticleType.OMINOUS_FLAME.get();
+					double x = this.getX(this.random.nextDouble() * this.random.nextDouble() * (this.random.nextBoolean() ? 1.0D : -1.0D));
+					double y =  this.getY(this.random.nextDouble());
+					double z = this.getZ(this.random.nextDouble() * this.random.nextDouble() * (this.random.nextBoolean() ? 1.0D : -1.0D));
+					particlePacket.queueParticle(options, false, x, y, z, (x - pos.x) * 0.0625D, (y - pos.y) * 0.0625D, (z - pos.z) * 0.0625D);
+				}
+			} else {
+				for(int j = 0; j < (!this.isShadowClone() ? 128 : 64); ++j) {
+					double x = this.getX((this.random.nextDouble() * this.random.nextDouble() * (this.random.nextBoolean() ? 1.0D : -1.0D)) * 2.0D);
+					double y =  this.getY(this.random.nextDouble() * 1.125D);
+					double z = this.getZ((this.random.nextDouble() * this.random.nextDouble() * (this.random.nextBoolean() ? 1.0D : -1.0D)) * 2.0D);
+					particlePacket.queueParticle(ParticleTypes.SMOKE, false, x, y, z, 0.0D, 0.0D, 0.0D);
+				}
+			}
+
+			PacketDistributor.sendToPlayersTrackingEntity(this, particlePacket);
+		}
+	}
+
 	public void makeTeleportTrail(double srcX, double srcY, double srcZ, double destX, double destY, double destZ) {
+		if (true) return;
 		if (this.level() instanceof ServerLevel) {
 			// make particle trail
 			ParticlePacket particlePacket = new ParticlePacket();
@@ -719,6 +787,14 @@ public class Lich extends BaseTFBoss {
 
 	public void setNextAttackType(int attackType) {
 		this.getEntityData().set(ATTACK_TYPE, attackType);
+	}
+
+	public int getTeleportInvisibility() {
+		return this.getEntityData().get(TELEPORT_INVISIBILITY);
+	}
+
+	public void setTeleportInvisibility(int attackType) {
+		this.getEntityData().set(TELEPORT_INVISIBILITY, attackType);
 	}
 
 	public int getBabyMinionsSummoned() {

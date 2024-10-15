@@ -1,5 +1,6 @@
 package twilightforest.entity.ai.goal;
 
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -13,8 +14,10 @@ import twilightforest.entity.projectile.LichBomb;
 import twilightforest.init.TFAttributes;
 import twilightforest.init.TFItems;
 
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.UUID;
 
 public class LichShadowsGoal extends Goal {
 
@@ -43,19 +46,24 @@ public class LichShadowsGoal extends Goal {
 
 	@Override
 	public void tick() {
-		if (this.lich.isShadowClone())
-			this.checkForMaster();
+		if (!this.lich.isShadowClone()) {
+			this.getClones().forEach(clone -> {
+				clone.setAttackCooldown(this.lich.getAttackCooldown());
+				clone.setTeleportInvisibility(this.lich.getTeleportInvisibility());
+			});
+		}
+
+		if (this.lich.getTeleportInvisibility() > 0) return;
+		if (this.lich.isShadowClone()) this.checkForMaster();
+
 		LivingEntity targetedEntity = this.lich.getTarget();
-		if (targetedEntity == null)
-			return;
+		if (targetedEntity == null) return;
 		float dist = this.lich.distanceTo(targetedEntity);
 
-		if (this.lich.getAttackCooldown() == 60) {
+		if (this.lich.getAttackCooldown() == 60 && !this.lich.isShadowClone()) {
 			this.lich.teleportToSightOfEntity(targetedEntity);
-
-			if (!this.lich.isShadowClone()) {
-				this.checkAndSpawnClones();
-			}
+			this.getClones().forEach(clone -> clone.teleportToSightOfEntity(targetedEntity));
+			this.checkAndSpawnClones();
 		}
 
 		if (this.lich.getSensing().hasLineOfSight(targetedEntity) && this.lich.getAttackCooldown() == 0 && dist < 20F) {
@@ -74,6 +82,18 @@ public class LichShadowsGoal extends Goal {
 			}
 			this.lich.setAttackCooldown(100);
 		}
+	}
+
+	protected List<Lich> getClones() {
+		if (!this.lich.isShadowClone()) {
+			List<Lich> clones = new ArrayList<>();
+			if (this.lich.level() instanceof ServerLevel server) {
+				for (UUID uuid : this.lich.getClones()) {
+					if (server.getEntity(uuid) instanceof Lich clone && clone.getMaster() == this.lich) clones.add(clone);
+				}
+			}
+			return clones;
+		} else return List.of();
 	}
 
 	private void checkForMaster() {
@@ -106,6 +126,7 @@ public class LichShadowsGoal extends Goal {
 			newClone.setTarget(targetedEntity);
 			newClone.setAttackCooldown(60 + this.lich.getRandom().nextInt(3) - this.lich.getRandom().nextInt(3));
 			newClone.setItemInHand(InteractionHand.MAIN_HAND, TFItems.TWILIGHT_SCEPTER.toStack());
+			newClone.setTeleportInvisibility(this.lich.getTeleportInvisibility());
 			this.lich.addClone(newClone.getUUID());
 			// make sparkles leading to it
 			this.lich.makeTeleportTrail(this.lich.getX(), this.lich.getY(), this.lich.getZ(), cloneSpot.x(), cloneSpot.y(), cloneSpot.z());

@@ -44,6 +44,7 @@ public class LichAbsorbMinionsGoal extends Goal {
 
 	@Override
 	public void tick() {
+		if (this.lich.getTeleportInvisibility() > 0) return;
 		super.tick();
 		if (this.lich.getScepterTimeLeft() > 0) return;
 
