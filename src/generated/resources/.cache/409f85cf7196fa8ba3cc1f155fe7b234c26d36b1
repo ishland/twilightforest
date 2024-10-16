@@ -1,4 +1,4 @@
-// 1.21.1	2024-10-16T14:00:16.734999297	TwilightForest blockstates and block models
+// 1.21.1	2024-10-16T14:28:31.349210224	TwilightForest blockstates and block models
 cab88029518a1647ec691d136328ed93c18108be assets/twilightforest/blockstates/acacia_banister.json
 9472090eea384d675fee73a90ed033b799c88820 assets/twilightforest/blockstates/alpha_yeti_boss_spawner.json
 94ee00eebd82061338b6db439a84b3fdf98f3942 assets/twilightforest/blockstates/alpha_yeti_trophy.json
@@ -377,7 +377,7 @@ e57513a7c02114a127186bea4444ab3348b079ac assets/twilightforest/blockstates/time_
 0539660a59032d24e2bab59084c7e5c66232103a assets/twilightforest/blockstates/time_fence.json
 2c7896adf0ed7a88bc056156c4b469379b5634aa assets/twilightforest/blockstates/time_fence_gate.json
 874c1ec509758729e97536eace0c5891612ab66d assets/twilightforest/blockstates/time_hanging_sign.json
-5e5f52ebbefcb264bece9abe7a673fa4cafd7b53 assets/twilightforest/blockstates/time_leaves.json
+4691adb21b87d5329bfcd190d3863c4dc9b63e6f assets/twilightforest/blockstates/time_leaves.json
 46816c67d770f839e0167d730277b1e967513fa4 assets/twilightforest/blockstates/time_log.json
 b445383eba8b557d597199a044f2bc43d8ac6217 assets/twilightforest/blockstates/time_log_core.json
 3ab0b14ef5792216dd0db7b36e58fadd558b2bb5 assets/twilightforest/blockstates/time_planks.json

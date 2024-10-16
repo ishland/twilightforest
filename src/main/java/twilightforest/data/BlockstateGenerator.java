@@ -982,7 +982,7 @@ public class BlockstateGenerator extends BlockModelBuilders {
 
 	// TODO: make bottom and top texture rotations random
 	private void timeLeaves() {
-		magicLeaves(TFBlocks.TIME_LEAVES, 180);
+		magicLeaves(TFBlocks.TIME_LEAVES, 0);
 	}
 
 	private void transformationLeaves() {
