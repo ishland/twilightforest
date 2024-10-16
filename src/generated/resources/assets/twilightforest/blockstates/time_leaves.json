@@ -1,10 +1,8 @@
 {
-  "multipart": [
-    {
-      "apply": {
-        "model": "twilightforest:block/time_leaves",
-        "x": 180
-      }
+  "variants": {
+    "": {
+      "model": "twilightforest:block/time_leaves",
+      "x": 180
     }
-  ]
+  }
 }
