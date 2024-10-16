@@ -418,6 +418,17 @@ public class Lich extends BaseTFBoss {
 		if (this.level() instanceof ServerLevel server) {
 			for (UUID uuid : this.getClones()) {
 				if (server.getEntity(uuid) instanceof Lich clone && clone.getMaster() == this) {
+					ParticlePacket particlePacket = new ParticlePacket();
+
+					for(int j = 0; j < 64 * 2; ++j) {
+						double x = clone.getX((this.random.nextDouble() * this.random.nextDouble() * (this.random.nextBoolean() ? 1.0D : -1.0D)) * 1.5D);
+						double y = clone.getY(this.random.nextDouble() * this.random.nextDouble() * 1.25D);
+						double z = clone.getZ((this.random.nextDouble() * this.random.nextDouble() * (this.random.nextBoolean() ? 1.0D : -1.0D)) * 1.5D);
+						particlePacket.queueParticle(ParticleTypes.SMOKE, false, x, y, z, 0.0D, 0.0D, 0.0D);
+					}
+
+					PacketDistributor.sendToPlayersTrackingEntity(this, particlePacket);
+
 					clone.remove(Entity.RemovalReason.DISCARDED);
 				}
 			}
