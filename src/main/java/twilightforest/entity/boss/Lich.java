@@ -238,6 +238,15 @@ public class Lich extends BaseTFBoss {
 
 		if (this.isDeadOrDying()) return;
 
+		if (this.getPhase() == 3) {
+            this.level().addParticle(TFParticleType.ANGRY_LICH.get(),
+                this.getX() + this.getRandom().nextFloat() * this.getBbWidth() * 2.0F - this.getBbWidth(),
+                this.getY() + 1.0D + this.getRandom().nextFloat() * this.getBbHeight(),
+                this.getZ() + this.getRandom().nextFloat() * this.getBbWidth() * 2.0F - this.getBbWidth(),
+                this.getRandom().nextGaussian() * 0.02D, this.getRandom().nextGaussian() * 0.02D, this.getRandom().nextGaussian() * 0.02D);
+			return;
+        }
+
 		// determine the hand position
 		float angle = ((this.yBodyRot * Mth.PI) / 180F);
 
@@ -269,13 +278,6 @@ public class Lich extends BaseTFBoss {
 
 			this.level().addParticle(ColorParticleOption.create(TFParticleType.MAGIC_EFFECT.get(), red, grn, blu), dx + (this.getRandom().nextGaussian() * 0.025), dy + (this.getRandom().nextGaussian() * 0.025), dz + (this.getRandom().nextGaussian() * 0.025), 0.0F, 0.0F, 0.0F);
 		}
-
-		if (this.getPhase() == 3)
-			this.level().addParticle(TFParticleType.ANGRY_LICH.get(),
-				this.getX() + this.getRandom().nextFloat() * this.getBbWidth() * 2.0F - this.getBbWidth(),
-				this.getY() + 1.0D + this.getRandom().nextFloat() * this.getBbHeight(),
-				this.getZ() + this.getRandom().nextFloat() * this.getBbWidth() * 2.0F - this.getBbWidth(),
-				this.getRandom().nextGaussian() * 0.02D, this.getRandom().nextGaussian() * 0.02D, this.getRandom().nextGaussian() * 0.02D);
 	}
 
 	public boolean isOutsideHomeRange(Vec3 pos) {
