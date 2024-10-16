@@ -73,4 +73,9 @@ public class LichRenderer<T extends Lich, M extends LichModel<T>> extends Humano
 	public ResourceLocation getTextureLocation(Lich entity) {
 		return TEXTURE;
 	}
+
+	@Override
+	protected float getShadowRadius(T entity) {
+		return entity.isShadowClone() || entity.deathTime > Lich.DEATH_ANIMATION_POINT_A ? 0.0F : super.getShadowRadius(entity);
+	}
 }
