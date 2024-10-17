@@ -1,4 +1,4 @@
-// 1.21.1	2024-10-14T20:59:00.8184556	Particle Descriptions
+// 1.21.1	2024-10-17T19:46:58.6179426	Particle Descriptions
 c12182d4cde474d99ce54a632c05e9799d305508 assets/twilightforest/particles/angry_lich.json
 ce403794cbcc5ec5f72b853a8c0a2f0608fadd0f assets/twilightforest/particles/annihilate.json
 21cdc0ed30720178ebd7bd11d6d92e9063330b1c assets/twilightforest/particles/cloud_puff.json
@@ -21,4 +21,5 @@ e3bcad650b1e2acd0f025c6432eba365315f6fa8 assets/twilightforest/particles/ominous
 751968af9c8083c018515fe4180948027e85008a assets/twilightforest/particles/snow_warning.json
 a30e84a77731c3583936efa8471c6c8d943d9fe2 assets/twilightforest/particles/sorting_particle.json
 a30e84a77731c3583936efa8471c6c8d943d9fe2 assets/twilightforest/particles/transformation_particle.json
+191b4171565e83183eae93e63194e50d90547669 assets/twilightforest/particles/twilight_orb.json
 5c3da6f955c278a9dde87ab1ea25c37b23d81af0 assets/twilightforest/particles/wandering_firefly.json

@@ -12,6 +12,7 @@ public class MagicEffectParticle extends SpellParticle {
 		super(level, x, y, z, xSpeed, ySpeed, zSpeed, sprites);
 	}
 
+	@Override
 	public int getLightColor(float partialTick) {
 		return 0xF000F0;
 	}

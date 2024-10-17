@@ -60,4 +60,5 @@ public class TFParticleType {
 		}
 	});
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> ANGRY_LICH = PARTICLE_TYPES.register("angry_lich", () -> new SimpleParticleType(false));
+	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> TWILIGHT_ORB = PARTICLE_TYPES.register("twilight_orb", () -> new SimpleParticleType(false));
 }
