@@ -54,7 +54,7 @@ public class LichRenderer<T extends Lich, M extends LichModel<T>> extends Humano
 		stack.scale(1.125F, 1.125F, 1.125F);
 		if (entity.deathTime > 0) {
 			if (entity.deathTime > Lich.DEATH_ANIMATION_POINT_A) {
-				stack.translate(0.0D, -1.8D * Math.pow(Math.min(((float) (entity.deathTime - Lich.DEATH_ANIMATION_POINT_A) + partialTicks) * 0.05D, 1.0D), 3.0D), 0.0D);
+				stack.translate(0.0D, -1.8D * Math.pow(Math.min(((float) (entity.deathTime - Lich.DEATH_ANIMATION_POINT_A) + partialTicks) / (float) (Lich.DEATH_ANIMATION_POINT_B - Lich.DEATH_ANIMATION_POINT_A), 1.0D), 3.0D), 0.0D);
 			} else {
 				float time = (float) entity.deathTime + partialTicks;
 				stack.translate(Math.sin(time * time) * 0.01D, 0.0D, Math.cos(time * time) * 0.01D);

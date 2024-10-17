@@ -3,6 +3,7 @@ package twilightforest.client.model.entity;
 import com.google.common.collect.Iterables;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -78,7 +79,6 @@ public class LichModel<T extends Lich> extends HumanoidModel<T> implements Troph
 	}
 
 	@Override
-
 	public void renderToBuffer(PoseStack stack, VertexConsumer builder, int light, int overlay, int color) {
 		if (!this.shadowClone) {
 			super.renderToBuffer(stack, builder, light, overlay, color);
@@ -98,7 +98,13 @@ public class LichModel<T extends Lich> extends HumanoidModel<T> implements Troph
 
 	@Override
 	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-		limbSwingAmount *= 0.75F;
+		if (entity.isDeadOrDying() && entity.deathTime < Lich.DEATH_ANIMATION_POINT_A) {
+			float partialTicks = Minecraft.getInstance().getTimer().getGameTimeDeltaTicks();
+			limbSwingAmount = entity.walkAnimation.speed(partialTicks);
+			limbSwing = entity.walkAnimation.position(partialTicks);
+			limbSwingAmount *= 1.5F;
+			if (limbSwingAmount > 1.0F) limbSwingAmount = 1.0F;
+		} else limbSwingAmount *= 0.75F;
 		this.shadowClone = entity.isShadowClone();
 		super.setupAnim(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
 
@@ -144,7 +150,7 @@ public class LichModel<T extends Lich> extends HumanoidModel<T> implements Troph
 			this.rightArm.xRot += -Mth.HALF_PI * 0.75F;
 		}
 
-		boolean flag = entity.deathTime > 50;
+		boolean flag = entity.deathTime > Lich.DEATH_ANIMATION_POINT_A;
 		this.body.skipDraw = flag;
 		this.leftArm.skipDraw = flag;
 		this.rightArm.skipDraw = flag;
