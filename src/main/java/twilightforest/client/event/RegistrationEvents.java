@@ -7,9 +7,7 @@ import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.FlameParticle;
-import net.minecraft.client.particle.Particle;
-import net.minecraft.client.particle.ParticleEngine;
+import net.minecraft.client.particle.*;
 import net.minecraft.client.renderer.DimensionSpecialEffects;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
@@ -544,7 +542,8 @@ public class RegistrationEvents {
 		event.registerSpriteSet(TFParticleType.CLOUD_PUFF.get(), CloudPuffParticle.Factory::new);
 		event.registerSpriteSet(TFParticleType.MAGIC_EFFECT.get(), MagicEffectParticle.Factory::new);
 		event.registerSpriteSet(TFParticleType.ANGRY_LICH.get(), AngryLichParticle.Factory::new);
-		event.registerSpriteSet(TFParticleType.TWILIGHT_ORB.get(), CustomTextureParticle.Factory::new);
+		event.registerSpriteSet(TFParticleType.TWILIGHT_ORB.get(), (SpriteSet sprite) -> new CustomTextureParticle.Factory(sprite, true));
+		event.registerSpriteSet(TFParticleType.SHIELD_BREAK.get(), CustomTextureParticle.ShieldBreak::new);
 	}
 
 	private static void registerClientExtensions(RegisterClientExtensionsEvent event) {

@@ -52,6 +52,7 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.block.LightableBlock;
+import twilightforest.components.entity.FortificationShieldAttachment;
 import twilightforest.data.tags.DamageTypeTagGenerator;
 import twilightforest.entity.ai.goal.*;
 import twilightforest.entity.monster.LichMinion;
@@ -345,6 +346,7 @@ public class Lich extends BaseTFBoss {
 					int newShieldStrength = this.getShieldStrength() - 1;
 					this.setShieldStrength(newShieldStrength);
 					float volume = 1.5F;
+					FortificationShieldAttachment.addShieldBreakParticles(src, this);
 					if (newShieldStrength < 6) volume += 0.25F * (6 - newShieldStrength);
 					if (newShieldStrength == 0) volume += 0.5F;
 					this.playSound(TFSounds.SHIELD_BREAK.get(), volume, this.getVoicePitch() * 1.25F);
@@ -421,7 +423,7 @@ public class Lich extends BaseTFBoss {
 				if (server.getEntity(uuid) instanceof Lich clone && clone.getMaster() == this) {
 					ParticlePacket particlePacket = new ParticlePacket();
 
-					for(int j = 0; j < 64 * 2; ++j) {
+					for(int j = 0; j < 128; ++j) {
 						double x = clone.getX((this.random.nextDouble() * this.random.nextDouble() * (this.random.nextBoolean() ? 1.0D : -1.0D)) * 1.5D);
 						double y = clone.getY(this.random.nextDouble() * this.random.nextDouble() * 1.25D);
 						double z = clone.getZ((this.random.nextDouble() * this.random.nextDouble() * (this.random.nextBoolean() ? 1.0D : -1.0D)) * 1.5D);
