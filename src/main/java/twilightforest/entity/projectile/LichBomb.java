@@ -5,9 +5,6 @@ import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.projectile.ItemSupplier;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
@@ -15,7 +12,7 @@ import twilightforest.entity.boss.Lich;
 import twilightforest.init.TFDamageTypes;
 import twilightforest.init.TFEntities;
 
-public class LichBomb extends TFThrowable implements ItemSupplier {
+public class LichBomb extends TFThrowable {
 
 	public LichBomb(EntityType<? extends LichBomb> type, Level world) {
 		super(type, world);
@@ -98,10 +95,5 @@ public class LichBomb extends TFThrowable implements ItemSupplier {
 			return;
 		}
 		this.explode();
-	}
-
-	@Override
-	public ItemStack getItem() {
-		return new ItemStack(Items.MAGMA_CREAM);
 	}
 }
