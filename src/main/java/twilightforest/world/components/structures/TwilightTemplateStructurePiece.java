@@ -30,8 +30,8 @@ public abstract class TwilightTemplateStructurePiece extends TemplateStructurePi
 	private final BoundingBox originalBox;
 
 	@SuppressWarnings("this-escape")
-	public TwilightTemplateStructurePiece(StructurePieceType structurePieceType, CompoundTag compoundTag, StructurePieceSerializationContext ctx, StructurePlaceSettings rl2SettingsFunction) {
-		super(structurePieceType, compoundTag, ctx.structureTemplateManager(), rl -> rl2SettingsFunction);
+	public TwilightTemplateStructurePiece(StructurePieceType structurePieceType, CompoundTag compoundTag, StructurePieceSerializationContext ctx, StructurePlaceSettings placeSettings) {
+		super(structurePieceType, compoundTag, ctx.structureTemplateManager(), rl -> placeSettings);
 		this.rotation = this.getRotation();
 		this.mirror = this.getMirror();
 
