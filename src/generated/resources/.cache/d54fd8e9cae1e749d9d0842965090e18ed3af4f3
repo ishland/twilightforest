@@ -1,4 +1,4 @@
-// 1.21.1	2024-08-11T11:15:17.188964728	Tags for minecraft:damage_type mod id twilightforest
+// 1.21.1	2024-10-20T00:07:48.3778609	Tags for minecraft:damage_type mod id twilightforest
 e871224cfaf3f71ec4cef5455688114b0d13ee16 data/minecraft/tags/damage_type/always_most_significant_fall.json
 addc08f14bbae216b52a4e7f153141d2a3ba1788 data/minecraft/tags/damage_type/avoids_guardian_thorns.json
 de716354e5bc80f34cc2ed16156ac33f59bbbaea data/minecraft/tags/damage_type/bypasses_armor.json
@@ -8,6 +8,7 @@ e871224cfaf3f71ec4cef5455688114b0d13ee16 data/minecraft/tags/damage_type/bypasse
 91c5fbcde71b923440c0fea949bcca78dd841114 data/minecraft/tags/damage_type/bypasses_wolf_armor.json
 370292a3495d06a886b1248faac983a2151db90d data/minecraft/tags/damage_type/damages_helmet.json
 faa4e76aee9d404134f371135a067f96027f5347 data/minecraft/tags/damage_type/ignites_armor_stands.json
+dd51976ea379a65cd9379c29f35319399619c5e7 data/minecraft/tags/damage_type/is_explosion.json
 f953fcb77923694dc4d54294fa83a1bc6249f0fb data/minecraft/tags/damage_type/is_fall.json
 ab38770a322cd432744b981e69b631f22a899f48 data/minecraft/tags/damage_type/is_fire.json
 7bd7907458433004776bd5d3b1a35ac5dd9b7540 data/minecraft/tags/damage_type/is_projectile.json
