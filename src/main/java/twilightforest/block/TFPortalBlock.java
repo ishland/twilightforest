@@ -208,7 +208,7 @@ public class TFPortalBlock extends HalfTransparentBlock implements LiquidBlockCo
 		}
 
 		if (!good) {
-			level.levelEvent(2001, pos, Block.getId(state));
+			level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(state));
 			level.setBlock(pos, Blocks.WATER.defaultBlockState(), 0b11);
 		}
 	}

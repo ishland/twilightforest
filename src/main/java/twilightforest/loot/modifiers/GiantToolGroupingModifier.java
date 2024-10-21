@@ -9,6 +9,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
@@ -78,14 +79,14 @@ public class GiantToolGroupingModifier extends LootModifier {
 				attachment.setGiantBlockConversion(allTheSame ? 64 : 0); // NO IN-BETWEEN! Either the whole 64 get converted, or none do
 
 				event.setCanceled(true); // We cancel this event, since we want to break the block we're looking at first
-				player.level().levelEvent(2001, pos, Block.getId(state));
+				player.level().levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(state));
 				player.gameMode.destroyBlock(pos); // Brake the block we broke, for real this time
 
 				// Break all the other blocks, if they're the same type
 				for (BlockPos offsetPos : GiantBlock.getVolume(pos)) {
 					if (!offsetPos.equals(pos) && player.level().getBlockState(offsetPos).is(state.getBlock())) {
 						BlockPos newPos = new BlockPos(offsetPos); // This feels dumb, but without it, the client thinks the last block in the iterator is broken too
-						player.level().levelEvent(2001, newPos, Block.getId(player.level().getBlockState(newPos)));
+						player.level().levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, newPos, Block.getId(player.level().getBlockState(newPos)));
 						player.gameMode.destroyBlock(newPos);
 					}
 				}

@@ -16,6 +16,7 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DispenserBlock;
+import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.phys.AABB;
 import twilightforest.init.TFSounds;
 
@@ -53,7 +54,7 @@ public class FeatherFanDispenseBehavior extends DefaultDispenseItemBehavior {
 			source.level().playSound(null, source.pos(), TFSounds.FAN_WHOOSH.get(), SoundSource.BLOCKS, 1.0F + random.nextFloat(), random.nextFloat() * 0.7F + 0.3F);
 			this.fired = false;
 		} else {
-			source.level().levelEvent(1001, source.pos(), 0);
+			source.level().levelEvent(LevelEvent.SOUND_DISPENSER_FAIL, source.pos(), 0);
 		}
 	}
 

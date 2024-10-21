@@ -89,10 +89,10 @@ public class UberousSoilBlock extends Block implements BonemealableBlock {
 					//If we make it growable by bonemeal as well, just delete this if statement and update the appropriate method inside the mushgloom class
 					level.setBlockAndUpdate(pos, pushEntitiesUp(state, newState, level, pos));
 					mushgloomBlock.growMushroom(serverLevel, fromPos, above, serverLevel.random);
-					level.levelEvent(2005, fromPos, 0);
+					level.levelEvent(2005, fromPos, 0); // FIXME Nothing happens, used to call BoneMealItem.addGrowthParticles on client
 					return;
 				}
-				level.levelEvent(1505, fromPos, 15); // Bonemeal particles
+				level.levelEvent(LevelEvent.PARTICLES_AND_SOUND_PLANT_GROWTH, fromPos, 15); // Bonemeal particles
 			}
 
 
@@ -110,7 +110,7 @@ public class UberousSoilBlock extends Block implements BonemealableBlock {
 				}));
 			}
 
-			level.levelEvent(2005, fromPos, 0);
+			level.levelEvent(2005, fromPos, 0); // FIXME Nothing happens, used to call BoneMealItem.addGrowthParticles on client
 		} else if (fromPos.getY() + 1 == pos.getY()) {
 			BlockState below = level.getBlockState(fromPos);
 			if (!(below.getBlock() instanceof BonemealableBlock)) return;
@@ -124,10 +124,10 @@ public class UberousSoilBlock extends Block implements BonemealableBlock {
 					for (int i = 0; i < 15; i++) BoneMealItem.applyBonemeal(new ItemStack(Items.BONE_MEAL), serverLevel, fromPos, fakePlayer);
 				}));
 
-				level.levelEvent(1505, fromPos, 15); // Bonemeal particles
+				level.levelEvent(LevelEvent.PARTICLES_AND_SOUND_PLANT_GROWTH, fromPos, 15); // Bonemeal particles
 			}
 
-			level.levelEvent(2005, fromPos, 0);
+			level.levelEvent(2005, fromPos, 0); // FIXME Nothing happens, used to call BoneMealItem.addGrowthParticles on client
 		}
 	}
 

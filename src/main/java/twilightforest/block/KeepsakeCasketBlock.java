@@ -223,12 +223,12 @@ public class KeepsakeCasketBlock extends BaseEntityBlock implements BlockLogging
 					BlockPos blockpos = pos.relative(direction);
 					if (level.getFluidState(blockpos).is(FluidTags.WATER)) {
 						level.setBlockAndUpdate(pos, state.setValue(BlockLoggingEnum.MULTILOGGED, BlockLoggingEnum.OBSIDIAN));
-						level.levelEvent(1501, pos, 0);
+						level.levelEvent(LevelEvent.LAVA_FIZZ, pos, 0);
 					}
 
 					if (flag && level.getBlockState(blockpos).is(Blocks.BLUE_ICE)) {
 						level.setBlockAndUpdate(pos, state.setValue(BlockLoggingEnum.MULTILOGGED, BlockLoggingEnum.BASALT));
-						level.levelEvent(1501, pos, 0);
+						level.levelEvent(LevelEvent.LAVA_FIZZ, pos, 0);
 					}
 				}
 			}
@@ -238,7 +238,7 @@ public class KeepsakeCasketBlock extends BaseEntityBlock implements BlockLogging
 					BlockPos blockpos = pos.relative(direction);
 					if (level.getFluidState(blockpos).is(FluidTags.LAVA)) {
 						level.setBlockAndUpdate(pos, state.setValue(BlockLoggingEnum.MULTILOGGED, BlockLoggingEnum.STONE));
-						level.levelEvent(1501, pos, 0);
+						level.levelEvent(LevelEvent.LAVA_FIZZ, pos, 0);
 					}
 				}
 			}
