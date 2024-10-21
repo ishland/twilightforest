@@ -204,7 +204,7 @@ public class LowerGoblinKnight extends Monster {
 
 	@Override
 	public void handleEntityEvent(byte id) {
-		if (id == 5) {
+		if (id == EntityEvent.STOP_ATTACKING) {
 			ItemStack broken = new ItemStack(Items.IRON_CHESTPLATE);
 			this.breakItem(broken);
 			this.breakItem(broken);
