@@ -18,9 +18,10 @@ import twilightforest.init.TFSounds;
 
 public class GhastTearParticle extends TextureSheetParticle {
 
-	public GhastTearParticle(ClientLevel level, double x, double y, double z, Item item) {
+	public GhastTearParticle(ClientLevel level, double x, double y, double z, ItemStack stack) {
 		super(level, x, y, z, 0.0D, 0.0D, 0.0D);
-		this.sprite = Minecraft.getInstance().getItemRenderer().getItemModelShaper().getItemModel(item).getParticleIcon(ModelData.EMPTY);
+		var model = Minecraft.getInstance().getItemRenderer().getModel(stack, level, null, 0);
+		this.setSprite(model.overrides().findOverride(stack, level, null, 0).getParticleIcon(ModelData.EMPTY));
 		this.rCol = this.gCol = this.bCol = 1.0F;
 		this.quadSize = 2.0F;
 		this.gravity = 0.6F;
@@ -57,7 +58,7 @@ public class GhastTearParticle extends TextureSheetParticle {
 	public static class Factory implements ParticleProvider<SimpleParticleType> {
 		@Override
 		public Particle createParticle(SimpleParticleType type, ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
-			return new GhastTearParticle(level, x, y, z, Items.GHAST_TEAR);
+			return new GhastTearParticle(level, x, y, z, new ItemStack(Items.GHAST_TEAR));
 		}
 	}
 }

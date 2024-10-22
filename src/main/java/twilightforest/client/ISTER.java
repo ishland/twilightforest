@@ -128,7 +128,7 @@ public class ISTER extends BlockEntityWithoutLevelRenderer {
 
 				if (camera == ItemDisplayContext.GUI) {
 					ModelResourceLocation back = ModelResourceLocation.standalone(TwilightForestMod.prefix("item/" + ((AbstractTrophyBlock) block).getVariant().getTrophyType().getModelName()));
-					BakedModel modelBack = minecraft.getItemRenderer().getItemModelShaper().getModelManager().getModel(back);
+					BakedModel modelBack = minecraft.getModelManager().getModel(back);
 
 					Lighting.setupForFlatItems();
 					MultiBufferSource.BufferSource bufferSource = minecraft.renderBuffers().bufferSource();
@@ -148,10 +148,10 @@ public class ISTER extends BlockEntityWithoutLevelRenderer {
 					pose.translate(0.0F, 0.25F, 0.0F);
 					if (trophyBlock.getVariant() == BossVariant.UR_GHAST) pose.translate(0.0F, 0.5F, 0.0F);
 					if (trophyBlock.getVariant() == BossVariant.ALPHA_YETI) pose.translate(0.0F, -0.15F, 0.0F);
-					TrophyRenderer.render(null, 180.0F, trophy, variant, !minecraft.isPaused() ? ClientEvents.time + minecraft.getTimer().getRealtimeDeltaTicks() : 0, pose, buffers, light, camera);
+					TrophyRenderer.render(null, 180.0F, trophy, variant, !minecraft.isPaused() ? ClientEvents.time + minecraft.getDeltaTracker().getRealtimeDeltaTicks() : 0, pose, buffers, light, camera);
 					pose.popPose();
 				} else {
-					TrophyRenderer.render(null, 180.0F, trophy, variant, !minecraft.isPaused() ? ClientEvents.time + minecraft.getTimer().getRealtimeDeltaTicks() : 0, pose, buffers, light, camera);
+					TrophyRenderer.render(null, 180.0F, trophy, variant, !minecraft.isPaused() ? ClientEvents.time + minecraft.getDeltaTracker().getRealtimeDeltaTicks() : 0, pose, buffers, light, camera);
 				}
 
 			} else if (block instanceof KeepsakeCasketBlock) {
@@ -221,7 +221,7 @@ public class ISTER extends BlockEntityWithoutLevelRenderer {
 			pose.pushPose();
 			pose.scale(1.0F, -1.0F, -1.0F);
 			Material material = new Material(Sheets.SHIELD_SHEET, TwilightForestMod.prefix("entity/knightmetal_shield"));
-			VertexConsumer vertexconsumer = material.sprite().wrap(ItemRenderer.getFoilBufferDirect(buffers, this.shield.renderType(material.atlasLocation()), true, stack.hasFoil()));
+			VertexConsumer vertexconsumer = material.sprite().wrap(ItemRenderer.getFoilBuffer(buffers, this.shield.renderType(material.atlasLocation()), true, stack.hasFoil()));
 			this.shield.renderToBuffer(pose, vertexconsumer, light, overlay);
 			pose.popPose();
 		} else if (item instanceof WearableLichCrown && this.trophies.get(BossVariant.LICH) instanceof LichModel<?> lichModel) {

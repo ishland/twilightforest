@@ -15,6 +15,9 @@ import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.NoopRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
+import net.minecraft.client.renderer.entity.state.EntityRenderState;
+import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
+import net.minecraft.client.renderer.entity.state.PlayerRenderState;
 import net.minecraft.client.renderer.item.ClampedItemPropertyFunction;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.resources.model.BakedModel;
@@ -253,7 +256,7 @@ public class RegistrationEvents {
 
 		BakedModel oldModel = event.getModels().get(ModelResourceLocation.inventory(TwilightForestMod.prefix("trollsteinn")));
 		models.put(ModelResourceLocation.inventory(TwilightForestMod.prefix("trollsteinn")), new TrollsteinnModel(oldModel));
-		BakedModel defaultReactorDebrisModel = event.getModels().get(ModelResourceLocation.vanilla("netherrack", ""));
+		BakedModel defaultReactorDebrisModel = event.getModels().get(new ModelResourceLocation(ResourceLocation.withDefaultNamespace("netherrack"), ""));
 		models.put(new ModelResourceLocation(TwilightForestMod.prefix("reactor_debris"), ""), new ReactorDebrisModel(defaultReactorDebrisModel));
 	}
 
@@ -655,18 +658,18 @@ public class RegistrationEvents {
 		BakedMultiPartRenderers.bakeMultiPartRenderers(event.getContext());
 		for (EntityType<?> type : event.getEntityTypes()) {
 			var renderer = event.getRenderer(type);
-			if (renderer instanceof LivingEntityRenderer<?, ?> living) {
+			if (renderer instanceof LivingEntityRenderer<?, ?, ?> living) {
 				attachRenderLayers(living);
 			}
 		}
 
 		event.getSkins().forEach(renderer -> {
-			LivingEntityRenderer<Player, EntityModel<Player>> skin = event.getSkin(renderer);
+			LivingEntityRenderer<Player, PlayerRenderState, EntityModel<PlayerRenderState>> skin = event.getSkin(renderer);
 			attachRenderLayers(Objects.requireNonNull(skin));
 		});
 	}
 
-	private static <T extends LivingEntity, M extends EntityModel<T>> void attachRenderLayers(LivingEntityRenderer<T, M> renderer) {
+	private static <T extends LivingEntity, S extends LivingEntityRenderState, M extends EntityModel<S>> void attachRenderLayers(LivingEntityRenderer<T, S, M> renderer) {
 		renderer.addLayer(new ShieldLayer<>(renderer));
 		renderer.addLayer(new IceLayer<>(renderer));
 	}

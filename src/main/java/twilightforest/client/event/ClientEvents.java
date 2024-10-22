@@ -12,6 +12,8 @@ import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.client.renderer.debug.DebugRenderer;
+import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
@@ -283,9 +285,9 @@ public class ClientEvents {
 		}
 	}
 
-	private static void unrenderHeadWithTrophies(RenderLivingEvent.Pre<?, ?> event) {
-		ItemStack stack = event.getEntity().getItemBySlot(EquipmentSlot.HEAD);
-		boolean visible = !(stack.getItem() instanceof TrophyItem) && !(stack.getItem() instanceof SkullCandleItem) && !areCuriosEquipped(event.getEntity());
+	private static void unrenderHeadWithTrophies(RenderLivingEvent.Pre<?, ?, ?> event) {
+		ItemStack stack = event.getRenderState().headItem;
+		boolean visible = !(stack.getItem() instanceof TrophyItem) && !(stack.getItem() instanceof SkullCandleItem) && !areCuriosEquipped(event.getRenderState());
 		boolean isPlayer = event.getEntity() instanceof Player;
 		if (event.getRenderer().getModel() instanceof HeadedModel headedModel) {
 			headedModel.getHead().visible = visible && (!isPlayer || headedModel.getHead().visible);  // some mods like Better Combat can move player's head and hide it in the first person view
@@ -295,10 +297,10 @@ public class ClientEvents {
 		}
 	}
 
-	private static boolean areCuriosEquipped(LivingEntity entity) {
-		if (ModList.get().isLoaded("curios")) {
-			return CuriosCompat.isCurioEquippedAndVisible(entity, stack -> stack.getItem() instanceof TrophyItem) || CuriosCompat.isCurioEquippedAndVisible(entity, stack -> stack.getItem() instanceof SkullCandleItem);
-		}
+	private static boolean areCuriosEquipped(EntityRenderState entity) {
+//		if (ModList.get().isLoaded("curios")) {
+//			return CuriosCompat.isCurioEquippedAndVisible(entity, stack -> stack.getItem() instanceof TrophyItem) || CuriosCompat.isCurioEquippedAndVisible(entity, stack -> stack.getItem() instanceof SkullCandleItem);
+//		}
 		return false;
 	}
 
@@ -333,7 +335,19 @@ public class ClientEvents {
 				BlockPos offsetPos = new BlockPos(pos.getX() & ~0b11, pos.getY() & ~0b11, pos.getZ() & ~0b11);
 				VertexConsumer consumer = event.getMultiBufferSource().getBuffer(RenderType.lines());
 				Vec3 xyz = Vec3.atLowerCornerOf(offsetPos).subtract(event.getCamera().getPosition());
-				LevelRenderer.renderShape(event.getPoseStack(), consumer, GIANT_BLOCK, xyz.x(), xyz.y(), xyz.z(), 0.0F, 0.0F, 0.0F, 0.45F);
+				PoseStack.Pose pose = event.getPoseStack().last();
+				GIANT_BLOCK.forAllEdges((x1, y1, z1, x2, y2, z2) -> {
+						float f = (float)(x2 - x1);
+						float f1 = (float)(y2 - y1);
+						float f2 = (float)(z2 - z1);
+						float f3 = Mth.sqrt(f * f + f1 * f1 + f2 * f2);
+						f /= f3;
+						f1 /= f3;
+						f2 /= f3;
+						consumer.addVertex(pose, (float)(x1 + xyz.x()), (float)(y1 + xyz.y()), (float)(z1 + xyz.z())).setColor(0.0F, 0.0F, 0.0F, 0.45F).setNormal(pose, f, f1, f2);
+						consumer.addVertex(pose, (float)(x2 + xyz.x()), (float)(y2 + xyz.y()), (float)(z2 + xyz.z())).setColor(0.0F, 0.0F, 0.0F, 0.45F).setNormal(pose, f, f1, f2);
+					}
+				);
 			}
 		}
 	}
