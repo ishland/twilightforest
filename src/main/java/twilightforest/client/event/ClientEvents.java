@@ -18,7 +18,6 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.Style;
 import net.minecraft.server.packs.resources.ReloadableResourceManager;
 import net.minecraft.sounds.Music;
 import net.minecraft.sounds.Musics;
