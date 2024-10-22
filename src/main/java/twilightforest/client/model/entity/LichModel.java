@@ -1,6 +1,5 @@
 package twilightforest.client.model.entity;
 
-import com.google.common.collect.Iterables;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.HumanoidModel;
@@ -9,18 +8,14 @@ import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.item.ItemDisplayContext;
 import twilightforest.client.renderer.entity.LichRenderer;
-import twilightforest.entity.boss.Lich;
+import twilightforest.client.state.LichRenderState;
 
-import java.util.Arrays;
+public class LichModel extends HumanoidModel<LichRenderState> implements TrophyBlockModel {
 
-public class LichModel<T extends Lich> extends HumanoidModel<T> implements TrophyBlockModel {
-
-	private boolean shadowClone;
 	private final ModelPart collar;
 	private final ModelPart cloak;
 
@@ -78,7 +73,6 @@ public class LichModel<T extends Lich> extends HumanoidModel<T> implements Troph
 	}
 
 	@Override
-
 	public void renderToBuffer(PoseStack stack, VertexConsumer builder, int light, int overlay, int color) {
 		if (!this.shadowClone) {
 			super.renderToBuffer(stack, builder, light, overlay, color);
@@ -88,46 +82,38 @@ public class LichModel<T extends Lich> extends HumanoidModel<T> implements Troph
 	}
 
 	@Override
-	protected Iterable<ModelPart> bodyParts() {
-		if (this.shadowClone) {
-			return super.bodyParts();
-		} else {
-			return Iterables.concat(Arrays.asList(this.cloak, this.collar), super.bodyParts());
-		}
-	}
+	public void setupAnim(LichRenderState state) {
+		super.setupAnim(state);
+		this.cloak.skipDraw = state.isShadowClone;
+		this.collar.skipDraw = state.isShadowClone;
 
-	@Override
-	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-		this.shadowClone = entity.isShadowClone();
-		super.setupAnim(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
-
-		float ogSin = Mth.sin(this.attackTime * Mth.PI);
-		float otherSin = Mth.sin((1.0F - (1.0F - this.attackTime) * (1.0F - this.attackTime)) * Mth.PI);
-		if (entity.tickCount > 0 && !entity.isDeadOrDying()) {
+		float ogSin = Mth.sin(state.attackTime * Mth.PI);
+		float otherSin = Mth.sin((1.0F - (1.0F - state.attackTime) * (1.0F - state.attackTime)) * Mth.PI);
+		if (state.ageInTicks > 0 && state.deathTime <= 0) {
 			this.leftArm.zRot = 0.5F;
 			this.leftArm.yRot = 0.1F - ogSin * 0.6F;
 			this.leftArm.xRot = -3.141593F;
 			this.leftArm.xRot -= ogSin * 1.2F - otherSin * 0.4F;
-			this.leftArm.zRot -= Mth.cos(ageInTicks * 0.26F) * 0.15F + 0.05F;
-			this.leftArm.xRot -= Mth.sin(ageInTicks * 0.167F) * 0.15F;
+			this.leftArm.zRot -= Mth.cos(state.ageInTicks * 0.26F) * 0.15F + 0.05F;
+			this.leftArm.xRot -= Mth.sin(state.ageInTicks * 0.167F) * 0.15F;
 		} else {
 			this.leftArm.xRot = 0.0F;
 			this.leftArm.yRot = 0.0F;
 		}
 
-		if (!entity.getMainHandItem().isEmpty()) {
+		if (!state.getMainHandItem().isEmpty()) {
 			this.rightArm.zRot = 0.0F;
 			this.rightArm.yRot = -(0.1F - ogSin * 0.6F);
 			this.rightArm.xRot = -Mth.HALF_PI;
 			this.rightArm.xRot -= ogSin * 1.2F - otherSin * 0.4F;
-			this.rightArm.zRot += Mth.cos(ageInTicks * 0.26F) * 0.15F + 0.05F;
-			this.rightArm.xRot += Mth.sin(ageInTicks * 0.167F) * 0.15F;
+			this.rightArm.zRot += Mth.cos(state.ageInTicks * 0.26F) * 0.15F + 0.05F;
+			this.rightArm.xRot += Mth.sin(state.ageInTicks * 0.167F) * 0.15F;
 		} else {
 			this.rightArm.xRot = 0.0F;
 			this.rightArm.yRot = 0.0F;
 		}
 
-		boolean flag = entity.deathTime > 50;
+		boolean flag = state.deathTime > 50;
 		this.body.skipDraw = flag;
 		this.leftArm.skipDraw = flag;
 		this.rightArm.skipDraw = flag;

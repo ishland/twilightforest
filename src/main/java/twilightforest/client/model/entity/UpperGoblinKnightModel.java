@@ -10,9 +10,9 @@ import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.util.Mth;
 import twilightforest.client.JappaPackReloadListener;
-import twilightforest.entity.monster.UpperGoblinKnight;
+import twilightforest.client.state.UpperGoblinKnightRenderState;
 
-public class UpperGoblinKnightModel extends HumanoidModel<UpperGoblinKnight> {
+public class UpperGoblinKnightModel extends HumanoidModel<UpperGoblinKnightRenderState> {
 
 	private final ModelPart breastplate;
 	private final ModelPart shield;
@@ -175,43 +175,37 @@ public class UpperGoblinKnightModel extends HumanoidModel<UpperGoblinKnight> {
 	}
 
 	@Override
-	public void setupAnim(UpperGoblinKnight entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-		boolean hasShield = entity.hasShield();
-
-		this.head.yRot = netHeadYaw * Mth.DEG_TO_RAD;
-		this.head.xRot = headPitch * Mth.DEG_TO_RAD;
+	public void setupAnim(UpperGoblinKnightRenderState state) {
+		this.head.yRot = state.yRot * Mth.DEG_TO_RAD;
+		this.head.xRot = state.xRot * Mth.DEG_TO_RAD;
 		this.head.zRot = 0.0F;
 		this.hat.yRot = this.head.yRot;
 		this.hat.xRot = this.head.xRot;
 		this.hat.zRot = this.head.zRot;
 
-		this.rightArm.xRot = Mth.cos(limbSwing * 0.6662F + Mth.PI) * 2.0F * limbSwingAmount * 0.5F;
+		this.rightArm.xRot = Mth.cos(state.walkAnimationPos * 0.6662F + Mth.PI) * 2.0F * state.walkAnimationSpeed * 0.5F;
 
-		float leftConstraint = hasShield ? 0.2F : limbSwingAmount;
+		float leftConstraint = state.hasShield ? 0.2F : state.walkAnimationSpeed;
 
-		if (entity.isShieldDisabled()) {
-			this.leftArm.zRot = ((Mth.cos(entity.tickCount * 3.25F) * Mth.PI * 0.4F) * Mth.DEG_TO_RAD) - 0.4F;
+		if (state.isShieldDisabled) {
+			this.leftArm.zRot = ((Mth.cos(state.ageInTicks * 3.25F) * Mth.PI * 0.4F) * Mth.DEG_TO_RAD) - 0.4F;
 		} else {
 			this.leftArm.zRot = 0.0F;
 		}
 
-		this.leftArm.xRot = Mth.cos(limbSwing * 0.6662F) * 2.0F * leftConstraint * 0.5F;
+		this.leftArm.xRot = Mth.cos(state.walkAnimationPos * 0.6662F) * 2.0F * leftConstraint * 0.5F;
 		this.rightArm.zRot = 0.0F;
 
-		this.rightLeg.xRot = Mth.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
-		this.leftLeg.xRot = Mth.cos(limbSwing * 0.6662F + Mth.PI) * 1.4F * limbSwingAmount;
+		this.rightLeg.xRot = Mth.cos(state.walkAnimationPos * 0.6662F) * 1.4F * state.walkAnimationSpeed;
+		this.leftLeg.xRot = Mth.cos(state.walkAnimationPos * 0.6662F + Mth.PI) * 1.4F * state.walkAnimationSpeed;
 		this.rightLeg.yRot = 0.0F;
 		this.leftLeg.yRot = 0.0F;
 
-		if (this.riding) {
+		if (state.isPassenger) {
 			this.rightArm.xRot -= (Mth.PI / 5.0F);
 			this.leftArm.xRot -= (Mth.PI / 5.0F);
 			this.rightLeg.xRot = 0;
 			this.leftLeg.xRot = 0;
-		}
-
-		if (this.leftArmPose != ArmPose.EMPTY) {
-			this.leftArm.xRot = this.leftArm.xRot * 0.5F - (Mth.PI / 10.0F);
 		}
 
 		this.rightArm.xRot = this.rightArm.xRot * 0.5F - (Mth.PI / 10.0F);
@@ -219,14 +213,14 @@ public class UpperGoblinKnightModel extends HumanoidModel<UpperGoblinKnight> {
 		rightArm.xRot -= (Mth.PI * 0.66F);
 
 		// during swing move arm forward
-		if (entity.heavySpearTimer > 0) {
-			rightArm.xRot -= this.getArmRotationDuringSwing(60.0F - entity.heavySpearTimer) * Mth.DEG_TO_RAD;
+		if (state.spearTimer > 0) {
+			rightArm.xRot -= state.getArmRotationDuringSwing() * Mth.DEG_TO_RAD;
 		}
 
 		this.rightArm.yRot = 0.0F;
 		this.leftArm.yRot = 0.0F;
 
-		AnimationUtils.bobArms(this.rightArm, this.leftArm, ageInTicks);
+		AnimationUtils.bobArms(this.rightArm, this.leftArm, state.ageInTicks);
 
 		// shield arm points somewhat inward
 		this.leftArm.zRot = -this.leftArm.zRot;
@@ -234,32 +228,7 @@ public class UpperGoblinKnightModel extends HumanoidModel<UpperGoblinKnight> {
 		// fix shield so that it's always perpendicular to the floor
 		this.shield.xRot = Mth.TWO_PI - this.leftArm.xRot;
 
-		this.breastplate.visible = entity.hasArmor();
-		this.shield.visible = entity.hasShield();
-	}
-
-	private float getArmRotationDuringSwing(float attackTime) {
-		if (attackTime <= 10.0F) {
-			// rock back
-			return attackTime;
-		}
-		if (attackTime > 10.0F && attackTime <= 30.0F) {
-			// hang back
-			return 10.0F;
-		}
-		if (attackTime > 30.0F && attackTime <= 33.0F) {
-			// slam forward
-			return (attackTime - 30.0F) * -8.0F + 10.0F;
-		}
-		if (attackTime > 33.0F && attackTime <= 50.0F) {
-			// stay forward
-			return -15.0F;
-		}
-		if (attackTime > 50.0F && attackTime <= 60.0F) {
-			// back to normal
-			return (10.0F - (attackTime - 50.0F)) * -1.5F;
-		}
-
-		return 0.0F;
+		this.breastplate.visible = state.hasArmor;
+		this.shield.visible = state.hasShield;
 	}
 }

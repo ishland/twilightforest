@@ -4,11 +4,12 @@ import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
 import net.minecraft.util.Mth;
 import twilightforest.client.JappaPackReloadListener;
 import twilightforest.entity.monster.BlockChainGoblin;
 
-public class BlockChainGoblinModel<T extends BlockChainGoblin> extends FixedHumanoidModel<T> {
+public class BlockChainGoblinModel<T extends HumanoidRenderState> extends FixedHumanoidModel<T> {
 
 	public BlockChainGoblinModel(ModelPart root) {
 		super(root, 3.0F);
@@ -107,8 +108,8 @@ public class BlockChainGoblinModel<T extends BlockChainGoblin> extends FixedHuma
 	}
 
 	@Override
-	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-		super.setupAnim(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
+	public void setupAnim(T state) {
+		super.setupAnim(state);
 
 		this.rightArm.xRot += Mth.PI;
 		this.leftArm.xRot += Mth.PI;

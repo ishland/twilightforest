@@ -4,21 +4,16 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.ZombieModel;
 import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.renderer.entity.state.ZombieRenderState;
 import net.minecraft.util.FastColor;
 import net.minecraft.world.effect.MobEffects;
 import twilightforest.entity.monster.LichMinion;
 
-public class LichMinionModel extends ZombieModel<LichMinion> {
+public class LichMinionModel extends ZombieModel<ZombieRenderState> {
 
-	private boolean hasStrength;
 
 	public LichMinionModel(ModelPart root) {
 		super(root);
-	}
-
-	@Override
-	public void prepareMobModel(LichMinion entity, float limbSwing, float limbSwingAmount, float partialTicks) {
-		this.hasStrength = entity.getEffect(MobEffects.DAMAGE_BOOST) != null;
 	}
 
 	@Override

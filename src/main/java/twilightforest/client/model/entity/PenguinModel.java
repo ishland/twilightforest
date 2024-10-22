@@ -12,10 +12,11 @@ import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
 import net.minecraft.util.Mth;
 import twilightforest.entity.passive.Penguin;
 
-public class PenguinModel extends HumanoidModel<Penguin> {
+public class PenguinModel extends HumanoidModel<HumanoidRenderState> {
 
 	public PenguinModel(ModelPart root) {
 		super(root);
@@ -66,35 +67,14 @@ public class PenguinModel extends HumanoidModel<Penguin> {
 	}
 
 	@Override
-	public void renderToBuffer(PoseStack stack, VertexConsumer builder, int light, int overlay, int color) {
-		if (this.young) {
-			float f = 2.0F;
-			stack.pushPose();
-			stack.scale(1.0F / f, 1.0F / f, 1.0F / f);
-			stack.translate(0.0F, 1.5F, 0.0F);
-			this.headParts().forEach((renderer) -> renderer.render(stack, builder, light, overlay, color));
-			stack.popPose();
+	public void setupAnim(HumanoidRenderState state) {
+		this.head.xRot = state.xRot * Mth.DEG_TO_RAD;
+		this.head.yRot = state.yRot * Mth.DEG_TO_RAD;
 
-			stack.pushPose();
-			stack.scale(1.0F / f, 1.0F / f, 1.0F / f);
-			stack.translate(0.0F, 1.5F, 0.0F);
-			this.bodyParts().forEach((renderer) -> renderer.render(stack, builder, light, overlay, color));
-			stack.popPose();
-		} else {
-			this.headParts().forEach((renderer) -> renderer.render(stack, builder, light, overlay, color));
-			this.bodyParts().forEach((renderer) -> renderer.render(stack, builder, light, overlay, color));
-		}
-	}
+		this.rightLeg.xRot = Mth.cos(state.walkAnimationPos) * 0.7F * state.walkAnimationSpeed;
+		this.leftLeg.xRot = Mth.cos(state.walkAnimationPos + Mth.PI) * 0.7F * state.walkAnimationSpeed;
 
-	@Override
-	public void setupAnim(Penguin entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-		this.head.xRot = headPitch * Mth.DEG_TO_RAD;
-		this.head.yRot = netHeadYaw * Mth.DEG_TO_RAD;
-
-		this.rightLeg.xRot = Mth.cos(limbSwing) * 0.7F * limbSwingAmount;
-		this.leftLeg.xRot = Mth.cos(limbSwing + Mth.PI) * 0.7F * limbSwingAmount;
-
-		this.rightArm.zRot = ageInTicks;
-		this.leftArm.zRot = -ageInTicks;
+		this.rightArm.zRot = state.ageInTicks;
+		this.leftArm.zRot = -state.ageInTicks;
 	}
 }

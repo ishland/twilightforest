@@ -13,10 +13,10 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemDisplayContext;
 import twilightforest.client.JappaPackReloadListener;
 import twilightforest.client.renderer.entity.SnowQueenRenderer;
-import twilightforest.entity.boss.SnowQueen;
+import twilightforest.client.state.SnowQueenRenderState;
 import twilightforest.entity.boss.SnowQueen.Phase;
 
-public class SnowQueenModel extends HumanoidModel<SnowQueen> implements TrophyBlockModel {
+public class SnowQueenModel extends HumanoidModel<SnowQueenRenderState> implements TrophyBlockModel {
 
 	public SnowQueenModel(ModelPart root) {
 		super(root);
@@ -182,14 +182,13 @@ public class SnowQueenModel extends HumanoidModel<SnowQueen> implements TrophyBl
 	}
 
 	@Override
-	public void setupAnim(SnowQueen entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-		super.setupAnim(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
-
+	public void setupAnim(SnowQueenRenderState state) {
+		super.setupAnim(state);
 		// in beam phase, arms forwards
-		if (entity.getCurrentPhase() == Phase.BEAM) {
-			if (entity.isBreathing()) {
-				float f6 = Mth.sin(this.attackTime * Mth.PI);
-				float f7 = Mth.sin((1.0F - (1.0F - this.attackTime) * (1.0F - this.attackTime)) * Mth.PI);
+		if (state.phase == Phase.BEAM) {
+			if (state.breathing) {
+				float f6 = Mth.sin(state.attackTime * Mth.PI);
+				float f7 = Mth.sin((1.0F - (1.0F - state.attackTime) * (1.0F - state.attackTime)) * Mth.PI);
 				this.rightArm.zRot = 0.0F;
 				this.leftArm.zRot = 0.0F;
 				this.rightArm.yRot = -(0.1F - f6 * 0.6F);
@@ -198,7 +197,7 @@ public class SnowQueenModel extends HumanoidModel<SnowQueen> implements TrophyBl
 				this.leftArm.xRot = -Mth.HALF_PI;
 				this.rightArm.xRot -= f6 * 1.2F - f7 * 0.4F;
 				this.leftArm.xRot -= f6 * 1.2F - f7 * 0.4F;
-				AnimationUtils.bobArms(this.rightArm, this.leftArm, ageInTicks);
+				AnimationUtils.bobArms(this.rightArm, this.leftArm, state.ageInTicks);
 			} else {
 				// arms up
 				this.rightArm.xRot += Mth.PI;

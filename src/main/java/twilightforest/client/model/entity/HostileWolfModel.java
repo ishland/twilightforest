@@ -1,16 +1,16 @@
 package twilightforest.client.model.entity;
 
-import com.google.common.collect.ImmutableList;
-import net.minecraft.client.model.AgeableListModel;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
+import net.minecraft.client.renderer.entity.state.WolfRenderState;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import twilightforest.entity.monster.HostileWolf;
 
 import java.util.function.Function;
 
-public class HostileWolfModel<T extends HostileWolf> extends AgeableListModel<T> {
+public class HostileWolfModel extends EntityModel<WolfRenderState> {
 
 	private final ModelPart head;
 	private final ModelPart body;
@@ -26,7 +26,7 @@ public class HostileWolfModel<T extends HostileWolf> extends AgeableListModel<T>
 	}
 
 	public HostileWolfModel(Function<ResourceLocation, RenderType> type, ModelPart root) {
-		super(type, false, 5.0F, 2.0F, 2.0F, 2.0F, 24.0F);
+		super(root, type);
 		this.head = root.getChild("head");
 		this.body = root.getChild("body");
 		this.upperBody = root.getChild("upper_body");
@@ -38,21 +38,16 @@ public class HostileWolfModel<T extends HostileWolf> extends AgeableListModel<T>
 	}
 
 	@Override
-	protected Iterable<ModelPart> headParts() {
-		return ImmutableList.of(this.head);
-	}
+	public void setupAnim(WolfRenderState state) {
+		super.setupAnim(state);
+		this.head.xRot = state.xRot * Mth.DEG_TO_RAD;
+		this.head.yRot = state.yRot * Mth.DEG_TO_RAD;
+		this.tail.xRot = state.ageInTicks;
 
-	@Override
-	protected Iterable<ModelPart> bodyParts() {
-		return ImmutableList.of(this.body, this.rightHindLeg, this.leftHindLeg, this.rightFrontLeg, this.leftFrontLeg, this.tail, this.upperBody);
-	}
-
-	@Override
-	public void prepareMobModel(T entity, float limbSwing, float limbSwingAmount, float partialTicks) {
-		if (entity.isAggressive()) {
+		if (state.isAngry) {
 			this.tail.yRot = 0.0F;
 		} else {
-			this.tail.yRot = Mth.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
+			this.tail.yRot = Mth.cos(state.walkAnimationPos * 0.6662F) * 1.4F * state.walkAnimationSpeed;
 		}
 
 		this.body.setPos(0.0F, 14.0F, 2.0F);
@@ -64,16 +59,9 @@ public class HostileWolfModel<T extends HostileWolf> extends AgeableListModel<T>
 		this.leftHindLeg.setPos(0.5F, 16.0F, 7.0F);
 		this.rightFrontLeg.setPos(-2.5F, 16.0F, -4.0F);
 		this.leftFrontLeg.setPos(0.5F, 16.0F, -4.0F);
-		this.rightHindLeg.xRot = Mth.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
-		this.leftHindLeg.xRot = Mth.cos(limbSwing * 0.6662F + Mth.PI) * 1.4F * limbSwingAmount;
-		this.rightFrontLeg.xRot = Mth.cos(limbSwing * 0.6662F + Mth.PI) * 1.4F * limbSwingAmount;
-		this.leftFrontLeg.xRot = Mth.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
-	}
-
-	@Override
-	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-		this.head.xRot = headPitch * Mth.DEG_TO_RAD;
-		this.head.yRot = netHeadYaw * Mth.DEG_TO_RAD;
-		this.tail.xRot = ageInTicks;
+		this.rightHindLeg.xRot = Mth.cos(state.walkAnimationPos * 0.6662F) * 1.4F * state.walkAnimationSpeed;
+		this.leftHindLeg.xRot = Mth.cos(state.walkAnimationPos * 0.6662F + Mth.PI) * 1.4F * state.walkAnimationSpeed;
+		this.rightFrontLeg.xRot = Mth.cos(state.walkAnimationPos * 0.6662F + Mth.PI) * 1.4F * state.walkAnimationSpeed;
+		this.leftFrontLeg.xRot = Mth.cos(state.walkAnimationPos * 0.6662F) * 1.4F * state.walkAnimationSpeed;
 	}
 }

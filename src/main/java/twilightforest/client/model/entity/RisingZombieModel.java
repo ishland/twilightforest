@@ -6,9 +6,10 @@ import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ZombieModel;
 import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.renderer.entity.state.ZombieRenderState;
 import twilightforest.entity.monster.RisingZombie;
 
-public class RisingZombieModel extends ZombieModel<RisingZombie> {
+public class RisingZombieModel extends ZombieModel<ZombieRenderState> {
 
 	private float tick;
 
@@ -45,8 +46,8 @@ public class RisingZombieModel extends ZombieModel<RisingZombie> {
 	}
 
 	@Override
-	protected void setupAttackAnimation(RisingZombie zombie, float ageInTicks) {
+	protected void setupAttackAnimation(ZombieRenderState zombie, float ageInTicks) {
 		super.setupAttackAnimation(zombie, ageInTicks);
-		this.tick = ageInTicks + Minecraft.getInstance().getTimer().getGameTimeDeltaTicks();
+		this.tick = ageInTicks + Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaTicks();
 	}
 }

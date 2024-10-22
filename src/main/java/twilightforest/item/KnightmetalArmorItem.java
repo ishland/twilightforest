@@ -13,9 +13,6 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import org.jetbrains.annotations.NotNull;
 import twilightforest.client.model.TFModelLayers;
-import twilightforest.client.model.armor.TFArmorModel;
-
-import java.util.function.Consumer;
 
 public class KnightmetalArmorItem extends ArmorItem {
 

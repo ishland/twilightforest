@@ -6,10 +6,7 @@
 
 package twilightforest.client.model.entity;
 
-import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.AgeableListModel;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
@@ -18,9 +15,9 @@ import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.util.Mth;
 import twilightforest.client.JappaPackReloadListener;
-import twilightforest.entity.passive.TinyBird;
+import twilightforest.client.state.BirdRenderState;
 
-public class TinyBirdModel extends AgeableListModel<TinyBird> {
+public class TinyBirdModel extends EntityModel<BirdRenderState> {
 
 	private final ModelPart head;
 	private final ModelPart body;
@@ -30,12 +27,13 @@ public class TinyBirdModel extends AgeableListModel<TinyBird> {
 	private final ModelPart leftWing;
 
 	public TinyBirdModel(ModelPart root) {
+		super(root);
 		this.head = root.getChild("head");
 		this.body = root.getChild("body");
 		this.rightFoot = root.getChild("right_foot");
 		this.leftFoot = root.getChild("left_foot");
-		this.rightWing = body.getChild("right_wing");
-		this.leftWing = body.getChild("left_wing");
+		this.rightWing = this.body.getChild("right_wing");
+		this.leftWing = this.body.getChild("left_wing");
 	}
 
 	public static LayerDefinition checkForPack() {
@@ -136,46 +134,18 @@ public class TinyBirdModel extends AgeableListModel<TinyBird> {
 	}
 
 	@Override
-	protected Iterable<ModelPart> headParts() {
-		return ImmutableList.of(this.head);
-	}
+	public void setupAnim(BirdRenderState state) {
+		super.setupAnim(state);
+		this.head.xRot = state.xRot * Mth.DEG_TO_RAD;
+		this.head.yRot = state.yRot * Mth.DEG_TO_RAD;
 
-	@Override
-	protected Iterable<ModelPart> bodyParts() {
-		return ImmutableList.of(this.head, this.body, this.rightFoot, this.leftFoot);
-	}
+		this.rightFoot.xRot = Mth.cos(state.walkAnimationPos * 0.6662F) * 1.4F * state.walkAnimationSpeed;
+		this.leftFoot.xRot = Mth.cos(state.walkAnimationPos * 0.6662F + Mth.PI) * 1.4F * state.walkAnimationSpeed;
 
-	@Override
-	public void renderToBuffer(PoseStack stack, VertexConsumer builder, int light, int overlay, int color) {
-		if (young) {
-			float f = 2.0F;
-			stack.pushPose();
-			stack.translate(0.0F, 5.0F, 0.75F);
-			this.headParts().forEach((renderer) -> renderer.render(stack, builder, light, overlay, color));
-			stack.popPose();
-			stack.pushPose();
-			stack.scale(1.0F / f, 1.0F / f, 1.0F / f);
-			stack.translate(0.0F, 24.0F, 0.0F);
-			this.bodyParts().forEach((renderer) -> renderer.render(stack, builder, light, overlay, color));
-			stack.popPose();
-		} else {
-			this.headParts().forEach((renderer) -> renderer.render(stack, builder, light, overlay, color));
-			this.bodyParts().forEach((renderer) -> renderer.render(stack, builder, light, overlay, color));
-		}
-	}
+		this.rightWing.zRot = state.ageInTicks;
+		this.leftWing.zRot = -state.ageInTicks;
 
-	@Override
-	public void setupAnim(TinyBird entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-		this.head.xRot = headPitch * Mth.DEG_TO_RAD;
-		this.head.yRot = netHeadYaw * Mth.DEG_TO_RAD;
-
-		this.rightFoot.xRot = Mth.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
-		this.leftFoot.xRot = Mth.cos(limbSwing * 0.6662F + Mth.PI) * 1.4F * limbSwingAmount;
-
-		this.rightWing.zRot = ageInTicks;
-		this.leftWing.zRot = -ageInTicks;
-
-		if (entity.isBirdLanded()) {
+		if (state.landed) {
 			this.rightFoot.y = 23.0F;
 			this.leftFoot.y = 23.0F;
 		} else {
