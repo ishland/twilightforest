@@ -24,7 +24,7 @@ public class SpecialFlowerPotBlock extends FlowerPotBlock {
 		if (!this.isEmpty()) {
 			level.setBlock(pos, getEmptyPot().defaultBlockState(), 3);
 			level.gameEvent(player, GameEvent.BLOCK_CHANGE, pos);
-			return InteractionResult.sidedSuccess(level.isClientSide());
+			return InteractionResult.SUCCESS;
 		} else {
 			return super.useWithoutItem(state, level, pos, player, result);
 		}

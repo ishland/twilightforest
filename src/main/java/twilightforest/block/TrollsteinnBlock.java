@@ -103,7 +103,7 @@ public class TrollsteinnBlock extends Block {
 
 		for (Direction direction : Direction.values()) {
 			BlockPos blockpos = pos.relative(direction);
-			if (!level.getBlockState(blockpos).isSolidRender(level, blockpos) && level.getMaxLocalRawBrightness(pos.relative(direction)) <= LIGHT_THRESHOLD) {
+			if (!level.getBlockState(blockpos).isSolidRender() && level.getMaxLocalRawBrightness(pos.relative(direction)) <= LIGHT_THRESHOLD) {
 				Direction.Axis direction$axis = direction.getAxis();
 				double d1 = direction$axis == Direction.Axis.X ? 0.5 + 0.5625 * (double) direction.getStepX() : (double) random.nextFloat();
 				double d2 = direction$axis == Direction.Axis.Y ? 0.5 + 0.5625 * (double) direction.getStepY() : (double) random.nextFloat();

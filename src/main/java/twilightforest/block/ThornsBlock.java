@@ -2,13 +2,12 @@ package twilightforest.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.PipeBlock;
@@ -168,11 +167,11 @@ public class ThornsBlock extends ConnectableRotatedPillarBlock implements Simple
 	}
 
 	@Override
-	public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor accessor, BlockPos currentPos, BlockPos facingPos) {
-		if (state.getValue(WATERLOGGED)) accessor.scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(accessor));
+	protected BlockState updateShape(BlockState state, LevelReader reader, ScheduledTickAccess access, BlockPos pos, Direction direction, BlockPos facingPos, BlockState facingState, RandomSource random) {
+		if (state.getValue(WATERLOGGED)) access.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(reader));
 		if (facingState.is(Blocks.AIR)) return state;
 
-		return super.updateShape(state, facing, facingState, accessor, currentPos, facingPos);
+		return super.updateShape(state, reader, access, pos, direction, facingPos, facingState, random);
 	}
 
 	@Override

@@ -7,7 +7,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -65,10 +65,10 @@ public class ChiseledCanopyShelfBlock extends ChiseledBookShelfBlock {
 	}
 
 	@Override
-	protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
+	protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
 		//always allow spawn eggs to be clicked so spawns can be set
-		if (stack.getItem() instanceof SpawnEggItem) return ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION;
-		if (state.getValue(SPAWNER)) return ItemInteractionResult.FAIL;
+		if (stack.getItem() instanceof SpawnEggItem) return InteractionResult.PASS;
+		if (state.getValue(SPAWNER)) return InteractionResult.FAIL;
 		return super.useItemOn(stack, state, level, pos, player, hand, result);
 	}
 

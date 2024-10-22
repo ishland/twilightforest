@@ -3,11 +3,10 @@ package twilightforest.block;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.PipeBlock;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
@@ -60,8 +59,8 @@ public class ForceFieldBlock extends Block implements SimpleWaterloggedBlock {
 	}
 
 	public static boolean cornerConnects(BlockGetter getter, BlockPos pos, Direction dir1, Direction dir2) {
-		Vec3i vec31 = dir1.getNormal();
-		Vec3i vec32 = dir2.getNormal();
+		Vec3i vec31 = dir1.getUnitVec3i();
+		Vec3i vec32 = dir2.getUnitVec3i();
 
 		return fullFaceOrSimilarForceField(getter, pos.offset(vec31), dir1, dir2) ||
 			fullFaceOrSimilarForceField(getter, pos.offset(vec32), dir2, dir1);
@@ -125,7 +124,7 @@ public class ForceFieldBlock extends Block implements SimpleWaterloggedBlock {
 	}
 
 	@Override
-	public boolean propagatesSkylightDown(BlockState state, BlockGetter getter, BlockPos pos) {
+	public boolean propagatesSkylightDown(BlockState state) {
 		return true;
 	}
 
@@ -170,9 +169,9 @@ public class ForceFieldBlock extends Block implements SimpleWaterloggedBlock {
 	}
 
 	@Override
-	public BlockState updateShape(BlockState state, Direction direction, BlockState facingState, LevelAccessor accessor, BlockPos pos, BlockPos facingPos) {
-		if (state.getValue(WATERLOGGED)) accessor.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(accessor));
-		return this.canConnectTo(state, accessor, pos, direction) ? state.setValue(PipeBlock.PROPERTY_BY_DIRECTION.get(direction), true) : state;
+	protected BlockState updateShape(BlockState state, LevelReader reader, ScheduledTickAccess access, BlockPos pos, Direction direction, BlockPos facingPos, BlockState facingState, RandomSource random) {
+		if (state.getValue(WATERLOGGED)) access.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(reader));
+		return this.canConnectTo(state, reader, pos, direction) ? state.setValue(PipeBlock.PROPERTY_BY_DIRECTION.get(direction), true) : state;
 	}
 
 	@Override

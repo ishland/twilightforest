@@ -5,6 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.util.RandomSource;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -13,6 +14,7 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -112,11 +114,11 @@ public class WroughtIronFenceBlock extends Block implements SimpleWaterloggedBlo
 	}
 
 	@Override
-	public BlockState updateShape(BlockState state, Direction direction, BlockState neighbor, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
+	protected BlockState updateShape(BlockState state, LevelReader reader, ScheduledTickAccess access, BlockPos pos, Direction direction, BlockPos facingPos, BlockState facingState, RandomSource random) {
 		if (state.getValue(WATERLOGGED)) {
-			level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
+			access.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(reader));
 		}
-		return direction.getAxis() == Direction.Axis.Y ? this.updateTop(level, state, pos) : this.updateSide(level, pos, state, neighborPos, neighbor, direction);
+		return direction.getAxis() == Direction.Axis.Y ? this.updateTop(reader, state, pos) : this.updateSide(reader, pos, state, facingPos, facingState, direction);
 	}
 
 	private BlockState updateSide(LevelReader level, BlockPos pos, BlockState firstState, BlockPos secondPos, BlockState secondState, Direction direction) {
@@ -211,8 +213,8 @@ public class WroughtIronFenceBlock extends Block implements SimpleWaterloggedBlo
 	}
 
 	@Override
-	public boolean propagatesSkylightDown(BlockState pState, BlockGetter pLevel, BlockPos pPos) {
-		return !pState.getValue(WATERLOGGED);
+	public boolean propagatesSkylightDown(BlockState state) {
+		return !state.getValue(WATERLOGGED);
 	}
 
 	@Override

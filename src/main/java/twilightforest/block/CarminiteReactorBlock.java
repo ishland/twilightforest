@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.redstone.Orientation;
 import twilightforest.block.entity.CarminiteReactorBlockEntity;
 import twilightforest.init.TFBlockEntities;
 import twilightforest.init.TFBlocks;
@@ -47,7 +48,7 @@ public class CarminiteReactorBlock extends BaseEntityBlock {
 	}
 
 	@Override
-	public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving) {
+	public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, @Nullable Orientation orientation, boolean isMoving) {
 		if (level.isClientSide()) return;
 
 		if (!state.getValue(ACTIVE) && this.isReactorReady(level, pos)) {
