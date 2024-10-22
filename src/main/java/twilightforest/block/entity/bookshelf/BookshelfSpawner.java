@@ -230,7 +230,7 @@ public abstract class BookshelfSpawner implements IOwnedSpawner {
 				}
 			}
 
-			Entity entity = EntityType.loadEntityRecursive(tag, level, processed -> {
+			Entity entity = EntityType.loadEntityRecursive(tag, level, EntitySpawnReason.SPAWNER, processed -> {
 				processed.moveTo(x, y, z, processed.getYRot(), processed.getXRot());
 				//set entity on fire if told to do so
 				if (fire) {
@@ -258,7 +258,7 @@ public abstract class BookshelfSpawner implements IOwnedSpawner {
 			entity.moveTo(entity.getX(), entity.getY(), entity.getZ(), random.nextFloat() * 360.0F, 0.0F);
 			if (entity instanceof Mob mob) {
 				boolean flag1 = data.getEntityToSpawn().size() == 1 && data.getEntityToSpawn().contains("id", 8);
-				EventHooks.finalizeMobSpawnSpawner(mob, level, level.getCurrentDifficultyAt(entity.blockPosition()), MobSpawnType.SPAWNER, null, this, flag1);
+				EventHooks.finalizeMobSpawnSpawner(mob, level, level.getCurrentDifficultyAt(entity.blockPosition()), EntitySpawnReason.SPAWNER, null, this, flag1);
 
 				data.getEquipment().ifPresent(mob::equip);
 			}
