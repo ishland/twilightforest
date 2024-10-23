@@ -1000,7 +1000,7 @@ public class BlockstateGenerator extends BlockModelBuilders {
 	}
 
 	private void makeTimeLeaves() {
-		buildMagicLeaves(TFBlocks.TIME_LEAVES.get(), 0);
+		buildMagicLeaves(TFBlocks.TIME_LEAVES.get(), 180);
 	}
 
 	private void makeTransformationLeaves() {
@@ -1013,10 +1013,17 @@ public class BlockstateGenerator extends BlockModelBuilders {
 
 	private void buildMagicLeaves(Block block, int rotation) {
 		rotation = (rotation == -90) ? 270 : rotation;
-		ModelBuilder.FaceRotation faceRotation = ModelBuilder.FaceRotation.values()[rotation / 90];
+		ModelBuilder.FaceRotation faceRotation = rotation % 180 == 0 ? ModelBuilder.FaceRotation.ZERO : ModelBuilder.FaceRotation.values()[rotation / 90];
+		boolean isRotation180 = rotation == 180;
+		float u1 = isRotation180 ? 16 : 0;
+		float v1 = isRotation180 ? 16 : 0;
+		float u2 = isRotation180 ? 0 : 16;
+		float v2 = isRotation180 ? 0 : 16;
+
+
 
 		ModelFile modelFile = models().leaves(name(block), prefix("block/" + name(block))).element()
-			.from(0, 0, 0).to(16, 16, 16).allFaces(((dir, builder) -> builder.cullface(dir).tintindex(0).rotation(faceRotation).texture("#all"))).end();
+			.from(0, 0, 0).to(16, 16, 16).allFaces(((dir, builder) -> builder.cullface(dir).uvs(u1, v1, u2, v2).tintindex(0).rotation(faceRotation).texture("#all"))).end();
 		getVariantBuilder(block).forAllStates((state -> ConfiguredModel.allYRotations(modelFile, 0, false)));
 	}
 
