@@ -1,10 +1,7 @@
 {
-  "multipart": [
-    {
-      "apply": {
-        "model": "twilightforest:block/mining_leaves",
-        "x": 90
-      }
+  "variants": {
+    "": {
+      "model": "twilightforest:block/mining_leaves"
     }
-  ]
+  }
 }
