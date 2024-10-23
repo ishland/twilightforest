@@ -1,7 +1,8 @@
 {
   "variants": {
     "": {
-      "model": "twilightforest:block/time_leaves"
+      "model": "twilightforest:block/time_leaves",
+      "x": 180
     }
   }
 }
