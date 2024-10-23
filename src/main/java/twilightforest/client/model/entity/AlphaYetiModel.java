@@ -12,11 +12,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemDisplayContext;
 import twilightforest.TwilightForestMod;
+import twilightforest.client.renderer.entity.AlphaYetiRenderer;
 import twilightforest.client.state.AlphaYetiRenderState;
 
 public class AlphaYetiModel extends HumanoidModel<AlphaYetiRenderState> implements TrophyBlockModel {
-
-	private static final ResourceLocation ALPHA_YETI_TEXTURE = TwilightForestMod.getModelTexture("yetialpha.png");
 
 	public AlphaYetiModel(ModelPart root) {
 		super(root);
@@ -222,7 +221,7 @@ public class AlphaYetiModel extends HumanoidModel<AlphaYetiRenderState> implemen
 	public void renderTrophy(PoseStack stack, MultiBufferSource buffer, int light, int overlay, int color, ItemDisplayContext context) {
 		stack.scale(0.2F, 0.2F, 0.2F);
 		stack.translate(0.0F, -1.5F, 0.0F);
-		VertexConsumer consumer = buffer.getBuffer(RenderType.entityCutoutNoCull(ALPHA_YETI_TEXTURE));
+		VertexConsumer consumer = buffer.getBuffer(RenderType.entityCutoutNoCull(AlphaYetiRenderer.TEXTURE));
 		this.head.render(stack, consumer, light, overlay, color);
 	}
 }

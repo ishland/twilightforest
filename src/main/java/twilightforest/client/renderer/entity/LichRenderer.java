@@ -6,8 +6,10 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.ARGB;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.TwilightForestMod;
+import twilightforest.client.model.TFModelLayers;
 import twilightforest.client.model.entity.LichModel;
 import twilightforest.client.renderer.TFRenderTypes;
 import twilightforest.client.renderer.entity.layers.ShieldLayer;
@@ -18,9 +20,17 @@ public class LichRenderer extends HumanoidMobRenderer<Lich, LichRenderState, Lic
 
 	public static final ResourceLocation TEXTURE = TwilightForestMod.getModelTexture("twilightlich64.png");
 
-	public LichRenderer(EntityRendererProvider.Context context, LichModel model, float shadowSize) {
-		super(context, model, shadowSize);
+	public LichRenderer(EntityRendererProvider.Context context) {
+		super(context, new LichModel(context.bakeLayer(TFModelLayers.LICH)), 0.6F);
 		this.addLayer(new ShieldLayer<>(this));
+	}
+
+	@Override
+	protected int getModelTint(LichRenderState state) {
+		if (state.isShadowClone) {
+			return ARGB.colorFromFloat(0.5F, 0.333F, 0.333F, 0.333F);
+		}
+		return super.getModelTint(state);
 	}
 
 	@Nullable

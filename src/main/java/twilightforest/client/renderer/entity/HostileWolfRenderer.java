@@ -4,8 +4,6 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.state.WolfRenderState;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.ARGB;
-import net.minecraft.world.entity.animal.Wolf;
 import twilightforest.client.model.TFModelLayers;
 import twilightforest.client.model.entity.HostileWolfModel;
 import twilightforest.entity.monster.HostileWolf;

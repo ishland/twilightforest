@@ -2,16 +2,16 @@ package twilightforest.client.renderer.entity;
 
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.resources.ResourceLocation;
+import twilightforest.client.model.TFModelLayers;
 import twilightforest.client.model.entity.BunnyModel;
 import twilightforest.client.state.DwarfRabbitRenderState;
 import twilightforest.entity.passive.DwarfRabbit;
 
 public class BunnyRenderer extends MobRenderer<DwarfRabbit, DwarfRabbitRenderState, BunnyModel> {
 
-	public BunnyRenderer(EntityRendererProvider.Context context, BunnyModel model, float shadowSize) {
-		super(context, model, shadowSize);
+	public BunnyRenderer(EntityRendererProvider.Context context) {
+		super(context, new BunnyModel(context.bakeLayer(TFModelLayers.BUNNY)), 0.3F);
 	}
 
 	@Override

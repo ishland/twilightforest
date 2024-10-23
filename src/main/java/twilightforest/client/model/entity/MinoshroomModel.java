@@ -243,7 +243,7 @@ public class MinoshroomModel extends HumanoidModel<MinoshroomRenderState> implem
 		this.rightBackLeg.xRot = Mth.cos(state.walkAnimationPos * 0.6662F) * 1.4F * state.walkAnimationSpeed;
 
 		// Ground slam animation
-		float f1 = state.getChargeAnimationScale();
+		float f1 = state.chargeAnim;
 		f1 = f1 * f1;
 
 		boolean jappa = JappaPackReloadListener.INSTANCE.isJappaPackLoaded();

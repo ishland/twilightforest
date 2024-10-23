@@ -13,7 +13,6 @@ import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.util.Mth;
 import twilightforest.client.JappaPackReloadListener;
-import twilightforest.entity.passive.Squirrel;
 
 public class SquirrelModel extends QuadrupedModel<LivingEntityRenderState> {
 

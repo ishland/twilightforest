@@ -6,18 +6,15 @@
 package twilightforest.client.model.entity;
 
 import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.util.Mth;
 import twilightforest.client.JappaPackReloadListener;
 import twilightforest.client.state.PinchBeetleRenderState;
-import twilightforest.entity.monster.PinchBeetle;
 
 public class PinchBeetleModel extends EntityModel<PinchBeetleRenderState> {
 

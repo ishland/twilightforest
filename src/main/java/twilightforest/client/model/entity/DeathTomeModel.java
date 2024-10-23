@@ -133,7 +133,7 @@ public class DeathTomeModel extends EntityModel<DeathTomeRenderState> {
 		float bounce = onLectern ? 0.0F : state.ageInTicks;
 		float open = onLectern ? 1.2F : 0.9f;
 
-		float flip = state.getFlip();
+		float flip = state.flip;
 		float flipRight = Mth.clamp(Mth.frac(flip + 0.25F) * 1.6F - 0.3F, 0.0F, 1.0F);
 		float flipLeft = Mth.clamp(Mth.frac(flip + 0.75F) * 1.6F - 0.3F, 0.0F, 1.0F);
 

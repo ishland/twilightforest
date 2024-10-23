@@ -6,21 +6,12 @@
 
 package twilightforest.client.model.entity;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import twilightforest.client.state.BirdRenderState;
-import twilightforest.entity.passive.Penguin;
-
-import java.util.function.Function;
 
 public class PenguinModel extends EntityModel<BirdRenderState> {
 

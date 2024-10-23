@@ -6,7 +6,6 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import twilightforest.client.JappaPackReloadListener;
-import twilightforest.entity.passive.Boar;
 
 public class BoarModel extends PigModel {
 

@@ -20,7 +20,6 @@ import twilightforest.client.state.BirdRenderState;
 public class TinyBirdModel extends EntityModel<BirdRenderState> {
 
 	private final ModelPart head;
-	private final ModelPart body;
 	private final ModelPart rightFoot;
 	private final ModelPart leftFoot;
 	private final ModelPart rightWing;
@@ -29,11 +28,11 @@ public class TinyBirdModel extends EntityModel<BirdRenderState> {
 	public TinyBirdModel(ModelPart root) {
 		super(root);
 		this.head = root.getChild("head");
-		this.body = root.getChild("body");
+		ModelPart body = root.getChild("body");
 		this.rightFoot = root.getChild("right_foot");
 		this.leftFoot = root.getChild("left_foot");
-		this.rightWing = this.body.getChild("right_wing");
-		this.leftWing = this.body.getChild("left_wing");
+		this.rightWing = body.getChild("right_wing");
+		this.leftWing = body.getChild("left_wing");
 	}
 
 	public static LayerDefinition checkForPack() {

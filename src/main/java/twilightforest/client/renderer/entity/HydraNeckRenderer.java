@@ -21,13 +21,13 @@ public class HydraNeckRenderer extends TFPartRenderer<HydraNeck, HydraNeckRender
 	@Override
 	public void render(HydraNeckRenderState state, PoseStack stack, MultiBufferSource buffer, int light) {
 		if (state.active) {
-			float yawDiff = state.headYRot - state.headYRotO;
+			float yawDiff = state.yRot - state.yRotO;
 			if (yawDiff > 180) {
 				yawDiff -= 360;
 			} else if (yawDiff < -180) {
 				yawDiff += 360;
 			}
-			float yaw2 = state.headYRotO + yawDiff * state.partialTick;
+			float yaw2 = state.yRotO + yawDiff * state.partialTick;
 
 			stack.mulPose(Axis.YN.rotationDegrees(yaw2 + 180));
 			super.render(state, stack, buffer, light);
@@ -44,8 +44,6 @@ public class HydraNeckRenderer extends TFPartRenderer<HydraNeck, HydraNeckRender
 		super.extractRenderState(entity, state, partialTick);
 		var container = HydraHeadRenderer.getHeadObject(entity.head);
 		state.active = container == null || container.isActive();
-		state.headYRot = entity.getYRot();
-		state.headYRotO = entity.yRotO;
 	}
 
 	@Override

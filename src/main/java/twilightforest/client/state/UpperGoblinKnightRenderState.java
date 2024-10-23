@@ -33,4 +33,30 @@ public class UpperGoblinKnightRenderState extends HumanoidRenderState {
 
 		return 0.0F;
 	}
+
+	public float getPitchForAttack() {
+		float attackTime = 60.0F - this.spearTimer;
+		if (attackTime <= 10.0F) {
+			// rock back
+			return attackTime * 3.0F;
+		}
+		if (attackTime > 10.0F && attackTime <= 30.0F) {
+			// hang back
+			return 30.0F;
+		}
+		if (attackTime > 30.0F && attackTime <= 33.0F) {
+			// slam forward
+			return (attackTime - 30.0F) * -25.0F + 30.0F;
+		}
+		if (attackTime > 33.0F && attackTime <= 50.0F) {
+			// stay forward
+			return -45.0F;
+		}
+		if (attackTime > 50.0F && attackTime <= 60.0F) {
+			// back to normal
+			return (10.0F - (attackTime - 50.0F)) * -4.5F;
+		}
+
+		return 0.0F;
+	}
 }

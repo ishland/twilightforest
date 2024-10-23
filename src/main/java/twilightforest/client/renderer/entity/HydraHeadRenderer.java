@@ -24,7 +24,6 @@ public class HydraHeadRenderer extends TFPartRenderer<HydraHead, HydraHeadRender
 
 	private static final ResourceLocation TEXTURE = TwilightForestMod.getModelTexture("hydra4.png");
 
-
 	public HydraHeadRenderer(EntityRendererProvider.Context context, HydraHeadModel model) {
 		super(context, model);
 	}

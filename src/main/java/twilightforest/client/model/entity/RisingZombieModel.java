@@ -7,7 +7,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ZombieModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.entity.state.ZombieRenderState;
-import twilightforest.entity.monster.RisingZombie;
 
 public class RisingZombieModel extends ZombieModel<ZombieRenderState> {
 

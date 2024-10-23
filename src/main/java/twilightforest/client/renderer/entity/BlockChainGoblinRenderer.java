@@ -3,13 +3,11 @@ package twilightforest.client.renderer.entity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
-import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -32,8 +30,8 @@ public class BlockChainGoblinRenderer extends HumanoidMobRenderer<BlockChainGobl
 	private final Model model;
 	private final Model chainModel;
 
-	public BlockChainGoblinRenderer(EntityRendererProvider.Context context, BlockChainGoblinModel model, float shadowSize) {
-		super(context, model, shadowSize);
+	public BlockChainGoblinRenderer(EntityRendererProvider.Context context) {
+		super(context, new BlockChainGoblinModel(context.bakeLayer(TFModelLayers.BLOCKCHAIN_GOBLIN)), 0.4F);
 		this.model = new SpikeBlockModel(context.bakeLayer(TFModelLayers.CHAIN_BLOCK));
 		this.chainModel = new ChainModel(context.bakeLayer(TFModelLayers.CHAIN));
 	}

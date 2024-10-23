@@ -1,13 +1,10 @@
 package twilightforest.client.renderer.entity;
 
 import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.renderer.entity.AgeableMobRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.client.renderer.entity.state.ChickenRenderState;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.animal.Chicken;
 import twilightforest.TwilightForestMod;
 import twilightforest.client.state.BirdRenderState;
 import twilightforest.entity.passive.Bird;

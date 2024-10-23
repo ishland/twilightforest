@@ -37,8 +37,8 @@ import java.util.Optional;
 public class MagicPaintingRenderer extends EntityRenderer<MagicPainting, MagicPaintingRenderState> {
 	public static long lastLightning = 0L;
 
-	public MagicPaintingRenderer(EntityRendererProvider.Context pContext) {
-		super(pContext);
+	public MagicPaintingRenderer(EntityRendererProvider.Context context) {
+		super(context);
 	}
 
 	@Override

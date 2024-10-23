@@ -7,6 +7,7 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.state.IronGolemRenderState;
 import net.minecraft.resources.ResourceLocation;
 import twilightforest.TwilightForestMod;
+import twilightforest.client.model.TFModelLayers;
 import twilightforest.client.model.entity.CarminiteGolemModel;
 import twilightforest.entity.monster.CarminiteGolem;
 
@@ -14,8 +15,8 @@ public class CarminiteGolemRenderer extends MobRenderer<CarminiteGolem, IronGole
 
 	private static final ResourceLocation TEXTURE = TwilightForestMod.getModelTexture("carminitegolem.png");
 
-	public CarminiteGolemRenderer(EntityRendererProvider.Context context, CarminiteGolemModel model, float shadowSize) {
-		super(context, model, shadowSize);
+	public CarminiteGolemRenderer(EntityRendererProvider.Context context) {
+		super(context, new CarminiteGolemModel(context.bakeLayer(TFModelLayers.CARMINITE_GOLEM)), 0.75F);
 	}
 
 	@Override

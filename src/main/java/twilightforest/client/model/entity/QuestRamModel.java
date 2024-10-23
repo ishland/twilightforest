@@ -9,7 +9,6 @@ package twilightforest.client.model.entity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
@@ -22,13 +21,11 @@ import net.minecraft.world.item.ItemDisplayContext;
 import twilightforest.client.JappaPackReloadListener;
 import twilightforest.client.renderer.entity.QuestRamRenderer;
 import twilightforest.client.state.QuestingRamRenderState;
-import twilightforest.entity.passive.QuestRam;
 
 import java.util.Arrays;
 
 public class QuestRamModel extends EntityModel<QuestingRamRenderState> implements TrophyBlockModel {
 
-	private final ModelPart root;
 	private final ModelPart head;
 	private ModelPart neck;
 	private ModelPart frontTorso;
@@ -42,7 +39,7 @@ public class QuestRamModel extends EntityModel<QuestingRamRenderState> implement
 	final int[] colorOrder = new int[]{0, 8, 7, 15, 14, 1, 4, 5, 13, 3, 9, 11, 10, 2, 6, 12};
 
 	public QuestRamModel(ModelPart root) {
-		this.root = root;
+		super(root);
 		this.head = root.getChild("head");
 		if (root.hasChild("neck")) {
 			this.neck = root.getChild("neck");

@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
 import net.minecraft.resources.ResourceLocation;
 import twilightforest.TwilightForestMod;
+import twilightforest.client.model.TFModelLayers;
 import twilightforest.client.model.entity.KnightPhantomModel;
 import twilightforest.client.state.KnightPhatomRenderState;
 import twilightforest.entity.boss.KnightPhantom;
@@ -17,8 +18,8 @@ public class KnightPhantomRenderer extends HumanoidMobRenderer<KnightPhantom, Kn
 
 	public static final ResourceLocation TEXTURE = TwilightForestMod.getModelTexture("phantomskeleton.png");
 
-	public KnightPhantomRenderer(EntityRendererProvider.Context context, KnightPhantomModel model, float shadowSize) {
-		super(context, model, shadowSize);
+	public KnightPhantomRenderer(EntityRendererProvider.Context context) {
+		super(context, new KnightPhantomModel(context.bakeLayer(TFModelLayers.KNIGHT_PHANTOM)), 0.625F);
 		this.addLayer(new ItemInHandLayer<>(this, context.getItemRenderer()));
 		this.addLayer(new HumanoidArmorLayer<>(this, new KnightPhantomModel(context.bakeLayer(ModelLayers.PLAYER_INNER_ARMOR)), new KnightPhantomModel(context.bakeLayer(ModelLayers.PLAYER_OUTER_ARMOR)), context.getEquipmentRenderer()));
 	}

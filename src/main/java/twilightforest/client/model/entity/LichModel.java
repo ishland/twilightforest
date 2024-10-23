@@ -73,15 +73,6 @@ public class LichModel extends HumanoidModel<LichRenderState> implements TrophyB
 	}
 
 	@Override
-	public void renderToBuffer(PoseStack stack, VertexConsumer builder, int light, int overlay, int color) {
-		if (!this.shadowClone) {
-			super.renderToBuffer(stack, builder, light, overlay, color);
-		} else {
-			super.renderToBuffer(stack, builder, light, overlay, FastColor.ARGB32.color((int) (FastColor.ARGB32.alpha(color) * 0.5F), (int) (FastColor.ARGB32.red(color) * 0.333F), (int) (FastColor.ARGB32.green(color) * 0.333F), (int) (FastColor.ARGB32.blue(color) * 0.333F)));
-		}
-	}
-
-	@Override
 	public void setupAnim(LichRenderState state) {
 		super.setupAnim(state);
 		this.cloak.skipDraw = state.isShadowClone;

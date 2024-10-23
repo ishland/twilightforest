@@ -8,7 +8,6 @@ package twilightforest.client.model.entity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
@@ -18,7 +17,6 @@ import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.util.Mth;
 import twilightforest.client.JappaPackReloadListener;
-import twilightforest.entity.monster.SlimeBeetle;
 
 public class SlimeBeetleModel extends EntityModel<LivingEntityRenderState> {
 
@@ -240,6 +238,13 @@ public class SlimeBeetleModel extends EntityModel<LivingEntityRenderState> {
 			PartPose.offset(0.0F, 0.0F, 0.0F));
 
 		return LayerDefinition.create(meshdefinition, 64, 64);
+	}
+
+	public void copyTailTo(SlimeBeetleModel model) {
+		model.tailBottom.copyFrom(this.tailBottom);
+		model.tailTop.copyFrom(this.tailTop);
+		model.slimeCenter.copyFrom(this.slimeCenter);
+		model.slime.copyFrom(this.slime);
 	}
 
 	public void renderTail(PoseStack stack, VertexConsumer builder, int light, int overlay) {

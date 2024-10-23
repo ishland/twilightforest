@@ -4,11 +4,9 @@ import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
-import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
 import net.minecraft.util.Mth;
 import twilightforest.client.JappaPackReloadListener;
 import twilightforest.client.state.BlockChainGoblinRenderState;
-import twilightforest.entity.monster.BlockChainGoblin;
 
 public class BlockChainGoblinModel extends FixedHumanoidModel<BlockChainGoblinRenderState> {
 

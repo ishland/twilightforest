@@ -11,14 +11,13 @@ import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
+import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemDisplayContext;
 import twilightforest.client.JappaPackReloadListener;
 import twilightforest.client.renderer.entity.NagaRenderer;
-import twilightforest.entity.boss.Naga;
 
-public class NagaModel extends EntityModel<LivingEntityRenderState> implements TrophyBlockModel {
+public class NagaModel<T extends EntityRenderState> extends EntityModel<T> implements TrophyBlockModel {
 
 	private final ModelPart head;
 
@@ -58,15 +57,6 @@ public class NagaModel extends EntityModel<LivingEntityRenderState> implements T
 			PartPose.offsetAndRotation(0.0F, 10.0F, -16.0F, 0.4363323129985824F, 0.0F, 0.0F));
 
 		return LayerDefinition.create(meshdefinition, 128, 64);
-	}
-
-	@Override
-	public void renderToBuffer(PoseStack stack, VertexConsumer builder, int light, int overlay, int color) {
-		if (this.entity instanceof Naga naga) {
-			this.head.render(stack, builder, light, overlay, FastColor.ARGB32.color(FastColor.ARGB32.alpha(color), FastColor.ARGB32.red(color), (int) (FastColor.ARGB32.green(color)- naga.stunlessRedOverlayProgress), (int) (FastColor.ARGB32.blue(color) - naga.stunlessRedOverlayProgress)));
-		} else {
-			this.head.render(stack, builder, light, overlay, color);
-		}
 	}
 
 	@Override

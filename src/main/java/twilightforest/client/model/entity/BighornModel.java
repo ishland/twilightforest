@@ -6,7 +6,6 @@ import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.renderer.entity.state.SheepRenderState;
 import twilightforest.client.JappaPackReloadListener;
-import twilightforest.entity.passive.Bighorn;
 
 public class BighornModel extends SheepModel {
 

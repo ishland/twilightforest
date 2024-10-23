@@ -10,16 +10,15 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.entity.LivingEntityRenderer;
-import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ARGB;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.Nullable;
+import twilightforest.client.state.PartEntityState;
 import twilightforest.entity.TFPart;
 
-public abstract class TFPartRenderer<T extends TFPart<?>, S extends LivingEntityRenderState, M extends EntityModel<S>> extends EntityRenderer<T, S> {
+public abstract class TFPartRenderer<T extends TFPart<?>, S extends PartEntityState, M extends EntityModel<S>> extends EntityRenderer<T, S> {
 
 	protected final M model;
 
@@ -42,7 +41,7 @@ public abstract class TFPartRenderer<T extends TFPart<?>, S extends LivingEntity
 		RenderType rendertype = this.getRenderType(state, visible, ghostly, glowing);
 		if (rendertype != null) {
 			VertexConsumer consumer = buffer.getBuffer(rendertype);
-			int overlay = LivingEntityRenderer.getOverlayCoords(state, OverlayTexture.NO_WHITE_U);
+			int overlay = this.getOverlayCoords(state);
 			int j = ghostly ? 654311423 : -1;
 			int k = ARGB.multiply(j, this.getModelTint(state));
 			this.model.renderToBuffer(stack, consumer, light, overlay, k);
@@ -54,6 +53,10 @@ public abstract class TFPartRenderer<T extends TFPart<?>, S extends LivingEntity
 
 	protected int getModelTint(S state) {
 		return -1;
+	}
+
+	private int getOverlayCoords(PartEntityState state) {
+		return OverlayTexture.pack(OverlayTexture.u(OverlayTexture.NO_WHITE_U), OverlayTexture.v(state.hasRedOverlay));
 	}
 
 	@Nullable
@@ -70,7 +73,7 @@ public abstract class TFPartRenderer<T extends TFPart<?>, S extends LivingEntity
 
 	protected void setupRotations(S state, PoseStack stack, float partialTicks) {
 		if (state.deathTime > 0) {
-			float f = ((float) state.deathTime + partialTicks - 1.0F) / 20.0F * 1.6F;
+			float f = (state.deathTime + partialTicks - 1.0F) / 20.0F * 1.6F;
 			f = Mth.sqrt(f);
 			if (f > 1.0F) {
 				f = 1.0F;
@@ -90,8 +93,8 @@ public abstract class TFPartRenderer<T extends TFPart<?>, S extends LivingEntity
 	@Override
 	public void extractRenderState(T entity, S state, float partialTick) {
 		super.extractRenderState(entity, state, partialTick);
-		float f = Mth.rotLerp(partialTick, entity.yRotO, entity.getYRot());
-		state.yRot = Mth.wrapDegrees(f);
+		state.yRot = entity.getYRot();
+		state.yRotO = entity.yRotO;
 		state.xRot = entity.getXRot(partialTick);
 		state.customName = entity.getCustomName();
 		state.isUpsideDown = this.isEntityUpsideDown(entity);

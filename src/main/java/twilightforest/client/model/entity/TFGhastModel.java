@@ -7,7 +7,6 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import twilightforest.client.state.TFGhastRenderState;
@@ -58,7 +57,7 @@ public class TFGhastModel extends EntityModel<TFGhastRenderState> {
 	}
 
 	@Override
-	public void setupAnim(LivingEntityRenderState state) {
+	public void setupAnim(TFGhastRenderState state) {
 		super.setupAnim(state);
 		// wave tentacles
 		for (int i = 0; i < this.tentacles.length; ++i) {

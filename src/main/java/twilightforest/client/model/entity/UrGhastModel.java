@@ -10,11 +10,11 @@ import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemDisplayContext;
 import twilightforest.TwilightForestMod;
 import twilightforest.client.renderer.entity.UrGhastRenderer;
+import twilightforest.client.state.TFGhastRenderState;
 
 public class UrGhastModel extends TFGhastModel implements TrophyBlockModel {
 
@@ -87,7 +87,7 @@ public class UrGhastModel extends TFGhastModel implements TrophyBlockModel {
 	}
 
 	@Override
-	public void setupAnim(LivingEntityRenderState state) {
+	public void setupAnim(TFGhastRenderState state) {
 		super.setupAnim(state);
 
 		// wave tentacles
