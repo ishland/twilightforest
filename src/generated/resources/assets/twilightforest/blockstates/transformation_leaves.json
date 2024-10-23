@@ -1,8 +1,10 @@
 {
-  "variants": {
-    "": {
-      "model": "twilightforest:block/transformation_leaves",
-      "x": 270
+  "multipart": [
+    {
+      "apply": {
+        "model": "twilightforest:block/transformation_leaves",
+        "x": 270
+      }
     }
-  }
+  ]
 }

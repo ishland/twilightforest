@@ -17,7 +17,6 @@ import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.client.model.generators.MultiPartBlockStateBuilder;
 import net.neoforged.neoforge.client.model.generators.loaders.CompositeModelBuilder;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
-import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import org.jetbrains.annotations.NotNull;
 import twilightforest.TwilightForestMod;
@@ -982,21 +981,18 @@ public class BlockstateGenerator extends BlockModelBuilders {
 
 	// TODO: make bottom and top texture rotations random
 	private void timeLeaves() {
-		magicLeaves(TFBlocks.TIME_LEAVES, 180);
+		ModelFile model = models().leaves("time_leaves", prefix("block/time_leaves"));
+		getMultipartBuilder(TFBlocks.TIME_LEAVES.get()).part().modelFile(model).rotationX(180).addModel().end();
 	}
 
 	private void transformationLeaves() {
-		magicLeaves(TFBlocks.TRANSFORMATION_LEAVES, 270);
+		ModelFile model = models().leaves("transformation_leaves", prefix("block/transformation_leaves"));
+		getMultipartBuilder(TFBlocks.TRANSFORMATION_LEAVES.get()).part().modelFile(model).rotationX(270).addModel().end();
 	}
 
 	private void miningLeaves() {
-		magicLeaves(TFBlocks.MINING_LEAVES, 90);
-	}
-
-	private void magicLeaves(DeferredBlock<Block> block, int rotation) {
-		ModelFile model = models().leaves(block.getId().getPath(), prefix("block/" + block.getId().getPath()));
-		ConfiguredModel configuredModel = new ConfiguredModel(model, rotation, 0, false);
-		simpleBlock(block.get(), configuredModel);
+		ModelFile model = models().leaves("mining_leaves", prefix("block/mining_leaves"));
+		getMultipartBuilder(TFBlocks.MINING_LEAVES.get()).part().modelFile(model).rotationX(90).addModel().end();
 	}
 
 	private void magicLogCore(Block b) {
