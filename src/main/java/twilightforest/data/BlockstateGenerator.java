@@ -11,9 +11,13 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.SlabType;
-import net.neoforged.neoforge.client.model.generators.*;
+import net.neoforged.neoforge.client.model.generators.BlockModelBuilder;
+import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
+import net.neoforged.neoforge.client.model.generators.ModelFile;
+import net.neoforged.neoforge.client.model.generators.MultiPartBlockStateBuilder;
 import net.neoforged.neoforge.client.model.generators.loaders.CompositeModelBuilder;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import org.jetbrains.annotations.NotNull;
 import twilightforest.TwilightForestMod;
@@ -910,22 +914,22 @@ public class BlockstateGenerator extends BlockModelBuilders {
 
 		logWoodSapling(TFBlocks.TIME_LOG.get(), TFBlocks.STRIPPED_TIME_LOG.get(), TFBlocks.TIME_WOOD.get(), TFBlocks.STRIPPED_TIME_WOOD.get(), TFBlocks.TIME_SAPLING.get());
 		plankBlocks("time", TFBlocks.TIME_PLANKS.get(), TFBlocks.TIME_SLAB.get(), TFBlocks.TIME_STAIRS.get(), TFBlocks.TIME_BUTTON.get(), TFBlocks.TIME_FENCE.get(), TFBlocks.TIME_GATE.get(), TFBlocks.TIME_PLATE.get(), TFBlocks.TIME_DOOR.get(), TFBlocks.TIME_TRAPDOOR.get(), true, false, TFBlocks.TIME_BANISTER.get());
-		makeTimeLeaves();
+		timeLeaves();
 		magicLogCore(TFBlocks.TIME_LOG_CORE.get());
 
 		logWoodSapling(TFBlocks.TRANSFORMATION_LOG.get(), TFBlocks.STRIPPED_TRANSFORMATION_LOG.get(), TFBlocks.TRANSFORMATION_WOOD.get(), TFBlocks.STRIPPED_TRANSFORMATION_WOOD.get(), TFBlocks.TRANSFORMATION_SAPLING.get());
 		plankBlocks("trans", TFBlocks.TRANSFORMATION_PLANKS.get(), TFBlocks.TRANSFORMATION_SLAB.get(), TFBlocks.TRANSFORMATION_STAIRS.get(), TFBlocks.TRANSFORMATION_BUTTON.get(), TFBlocks.TRANSFORMATION_FENCE.get(), TFBlocks.TRANSFORMATION_GATE.get(), TFBlocks.TRANSFORMATION_PLATE.get(), TFBlocks.TRANSFORMATION_DOOR.get(), TFBlocks.TRANSFORMATION_TRAPDOOR.get(), true, false, TFBlocks.TRANSFORMATION_BANISTER.get());
-		makeTransformationLeaves();
+		transformationLeaves();
 		magicLogCore(TFBlocks.TRANSFORMATION_LOG_CORE.get());
 
 		logWoodSapling(TFBlocks.MINING_LOG.get(), TFBlocks.STRIPPED_MINING_LOG.get(), TFBlocks.MINING_WOOD.get(), TFBlocks.STRIPPED_MINING_WOOD.get(), TFBlocks.MINING_SAPLING.get());
 		plankBlocks("mine", TFBlocks.MINING_PLANKS.get(), TFBlocks.MINING_SLAB.get(), TFBlocks.MINING_STAIRS.get(), TFBlocks.MINING_BUTTON.get(), TFBlocks.MINING_FENCE.get(), TFBlocks.MINING_GATE.get(), TFBlocks.MINING_PLATE.get(), TFBlocks.MINING_DOOR.get(), TFBlocks.MINING_TRAPDOOR.get(), TFBlocks.MINING_BANISTER.get());
-		makeMiningLeaves();
+		miningLeaves();
 		magicLogCore(TFBlocks.MINING_LOG_CORE.get());
 
 		logWoodSapling(TFBlocks.SORTING_LOG.get(), TFBlocks.STRIPPED_SORTING_LOG.get(), TFBlocks.SORTING_WOOD.get(), TFBlocks.STRIPPED_SORTING_WOOD.get(), TFBlocks.SORTING_SAPLING.get());
 		plankBlocks("sort", TFBlocks.SORTING_PLANKS.get(), TFBlocks.SORTING_SLAB.get(), TFBlocks.SORTING_STAIRS.get(), TFBlocks.SORTING_BUTTON.get(), TFBlocks.SORTING_FENCE.get(), TFBlocks.SORTING_GATE.get(), TFBlocks.SORTING_PLATE.get(), TFBlocks.SORTING_DOOR.get(), TFBlocks.SORTING_TRAPDOOR.get(), true, true, TFBlocks.SORTING_BANISTER.get());
-		buildSortingLeaves();
+		singleBlockBoilerPlate(TFBlocks.SORTING_LEAVES.get(), "block/leaves", m -> m.texture("all", "block/sorting_leaves"));  // TODO: make all sides' texture rotation random
 		magicLogCore(TFBlocks.SORTING_LOG_CORE.get());
 
 		banisterVanilla(TFBlocks.OAK_BANISTER.get(), "oak_planks", "oak");
@@ -976,48 +980,23 @@ public class BlockstateGenerator extends BlockModelBuilders {
 		hollowLogs(TFBlocks.SORTING_LOG, TFBlocks.STRIPPED_SORTING_LOG, TFBlocks.HOLLOW_SORTING_LOG_HORIZONTAL, TFBlocks.HOLLOW_SORTING_LOG_VERTICAL, TFBlocks.HOLLOW_SORTING_LOG_CLIMBABLE, EMPTY_LOG, MOSS_LOG, MOSS_LOG_GRASS, SNOW_LOG, HOLLOW_LOG, VINE_LOG, LADDER_LOG);
 	}
 
-	private void buildSortingLeaves() {
-		Block block = TFBlocks.SORTING_LEAVES.get();
-
-		// we create 4 variants of leaves and choose 1 of 4 flowing direction for each face of each variant
-		int[][] CHOSEN_VARIANTS = {{0, 2, 2, 3, 0, 0}, {2, 0, 3, 0, 2, 1}, {3, 3, 1, 2, 3, 2}, {1, 1, 0, 1, 1, 3}};
-		ModelFile[] modelFiles = new ModelFile[CHOSEN_VARIANTS.length];
-		for(int i = 0; i < CHOSEN_VARIANTS.length; i++) {
-			ModelBuilder<BlockModelBuilder> modelBuilder = models().leaves(name(block) + (i > 0 ? i : ""), prefix("block/" + name(block)));  // i > 0 ? i : "" to generate item model
-			ModelBuilder<BlockModelBuilder>.ElementBuilder builder = modelBuilder.element().from(0, 0, 0).to(16, 16, 16);
-			for (Direction dir :  Direction.values()) {
-				ModelBuilder.FaceRotation rotation = ModelBuilder.FaceRotation.values()[CHOSEN_VARIANTS[i][dir.ordinal()]];
-				builder.face(dir).texture("#all").rotation(rotation).tintindex(0).end();
-			}
-			builder.end();
-			modelFiles[i] = modelBuilder;
-		}
-		getVariantBuilder(block).forAllStates(state ->
-			Arrays.stream(modelFiles)
-				.map(builder -> new ConfiguredModel(builder, 0, 0, false))
-				.toArray(ConfiguredModel[]::new)
-		);
+	// TODO: make bottom and top texture rotations random
+	private void timeLeaves() {
+		magicLeaves(TFBlocks.TIME_LEAVES, 0);
 	}
 
-	private void makeTimeLeaves() {
-		buildMagicLeaves(TFBlocks.TIME_LEAVES.get(), 0);
+	private void transformationLeaves() {
+		magicLeaves(TFBlocks.TRANSFORMATION_LEAVES, 270);
 	}
 
-	private void makeTransformationLeaves() {
-		buildMagicLeaves(TFBlocks.TRANSFORMATION_LEAVES.get(), -90);
+	private void miningLeaves() {
+		magicLeaves(TFBlocks.MINING_LEAVES, 90);
 	}
 
-	private void makeMiningLeaves() {
-		buildMagicLeaves(TFBlocks.MINING_LEAVES.get(), 90);
-	}
-
-	private void buildMagicLeaves(Block block, int rotation) {
-		rotation = (rotation == -90) ? 270 : rotation;
-		ModelBuilder.FaceRotation faceRotation = ModelBuilder.FaceRotation.values()[rotation / 90];
-
-		ModelFile modelFile = models().leaves(name(block), prefix("block/" + name(block))).element()
-			.from(0, 0, 0).to(16, 16, 16).allFaces(((dir, builder) -> builder.cullface(dir).tintindex(0).rotation(faceRotation).texture("#all"))).end();
-		getVariantBuilder(block).forAllStates((state -> ConfiguredModel.allYRotations(modelFile, 0, false)));
+	private void magicLeaves(DeferredBlock<Block> block, int rotation) {
+		ModelFile model = models().leaves(block.getId().getPath(), prefix("block/" + block.getId().getPath()));
+		ConfiguredModel configuredModel = new ConfiguredModel(model, rotation, 0, false);
+		simpleBlock(block.get(), configuredModel);
 	}
 
 	private void magicLogCore(Block b) {
