@@ -6,7 +6,7 @@
 
 package twilightforest.client.model.entity;
 
-import net.minecraft.client.model.HierarchicalModel;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
@@ -15,10 +15,10 @@ import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.util.Mth;
 import twilightforest.client.JappaPackReloadListener;
-import twilightforest.entity.passive.Raven;
+import twilightforest.client.state.BirdRenderState;
 
-public class RavenModel extends HierarchicalModel<Raven> {
-	private final ModelPart root;
+public class RavenModel extends EntityModel<BirdRenderState> {
+
 	private final ModelPart head;
 	private final ModelPart rightWing;
 	private final ModelPart leftWing;
@@ -26,7 +26,7 @@ public class RavenModel extends HierarchicalModel<Raven> {
 	private final ModelPart leftLeg;
 
 	public RavenModel(ModelPart root) {
-		this.root = root;
+		super(root);
 
 		this.head = root.getChild("head");
 		var body = root.getChild("body");
@@ -147,23 +147,20 @@ public class RavenModel extends HierarchicalModel<Raven> {
 	}
 
 	@Override
-	public ModelPart root() {
-		return this.root;
-	}
+	public void setupAnim(BirdRenderState state) {
+		super.setupAnim(state);
+		float f = (Mth.sin(state.flap) + 1.0F) * state.flapSpeed;
+		this.head.xRot = state.xRot * Mth.DEG_TO_RAD;
+		this.head.yRot = state.yRot * Mth.DEG_TO_RAD;
+		this.head.zRot = state.yRot > 5.0F ? -0.2617994F : 0.0F;
 
-	@Override
-	public void setupAnim(Raven entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-		this.head.xRot = headPitch * Mth.DEG_TO_RAD;
-		this.head.yRot = netHeadYaw * Mth.DEG_TO_RAD;
-		this.head.zRot = netHeadYaw > 5.0F ? -0.2617994F : 0.0F;
+		this.rightLeg.xRot = Mth.cos(state.walkAnimationPos * 0.6662F) * 1.4F * state.walkAnimationSpeed;
+		this.leftLeg.xRot = Mth.cos(state.walkAnimationPos * 0.6662F + Mth.PI) * 1.4F * state.walkAnimationSpeed;
 
-		this.rightLeg.xRot = Mth.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
-		this.leftLeg.xRot = Mth.cos(limbSwing * 0.6662F + Mth.PI) * 1.4F * limbSwingAmount;
+		this.rightWing.zRot = f;
+		this.leftWing.zRot = -f;
 
-		this.rightWing.zRot = ageInTicks;
-		this.leftWing.zRot = -ageInTicks;
-
-		if (entity.isBirdLanded()) {
+		if (state.landed) {
 			this.rightLeg.y = 21.0F;
 			this.leftLeg.y = 21.0F;
 		} else {

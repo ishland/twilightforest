@@ -7,7 +7,6 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import net.minecraft.util.Mth;
 import twilightforest.client.model.TFModelLayers;
-import twilightforest.client.model.entity.NoopModel;
 import twilightforest.entity.monster.SnowGuardian;
 
 public class SnowGuardianRenderer extends TFBipedRenderer<SnowGuardian, NoopModel<SnowGuardian>> {

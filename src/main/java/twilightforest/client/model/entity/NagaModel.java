@@ -1,9 +1,8 @@
 package twilightforest.client.model.entity;
 
-import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.ListModel;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
@@ -12,22 +11,19 @@ import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.util.Mth;
-import net.minecraft.util.FastColor;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemDisplayContext;
-import org.jetbrains.annotations.Nullable;
 import twilightforest.client.JappaPackReloadListener;
 import twilightforest.client.renderer.entity.NagaRenderer;
 import twilightforest.entity.boss.Naga;
 
-public class NagaModel<T extends Entity> extends ListModel<T> implements TrophyBlockModel {
+public class NagaModel extends EntityModel<LivingEntityRenderState> implements TrophyBlockModel {
 
 	private final ModelPart head;
-	@Nullable
-	private T entity;
 
 	public NagaModel(ModelPart root) {
+		super(root);
 		this.head = root.getChild("head");
 	}
 
@@ -65,23 +61,12 @@ public class NagaModel<T extends Entity> extends ListModel<T> implements TrophyB
 	}
 
 	@Override
-	public Iterable<ModelPart> parts() {
-		return ImmutableList.of(this.head);
-	}
-
-	@Override
 	public void renderToBuffer(PoseStack stack, VertexConsumer builder, int light, int overlay, int color) {
 		if (this.entity instanceof Naga naga) {
 			this.head.render(stack, builder, light, overlay, FastColor.ARGB32.color(FastColor.ARGB32.alpha(color), FastColor.ARGB32.red(color), (int) (FastColor.ARGB32.green(color)- naga.stunlessRedOverlayProgress), (int) (FastColor.ARGB32.blue(color) - naga.stunlessRedOverlayProgress)));
 		} else {
 			this.head.render(stack, builder, light, overlay, color);
 		}
-		this.entity = null;
-	}
-
-	@Override
-	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-		this.entity = entity;
 	}
 
 	@Override

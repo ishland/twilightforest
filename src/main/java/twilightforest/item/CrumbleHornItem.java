@@ -14,6 +14,7 @@ import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -109,7 +110,7 @@ public class CrumbleHornItem extends Item {
 					if (block.canHarvestBlock(state, serverLevel, pos, (Player) living)) {
 						serverLevel.removeBlock(pos, false);
 						block.playerDestroy(serverLevel, (Player) living, pos, state, serverLevel.getBlockEntity(pos), ItemStack.EMPTY);
-						serverLevel.levelEvent(2001, pos, Block.getId(state));
+						serverLevel.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(state));
 						if (player instanceof ServerPlayer) {
 							player.awardStat(Stats.ITEM_USED.get(this));
 						}
@@ -123,7 +124,7 @@ public class CrumbleHornItem extends Item {
 		} else {
 			if (serverLevel.getRandom().nextFloat() < crumbleMap.chanceToCrumble()) {
 				serverLevel.setBlock(pos, crumbleMap.result().withPropertiesOf(state), 3);
-				serverLevel.levelEvent(2001, pos, Block.getId(state));
+				serverLevel.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(state));
 				if (living instanceof ServerPlayer player) {
 					player.awardStat(Stats.ITEM_USED.get(this));
 				}

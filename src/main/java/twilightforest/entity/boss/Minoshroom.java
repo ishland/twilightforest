@@ -171,10 +171,6 @@ public class Minoshroom extends BaseTFBoss implements ITFCharger {
 		return (this.getRandom().nextFloat() - this.getRandom().nextFloat()) * 0.2F + 0.7F;
 	}
 
-	public float getChargeAnimationScale(float scale) {
-		return (this.prevClientSideChargeAnimation + (this.clientSideChargeAnimation - this.prevClientSideChargeAnimation) * scale) / 6.0F;
-	}
-
 	public void setMaxCharge(int charge) {
 		this.getEntityData().set(GROUND_CHARGE, charge);
 	}

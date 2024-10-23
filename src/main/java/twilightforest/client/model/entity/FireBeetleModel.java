@@ -5,20 +5,19 @@
 // - ZeuX
 package twilightforest.client.model.entity;
 
-import net.minecraft.client.model.HierarchicalModel;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.util.Mth;
 import twilightforest.client.JappaPackReloadListener;
-import twilightforest.entity.monster.FireBeetle;
 
-public class FireBeetleModel extends HierarchicalModel<FireBeetle> {
+public class FireBeetleModel extends EntityModel<LivingEntityRenderState> {
 
-	private final ModelPart root;
 	private final ModelPart head;
 	private final ModelPart rightLeg1;
 	private final ModelPart rightLeg2;
@@ -28,16 +27,16 @@ public class FireBeetleModel extends HierarchicalModel<FireBeetle> {
 	private final ModelPart leftLeg3;
 
 	public FireBeetleModel(ModelPart root) {
-		this.root = root;
+		super(root);
 		this.head = root.getChild("head");
 
-		this.rightLeg1 = this.root.getChild("right_leg_1");
-		this.rightLeg2 = this.root.getChild("right_leg_2");
-		this.rightLeg3 = this.root.getChild("right_leg_3");
+		this.rightLeg1 = root.getChild("right_leg_1");
+		this.rightLeg2 = root.getChild("right_leg_2");
+		this.rightLeg3 = root.getChild("right_leg_3");
 
-		this.leftLeg1 = this.root.getChild("left_leg_1");
-		this.leftLeg2 = this.root.getChild("left_leg_2");
-		this.leftLeg3 = this.root.getChild("left_leg_3");
+		this.leftLeg1 = root.getChild("left_leg_1");
+		this.leftLeg2 = root.getChild("left_leg_2");
+		this.leftLeg3 = root.getChild("left_leg_3");
 	}
 
 	public static LayerDefinition checkForPack() {
@@ -221,14 +220,9 @@ public class FireBeetleModel extends HierarchicalModel<FireBeetle> {
 	}
 
 	@Override
-	public ModelPart root() {
-		return this.root;
-	}
-
-	@Override
-	public void setupAnim(FireBeetle entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-		this.head.yRot = netHeadYaw * Mth.DEG_TO_RAD;
-		this.head.xRot = headPitch * Mth.DEG_TO_RAD;
+	public void setupAnim(LivingEntityRenderState state) {
+		this.head.yRot = state.yRot * Mth.DEG_TO_RAD;
+		this.head.xRot = state.xRot * Mth.DEG_TO_RAD;
 
 		float legZ = Mth.PI / 11F;
 		this.leftLeg1.zRot = legZ;
@@ -247,13 +241,13 @@ public class FireBeetleModel extends HierarchicalModel<FireBeetle> {
 		this.leftLeg3.yRot = -var10 * 2.0F + var9;
 		this.rightLeg3.yRot = var10 * 2.0F - var9;
 
-		float var11 = -(Mth.cos(limbSwing * 0.6662F * 2.0F + 0.0F) * 0.4F) * limbSwingAmount;
-		float var12 = -(Mth.cos(limbSwing * 0.6662F * 2.0F + Mth.PI) * 0.4F) * limbSwingAmount;
-		float var14 = -(Mth.cos(limbSwing * 0.6662F * 2.0F + (Mth.PI * 1.5F)) * 0.4F) * limbSwingAmount;
+		float var11 = -(Mth.cos(state.walkAnimationPos * 0.6662F * 2.0F + 0.0F) * 0.4F) * state.walkAnimationSpeed;
+		float var12 = -(Mth.cos(state.walkAnimationPos * 0.6662F * 2.0F + Mth.PI) * 0.4F) * state.walkAnimationSpeed;
+		float var14 = -(Mth.cos(state.walkAnimationPos * 0.6662F * 2.0F + (Mth.PI * 1.5F)) * 0.4F) * state.walkAnimationSpeed;
 
-		float var15 = Math.abs(Mth.sin(limbSwing * 0.6662F + 0.0F) * 0.4F) * limbSwingAmount;
-		float var16 = Math.abs(Mth.sin(limbSwing * 0.6662F + Mth.PI) * 0.4F) * limbSwingAmount;
-		float var18 = Math.abs(Mth.sin(limbSwing * 0.6662F + (Mth.PI * 1.5F)) * 0.4F) * limbSwingAmount;
+		float var15 = Math.abs(Mth.sin(state.walkAnimationPos * 0.6662F + 0.0F) * 0.4F) * state.walkAnimationSpeed;
+		float var16 = Math.abs(Mth.sin(state.walkAnimationPos * 0.6662F + Mth.PI) * 0.4F) * state.walkAnimationSpeed;
+		float var18 = Math.abs(Mth.sin(state.walkAnimationPos * 0.6662F + (Mth.PI * 1.5F)) * 0.4F) * state.walkAnimationSpeed;
 
 		this.leftLeg1.yRot += var11;
 		this.rightLeg1.yRot -= var11;

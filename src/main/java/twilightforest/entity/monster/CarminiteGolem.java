@@ -5,6 +5,7 @@ import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityEvent;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -93,7 +94,7 @@ public class CarminiteGolem extends Monster {
 
 	@Override
 	public void handleEntityEvent(byte id) {
-		if (id == 4) {
+		if (id == EntityEvent.START_ATTACKING) {
 			this.attackTimer = 10;
 			this.playSound(TFSounds.CARMINITE_GOLEM_ATTACK.get(), 1.0F, 1.0F);
 		} else {

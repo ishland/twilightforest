@@ -12,10 +12,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -239,9 +236,9 @@ public class UpperGoblinKnight extends Monster {
 
 	@Override
 	public void handleEntityEvent(byte id) {
-		if (id == 4) {
+		if (id == EntityEvent.START_ATTACKING) {
 			this.heavySpearTimer = HEAVY_SPEAR_TIMER_START;
-		} else if (id == 5) {
+		} else if (id == EntityEvent.STOP_ATTACKING) {
 			ItemStack broken = new ItemStack(Items.IRON_CHESTPLATE);
 			this.breakItem(broken);
 			this.breakItem(broken);

@@ -32,7 +32,8 @@ import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.level.portal.DimensionTransition;
+import net.minecraft.world.level.portal.TeleportTransition;
+import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -196,7 +197,7 @@ public class TFPortalBlock extends HalfTransparentBlock implements LiquidBlockCo
 	}
 
 	@Override
-	public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving) {
+	public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, @Nullable Orientation orientation, boolean isMoving) {
 		boolean good = level.getBlockState(pos.below()).isFaceSturdy(level, pos, Direction.UP);
 
 		for (Direction facing : Direction.Plane.HORIZONTAL) {
@@ -208,7 +209,7 @@ public class TFPortalBlock extends HalfTransparentBlock implements LiquidBlockCo
 		}
 
 		if (!good) {
-			level.levelEvent(2001, pos, Block.getId(state));
+			level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(state));
 			level.setBlock(pos, Blocks.WATER.defaultBlockState(), 0b11);
 		}
 	}
@@ -277,9 +278,8 @@ public class TFPortalBlock extends HalfTransparentBlock implements LiquidBlockCo
 		return 60;
 	}
 
-	@Nullable
 	@Override
-	public DimensionTransition getPortalDestination(ServerLevel level, Entity entity, BlockPos pos) {
+	public TeleportTransition getPortalDestination(ServerLevel level, Entity entity, BlockPos pos) {
 		if (cachedOriginDimension == null) cachedOriginDimension = ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse(TFConfig.originDimension));
 		ResourceKey<Level> newDimension = !level.dimension().location().equals(TFDimension.DIMENSION) ? TFDimension.DIMENSION_KEY : cachedOriginDimension;
 		ServerLevel serverlevel = level.getServer().getLevel(newDimension);

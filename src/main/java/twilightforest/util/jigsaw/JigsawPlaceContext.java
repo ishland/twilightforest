@@ -32,12 +32,12 @@ public record JigsawPlaceContext(BlockPos templatePos, StructurePlaceSettings pl
 		);
 
 		return pickPlaceableJunction(
-			connectables, parentStructureTemplatePos, sourceOrientation, sourceJigsawPos, jigsawLabel, random
+			connectables, parentStructureTemplatePos.offset(sourceJigsawPos), sourceOrientation, jigsawLabel, random
 		);
 	}
 
 	@Nullable
-	private static JigsawPlaceContext pickPlaceableJunction(List<StructureTemplate.StructureBlockInfo> connectableJigsaws, BlockPos sourceTemplatePos, FrontAndTop sourceOrientation, BlockPos sourceJigsawPos, String jigsawLabel, RandomSource random) {
+	private static JigsawPlaceContext pickPlaceableJunction(List<StructureTemplate.StructureBlockInfo> connectableJigsaws, BlockPos sourceTemplatePos, FrontAndTop sourceOrientation, String jigsawLabel, RandomSource random) {
 		StructureTemplate.StructureBlockInfo connectable = null;
 
 		for (int i = 0; i < connectableJigsaws.size(); i++) {
@@ -52,13 +52,13 @@ public record JigsawPlaceContext(BlockPos templatePos, StructurePlaceSettings pl
 
 		if (connectable != null) {
 			boolean useVertical = sourceOrientation.front().getAxis().isVertical();
-			return generateAtJunction(useVertical, random, sourceTemplatePos, sourceOrientation, sourceJigsawPos, connectable, connectableJigsaws);
+			return generateAtJunction(useVertical, random, sourceTemplatePos, sourceOrientation, connectable, connectableJigsaws);
 		}
 
 		return null;
 	}
 
-	private static JigsawPlaceContext generateAtJunction(boolean useVertical, RandomSource random, BlockPos sourceTemplatePos, FrontAndTop sourceState, BlockPos sourceJigsawPos, StructureTemplate.StructureBlockInfo otherJigsaw, List<StructureTemplate.StructureBlockInfo> spareJigsaws) {
+	private static JigsawPlaceContext generateAtJunction(boolean useVertical, RandomSource random, BlockPos sourceTemplatePos, FrontAndTop sourceState, StructureTemplate.StructureBlockInfo otherJigsaw, List<StructureTemplate.StructureBlockInfo> spareJigsaws) {
 		Direction sourceFront = sourceState.front();
 		BlockPos otherOffset = otherJigsaw.pos();
 
@@ -66,16 +66,16 @@ public record JigsawPlaceContext(BlockPos templatePos, StructurePlaceSettings pl
 			Direction sourceTop = sourceState.top();
 			Direction otherTop = JigsawBlock.getTopFacing(otherJigsaw.state());
 
-			return getPlacement(sourceTemplatePos, otherOffset, sourceFront, RotationUtil.getRelativeRotation(otherTop, sourceTop), sourceJigsawPos, otherJigsaw, spareJigsaws, random);
+			return getPlacement(sourceTemplatePos, otherOffset, sourceFront, RotationUtil.getRelativeRotation(otherTop, sourceTop), otherJigsaw, spareJigsaws, random);
 		} else {
 			Direction otherFront = JigsawBlock.getFrontFacing(otherJigsaw.state());
 
-			return getPlacement(sourceTemplatePos, otherOffset, sourceFront, RotationUtil.getRelativeRotation(otherFront.getOpposite(), sourceFront), sourceJigsawPos, otherJigsaw, spareJigsaws, random);
+			return getPlacement(sourceTemplatePos, otherOffset, sourceFront, RotationUtil.getRelativeRotation(otherFront.getOpposite(), sourceFront), otherJigsaw, spareJigsaws, random);
 		}
 	}
 
-	private static JigsawPlaceContext getPlacement(BlockPos sourceTemplatePos, BlockPos otherOffset, Direction sourceFront, Rotation relativeRotation, BlockPos sourceJigsawPos, StructureTemplate.StructureBlockInfo seedJigsaw, List<StructureTemplate.StructureBlockInfo> unconnectedJigsaws, RandomSource random) {
-		BlockPos placePos = sourceTemplatePos.offset(sourceJigsawPos).relative(sourceFront).subtract(otherOffset);
+	private static JigsawPlaceContext getPlacement(BlockPos centerPos, BlockPos otherOffset, Direction sourceFront, Rotation relativeRotation, StructureTemplate.StructureBlockInfo seedJigsaw, List<StructureTemplate.StructureBlockInfo> unconnectedJigsaws, RandomSource random) {
+		BlockPos placePos = centerPos.relative(sourceFront).subtract(otherOffset);
 
 		StructurePlaceSettings placementSettings = new StructurePlaceSettings();
 		placementSettings.setMirror(Mirror.NONE);

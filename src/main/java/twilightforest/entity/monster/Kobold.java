@@ -11,6 +11,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EntityEvent;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
@@ -142,7 +143,7 @@ public class Kobold extends Monster {
 
 	@Override
 	public void handleEntityEvent(byte pId) {
-		if (pId == 45) {
+		if (pId == EntityEvent.FOX_EAT) {
 			ItemStack itemstack = this.getItemBySlot(EquipmentSlot.MAINHAND);
 			if (!itemstack.isEmpty()) {
 				this.spawnItemParticles(itemstack, 8);

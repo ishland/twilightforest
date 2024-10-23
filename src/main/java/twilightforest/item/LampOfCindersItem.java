@@ -13,8 +13,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import twilightforest.init.TFBlocks;
@@ -114,7 +114,7 @@ public class LampOfCindersItem extends Item {
 					level.getRandom().nextInt(range) - level.getRandom().nextInt(range)
 				);
 
-				level.levelEvent(player, 2004, rPos, 0);
+				level.levelEvent(player, LevelEvent.PARTICLES_MOBBLOCK_SPAWN, rPos, 0);
 			}
 
 			//burn mobs!

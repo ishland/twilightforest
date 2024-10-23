@@ -4,10 +4,11 @@ import net.minecraft.client.model.SheepModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.client.renderer.entity.state.SheepRenderState;
 import twilightforest.client.JappaPackReloadListener;
 import twilightforest.entity.passive.Bighorn;
 
-public class BighornModel<T extends Bighorn> extends SheepModel<T> {
+public class BighornModel extends SheepModel {
 
 	public BighornModel(ModelPart root) {
 		super(root);
@@ -136,9 +137,9 @@ public class BighornModel<T extends Bighorn> extends SheepModel<T> {
 	}
 
 	@Override
-	public void prepareMobModel(T entity, float limbSwing, float limbSwingAmount, float partialTicks) {
-		this.head.getChild("left_horn").visible = !entity.isBaby();
-		this.head.getChild("right_horn").visible = !entity.isBaby();
-		super.prepareMobModel(entity, limbSwing, limbSwingAmount, partialTicks);
+	public void setupAnim(SheepRenderState state) {
+		this.head.getChild("left_horn").visible = !state.isBaby;
+		this.head.getChild("right_horn").visible = !state.isBaby;
+		super.setupAnim(state);
 	}
 }

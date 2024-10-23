@@ -7,6 +7,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import twilightforest.entity.projectile.TFThrowable;
@@ -15,7 +16,7 @@ import twilightforest.entity.projectile.TFThrowable;
  * This renderer serves as a way to render item textures on a projectile without needing an actual item registered for it.
  * Consider using {@link net.minecraft.client.renderer.entity.ThrownItemRenderer} if your projectile is an existing item already.
  */
-public class CustomProjectileTextureRenderer extends EntityRenderer<TFThrowable> {
+public class CustomProjectileTextureRenderer extends EntityRenderer<TFThrowable, EntityRenderState> {
 
 	private final ResourceLocation texture;
 
@@ -26,7 +27,7 @@ public class CustomProjectileTextureRenderer extends EntityRenderer<TFThrowable>
 
 	//[VanillaCopy] of DragonFireballRender.render, we just input our own texture stuff instead
 	@Override
-	public void render(TFThrowable entity, float entityYaw, float partialTicks, PoseStack stack, MultiBufferSource buffer, int light) {
+	public void render(EntityRenderState state, PoseStack stack, MultiBufferSource buffer, int light) {
 		stack.pushPose();
 		stack.scale(0.5F, 0.5F, 0.5F);
 		stack.mulPose(this.entityRenderDispatcher.cameraOrientation());
@@ -38,7 +39,7 @@ public class CustomProjectileTextureRenderer extends EntityRenderer<TFThrowable>
 		vertex(consumer, pose, light, 1.0F, 1.0F, 1.0F, 0.0F);
 		vertex(consumer, pose, light, 0.0F, 1.0F, 0.0F, 0.0F);
 		stack.popPose();
-		super.render(entity, entityYaw, partialTicks, stack, buffer, light);
+		super.render(state, stack, buffer, light);
 	}
 
 	private static void vertex(VertexConsumer consumer, PoseStack.Pose pose, int light, float xOffset, float zOffset, float u, float v) {
@@ -46,7 +47,7 @@ public class CustomProjectileTextureRenderer extends EntityRenderer<TFThrowable>
 	}
 
 	@Override
-	public ResourceLocation getTextureLocation(TFThrowable entity) {
-		return this.texture;
+	public EntityRenderState createRenderState() {
+		return new EntityRenderState();
 	}
 }

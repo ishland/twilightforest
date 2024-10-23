@@ -19,8 +19,11 @@ public final class LichTowerPieces {
 	};
 	public static final ResourceLocation DIRECT_ATTACHMENT = TwilightForestMod.prefix("lich_tower/no_bridge");
 	static final ResourceLocation[] ROOM_BRIDGES = new ResourceLocation[] {
-		TwilightForestMod.prefix("lich_tower/room_bridge_5"),
-		TwilightForestMod.prefix("lich_tower/room_bridge_3")
+		TwilightForestMod.prefix("lich_tower/room_bridge_1"),
+		TwilightForestMod.prefix("lich_tower/room_bridge_2"),
+		TwilightForestMod.prefix("lich_tower/room_bridge_3"),
+		TwilightForestMod.prefix("lich_tower/room_bridge_4"),
+		TwilightForestMod.prefix("lich_tower/room_bridge_5")
 	};
 	static final ResourceLocation COBBLESTONE_WALL = TwilightForestMod.prefix("lich_tower/wall_cobble");
 	static final ResourceLocation[] BRIDGE_COVERS = new ResourceLocation[] {

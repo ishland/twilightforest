@@ -6,8 +6,6 @@
 
 package twilightforest.client.model.entity;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -29,7 +27,7 @@ public class MoonwormModel extends Model {
 	private final ModelPart head;
 
 	public MoonwormModel(ModelPart root) {
-		super(RenderType::entityCutoutNoCull);
+		super(root, RenderType::entityCutoutNoCull);
 
 		this.head = root.getChild("head");
 		this.shape1 = root.getChild("shape1");
@@ -87,13 +85,5 @@ public class MoonwormModel extends Model {
 			this.shape2.y += Math.min(0.0F, Mth.sin(time / 2.0F + 2.0F));
 			this.shape3.y += Math.min(0.0F, Mth.sin(time / 2.0F + 3.0F));
 		}
-	}
-
-	@Override
-	public void renderToBuffer(PoseStack ms, VertexConsumer buffer, int light, int overlay, int color) {
-		this.shape1.render(ms, buffer, light, overlay, color);
-		this.shape2.render(ms, buffer, light, overlay, color);
-		this.shape3.render(ms, buffer, light, overlay, color);
-		this.head.render(ms, buffer, light, overlay, color);
 	}
 }

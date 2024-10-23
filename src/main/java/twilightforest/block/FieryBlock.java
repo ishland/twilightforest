@@ -32,7 +32,7 @@ public class FieryBlock extends Block {
 	}
 
 	@Override
-	public VoxelShape getOcclusionShape(BlockState state, BlockGetter getter, BlockPos pos) {
+	public VoxelShape getOcclusionShape(BlockState state) {
 		return Shapes.empty();
 	}
 
@@ -41,7 +41,7 @@ public class FieryBlock extends Block {
 		if ((!entity.fireImmune())
 			&& entity instanceof LivingEntity living
 			&& !living.getItemBySlot(EquipmentSlot.FEET).is(TFItems.FIERY_BOOTS.get())) {
-			entity.hurt(TFDamageTypes.getDamageSource(level, TFDamageTypes.FIERY), 1.0F);
+			living.hurt(TFDamageTypes.getDamageSource(level, TFDamageTypes.FIERY), 1.0F);
 		}
 
 		super.stepOn(level, pos, state, entity);

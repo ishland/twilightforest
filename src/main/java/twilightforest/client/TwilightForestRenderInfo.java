@@ -23,12 +23,6 @@ public class TwilightForestRenderInfo extends DimensionSpecialEffects {
 		super(cloudHeight, placebo, fogType, brightenLightMap, entityLightingBottomsLit);
 	}
 
-	@Nullable
-	@Override
-	public float[] getSunriseColor(float daycycle, float partialTicks) { // Fog color
-		return null;
-	}
-
 	@Override
 	public Vec3 getBrightnessDependentFogColor(Vec3 biomeFogColor, float daylight) { // For modifying biome fog color with daycycle
 		return biomeFogColor.multiply(daylight * 0.94F + 0.06F, (daylight * 0.94F + 0.06F), (daylight * 0.91F + 0.09F));
@@ -57,7 +51,7 @@ public class TwilightForestRenderInfo extends DimensionSpecialEffects {
 	}
 
 	@Override
-	public boolean renderSky(ClientLevel level, int ticks, float partialTick, Matrix4f modelViewMatrix, Camera camera, Matrix4f projectionMatrix, boolean isFoggy, Runnable setupFog) {
+	public boolean renderSky(ClientLevel level, int ticks, float partialTick, Matrix4f modelViewMatrix, Camera camera, Matrix4f projectionMatrix, Runnable setupFog) {
 		return TFSkyRenderer.renderSky(level, partialTick, modelViewMatrix, camera, projectionMatrix, setupFog);
 	}
 

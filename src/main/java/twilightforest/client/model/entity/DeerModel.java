@@ -4,13 +4,14 @@ import net.minecraft.client.model.QuadrupedModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import twilightforest.client.JappaPackReloadListener;
 import twilightforest.entity.passive.Deer;
 
-public class DeerModel extends QuadrupedModel<Deer> {
+public class DeerModel extends QuadrupedModel<LivingEntityRenderState> {
 
 	public DeerModel(ModelPart root) {
-		super(root, true, 4.0F, 4.0F, 2.0F, 2.0F, 10);
+		super(root);
 	}
 
 	public static LayerDefinition checkForPack() {
@@ -146,9 +147,9 @@ public class DeerModel extends QuadrupedModel<Deer> {
 	}
 
 	@Override
-	public void prepareMobModel(Deer entity, float limbSwing, float limbSwingAmount, float partialTicks) {
-		this.head.getChild("right_antler").visible = !entity.isBaby();
-		this.head.getChild("left_antler").visible = !entity.isBaby();
-		super.prepareMobModel(entity, limbSwing, limbSwingAmount, partialTicks);
+	public void setupAnim(LivingEntityRenderState state) {
+		this.head.getChild("right_antler").visible = !state.isBaby;
+		this.head.getChild("left_antler").visible = !state.isBaby;
+		super.setupAnim(state);
 	}
 }

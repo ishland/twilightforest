@@ -7,6 +7,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.*;
@@ -28,10 +29,11 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -45,7 +47,7 @@ import twilightforest.init.TFSounds;
 
 public class KeepsakeCasketBlock extends BaseEntityBlock implements BlockLoggingEnum.IMultiLoggable {
 
-	public static final DirectionProperty FACING = TFHorizontalBlock.FACING;
+	public static final EnumProperty<Direction> FACING = TFHorizontalBlock.FACING;
 	public static final IntegerProperty BREAKAGE = IntegerProperty.create("damage", 0, 2);
 	public static final MapCodec<KeepsakeCasketBlock> CODEC = simpleCodec(KeepsakeCasketBlock::new);
 	private static final VoxelShape BOTTOM_X = Block.box(2.0D, 0.0D, 1.0D, 14.0D, 6.0D, 15.0D);
@@ -133,12 +135,12 @@ public class KeepsakeCasketBlock extends BaseEntityBlock implements BlockLogging
 	}
 
 	@Override
-	protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
+	protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
 		boolean flag = false;
 		if (state.getValue(BlockLoggingEnum.MULTILOGGED).getBlock() == Blocks.AIR || state.getValue(BlockLoggingEnum.MULTILOGGED).getFluid() != Fluids.EMPTY) {
 			if (!(stack.getItem() == TFItems.CHARM_OF_KEEPING_3.get())) {
 				if (level.isClientSide()) {
-					return ItemInteractionResult.SUCCESS;
+					return InteractionResult.SUCCESS;
 				} else {
 					MenuProvider inamedcontainerprovider = this.getMenuProvider(state, level, pos);
 
@@ -156,12 +158,12 @@ public class KeepsakeCasketBlock extends BaseEntityBlock implements BlockLogging
 				}
 			}
 		}
-		return flag ? ItemInteractionResult.sidedSuccess(level.isClientSide()) : ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+		return flag ? InteractionResult.SUCCESS : InteractionResult.TRY_WITH_EMPTY_HAND;
 	}
 
 	@Override
 	public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
-		if (!level.isClientSide() && !player.isCreative() && level.getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS)) {
+		if (level instanceof ServerLevel sl && !player.isCreative() && sl.getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS)) {
 			BlockEntity tile = level.getBlockEntity(pos);
 			if (tile instanceof KeepsakeCasketBlockEntity casket) {
 				ItemStack stack = new ItemStack(this);
@@ -208,9 +210,9 @@ public class KeepsakeCasketBlock extends BaseEntityBlock implements BlockLogging
 	}
 
 	@Override
-	public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving) {
+	public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, @Nullable Orientation orientation, boolean isMoving) {
 		this.reactWithNeighbors(level, pos, state);
-		super.neighborChanged(state, level, pos, block, fromPos, isMoving);
+		super.neighborChanged(state, level, pos, block, orientation, isMoving);
 	}
 
 	//[VanillaCopy] of FlowingFluidBlock.reactWithNeighbors, adapted for blockstates
@@ -223,12 +225,12 @@ public class KeepsakeCasketBlock extends BaseEntityBlock implements BlockLogging
 					BlockPos blockpos = pos.relative(direction);
 					if (level.getFluidState(blockpos).is(FluidTags.WATER)) {
 						level.setBlockAndUpdate(pos, state.setValue(BlockLoggingEnum.MULTILOGGED, BlockLoggingEnum.OBSIDIAN));
-						level.levelEvent(1501, pos, 0);
+						level.levelEvent(LevelEvent.LAVA_FIZZ, pos, 0);
 					}
 
 					if (flag && level.getBlockState(blockpos).is(Blocks.BLUE_ICE)) {
 						level.setBlockAndUpdate(pos, state.setValue(BlockLoggingEnum.MULTILOGGED, BlockLoggingEnum.BASALT));
-						level.levelEvent(1501, pos, 0);
+						level.levelEvent(LevelEvent.LAVA_FIZZ, pos, 0);
 					}
 				}
 			}
@@ -238,7 +240,7 @@ public class KeepsakeCasketBlock extends BaseEntityBlock implements BlockLogging
 					BlockPos blockpos = pos.relative(direction);
 					if (level.getFluidState(blockpos).is(FluidTags.LAVA)) {
 						level.setBlockAndUpdate(pos, state.setValue(BlockLoggingEnum.MULTILOGGED, BlockLoggingEnum.STONE));
-						level.levelEvent(1501, pos, 0);
+						level.levelEvent(LevelEvent.LAVA_FIZZ, pos, 0);
 					}
 				}
 			}

@@ -4,12 +4,14 @@ import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.core.Holder;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.StackedContents;
+import net.minecraft.world.entity.player.StackedItemContents;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
@@ -38,14 +40,12 @@ import twilightforest.util.TFItemStackUtils;
 
 import java.util.*;
 
-public class UncraftingMenu extends RecipeBookMenu<RecipeInput, Recipe<RecipeInput>> {
+public class UncraftingMenu extends AbstractCraftingMenu {
 
 	private static final String TAG_MARKER = "TwilightForestMarker";
 
 	// Inaccessible grid, for uncrafting logic
 	private final UncraftingContainer uncraftingMatrix = new UncraftingContainer(this);
-	// Accessible grid, for actual crafting
-	public final CraftingContainer assemblyMatrix = new TransientCraftingContainer(this, 3, 3);
 	// Inaccessible grid, for recrafting logic
 	private final CraftingContainer combineMatrix = new TransientCraftingContainer(this, 3, 3);
 
@@ -73,26 +73,26 @@ public class UncraftingMenu extends RecipeBookMenu<RecipeInput, Recipe<RecipeInp
 	}
 
 	public UncraftingMenu(int id, Inventory inventory, Level level, ContainerLevelAccess positionData) {
-		super(TFMenuTypes.UNCRAFTING.get(), id);
+		super(TFMenuTypes.UNCRAFTING.get(), id, 3, 3);
 
 		this.positionData = positionData;
 		this.level = level;
 		this.player = inventory.player;
 
 		this.addSlot(new Slot(this.tinkerInput, 0, 13, 35));
-		this.addSlot(new UncraftingResultSlot(inventory.player, this.tinkerInput, this.uncraftingMatrix, this.assemblyMatrix, this.tinkerResult, 0, 147, 35));
+		this.addSlot(new UncraftingResultSlot(inventory.player, this.tinkerInput, this.uncraftingMatrix, this.craftSlots, this.tinkerResult, 0, 147, 35));
 
 		int invX;
 		int invY;
 
 		for (invX = 0; invX < 3; ++invX) {
 			for (invY = 0; invY < 3; ++invY) {
-				this.addSlot(new UncraftingSlot(inventory.player, this.tinkerInput, this.uncraftingMatrix, this.assemblyMatrix, invY + invX * 3, 300000 + invY * 18, 17 + invX * 18));
+				this.addSlot(new UncraftingSlot(inventory.player, this.tinkerInput, this.uncraftingMatrix, this.craftSlots, invY + invX * 3, 300000 + invY * 18, 17 + invX * 18));
 			}
 		}
 		for (invX = 0; invX < 3; ++invX) {
 			for (invY = 0; invY < 3; ++invY) {
-				this.addSlot(new AssemblySlot(this.assemblyMatrix, invY + invX * 3, 62 + invY * 18, 17 + invX * 18));
+				this.addSlot(new AssemblySlot(this.craftSlots, invY + invX * 3, 62 + invY * 18, 17 + invX * 18));
 			}
 		}
 
@@ -106,7 +106,7 @@ public class UncraftingMenu extends RecipeBookMenu<RecipeInput, Recipe<RecipeInp
 			this.addSlot(new Slot(inventory, invX, 8 + invX * 18, 142));
 		}
 
-		this.slotsChanged(this.assemblyMatrix);
+		this.slotsChanged(this.craftSlots);
 
 		if (!FMLLoader.isProduction()) {
 			// Debug slot listing
@@ -201,10 +201,10 @@ public class UncraftingMenu extends RecipeBookMenu<RecipeInput, Recipe<RecipeInp
 			}
 		}
 		// Now we've got the uncrafting logic set in, currently we don't modify the uncraftingMatrix. That's fine.
-		if (inventory == this.assemblyMatrix || inventory == this.tinkerInput) {
+		if (inventory == this.craftSlots || inventory == this.tinkerInput) {
 			if (this.tinkerInput.isEmpty()) {
 				// display the output
-				this.chooseRecipe(this.assemblyMatrix.asCraftInput());
+				this.chooseRecipe(this.craftSlots.asCraftInput());
 			} else {
 				// we placed an item in the assembly matrix, the next step will re-initialize these with correct values
 				this.tinkerResult.setItem(0, ItemStack.EMPTY);
@@ -214,11 +214,11 @@ public class UncraftingMenu extends RecipeBookMenu<RecipeInput, Recipe<RecipeInp
 		}
 
 		// repairing / recrafting: if there is an input item, and items in both grids, can we combine them to produce an output item that is the same type as the input item?
-		if (inventory != this.combineMatrix && !this.uncraftingMatrix.isEmpty() && !this.assemblyMatrix.isEmpty()) {
+		if (inventory != this.combineMatrix && !this.uncraftingMatrix.isEmpty() && !this.craftSlots.isEmpty()) {
 			// combine the two matrices
 			for (int i = 0; i < 9; i++) {
 
-				ItemStack assembly = this.assemblyMatrix.getItem(i);
+				ItemStack assembly = this.craftSlots.getItem(i);
 				ItemStack uncrafting = this.uncraftingMatrix.getItem(i);
 
 				if (!assembly.isEmpty()) {
@@ -271,7 +271,7 @@ public class UncraftingMenu extends RecipeBookMenu<RecipeInput, Recipe<RecipeInp
 	}
 
 	public static boolean isIngredientProblematic(ItemStack ingredient) {
-		return (!ingredient.isEmpty() && ingredient.getItem().hasCraftingRemainingItem(ingredient)) || ingredient.is(Items.BARRIER);
+		return (!ingredient.isEmpty() && !ingredient.getItem().getCraftingRemainder(ingredient).isEmpty()) || ingredient.is(Items.BARRIER);
 	}
 
 	private static ItemStack normalizeIngredient(ItemStack ingredient) {
@@ -368,7 +368,7 @@ public class UncraftingMenu extends RecipeBookMenu<RecipeInput, Recipe<RecipeInp
 		}
 
 		if (inputStack.getItem() instanceof ArmorItem input && resultStack.getItem() instanceof ArmorItem result) {
-			return input.getEquipmentSlot() == result.getEquipmentSlot();
+			return input.getEquipmentSlot(inputStack) == result.getEquipmentSlot(resultStack);
 		}
 
 		return false;
@@ -387,7 +387,7 @@ public class UncraftingMenu extends RecipeBookMenu<RecipeInput, Recipe<RecipeInp
 	 */
 	private int calculateUncraftingCost() {
 		// we don't want to display anything if there is anything in the assembly grid
-		if ((!TFConfig.disableUncraftingOnly || this.storedGhostRecipe instanceof UncraftingRecipe) && this.assemblyMatrix.isEmpty()) {
+		if ((!TFConfig.disableUncraftingOnly || this.storedGhostRecipe instanceof UncraftingRecipe) && this.craftSlots.isEmpty()) {
 			return this.storedGhostRecipe instanceof UncraftingRecipe recipe ? recipe.getCost() : (int) Math.round(countDamageableParts(this.uncraftingMatrix) * TFConfig.uncraftingXpCostMultiplier);
 		}
 		return 0;
@@ -410,7 +410,7 @@ public class UncraftingMenu extends RecipeBookMenu<RecipeInput, Recipe<RecipeInp
 
 		if (!ItemStack.isSameItem(input, output)) {
 			// add each ingredient being used to the cost if recrafting
-			cost += this.assemblyMatrix.getItems().stream().filter(stack -> !stack.isEmpty()).toList().size();
+			cost += this.craftSlots.getItems().stream().filter(stack -> !stack.isEmpty()).toList().size();
 		}
 
 		// look at the input's enchantments and total them up
@@ -456,11 +456,11 @@ public class UncraftingMenu extends RecipeBookMenu<RecipeInput, Recipe<RecipeInp
 	public void clicked(int slotNum, int mouseButton, ClickType clickType, Player player) {
 
 		// if the player is trying to take an item out of the assembly grid, and the assembly grid is empty, take the item from the uncrafting grid.
-		if (slotNum > 0 && this.getSlotContainer(slotNum) == this.assemblyMatrix
+		if (slotNum > 0 && this.getSlotContainer(slotNum) == this.craftSlots
 			&& player.containerMenu.getCarried().isEmpty() && !this.slots.get(slotNum).hasItem()) {
 
 			// is the assembly matrix empty?
-			if (this.assemblyMatrix.isEmpty() && (clickType != ClickType.SWAP || player.getInventory().getItem(mouseButton).isEmpty())) {
+			if (this.craftSlots.isEmpty() && (clickType != ClickType.SWAP || player.getInventory().getItem(mouseButton).isEmpty())) {
 				slotNum -= 9;
 			}
 		}
@@ -561,7 +561,7 @@ public class UncraftingMenu extends RecipeBookMenu<RecipeInput, Recipe<RecipeInp
 				if (!this.moveItemStackTo(itemstack1, 0, 1, false)) {
 					return ItemStack.EMPTY;
 				}
-			} else if (slot.container == this.assemblyMatrix) {
+			} else if (slot.container == this.craftSlots) {
 				if (!this.moveItemStackTo(itemstack1, 20, 56, false)) {
 					return ItemStack.EMPTY;
 				}
@@ -591,15 +591,15 @@ public class UncraftingMenu extends RecipeBookMenu<RecipeInput, Recipe<RecipeInp
 	public void removed(Player player) {
 		super.removed(player);
 		this.positionData.execute((world, pos) -> {
-			this.clearContainer(player, this.assemblyMatrix);
+			this.clearContainer(player, this.craftSlots);
 			this.clearContainer(player, this.tinkerInput);
 		});
 	}
 
 	private ItemStack[] getIngredients(Recipe<?> recipe) {
-		ItemStack[] stacks = new ItemStack[recipe.getIngredients().size()];
+		ItemStack[] stacks = new ItemStack[recipe.display().size()];
 
-		for (int i = 0; i < recipe.getIngredients().size(); i++) {
+		for (int i = 0; i < recipe.display().size(); i++) {
 			ItemStack[] matchingStacks = Arrays.stream(recipe.getIngredients().get(i).getItems()).filter(s -> !s.is(ItemTagGenerator.BANNED_UNCRAFTING_INGREDIENTS)).toArray(ItemStack[]::new);
 			stacks[i] = matchingStacks.length > 0 ? matchingStacks[Math.floorMod(this.ingredientsInCycle, matchingStacks.length)] : ItemStack.EMPTY;
 		}
@@ -613,55 +613,26 @@ public class UncraftingMenu extends RecipeBookMenu<RecipeInput, Recipe<RecipeInp
 	}
 
 	@Override
-	public void fillCraftSlotsStackedContents(StackedContents stackedContents) {
-		this.assemblyMatrix.fillStackedContents(stackedContents);
+	public Slot getResultSlot() {
+		return this.slots.get(1);
 	}
 
 	@Override
-	public void clearCraftingContent() {
-		this.tinkerInput.clearContent();
-		this.assemblyMatrix.clearContent();
-		this.tinkerResult.clearContent();
+	public List<Slot> getInputGridSlots() {
+		return this.slots.subList(11, 20);
 	}
 
 	@Override
-	public int getResultSlotIndex() {
-		return 1; // tinkerResult slot
+	protected Player owner() {
+		return this.player;
 	}
 
-	@Override
-	public int getGridWidth() {
-		return this.assemblyMatrix.getWidth();
-	}
-
-	@Override
-	public int getGridHeight() {
-		return this.assemblyMatrix.getHeight();
-	}
-
-	@Override
-	public int getSize() {
-		return 20;
+	public CraftingContainer getCraftSlots() {
+		return this.craftSlots;
 	}
 
 	@Override
 	public RecipeBookType getRecipeBookType() {
 		return RecipeBookType.CRAFTING;
-	}
-
-	@Override
-	public boolean shouldMoveToInventory(int slot) {
-		return slot == 0 || (11 <= slot && slot <= 19);
-	}
-
-	@Override
-	public boolean recipeMatches(RecipeHolder<Recipe<RecipeInput>> recipeHolder) {
-		return recipeHolder.value().matches(this.assemblyMatrix.asCraftInput(), this.player.level());
-	}
-
-	@SuppressWarnings({"unchecked", "rawtypes", "RedundantSuppression"})
-	@Override
-	public void handlePlacement(boolean placeAll, RecipeHolder<?> recipe, ServerPlayer player) {
-		new UncrafterPlaceRecipe<>(this).recipeClicked(player, (RecipeHolder<Recipe<RecipeInput>>) recipe, placeAll);
 	}
 }

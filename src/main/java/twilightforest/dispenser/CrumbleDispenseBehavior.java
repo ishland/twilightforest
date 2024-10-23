@@ -11,6 +11,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DispenserBlock;
+import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.state.BlockState;
 import twilightforest.init.TFDataMaps;
 
@@ -30,7 +31,7 @@ public class CrumbleDispenseBehavior extends DefaultDispenseItemBehavior {
 					level.destroyBlock(pos, true);
 				} else {
 					level.setBlock(pos, resultBlock.result().withPropertiesOf(state), 3);
-					level.levelEvent(2001, pos, Block.getId(state));
+					level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(state));
 				}
 
 				stack.hurtAndBreak(1, level, null, item -> {});
@@ -46,7 +47,7 @@ public class CrumbleDispenseBehavior extends DefaultDispenseItemBehavior {
 			super.playSound(source);
 			this.fired = false;
 		} else {
-			source.level().levelEvent(1001, source.pos(), 0);
+			source.level().levelEvent(LevelEvent.SOUND_DISPENSER_FAIL, source.pos(), 0);
 		}
 	}
 

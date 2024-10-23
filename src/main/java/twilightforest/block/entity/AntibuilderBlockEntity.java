@@ -5,6 +5,7 @@ import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
@@ -220,7 +221,7 @@ public class AntibuilderBlockEntity extends BlockEntity {
 			}
 
 			if (stateThere.isAir()) {
-				level.levelEvent(2001, pos, Block.getId(replaceWith));
+				level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(replaceWith));
 			}
 			Block.updateOrDestroy(stateThere, replaceWith, level, pos, 2);
 		}

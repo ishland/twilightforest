@@ -95,11 +95,11 @@ public abstract class CursedSpawnerLogic extends BaseSpawner {
 							if (!spawndata$customspawnrules.isValidPosition(spawnAt, serverLevel)) {
 								continue;
 							}
-						} else if (!SpawnPlacements.checkSpawnRules(possibleEntityType.get(), serverLevel, MobSpawnType.SPAWNER, spawnAt, serverLevel.getRandom())) {
+						} else if (!SpawnPlacements.checkSpawnRules(possibleEntityType.get(), serverLevel, EntitySpawnReason.SPAWNER, spawnAt, serverLevel.getRandom())) {
 							continue;
 						}
 
-						Entity entity = EntityType.loadEntityRecursive(entityData, serverLevel, spawnedEntity -> {
+						Entity entity = EntityType.loadEntityRecursive(entityData, serverLevel, EntitySpawnReason.SPAWNER, spawnedEntity -> {
 							spawnedEntity.moveTo(spawnX, spawnY, spawnZ, spawnedEntity.getYRot(), spawnedEntity.getXRot());
 							return spawnedEntity;
 						});
@@ -128,14 +128,14 @@ public abstract class CursedSpawnerLogic extends BaseSpawner {
 
 						entity.moveTo(entity.getX(), entity.getY(), entity.getZ(), randomsource.nextFloat() * 360.0F, 0.0F);
 						if (entity instanceof Mob mob) {
-							if (!net.neoforged.neoforge.event.EventHooks.checkSpawnPositionSpawner(mob, serverLevel, MobSpawnType.SPAWNER, spawndata, this)) {
+							if (!net.neoforged.neoforge.event.EventHooks.checkSpawnPositionSpawner(mob, serverLevel, EntitySpawnReason.SPAWNER, spawndata, this)) {
 								continue;
 							}
 
 							boolean flag1 = spawndata.getEntityToSpawn().size() == 1 && spawndata.getEntityToSpawn().contains("id", 8);
 							// Neo: Patch in FinalizeSpawn for spawners so it may be fired unconditionally, instead of only when vanilla would normally call it.
 							// The local flag1 is the conditions under which the spawner will normally call Mob#finalizeSpawn.
-							net.neoforged.neoforge.event.EventHooks.finalizeMobSpawnSpawner(mob, serverLevel, serverLevel.getCurrentDifficultyAt(entity.blockPosition()), MobSpawnType.SPAWNER, null, this, flag1);
+							net.neoforged.neoforge.event.EventHooks.finalizeMobSpawnSpawner(mob, serverLevel, serverLevel.getCurrentDifficultyAt(entity.blockPosition()), EntitySpawnReason.SPAWNER, null, this, flag1);
 
 							spawndata.getEquipment().ifPresent(mob::equip);
 

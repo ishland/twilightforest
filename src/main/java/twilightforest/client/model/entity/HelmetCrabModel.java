@@ -6,17 +6,16 @@
 
 package twilightforest.client.model.entity;
 
-import net.minecraft.client.model.HierarchicalModel;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.util.Mth;
 import twilightforest.client.JappaPackReloadListener;
-import twilightforest.entity.monster.HelmetCrab;
 
-public class HelmetCrabModel extends HierarchicalModel<HelmetCrab> {
+public class HelmetCrabModel extends EntityModel<LivingEntityRenderState> {
 
-	private final ModelPart root;
 	private final ModelPart body;
 	private final ModelPart leftClaw;
 	private final ModelPart rightClaw;
@@ -26,7 +25,7 @@ public class HelmetCrabModel extends HierarchicalModel<HelmetCrab> {
 	private final ModelPart leftLeg2;
 
 	public HelmetCrabModel(ModelPart root) {
-		this.root = root;
+		super(root);
 
 		this.body = root.getChild("body");
 		this.rightClaw = root.getChild("right_claw");
@@ -197,14 +196,9 @@ public class HelmetCrabModel extends HierarchicalModel<HelmetCrab> {
 	}
 
 	@Override
-	public ModelPart root() {
-		return this.root;
-	}
-
-	@Override
-	public void setupAnim(HelmetCrab entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-		this.body.yRot = netHeadYaw * Mth.DEG_TO_RAD;
-		this.body.xRot = headPitch * Mth.DEG_TO_RAD;
+	public void setupAnim(LivingEntityRenderState state) {
+		this.body.yRot = state.yRot * Mth.DEG_TO_RAD;
+		this.body.xRot = state.xRot * Mth.DEG_TO_RAD;
 
 		float f6 = (Mth.PI / 4F);
 		this.rightLeg1.zRot = -f6 * 0.74F;
@@ -217,12 +211,12 @@ public class HelmetCrabModel extends HierarchicalModel<HelmetCrab> {
 		this.leftLeg1.yRot = -f8 - f7;
 		this.rightLeg2.yRot = -f8 + f7;
 		this.leftLeg2.yRot = f8 - f7;
-		float f10 = -(Mth.cos(limbSwing * 0.6662F * 2.0F + Mth.PI) * 0.4F) * limbSwingAmount;
-		float f11 = -(Mth.cos(limbSwing * 0.6662F * 2.0F + Mth.HALF_PI) * 0.4F) * limbSwingAmount;
-		float f12 = -(Mth.cos(limbSwing * 0.6662F * 2.0F + (Mth.PI * 3.0F / 2.0F)) * 0.4F) * limbSwingAmount;
-		float f14 = Math.abs(Mth.sin(limbSwing * 0.6662F + Mth.PI) * 0.4F) * limbSwingAmount;
-		float f15 = Math.abs(Mth.sin(limbSwing * 0.6662F + Mth.HALF_PI) * 0.4F) * limbSwingAmount;
-		float f16 = Math.abs(Mth.sin(limbSwing * 0.6662F + (Mth.PI * 3.0F / 2.0F)) * 0.4F) * limbSwingAmount;
+		float f10 = -(Mth.cos(state.walkAnimationPos * 0.6662F * 2.0F + Mth.PI) * 0.4F) * state.walkAnimationSpeed;
+		float f11 = -(Mth.cos(state.walkAnimationPos * 0.6662F * 2.0F + Mth.HALF_PI) * 0.4F) * state.walkAnimationSpeed;
+		float f12 = -(Mth.cos(state.walkAnimationPos * 0.6662F * 2.0F + (Mth.PI * 3.0F / 2.0F)) * 0.4F) * state.walkAnimationSpeed;
+		float f14 = Math.abs(Mth.sin(state.walkAnimationPos * 0.6662F + Mth.PI) * 0.4F) * state.walkAnimationSpeed;
+		float f15 = Math.abs(Mth.sin(state.walkAnimationPos * 0.6662F + Mth.HALF_PI) * 0.4F) * state.walkAnimationSpeed;
+		float f16 = Math.abs(Mth.sin(state.walkAnimationPos * 0.6662F + (Mth.PI * 3.0F / 2.0F)) * 0.4F) * state.walkAnimationSpeed;
 		this.rightLeg1.yRot += f10;
 		this.leftLeg1.yRot -= f10;
 		this.rightLeg2.yRot += f11;
@@ -235,12 +229,12 @@ public class HelmetCrabModel extends HierarchicalModel<HelmetCrab> {
 		// swing right arm as if it were an arm, not a leg
 		if (JappaPackReloadListener.INSTANCE.isJappaPackLoaded()) {
 			this.rightClaw.yRot = 0.319531F;
-			this.rightClaw.yRot += (Mth.cos(limbSwing * 0.6662F + Mth.PI) * 2.0F * limbSwingAmount * 0.5F) / 2;
+			this.rightClaw.yRot += (Mth.cos(state.walkAnimationPos * 0.6662F + Mth.PI) * 2.0F * state.walkAnimationSpeed * 0.5F) / 2;
 			this.leftClaw.yRot = -0.319531F;
-			this.leftClaw.yRot += -(Mth.cos(limbSwing * 0.6662F + Mth.PI) * 2.0F * limbSwingAmount * 0.5F) / 2;
+			this.leftClaw.yRot += -(Mth.cos(state.walkAnimationPos * 0.6662F + Mth.PI) * 2.0F * state.walkAnimationSpeed * 0.5F) / 2;
 		} else {
 			this.rightClaw.yRot = -1.319531F;
-			this.rightClaw.yRot += Mth.cos(limbSwing * 0.6662F + Mth.PI) * 2.0F * limbSwingAmount * 0.5F;
+			this.rightClaw.yRot += Mth.cos(state.walkAnimationPos * 0.6662F + Mth.PI) * 2.0F * state.walkAnimationSpeed * 0.5F;
 			this.leftClaw.zRot = f6;
 			this.leftClaw.yRot = f8 * 2.0F - f7;
 			this.leftClaw.yRot -= f12;

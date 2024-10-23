@@ -33,8 +33,8 @@ public abstract class TwilightJigsawPiece extends TwilightTemplateStructurePiece
 	private final JigsawRecord sourceJigsaw;
 	private final List<JigsawRecord> spareJigsaws;
 
-	public TwilightJigsawPiece(StructurePieceType structurePieceType, CompoundTag compoundTag, StructurePieceSerializationContext ctx, StructurePlaceSettings rl2SettingsFunction) {
-		super(structurePieceType, compoundTag, ctx, rl2SettingsFunction);
+	public TwilightJigsawPiece(StructurePieceType structurePieceType, CompoundTag compoundTag, StructurePieceSerializationContext ctx, StructurePlaceSettings placeSettings) {
+		super(structurePieceType, compoundTag, ctx, placeSettings);
 
 		this.sourceJigsaw = readSourceFromNBT(compoundTag);
 		this.spareJigsaws = readConnectionsFromNBT(compoundTag);

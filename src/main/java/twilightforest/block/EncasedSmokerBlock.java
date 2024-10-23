@@ -7,6 +7,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.redstone.Orientation;
 import twilightforest.init.TFSounds;
 
 public class EncasedSmokerBlock extends TFSmokerBlock {
@@ -24,7 +25,7 @@ public class EncasedSmokerBlock extends TFSmokerBlock {
 	}
 
 	@Override
-	public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving) {
+	public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, @Nullable Orientation orientation, boolean isMoving) {
 		if (level.isClientSide()) return;
 
 		boolean powered = level.hasNeighborSignal(pos);

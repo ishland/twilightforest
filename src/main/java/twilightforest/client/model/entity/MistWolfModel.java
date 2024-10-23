@@ -8,10 +8,8 @@ import net.minecraft.util.FastColor;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.entity.monster.MistWolf;
 
-public class MistWolfModel extends HostileWolfModel<MistWolf> {
+public class MistWolfModel extends HostileWolfModel {
 
-	@Nullable
-	private MistWolf wolf;
 
 	public MistWolfModel(ModelPart root) {
 		super(RenderType::entityTranslucent, root);
@@ -27,12 +25,5 @@ public class MistWolfModel extends HostileWolfModel<MistWolf> {
 		} else {
 			super.renderToBuffer(stack, consumer, light, overlay, color);
 		}
-		this.wolf = null;
-	}
-
-	@Override
-	public void setupAnim(MistWolf entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-		super.setupAnim(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
-		this.wolf = entity;
 	}
 }

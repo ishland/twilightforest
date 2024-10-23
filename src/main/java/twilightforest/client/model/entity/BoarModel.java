@@ -8,7 +8,7 @@ import net.minecraft.client.model.geom.builders.*;
 import twilightforest.client.JappaPackReloadListener;
 import twilightforest.entity.passive.Boar;
 
-public class BoarModel<T extends Boar> extends PigModel<T> {
+public class BoarModel extends PigModel {
 
 	public BoarModel(ModelPart root) {
 		super(root);

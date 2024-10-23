@@ -27,6 +27,7 @@ import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
@@ -229,7 +230,7 @@ public class Troll extends Monster implements RangedAttackMob {
 	private void ripenBer(int offset, BlockPos pos) {
 		if (this.level().getBlockState(pos).getBlock() == TFBlocks.UNRIPE_TROLLBER.get() && this.getRandom().nextBoolean() && (Math.abs(pos.getX() + pos.getY() + pos.getZ()) % 5 == offset)) {
 			this.level().setBlockAndUpdate(pos, TFBlocks.TROLLBER.get().defaultBlockState());
-			this.level().levelEvent(2004, pos, 0);
+			this.level().levelEvent(LevelEvent.PARTICLES_MOBBLOCK_SPAWN, pos, 0);
 		}
 	}
 
