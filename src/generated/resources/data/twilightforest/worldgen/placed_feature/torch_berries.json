@@ -22,6 +22,9 @@
       "count": 8
     },
     {
+      "type": "minecraft:in_square"
+    },
+    {
       "type": "twilightforest:no_structure",
       "additional_clearance": 0,
       "occupies_surface": false,

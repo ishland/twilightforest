@@ -1,4 +1,4 @@
-// 1.21.1	2024-10-15T02:33:32.127678962	Registries
+// 1.21.1	2024-10-23T17:29:46.063887097	Registries
 9089ada9ce06fd30adf8b10e50f02233c7d5a76e data/minecraft/twilight/wood_palettes/acacia.json
 dca1ef01d0df4e956fd414782de57c25dfddd290 data/minecraft/twilight/wood_palettes/birch.json
 01becb45438b7f2bfdc77baba72bc986341510c8 data/minecraft/twilight/wood_palettes/crimson.json
@@ -316,7 +316,7 @@ ec487e589c0848f71eb9af87b55c15591514501e data/twilightforest/worldgen/placed_fea
 4208c165f5a2f75a47dffd8e133234648997c161 data/twilightforest/worldgen/placed_feature/stone_circle.json
 b7ad33a74bb4f04f46243d0dadb289130c9d4964 data/twilightforest/worldgen/placed_feature/tf_oak_fallen_log.json
 78f72f10d43c89561a37667e362ed2201574740c data/twilightforest/worldgen/placed_feature/thorns.json
-c11f720407a538704e6d3889596a6c8b254a755a data/twilightforest/worldgen/placed_feature/torch_berries.json
+9b6386b30a674dc10e62f5b77e244b0ee1b2cda4 data/twilightforest/worldgen/placed_feature/torch_berries.json
 b08c73b8946128cd844fad20f3ea36338e134d26 data/twilightforest/worldgen/placed_feature/tree/darkwood_tree.json
 73e1d7dbb251d95838cc9bf6dacb815a5265331f data/twilightforest/worldgen/placed_feature/tree/dead_canopy_tree.json
 28b9661b3001da91f47564899cb3fc88476879f7 data/twilightforest/worldgen/placed_feature/tree/forest_mega_oak_tree.json
