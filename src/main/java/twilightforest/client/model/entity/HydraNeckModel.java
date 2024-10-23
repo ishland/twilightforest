@@ -11,8 +11,9 @@ import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.util.Mth;
 import twilightforest.client.JappaPackReloadListener;
+import twilightforest.client.state.HydraNeckRenderState;
 
-public class HydraNeckModel extends EntityModel<LivingEntityRenderState> {
+public class HydraNeckModel extends EntityModel<HydraNeckRenderState> {
 
 	private final ModelPart neck;
 
@@ -54,7 +55,7 @@ public class HydraNeckModel extends EntityModel<LivingEntityRenderState> {
 	}
 
 	@Override
-	public void setupAnim(LivingEntityRenderState state) {
+	public void setupAnim(HydraNeckRenderState state) {
 		this.neck.yRot = state.yRot * Mth.DEG_TO_RAD;
 		this.neck.xRot = state.xRot * Mth.DEG_TO_RAD;
 	}

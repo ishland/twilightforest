@@ -58,16 +58,11 @@ public class BlockChainRenderer extends EntityRenderer<ChainBlock> {
 		}
 	}
 
-	public static void renderChain(Entity entity, Vec3 xyz, double scale, PoseStack stack, MultiBufferSource buffer, int light, Model chainModel) {
+	public static void renderChain(boolean renderFoil, Vec3 xyz, double scale, PoseStack stack, MultiBufferSource buffer, int light, Model chainModel) {
 		Vec3 pos = xyz.scale(scale);
 
 		stack.pushPose();
-		VertexConsumer vertexConsumer;
-		if (entity instanceof ChainBlock block) {
-			vertexConsumer = ItemRenderer.getFoilBufferDirect(buffer, chainModel.renderType(TEXTURE), false, block.isFoil());
-		} else {
-			vertexConsumer = buffer.getBuffer(chainModel.renderType(TEXTURE));
-		}
+		VertexConsumer vertexConsumer = ItemRenderer.getFoilBuffer(buffer, chainModel.renderType(TEXTURE), false, renderFoil);
 
 		stack.translate(pos.x(), pos.y(), pos.z());
 

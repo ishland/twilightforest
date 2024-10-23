@@ -36,7 +36,7 @@ public record MagicPaintingVariant(int width, int height, List<Layer> layers) {
 	}
 
 	public static Optional<MagicPaintingVariant> getVariant(@Nullable HolderLookup.Provider regAccess, ResourceKey<MagicPaintingVariant> id) {
-		return regAccess == null ? Optional.empty() : regAccess.asGetterLookup().lookup(TFRegistries.Keys.MAGIC_PAINTINGS).flatMap(reg -> reg.get(id)).map(Holder.Reference::value);
+		return regAccess == null ? Optional.empty() : regAccess.lookup(TFRegistries.Keys.MAGIC_PAINTINGS).flatMap(reg -> reg.get(id)).map(Holder.Reference::value);
 	}
 
 	public static String getVariantId(RegistryAccess regAccess, MagicPaintingVariant variant) {
@@ -44,7 +44,7 @@ public record MagicPaintingVariant(int width, int height, List<Layer> layers) {
 	}
 
 	public static ResourceLocation getVariantResourceLocation(RegistryAccess regAccess, MagicPaintingVariant variant) {
-		return regAccess.registry(TFRegistries.Keys.MAGIC_PAINTINGS).map(reg -> reg.getKey(variant)).orElse(MagicPaintingVariants.DEFAULT.location());
+		return regAccess.lookup(TFRegistries.Keys.MAGIC_PAINTINGS).map(reg -> reg.getKey(variant)).orElse(MagicPaintingVariants.DEFAULT.location());
 	}
 
 	public record Layer(String path, @Nullable Parallax parallax, @Nullable OpacityModifier opacityModifier, boolean fullbright) {

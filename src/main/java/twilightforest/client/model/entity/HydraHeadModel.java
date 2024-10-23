@@ -114,9 +114,8 @@ public class HydraHeadModel extends EntityModel<HydraHeadRenderState> implements
 		this.head.yRot = state.yRot * Mth.DEG_TO_RAD;
 		this.head.xRot = state.xRot * Mth.DEG_TO_RAD;
 
-		float mouthOpen = state.getMouthAngle();
-		this.head.xRot -= mouthOpen * (Mth.PI / 12.0F);
-		this.jaw.xRot = mouthOpen * (Mth.PI / 3.0F);
+		this.head.xRot -= state.mouthAngle * (Mth.PI / 12.0F);
+		this.jaw.xRot = state.mouthAngle * (Mth.PI / 3.0F);
 	}
 
 

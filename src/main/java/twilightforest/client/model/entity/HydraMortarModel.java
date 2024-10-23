@@ -12,7 +12,7 @@ import net.minecraft.client.renderer.RenderType;
 public class HydraMortarModel extends Model {
 
 	public HydraMortarModel(ModelPart root) {
-		super(root, RenderType::entityCutoutNoCull);
+		super(root, RenderType::entityTranslucent);
 	}
 
 	public static LayerDefinition create() {

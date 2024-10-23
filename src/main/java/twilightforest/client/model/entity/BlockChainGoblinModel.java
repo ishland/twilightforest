@@ -7,9 +7,10 @@ import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
 import net.minecraft.util.Mth;
 import twilightforest.client.JappaPackReloadListener;
+import twilightforest.client.state.BlockChainGoblinRenderState;
 import twilightforest.entity.monster.BlockChainGoblin;
 
-public class BlockChainGoblinModel<T extends HumanoidRenderState> extends FixedHumanoidModel<T> {
+public class BlockChainGoblinModel extends FixedHumanoidModel<BlockChainGoblinRenderState> {
 
 	public BlockChainGoblinModel(ModelPart root) {
 		super(root, 3.0F);
@@ -108,7 +109,7 @@ public class BlockChainGoblinModel<T extends HumanoidRenderState> extends FixedH
 	}
 
 	@Override
-	public void setupAnim(T state) {
+	public void setupAnim(BlockChainGoblinRenderState state) {
 		super.setupAnim(state);
 
 		this.rightArm.xRot += Mth.PI;

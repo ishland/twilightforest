@@ -136,14 +136,15 @@ public class TinyBirdModel extends EntityModel<BirdRenderState> {
 	@Override
 	public void setupAnim(BirdRenderState state) {
 		super.setupAnim(state);
+		float f = (Mth.sin(state.flap) + 1.0F) * state.flapSpeed;
 		this.head.xRot = state.xRot * Mth.DEG_TO_RAD;
 		this.head.yRot = state.yRot * Mth.DEG_TO_RAD;
 
 		this.rightFoot.xRot = Mth.cos(state.walkAnimationPos * 0.6662F) * 1.4F * state.walkAnimationSpeed;
 		this.leftFoot.xRot = Mth.cos(state.walkAnimationPos * 0.6662F + Mth.PI) * 1.4F * state.walkAnimationSpeed;
 
-		this.rightWing.zRot = state.ageInTicks;
-		this.leftWing.zRot = -state.ageInTicks;
+		this.rightWing.zRot = f;
+		this.leftWing.zRot = -f;
 
 		if (state.landed) {
 			this.rightFoot.y = 23.0F;

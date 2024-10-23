@@ -10,9 +10,9 @@ import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.Mob;
+import twilightforest.client.state.TFGhastRenderState;
 
-public class TFGhastModel extends EntityModel<LivingEntityRenderState> {
+public class TFGhastModel extends EntityModel<TFGhastRenderState> {
 
 	protected final static int tentacleCount = 9;
 	private final ModelPart body;

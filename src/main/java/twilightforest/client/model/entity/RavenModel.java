@@ -149,6 +149,7 @@ public class RavenModel extends EntityModel<BirdRenderState> {
 	@Override
 	public void setupAnim(BirdRenderState state) {
 		super.setupAnim(state);
+		float f = (Mth.sin(state.flap) + 1.0F) * state.flapSpeed;
 		this.head.xRot = state.xRot * Mth.DEG_TO_RAD;
 		this.head.yRot = state.yRot * Mth.DEG_TO_RAD;
 		this.head.zRot = state.yRot > 5.0F ? -0.2617994F : 0.0F;
@@ -156,8 +157,8 @@ public class RavenModel extends EntityModel<BirdRenderState> {
 		this.rightLeg.xRot = Mth.cos(state.walkAnimationPos * 0.6662F) * 1.4F * state.walkAnimationSpeed;
 		this.leftLeg.xRot = Mth.cos(state.walkAnimationPos * 0.6662F + Mth.PI) * 1.4F * state.walkAnimationSpeed;
 
-		this.rightWing.zRot = state.ageInTicks;
-		this.leftWing.zRot = -state.ageInTicks;
+		this.rightWing.zRot = f;
+		this.leftWing.zRot = -f;
 
 		if (state.landed) {
 			this.rightLeg.y = 21.0F;

@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
+import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
@@ -21,30 +22,31 @@ import twilightforest.TwilightForestMod;
 import twilightforest.entity.boss.Lich;
 import twilightforest.init.TFDataAttachments;
 
-public class ShieldLayer<T extends LivingEntity, M extends EntityModel<T>> extends RenderLayer<T, M> {
+public class ShieldLayer<S extends LivingEntityRenderState, M extends EntityModel<S>> extends RenderLayer<S, M> {
 
 	public static final ModelResourceLocation LOC = ModelResourceLocation.standalone(TwilightForestMod.prefix("item/shield"));
 	private static final Direction[] DIRS = ArrayUtils.add(Direction.values(), null);
 
-	public ShieldLayer(RenderLayerParent<T, M> renderer) {
+	public ShieldLayer(RenderLayerParent<S, M> renderer) {
 		super(renderer);
 	}
 
 	@Override
-	public void render(PoseStack stack, MultiBufferSource buffer, int light, T entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+	public void render(PoseStack stack, MultiBufferSource source, int light, S state, float netHeadYaw, float headPitch) {
 		if (this.getShieldCount(entity) > 0) {
-			this.renderShields(stack, buffer, entity, partialTicks);
+			this.renderShields(stack, source, state);
 		}
 	}
 
+	//TODO oh no...
 	private int getShieldCount(T entity) {
 		return entity instanceof Lich lich
 			? lich.getShieldStrength()
 			: entity.getData(TFDataAttachments.FORTIFICATION_SHIELDS).shieldsLeft();
 	}
 
-	private void renderShields(PoseStack stack, MultiBufferSource buffer, T entity, float partialTicks) {
-		float age = entity.tickCount + partialTicks;
+	private void renderShields(PoseStack stack, MultiBufferSource buffer, S state) {
+		float age = state.ageInTicks;
 		float rotateAngleY = age / -5.0F;
 		float rotateAngleX = Mth.sin(age / 5.0F) / 4.0F;
 		float rotateAngleZ = Mth.cos(age / 5.0F) / 4.0F;
