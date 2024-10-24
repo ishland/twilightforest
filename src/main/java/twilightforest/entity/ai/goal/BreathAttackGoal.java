@@ -1,5 +1,6 @@
 package twilightforest.entity.ai.goal;
 
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
@@ -85,7 +86,7 @@ public class BreathAttackGoal<T extends Mob & IBreathAttacker> extends Goal {
 			// anyhoo, deal damage
 			Entity target = this.getHeadLookTarget();
 			if (target != null) {
-				this.entityHost.doBreathAttack(target);
+				this.entityHost.doBreathAttack((ServerLevel) this.entityHost.level(), target);
 				this.entityHost.gameEvent(GameEvent.PROJECTILE_SHOOT);
 			}
 		}

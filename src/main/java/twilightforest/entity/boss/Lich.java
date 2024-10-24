@@ -89,7 +89,6 @@ public class Lich extends BaseTFBoss {
 		this.xpReward = 217;
 	}
 
-	@SuppressWarnings("this-escape")
 	public Lich(Level level, Lich otherLich) {
 		this(TFEntities.LICH.get(), level);
 		this.setMasterUUID(otherLich.getUUID());
@@ -234,8 +233,8 @@ public class Lich extends BaseTFBoss {
 	}
 
 	@Override
-	protected void customServerAiStep() {
-		super.customServerAiStep();
+	protected void customServerAiStep(ServerLevel level) {
+		super.customServerAiStep(level);
 
 		// Teleport home if we get too far away from it
 		if (this.getRestrictionPoint() != null && this.getRestrictionPoint().pos().distSqr(this.blockPosition()) > (this.getHomeRadius() * this.getHomeRadius()) || (this.getPhase() == 3 && this.getRestrictionPoint() != null && this.getY() < this.getRestrictionPoint().pos().below(3).getY())) {
@@ -271,7 +270,7 @@ public class Lich extends BaseTFBoss {
 	}
 
 	@Override
-	public boolean hurt(DamageSource src, float damage) {
+	public boolean hurtServer(ServerLevel level, DamageSource src, float damage) {
 		// if we're in a wall, teleport for gosh sakes
 		if (src.is(DamageTypes.IN_WALL) && this.getTarget() != null) {
 			this.teleportToSightOfEntity(this.getTarget());
@@ -307,7 +306,7 @@ public class Lich extends BaseTFBoss {
 			return false;
 		}
 
-		if (super.hurt(src, damage)) {
+		if (super.hurtServer(level, src, damage)) {
 			if (this.getRandom().nextInt(this.getPhase() == 3 ? 6 : 3) == 0) {
 				this.teleportToSightOfEntity(this.getTarget());
 			}
@@ -636,11 +635,6 @@ public class Lich extends BaseTFBoss {
 	}
 
 	@Override
-	public ResourceKey<LootTable> getDefaultLootTable() {
-		return !this.isShadowClone() ? super.getDefaultLootTable() : null;
-	}
-
-	@Override
 	public boolean displayFireAnimation() {
 		return this.deathTime <= 0 && super.displayFireAnimation();
 	}
@@ -677,8 +671,13 @@ public class Lich extends BaseTFBoss {
 	}
 
 	@Override
-	protected boolean shouldSpawnLoot() {
-		return !this.isShadowClone() && super.shouldSpawnLoot();
+	protected boolean shouldDropLoot() {
+		return !this.isShadowClone() && super.shouldDropLoot();
+	}
+
+	@Override
+	protected boolean shouldSpawnLoot(ServerLevel level) {
+		return !this.isShadowClone() && super.shouldSpawnLoot(level);
 	}
 
 	@Override

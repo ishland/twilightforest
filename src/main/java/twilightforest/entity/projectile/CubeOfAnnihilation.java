@@ -34,13 +34,13 @@ public class CubeOfAnnihilation extends ThrowableProjectile {
 	private boolean hasHitObstacle = false;
 	private ItemStack stack;
 
-	public CubeOfAnnihilation(EntityType<? extends CubeOfAnnihilation> type, Level world) {
-		super(type, world);
+	public CubeOfAnnihilation(EntityType<? extends CubeOfAnnihilation> type, Level level) {
+		super(type, level);
 	}
 
-	@SuppressWarnings("this-escape")
-	public CubeOfAnnihilation(EntityType<? extends CubeOfAnnihilation> type, Level world, LivingEntity thrower, ItemStack stack) {
-		super(type, thrower, world);
+	public CubeOfAnnihilation(EntityType<? extends CubeOfAnnihilation> type, Level level, LivingEntity thrower, ItemStack stack) {
+		super(type, level);
+		this.setOwner(thrower);
 		this.shootFromRotation(thrower, thrower.getXRot(), thrower.getYRot(), 0.0F, 1.5F, 1.0F);
 		this.stack = stack;
 	}
@@ -62,7 +62,7 @@ public class CubeOfAnnihilation extends ThrowableProjectile {
 	@Override
 	protected void onHitEntity(EntityHitResult result) {
 		super.onHitEntity(result);
-		if (result.getEntity() instanceof LivingEntity && result.getEntity().hurt(this.getDamageSource(), 10)) {
+		if (result.getEntity() instanceof LivingEntity && result.getEntity().hurtServer((ServerLevel) this.level(), this.getDamageSource(), 10)) {
 			this.tickCount += 60;
 		}
 	}

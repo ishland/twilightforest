@@ -1,5 +1,6 @@
 package twilightforest.entity.ai.goal;
 
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
@@ -72,11 +73,12 @@ public class YetiRampageGoal extends Goal {
 			this.yeti.gameEvent(GameEvent.HIT_GROUND);
 		}
 
-		this.yeti.destroyBlocksInAABB(this.yeti.getBoundingBox().inflate(1, 2, 1).move(0, 2, 0));
+		ServerLevel level = (ServerLevel) this.yeti.level();
+		this.yeti.destroyBlocksInAABB(level, this.yeti.getBoundingBox().inflate(1, 2, 1).move(0, 2, 0));
 
 		// regular falling blocks, twice a second
 		if (this.currentDuration % 10 == 0) {
-			this.yeti.makeRandomBlockFall(30, 80);
+			this.yeti.makeRandomBlockFall(level, 30, 80);
 		}
 
 		// blocks target players, one every second
@@ -86,7 +88,7 @@ public class YetiRampageGoal extends Goal {
 
 		// blocks that fall close to the yeti, twice a second near the end of the rampage
 		if (this.currentDuration < 40 && this.currentDuration % 10 == 0) {
-			this.yeti.makeRandomBlockFall(15, 40);
+			this.yeti.makeRandomBlockFall(level, 15, 40);
 		}
 
 		if (this.currentDuration % 20 == 0) {

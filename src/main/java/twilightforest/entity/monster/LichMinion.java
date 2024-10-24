@@ -1,5 +1,6 @@
 package twilightforest.entity.monster;
 
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -30,10 +31,10 @@ public class LichMinion extends Zombie {
 	}
 
 	@Override
-	public boolean hurt(DamageSource source, float amount) {
-		LivingEntity prevTarget = getTarget();
+	public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
+		LivingEntity prevTarget = this.getTarget();
 
-		if (super.hurt(source, amount)) {
+		if (super.hurtServer(level, source, amount)) {
 			if (source.getEntity() instanceof Lich) {
 				// return to previous target but speed up
 				this.setLastHurtByMob(prevTarget);
@@ -72,8 +73,8 @@ public class LichMinion extends Zombie {
 			this.findNewMaster();
 		}
 		// if we still don't have a master, or ours is dead, die.
-		if (this.master == null || !this.master.isAlive()) {
-			this.kill();
+		if ((this.master == null || !this.master.isAlive()) && this.level() instanceof ServerLevel level) {
+			this.kill(level);
 		}
 		super.aiStep();
 	}

@@ -7,6 +7,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
@@ -50,7 +51,6 @@ public class DeathTome extends Monster implements RangedAttackMob {
 	public float flipT;
 	public float flipA;
 
-	@SuppressWarnings("this-escape")
 	public DeathTome(EntityType<? extends DeathTome> type, Level world) {
 		super(type, world);
 		this.moveControl = new FlyingMoveControl(this, 10, false);
@@ -170,7 +170,7 @@ public class DeathTome extends Monster implements RangedAttackMob {
 	}
 
 	@Override
-	public boolean hurt(DamageSource src, float damage) {
+	public boolean hurtServer(ServerLevel level, DamageSource src, float damage) {
 		if (this.isOnLectern()) {
 			this.jumpControl.jump();
 			this.setOnLectern(false);
@@ -180,12 +180,12 @@ public class DeathTome extends Monster implements RangedAttackMob {
 			damage *= 2;
 		}
 
-		if (super.hurt(src, damage)) {
+		if (super.hurtServer(level, src, damage)) {
 			if (damage > 0) {
 				if (!this.level().isClientSide()) {
 					LootParams ctx = TFLootTables.createLootParams(this, true, src).create(LootContextParamSets.ENTITY);
 
-					Objects.requireNonNull(this.level().getServer()).reloadableRegistries().getLootTable(TFLootTables.DEATH_TOME_HURT).getRandomItems(ctx, s -> spawnAtLocation(s, 1.0F));
+					Objects.requireNonNull(this.level().getServer()).reloadableRegistries().getLootTable(TFLootTables.DEATH_TOME_HURT).getRandomItems(ctx, s -> this.spawnAtLocation(level, s, 1.0F));
 				}
 			}
 			return true;

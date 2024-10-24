@@ -66,8 +66,8 @@ public class NatureBolt extends TFThrowable implements ITFProjectile, ItemSuppli
 		BlockPos blockPosHit = result.getBlockPos();
 		BlockState stateHit = this.level().getBlockState(blockPosHit);
 
-		if (EventHooks.canEntityGrief(this.level(), this)) {
-			if (!this.level().isClientSide() && stateHit.getBlock() instanceof BonemealableBlock bonemealable && bonemealable.isValidBonemealTarget(this.level(), blockPosHit, stateHit)) {
+		if (this.level() instanceof ServerLevel level && EventHooks.canEntityGrief(level, this)) {
+			if (stateHit.getBlock() instanceof BonemealableBlock bonemealable && bonemealable.isValidBonemealTarget(this.level(), blockPosHit, stateHit)) {
 				bonemealable.performBonemeal((ServerLevel) this.level(), this.random, blockPosHit, stateHit);
 			} else if (stateHit.isSolid() && this.canReplaceBlock(this.level(), blockPosHit)) {
 				this.level().setBlockAndUpdate(blockPosHit, Blocks.BIRCH_LEAVES.defaultBlockState().setValue(LeavesBlock.PERSISTENT, true));
@@ -80,8 +80,8 @@ public class NatureBolt extends TFThrowable implements ITFProjectile, ItemSuppli
 		super.onHitEntity(result);
 		Entity owner = this.getOwner();
 		Entity entityHit = result.getEntity();
-		if (entityHit instanceof LivingEntity living && (owner == null || (entityHit != owner && entityHit != owner.getVehicle()))) {
-			if (entityHit.hurt(TFDamageTypes.getIndirectEntityDamageSource(this.level(), TFDamageTypes.LEAF_BRAIN, this, this.getOwner()), 2)
+		if (this.level() instanceof ServerLevel level && entityHit instanceof LivingEntity living && (owner == null || (entityHit != owner && entityHit != owner.getVehicle()))) {
+			if (entityHit.hurtServer(level, TFDamageTypes.getIndirectEntityDamageSource(this.level(), TFDamageTypes.LEAF_BRAIN, this, this.getOwner()), 2)
 				&& this.level().getDifficulty() != Difficulty.PEACEFUL) {
 				int poisonTime = this.level().getDifficulty() == Difficulty.HARD ? 7 : 3;
 				living.addEffect(new MobEffectInstance(MobEffects.POISON, poisonTime * 20, 0));
@@ -99,7 +99,7 @@ public class NatureBolt extends TFThrowable implements ITFProjectile, ItemSuppli
 	}
 
 	private boolean canReplaceBlock(Level level, BlockPos pos) {
-		return !level.getBlockState(pos).hasBlockEntity() && level.getBlockState(pos).isSolidRender(level, pos) && level.getBlockState(pos).is(BlockTagGenerator.DRUID_PROJECTILE_REPLACEABLE) && EntityUtil.canDestroyBlock(level, pos, this);
+		return !level.getBlockState(pos).hasBlockEntity() && level.getBlockState(pos).isSolidRender() && level.getBlockState(pos).is(BlockTagGenerator.DRUID_PROJECTILE_REPLACEABLE) && EntityUtil.canDestroyBlock(level, pos, this);
 	}
 
 	@Override

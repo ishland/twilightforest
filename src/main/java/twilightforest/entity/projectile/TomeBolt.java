@@ -3,6 +3,7 @@ package twilightforest.entity.projectile;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -55,8 +56,8 @@ public class TomeBolt extends TFThrowable implements ItemSupplier {
 	@Override
 	protected void onHitEntity(EntityHitResult result) {
 		super.onHitEntity(result);
-		if (result.getEntity() instanceof LivingEntity living) {
-			if (result.getEntity().hurt(TFDamageTypes.getIndirectEntityDamageSource(this.level(), this.random.nextBoolean() ? TFDamageTypes.LOST_WORDS : TFDamageTypes.SCHOOLED, this, this.getOwner()), 3)) {
+		if (result.getEntity() instanceof LivingEntity living && this.level() instanceof ServerLevel level) {
+			if (result.getEntity().hurtServer(level, TFDamageTypes.getIndirectEntityDamageSource(level, this.random.nextBoolean() ? TFDamageTypes.LOST_WORDS : TFDamageTypes.SCHOOLED, this, this.getOwner()), 3)) {
 				// inflict move slowdown
 				int duration = this.level().getDifficulty() == Difficulty.EASY ? 2 : this.level().getDifficulty() == Difficulty.NORMAL ? 6 : 8;
 				living.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, duration * 20, 1));

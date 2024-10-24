@@ -3,6 +3,7 @@ package twilightforest.entity.projectile;
 import net.minecraft.core.particles.ColorParticleOption;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityEvent;
@@ -53,9 +54,7 @@ public class LichBolt extends TFThrowable {
 	}
 
 	@Override
-	public boolean hurt(DamageSource damagesource, float amount) {
-		super.hurt(damagesource, amount);
-
+	public boolean hurtServer(ServerLevel level, DamageSource damagesource, float amount) {
 		if (!this.level().isClientSide() && damagesource.getEntity() != null) {
 			Vec3 vec3d = damagesource.getEntity().getLookAngle();
 			// reflect faster and more accurately
@@ -67,7 +66,7 @@ public class LichBolt extends TFThrowable {
 			return true;
 		}
 
-		return false;
+		return super.hurtServer(level, damagesource, amount);
 	}
 
 	@Override

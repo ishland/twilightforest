@@ -53,7 +53,8 @@ public class ChainBlock extends ThrowableProjectile implements IEntityWithComple
 	}
 
 	public ChainBlock(EntityType<? extends ChainBlock> type, Level level, LivingEntity thrower, InteractionHand hand, ItemStack stack) {
-		super(type, thrower, level);
+		super(type, level);
+		this.setOwner(thrower);
 		this.isReturning = false;
 		this.stack = stack;
 		this.setHand(hand);
@@ -97,26 +98,25 @@ public class ChainBlock extends ThrowableProjectile implements IEntityWithComple
 	protected void onHitEntity(EntityHitResult result) {
 		super.onHitEntity(result);
 		// only hit living things & inside the world border
-		Level level = this.level();
-		if (!level.isClientSide() && result.getEntity() != this.getOwner() && level.getWorldBorder().isWithinBounds(result.getEntity().blockPosition())) {
+		if (this.level() instanceof ServerLevel level && result.getEntity() != this.getOwner() && level.getWorldBorder().isWithinBounds(result.getEntity().blockPosition())) {
 			float damage = 10.0F;
 			DamageSource source = TFDamageTypes.getIndirectEntityDamageSource(level, TFDamageTypes.SPIKED, this, this.getOwner());
 			if (stack != null) {
 				if (result.getEntity() instanceof LivingEntity living) {
-					damage = EnchantmentHelper.modifyDamage((ServerLevel) level, this.stack, living, source, damage);
+					damage = EnchantmentHelper.modifyDamage(level, this.stack, living, source, damage);
 				} else if (result.getEntity() instanceof PartEntity<?> part && part.getParent() instanceof LivingEntity living) {
-					damage = EnchantmentHelper.modifyDamage((ServerLevel) level, this.stack, living, source, damage);
+					damage = EnchantmentHelper.modifyDamage(level, this.stack, living, source, damage);
 				}
 			}
 
 			//properly disable shields
 			if (result.getEntity() instanceof Player player && player.isUsingItem() && player.getUseItem().canPerformAction(ItemAbilities.SHIELD_BLOCK)) {
 				player.getUseItem().hurtAndBreak(5, player, LivingEntity.getSlotForHand(player.getUsedItemHand()));
-				player.disableShield();
+				player.disableShield(player.getUseItem());
 			}
 
 			if (damage > 0.0F) {
-				if (result.getEntity().hurt(source, damage)) {
+				if (result.getEntity().hurtServer(level, source, damage)) {
 					this.playSound(TFSounds.BLOCK_AND_CHAIN_HIT.get(), 1.0f, this.random.nextFloat());
 					// age when we hit a monster so that we go back to the player faster
 					this.hitEntity = true;
@@ -151,7 +151,7 @@ public class ChainBlock extends ThrowableProjectile implements IEntityWithComple
 					null,
 					vec3,
 					level.getBlockState(result.getBlockPos()),
-					item -> this.kill()
+					item -> this.kill(level)
 				);
 			}
 		}

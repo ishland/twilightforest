@@ -7,6 +7,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -43,7 +44,6 @@ public class Minoshroom extends BaseTFBoss implements ITFCharger {
 	public float clientSideChargeAnimation;
 	private boolean groundSmashState = false;
 
-	@SuppressWarnings("this-escape")
 	public Minoshroom(EntityType<? extends Minoshroom> type, Level level) {
 		super(type, level);
 		this.xpReward = 100;
@@ -134,7 +134,7 @@ public class Minoshroom extends BaseTFBoss implements ITFCharger {
 
 	@Nullable
 	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor accessor, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData data) {
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor accessor, DifficultyInstance difficulty, EntitySpawnReason reason, @Nullable SpawnGroupData data) {
 		data = super.finalizeSpawn(accessor, difficulty, reason, data);
 		this.populateDefaultEquipmentSlots(accessor.getRandom(), difficulty);
 		this.populateDefaultEquipmentEnchantments(accessor, accessor.getRandom(), difficulty);
@@ -142,8 +142,8 @@ public class Minoshroom extends BaseTFBoss implements ITFCharger {
 	}
 
 	@Override
-	public boolean doHurtTarget(Entity entity) {
-		return EntityUtil.properlyApplyCustomDamageSource(this, entity, TFDamageTypes.getEntityDamageSource(this.level(), TFDamageTypes.AXING, this), TFSounds.MINOSHROOM_ATTACK.get());
+	public boolean doHurtTarget(ServerLevel level, Entity entity) {
+		return EntityUtil.properlyApplyCustomDamageSource(level, this, entity, TFDamageTypes.getEntityDamageSource(this.level(), TFDamageTypes.AXING, this), TFSounds.MINOSHROOM_ATTACK.get());
 	}
 
 	@Override

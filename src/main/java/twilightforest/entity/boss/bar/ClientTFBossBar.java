@@ -5,6 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.BossHealthOverlay;
 import net.minecraft.client.gui.components.LerpingBossEvent;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -39,12 +40,12 @@ public class ClientTFBossBar extends LerpingBossEvent {
 		RenderSystem.enableBlend();
 		RenderSystem.setShaderColor(((this.color >> 16) & 255) / 255F, ((this.color >> 8) & 255) / 255F, (this.color & 255) / 255F, 1.0F);
 
-		guiGraphics.blitSprite(BAR_BACKGROUND, 182, 5, 0, 0, x, y, 182, 5);
-		if (this.overlay != BossEvent.BossBarOverlay.PROGRESS) guiGraphics.blitSprite(BossHealthOverlay.OVERLAY_BACKGROUND_SPRITES[this.overlay.ordinal() - 1], 182, 5, 0, 0, x, y, 182, 5);
+		guiGraphics.blitSprite(RenderType::guiTextured, BAR_BACKGROUND, 182, 5, 0, 0, x, y, 182, 5);
+		if (this.overlay != BossEvent.BossBarOverlay.PROGRESS) guiGraphics.blitSprite(RenderType::guiTextured, BossHealthOverlay.OVERLAY_BACKGROUND_SPRITES[this.overlay.ordinal() - 1], 182, 5, 0, 0, x, y, 182, 5);
 		int i = Mth.lerpDiscrete(this.getProgress(), 0, 182);
 		if (i > 0) {
-			guiGraphics.blitSprite(BAR_PROGRESS, 182, 5, 0, 0, x, y, i, 5);
-			if (this.overlay != BossEvent.BossBarOverlay.PROGRESS) guiGraphics.blitSprite(BossHealthOverlay.OVERLAY_PROGRESS_SPRITES[this.overlay.ordinal() - 1], 182, 5, 0, 0, x, y, i, 5);
+			guiGraphics.blitSprite(RenderType::guiTextured, BAR_PROGRESS, 182, 5, 0, 0, x, y, i, 5);
+			if (this.overlay != BossEvent.BossBarOverlay.PROGRESS) guiGraphics.blitSprite(RenderType::guiTextured, BossHealthOverlay.OVERLAY_PROGRESS_SPRITES[this.overlay.ordinal() - 1], 182, 5, 0, 0, x, y, i, 5);
 		}
 
 		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);

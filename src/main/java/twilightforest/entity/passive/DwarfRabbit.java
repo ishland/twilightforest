@@ -46,7 +46,7 @@ public class DwarfRabbit extends Animal implements VariantHolder<Holder<DwarfRab
 		this.goalSelector.addGoal(0, new FloatGoal(this));
 		this.goalSelector.addGoal(1, new PanicGoal(this, 2.0F));
 		this.goalSelector.addGoal(2, new BreedGoal(this, 0.8D));
-		this.goalSelector.addGoal(2, new TemptGoal(this, 1.0F, Ingredient.of(ItemTagGenerator.DWARF_RABBIT_TEMPT_ITEMS), false));
+		this.goalSelector.addGoal(2, new TemptGoal(this, 1.0F, stack -> stack.is(ItemTagGenerator.DWARF_RABBIT_TEMPT_ITEMS), false));
 		this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, Player.class, 2.0F, 0.8F, 1.33F));
 		this.goalSelector.addGoal(4, new AvoidEntityGoal<>(this, Ocelot.class, 8.0F, 0.8F, 1.1F));
 		this.goalSelector.addGoal(4, new AvoidEntityGoal<>(this, Cat.class, 8.0F, 0.8F, 1.1F));
@@ -68,7 +68,7 @@ public class DwarfRabbit extends Animal implements VariantHolder<Holder<DwarfRab
 	@Nullable
 	@Override
 	public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob mob) {
-		DwarfRabbit dwarf = TFEntities.DWARF_RABBIT.get().create(level);
+		DwarfRabbit dwarf = TFEntities.DWARF_RABBIT.get().create(level, EntitySpawnReason.BREEDING);
 		Holder<DwarfRabbitVariant> variant = DwarfRabbitVariant.getRandomCommonVariant(level.registryAccess(), level.getRandom());
 		if (dwarf != null && mob instanceof DwarfRabbit parent) {
 			if (this.getRandom().nextInt(20) != 0) {
@@ -87,7 +87,7 @@ public class DwarfRabbit extends Animal implements VariantHolder<Holder<DwarfRab
 	@Override
 	protected void defineSynchedData(SynchedEntityData.Builder builder) {
 		super.defineSynchedData(builder);
-		builder.define(VARIANT, this.registryAccess().registryOrThrow(TFRegistries.Keys.DWARF_RABBIT_VARIANT).getHolderOrThrow(DwarfRabbitVariants.BROWN));
+		builder.define(VARIANT, this.registryAccess().lookupOrThrow(TFRegistries.Keys.DWARF_RABBIT_VARIANT).getOrThrow(DwarfRabbitVariants.BROWN));
 	}
 
 	@Override
@@ -101,12 +101,12 @@ public class DwarfRabbit extends Animal implements VariantHolder<Holder<DwarfRab
 		super.readAdditionalSaveData(compound);
 		Optional.ofNullable(ResourceLocation.tryParse(compound.getString("variant")))
 			.map(location -> ResourceKey.create(TFRegistries.Keys.DWARF_RABBIT_VARIANT, location))
-			.flatMap(key -> this.registryAccess().registryOrThrow(TFRegistries.Keys.DWARF_RABBIT_VARIANT).getHolder(key))
+			.flatMap(key -> this.registryAccess().lookupOrThrow(TFRegistries.Keys.DWARF_RABBIT_VARIANT).get(key))
 			.ifPresent(this::setVariant);
 	}
 
 	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor accessor, DifficultyInstance difficulty, MobSpawnType type, @Nullable SpawnGroupData data) {
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor accessor, DifficultyInstance difficulty, EntitySpawnReason type, @Nullable SpawnGroupData data) {
 		data = super.finalizeSpawn(accessor, difficulty, type, data);
 		this.setVariant(DwarfRabbitVariant.getVariant(accessor.registryAccess(), accessor.getBiome(this.blockPosition()), this.getRandom()));
 		return data;

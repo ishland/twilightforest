@@ -37,6 +37,7 @@ public class LoyalZombie extends TamableAnimal {
 
 	public LoyalZombie(EntityType<? extends LoyalZombie> type, Level world) {
 		super(type, world);
+		this.xpReward = 0;
 	}
 
 	@Override
@@ -66,8 +67,8 @@ public class LoyalZombie extends TamableAnimal {
 	}
 
 	@Override
-	public boolean doHurtTarget(Entity entity) {
-		boolean success = entity.hurt(this.damageSources().mobAttack(this), 7.0F);
+	public boolean doHurtTarget(ServerLevel level, Entity entity) {
+		boolean success = entity.hurtServer(level, this.damageSources().mobAttack(this), 7.0F);
 
 		if (success) {
 			entity.push(0.0D, 0.2D, 0.0D);
@@ -98,7 +99,7 @@ public class LoyalZombie extends TamableAnimal {
 			this.heal(1.0F);
 			this.playSound(SoundEvents.ZOMBIE_INFECT, this.getSoundVolume(), this.getVoicePitch());
 			player.getItemInHand(hand).consume(1, player);
-			return InteractionResult.sidedSuccess(this.level().isClientSide());
+			return InteractionResult.SUCCESS;
 		}
 
 		return super.interactAt(player, vec3, hand);
@@ -152,10 +153,5 @@ public class LoyalZombie extends TamableAnimal {
 	@Override
 	protected void playStepSound(BlockPos pos, BlockState state) {
 		playSound(TFSounds.LOYAL_ZOMBIE_STEP.get(), 0.15F, 1.0F);
-	}
-
-	@Override
-	protected void dropExperience(@Nullable Entity entity) {
-
 	}
 }

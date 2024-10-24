@@ -4,8 +4,8 @@ import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Zombie;
@@ -13,6 +13,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.fluids.FluidType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
@@ -30,7 +31,7 @@ public class RisingZombie extends Zombie {
 
 	@Nullable
 	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor accessor, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData data) {
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor accessor, DifficultyInstance difficulty, EntitySpawnReason reason, @Nullable SpawnGroupData data) {
 		// NO-OP
 		return data;
 	}
@@ -64,5 +65,35 @@ public class RisingZombie extends Zombie {
 	@Override
 	protected boolean canRide(Entity entity) {
 		return false;
+	}
+
+	@Override
+	public void push(Entity entity) {
+
+	}
+
+	@Override
+	public boolean isPushable() {
+		return false;
+	}
+
+	@Override
+	protected boolean isImmobile() {
+		return true;
+	}
+
+	@Override
+	public boolean canUsePortal(boolean allowPassengers) {
+		return false;
+	}
+
+	@Override
+	public boolean isPushedByFluid(FluidType type) {
+		return false;
+	}
+
+	@Override
+	protected void pushEntities() {
+
 	}
 }

@@ -10,8 +10,8 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.VariantHolder;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -50,7 +50,7 @@ public class TinyBird extends FlyingBird implements VariantHolder<Holder<TinyBir
 	@Override
 	protected void defineSynchedData(SynchedEntityData.Builder builder) {
 		super.defineSynchedData(builder);
-		builder.define(VARIANT, this.registryAccess().registryOrThrow(TFRegistries.Keys.TINY_BIRD_VARIANT).getHolderOrThrow(TinyBirdVariants.RED));
+		builder.define(VARIANT, this.registryAccess().lookupOrThrow(TFRegistries.Keys.TINY_BIRD_VARIANT).getOrThrow(TinyBirdVariants.RED));
 	}
 
 	public static AttributeSupplier.Builder registerAttributes() {
@@ -71,12 +71,12 @@ public class TinyBird extends FlyingBird implements VariantHolder<Holder<TinyBir
 		super.readAdditionalSaveData(compound);
 		Optional.ofNullable(ResourceLocation.tryParse(compound.getString("variant")))
 			.map(location -> ResourceKey.create(TFRegistries.Keys.TINY_BIRD_VARIANT, location))
-			.flatMap(key -> this.registryAccess().registryOrThrow(TFRegistries.Keys.TINY_BIRD_VARIANT).getHolder(key))
+			.flatMap(key -> this.registryAccess().lookupOrThrow(TFRegistries.Keys.TINY_BIRD_VARIANT).get(key))
 			.ifPresent(this::setVariant);
 	}
 
 	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor accessor, DifficultyInstance difficulty, MobSpawnType type, @Nullable SpawnGroupData data) {
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor accessor, DifficultyInstance difficulty, EntitySpawnReason type, @Nullable SpawnGroupData data) {
 		data = super.finalizeSpawn(accessor, difficulty, type, data);
 		this.setVariant(TinyBirdVariant.getVariant(accessor.registryAccess(), accessor.getBiome(this.blockPosition()), this.getRandom()));
 		return data;

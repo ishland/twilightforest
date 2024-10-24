@@ -56,8 +56,8 @@ public abstract class BaseTFBoss extends Monster implements IBossLootBuffer, Enf
 
 	public abstract Block getBossSpawner();
 
-	protected boolean shouldSpawnLoot() {
-		return this.level().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT);
+	protected boolean shouldSpawnLoot(ServerLevel level) {
+		return level.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT);
 	}
 
 	protected boolean shouldCreateSpawner() {
@@ -101,8 +101,10 @@ public abstract class BaseTFBoss extends Monster implements IBossLootBuffer, Enf
 	public void lavaHurt() {
 		if (!this.fireImmune()) {
 			this.igniteForSeconds(5);
-			if (this.hurt(this.damageSources().lava(), 4.0F)) {
-				this.playSound(SoundEvents.GENERIC_BURN, 0.4F, 2.0F + this.getRandom().nextFloat() * 0.4F);
+			if (this.level() instanceof ServerLevel serverlevel && this.hurtServer(serverlevel, this.damageSources().lava(), 4.0F)) {
+				if (this.shouldPlayLavaHurtSound() && !this.isSilent()) {
+					this.playSound(SoundEvents.GENERIC_BURN, 0.4F, 2.0F + this.getRandom().nextFloat() * 0.4F);
+				}
 				EntityUtil.killLavaAround(this);
 			}
 		}
@@ -111,7 +113,7 @@ public abstract class BaseTFBoss extends Monster implements IBossLootBuffer, Enf
 	@Override
 	public void die(DamageSource cause) {
 		super.die(cause);
-		if (this.shouldSpawnLoot() && this.level() instanceof ServerLevel server) this.postmortem(server, cause);
+		if (this.level() instanceof ServerLevel server && this.shouldSpawnLoot(server)) this.postmortem(server, cause);
 	}
 
 	// mark the boss structure as conquered, separate method, so it can be overridden
@@ -129,7 +131,7 @@ public abstract class BaseTFBoss extends Monster implements IBossLootBuffer, Enf
 
 	// drop loot into a chest after removal, separate method, so it can be overridden
 	protected void postRemoval(ServerLevel serverLevel, RemovalReason reason) {
-		if (reason.equals(RemovalReason.KILLED) && this.shouldSpawnLoot()) {
+		if (reason.equals(RemovalReason.KILLED) && this.shouldSpawnLoot(serverLevel)) {
 			IBossLootBuffer.depositDropsIntoChest(this, this.getDeathContainer(this.getRandom()).defaultBlockState().setValue(ChestBlock.FACING, Direction.Plane.HORIZONTAL.getRandomDirection(this.level().getRandom())), EntityUtil.bossChestLocation(this), serverLevel);
 		}
 	}
@@ -222,9 +224,9 @@ public abstract class BaseTFBoss extends Monster implements IBossLootBuffer, Enf
 	}
 
 	@Override
-	protected void customServerAiStep() {
-		super.customServerAiStep();
-		if (!this.level().isClientSide()) this.tickBossBar();
+	protected void customServerAiStep(ServerLevel level) {
+		super.customServerAiStep(level);
+		this.tickBossBar();
 	}
 
 	protected void tickBossBar() {

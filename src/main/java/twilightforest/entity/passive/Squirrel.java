@@ -31,7 +31,7 @@ public class Squirrel extends Animal {
 	protected void registerGoals() {
 		this.goalSelector.addGoal(0, new FloatGoal(this));
 		this.goalSelector.addGoal(1, new PanicGoal(this, 1.38F));
-		this.goalSelector.addGoal(2, new TemptGoal(this, 1.0F, Ingredient.of(ItemTagGenerator.SQUIRREL_TEMPT_ITEMS), true));
+		this.goalSelector.addGoal(2, new TemptGoal(this, 1.0F, stack -> stack.is(ItemTagGenerator.SQUIRREL_TEMPT_ITEMS), true));
 		this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, Player.class, 2.0F, 0.8F, 1.4F));
 		this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, Wolf.class, 8.0F, 0.8F, 1.4F));
 		this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, Cat.class, 8.0F, 0.8F, 1.4F));

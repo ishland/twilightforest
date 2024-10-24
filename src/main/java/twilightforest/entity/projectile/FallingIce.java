@@ -62,7 +62,6 @@ public class FallingIce extends Entity {
 		super(type, level);
 	}
 
-	@SuppressWarnings("this-escape")
 	public FallingIce(Level level, double x, double y, double z, BlockState state, int hangTime) {
 		this(TFEntities.FALLING_ICE.get(), level);
 		this.hangTime = hangTime;
@@ -130,7 +129,7 @@ public class FallingIce extends Entity {
 				}
 
 				if (!this.onGround() && !flag1) {
-					if (!this.level().isClientSide() && (this.time > 100 && (blockpos.getY() <= this.level().getMinBuildHeight() || blockpos.getY() > this.level().getMaxBuildHeight()) || this.time > 1000)) {
+					if (!this.level().isClientSide() && (this.time > 100 && (blockpos.getY() <= this.level().getMinY() || blockpos.getY() > this.level().getMaxY()) || this.time > 1000)) {
 						this.discard();
 					}
 				} else {
@@ -216,6 +215,15 @@ public class FallingIce extends Entity {
 		}
 
 		this.playSound(Blocks.PACKED_ICE.defaultBlockState().getSoundType().getBreakSound(), 3.0F, 0.5F);
+		return false;
+	}
+
+	@Override
+	public final boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
+		if (!this.isInvulnerableToBase(source)) {
+			this.markHurt();
+		}
+
 		return false;
 	}
 

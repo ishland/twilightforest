@@ -5,6 +5,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -31,7 +32,7 @@ public class Deer extends Animal {
 		goalSelector.addGoal(0, new FloatGoal(this));
 		goalSelector.addGoal(1, new PanicGoal(this, 2.0D));
 		goalSelector.addGoal(2, new BreedGoal(this, 1.0D));
-		goalSelector.addGoal(3, new TemptGoal(this, 1.25D, Ingredient.of(ItemTagGenerator.DEER_TEMPT_ITEMS), false));
+		goalSelector.addGoal(3, new TemptGoal(this, 1.25D, stack -> stack.is(ItemTagGenerator.DEER_TEMPT_ITEMS), false));
 		goalSelector.addGoal(4, new FollowParentGoal(this, 1.25D));
 		goalSelector.addGoal(4, new AvoidEntityGoal<>(this, Player.class, 16.0F, 1.5D, 1.8D));
 		goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 1.0D));
@@ -66,7 +67,7 @@ public class Deer extends Animal {
 
 	@Override
 	public Deer getBreedOffspring(ServerLevel level, AgeableMob mate) {
-		return TFEntities.DEER.get().create(level);
+		return TFEntities.DEER.get().create(level, EntitySpawnReason.BREEDING);
 	}
 
 	@Override

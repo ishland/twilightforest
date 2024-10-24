@@ -9,16 +9,17 @@ import net.minecraft.world.level.Level;
 
 public abstract class TFThrowable extends ThrowableProjectile implements ITFProjectile {
 
-	public TFThrowable(EntityType<? extends TFThrowable> type, Level worldIn) {
-		super(type, worldIn);
+	public TFThrowable(EntityType<? extends TFThrowable> type, Level level) {
+		super(type, level);
 	}
 
-	public TFThrowable(EntityType<? extends TFThrowable> type, Level worldIn, double x, double y, double z) {
-		super(type, x, y, z, worldIn);
+	public TFThrowable(EntityType<? extends TFThrowable> type, Level level, double x, double y, double z) {
+		super(type, x, y, z, level);
 	}
 
-	public TFThrowable(EntityType<? extends TFThrowable> type, Level worldIn, LivingEntity throwerIn) {
-		super(type, throwerIn, worldIn);
+	public TFThrowable(EntityType<? extends TFThrowable> type, Level level, LivingEntity thrower) {
+		super(type, level);
+		this.setOwner(thrower);
 	}
 
 	@Override

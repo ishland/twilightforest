@@ -12,10 +12,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Container;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.decoration.HangingEntity;
 import net.minecraft.world.entity.decoration.Painting;
@@ -133,13 +130,13 @@ public class EntityUtil {
 	}
 
 	//copy of Mob.doHurtTarget, allows for using a custom DamageSource instead of the generic Mob Attack one
-	public static boolean properlyApplyCustomDamageSource(Mob entity, Entity victim, DamageSource source, @Nullable SoundEvent flingSound) {
+	public static boolean properlyApplyCustomDamageSource(ServerLevel level, Mob entity, Entity victim, DamageSource source, @Nullable SoundEvent flingSound) {
 		float f = (float)entity.getAttributeValue(Attributes.ATTACK_DAMAGE);
 		if (entity.level() instanceof ServerLevel serverlevel) {
 			f = EnchantmentHelper.modifyDamage(serverlevel, entity.getWeaponItem(), entity, source, f);
 		}
 
-		boolean flag = victim.hurt(source, f);
+		boolean flag = victim.hurtServer(level, source, f);
 		if (flag) {
 			float f1 = getKnockback(entity, victim, source);
 			if (f1 > 0.0F && victim instanceof LivingEntity livingentity) {
@@ -149,11 +146,7 @@ public class EntityUtil {
 				livingentity.knockback(f1 * 0.5F, Mth.sin(entity.getYRot() * Mth.DEG_TO_RAD), -Mth.cos(entity.getYRot() * Mth.DEG_TO_RAD));
 				entity.setDeltaMovement(entity.getDeltaMovement().multiply(0.6D, 1.0D, 0.6D));
 			}
-
-			if (entity.level() instanceof ServerLevel level) {
-				EnchantmentHelper.doPostAttackEffects(level, victim, source);
-			}
-
+			EnchantmentHelper.doPostAttackEffects(level, victim, source);
 			entity.setLastHurtMob(entity);
 		}
 
@@ -167,9 +160,9 @@ public class EntityUtil {
 
 	// [VanillaCopy] with modifications: StructureTemplate.createEntityIgnoreException
 	@Nullable
-	private static <T extends Entity> T createEntityIgnoreException(EntityType<T> type, ServerLevelAccessor levelAccessor) {
+	private static <T extends Entity> T createEntityIgnoreException(EntityType<T> type, ServerLevelAccessor levelAccessor, EntitySpawnReason reason) {
 		try {
-			return type.create(levelAccessor.getLevel());
+			return type.create(levelAccessor.getLevel(), reason);
 		} catch (Exception exception) {
 			return null;
 		}
@@ -178,7 +171,7 @@ public class EntityUtil {
 	public static boolean tryHangPainting(WorldGenLevel world, BlockPos pos, Direction direction, @Nullable Holder<PaintingVariant> chosenPainting) {
 		if (chosenPainting == null) return false;
 
-		Painting painting = createEntityIgnoreException(EntityType.PAINTING, world);
+		Painting painting = createEntityIgnoreException(EntityType.PAINTING, world, EntitySpawnReason.STRUCTURE);
 
 		painting.setPos(pos.getX(), pos.getY(), pos.getZ());
 		try {
@@ -207,14 +200,14 @@ public class EntityUtil {
 	public static Holder<PaintingVariant> getPaintingOfSize(WorldGenLevel level, RandomSource rand, int width, int height, boolean exactMeasurements) {
 		List<Holder<PaintingVariant>> valid = new ArrayList<>();
 
-		for (Holder<PaintingVariant> art : level.registryAccess().registryOrThrow(Registries.PAINTING_VARIANT).holders().toList()) {
+		for (PaintingVariant art : level.registryAccess().lookupOrThrow(Registries.PAINTING_VARIANT)) {
 			if (exactMeasurements) {
-				if (art.value().width() == width && art.value().height() == height) {
-					valid.add(art);
+				if (art.width() == width && art.height() == height) {
+					valid.add(level.registryAccess().lookupOrThrow(Registries.PAINTING_VARIANT).wrapAsHolder(art));
 				}
 			} else {
-				if (art.value().width() >= width || art.value().height() >= height) {
-					valid.add(art);
+				if (art.width() >= width || art.height() >= height) {
+					valid.add(level.registryAccess().lookupOrThrow(Registries.PAINTING_VARIANT).wrapAsHolder(art));
 				}
 			}
 		}
@@ -229,7 +222,7 @@ public class EntityUtil {
 	public static List<Holder<PaintingVariant>> getPaintingsOfSizeOrSmaller(WorldGenLevel level, TagKey<PaintingVariant> lichTowerPaintings, int width, int height) {
 		List<Holder<PaintingVariant>> valid = new ArrayList<>();
 
-		for (Holder<PaintingVariant> art : level.registryAccess().registryOrThrow(Registries.PAINTING_VARIANT).getTagOrEmpty(lichTowerPaintings)) {
+		for (Holder<PaintingVariant> art : level.registryAccess().lookupOrThrow(Registries.PAINTING_VARIANT).getTagOrEmpty(lichTowerPaintings)) {
 			if (art.value().width() <= width && art.value().height() <= height) {
 				valid.add(art);
 			}
@@ -272,7 +265,7 @@ public class EntityUtil {
 				ChunkAccess chunk = world.getChunk(i1, j1, ChunkStatus.STRUCTURE_STARTS);
 				if (chunk instanceof ProtoChunk proto) {
 					proto.getEntities().forEach(nbt -> {
-						Entity entity = EntityType.loadEntityRecursive(nbt, world.getLevel(), e -> e);
+						Entity entity = EntityType.loadEntityRecursive(nbt, world.getLevel(), EntitySpawnReason.STRUCTURE, e -> e);
 						if (entity != null && boundingBox.intersects(entity.getBoundingBox())) {
 							list.add(entity);
 						}

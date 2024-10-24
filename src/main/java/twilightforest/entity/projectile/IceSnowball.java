@@ -1,6 +1,7 @@
 package twilightforest.entity.projectile;
 
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
@@ -37,8 +38,8 @@ public class IceSnowball extends TFThrowable implements ItemSupplier {
 	}
 
 	@Override
-	public boolean hurt(DamageSource source, float amount) {
-		super.hurt(source, amount);
+	public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
+		super.hurtServer(level, source, amount);
 		this.die();
 		return true;
 	}

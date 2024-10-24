@@ -8,6 +8,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
@@ -45,7 +46,6 @@ public class Kobold extends Monster {
 	private int lastEatenBreadTicks;
 	private int eatingTime;
 
-	@SuppressWarnings("this-escape")
 	public Kobold(EntityType<? extends Kobold> type, Level world) {
 		super(type, world);
 		this.setCanPickUpLoot(true);
@@ -104,11 +104,6 @@ public class Kobold extends Monster {
 	}
 
 	@Override
-	public SoundEvent getEatingSound(ItemStack stack) {
-		return TFSounds.KOBOLD_MUNCH.get();
-	}
-
-	@Override
 	public void aiStep() {
 		super.aiStep();
 
@@ -132,7 +127,7 @@ public class Kobold extends Monster {
 				}
 				//every 3 seconds chew some bread
 				if (this.lastEatenBreadTicks > 60 && this.getRandom().nextFloat() < 0.1F) {
-					this.playSound(this.getEatingSound(itemstack), 0.75F, 0.9F);
+					this.playSound(TFSounds.KOBOLD_MUNCH.get(), 0.75F, 0.9F);
 					this.gameEvent(GameEvent.EAT);
 					this.level().broadcastEntityEvent(this, (byte) 45);
 					this.lastEatenBreadTicks = 0;
@@ -154,7 +149,8 @@ public class Kobold extends Monster {
 
 	}
 
-	private void spawnItemParticles(ItemStack stack, int amount) {
+	@Override
+	public void spawnItemParticles(ItemStack stack, int amount) {
 		ParticleOptions particleOptions = new ItemParticleOption(ParticleTypes.ITEM, stack);
 		if (this.level().isClientSide()) {
 			for (int i = 0; i < amount; ++i) {
@@ -193,13 +189,8 @@ public class Kobold extends Monster {
 	}
 
 	@Override
-	public boolean canTakeItem(ItemStack stack) {
-		EquipmentSlot equipmentslot = this.getEquipmentSlotForItem(stack);
-		if (!this.getItemBySlot(equipmentslot).isEmpty()) {
-			return false;
-		} else {
-			return equipmentslot == EquipmentSlot.MAINHAND && super.canTakeItem(stack);
-		}
+	protected boolean canDispenserEquipIntoSlot(EquipmentSlot slot) {
+		return slot == EquipmentSlot.MAINHAND && this.canPickUpLoot();
 	}
 
 	@Override
@@ -208,7 +199,7 @@ public class Kobold extends Monster {
 	}
 
 	@Override
-	protected void pickUpItem(ItemEntity item) {
+	protected void pickUpItem(ServerLevel level, ItemEntity item) {
 		ItemStack itemstack = item.getItem();
 		if (this.canHoldItem(itemstack)) {
 			int i = itemstack.getCount();
