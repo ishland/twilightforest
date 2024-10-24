@@ -1,6 +1,6 @@
 package twilightforest.client.model.block.patch;
 
-import net.minecraft.client.renderer.block.model.ItemOverrides;
+import net.minecraft.client.renderer.block.model.ItemOverride;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.Material;
@@ -11,6 +11,7 @@ import net.minecraft.world.inventory.InventoryMenu;
 import net.neoforged.neoforge.client.model.geometry.IGeometryBakingContext;
 import net.neoforged.neoforge.client.model.geometry.IUnbakedGeometry;
 
+import java.util.List;
 import java.util.function.Function;
 
 public record UnbakedPatchModel(Material material, boolean shaggify) implements IUnbakedGeometry<UnbakedPatchModel> {
@@ -19,7 +20,7 @@ public record UnbakedPatchModel(Material material, boolean shaggify) implements 
 	}
 
 	@Override
-	public BakedModel bake(IGeometryBakingContext owner, ModelBaker baker, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelTransform, ItemOverrides overrides) {
+	public BakedModel bake(IGeometryBakingContext owner, ModelBaker baker, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelTransform, List<ItemOverride> overrides) {
 		return new PatchModel(spriteGetter.apply(this.material()), this.shaggify());
 	}
 }

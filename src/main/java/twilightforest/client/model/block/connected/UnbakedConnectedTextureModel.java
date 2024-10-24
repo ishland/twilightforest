@@ -34,6 +34,7 @@ public class UnbakedConnectedTextureModel implements IUnbakedGeometry<UnbakedCon
 	private final List<Block> connectableBlocks;
 	private final BlockElement[][] baseElements;
 	private final BlockElement[][][] faceElements;
+	public static final FaceBakery FACE_BAKERY = new FaceBakery();
 
 	public UnbakedConnectedTextureModel(EnumSet<Direction> enabledFaces, boolean renderOnDisabledFaces, List<Block> connectableBlocks, int baseTintIndex, int baseEmissivity, int tintIndex, int emissivity) {
 		//a list of block faces that should have connected textures.
@@ -49,33 +50,30 @@ public class UnbakedConnectedTextureModel implements IUnbakedGeometry<UnbakedCon
 		//face elements - the connected bit of the model.
 		//the array is made of the directions, quads, and each logic value in the ConnectionLogic class
 		this.faceElements = new BlockElement[6][4][5];
-		ExtraFaceData baseFace = new ExtraFaceData(-1, baseEmissivity, baseEmissivity, false);
-		ExtraFaceData overlayFace = new ExtraFaceData(-1, emissivity, emissivity, true);
 		Vec3i center = new Vec3i(8, 8, 8);
 
 		for (Direction face : Direction.values()) {
 			Direction[] planeDirections = ConnectionLogic.AXIS_PLANE_DIRECTIONS[face.getAxis().ordinal()];
 
 			for(int i = 0; i < 4; ++i) {
-				Vec3i corner = face.getNormal().offset(planeDirections[i].getNormal()).offset(planeDirections[(i + 1) % 4].getNormal()).offset(1, 1, 1).multiply(8);
-				BlockElement element = new BlockElement(new Vector3f((float)Math.min(center.getX(), corner.getX()), (float)Math.min(center.getY(), corner.getY()), (float)Math.min(center.getZ(), corner.getZ())), new Vector3f((float)Math.max(center.getX(), corner.getX()), (float)Math.max(center.getY(), corner.getY()), (float)Math.max(center.getZ(), corner.getZ())), Map.of(), null, true);
-				this.baseElements[face.get3DDataValue()][i] = new BlockElement(element.from, element.to, Map.of(face, new BlockElementFace(face, baseTintIndex, "", new BlockFaceUV(ConnectionLogic.NONE.remapUVs(element.uvsByFace(face)), 0), baseFace, new MutableObject<>())), null, true);
+				Vec3i corner = face.getUnitVec3i().offset(planeDirections[i].getUnitVec3i()).offset(planeDirections[(i + 1) % 4].getUnitVec3i()).offset(1, 1, 1).multiply(8);
+				BlockElement element = new BlockElement(new Vector3f((float)Math.min(center.getX(), corner.getX()), (float)Math.min(center.getY(), corner.getY()), (float)Math.min(center.getZ(), corner.getZ())), new Vector3f((float)Math.max(center.getX(), corner.getX()), (float)Math.max(center.getY(), corner.getY()), (float)Math.max(center.getZ(), corner.getZ())), Map.of(), null, true, 0);
+				this.baseElements[face.get3DDataValue()][i] = new BlockElement(element.from, element.to, Map.of(face, new BlockElementFace(face, baseTintIndex, "", new BlockFaceUV(ConnectionLogic.NONE.remapUVs(element.uvsByFace(face)), 0))), null, true, baseEmissivity);
 
 				for (ConnectionLogic logic : ConnectionLogic.values()) {
-					this.faceElements[face.get3DDataValue()][i][logic.ordinal()] = new BlockElement(element.from, element.to, Map.of(face, new BlockElementFace(face, tintIndex, "", new BlockFaceUV(logic.remapUVs(element.uvsByFace(face)), 0), overlayFace, new MutableObject<>())), null, true);
+					this.faceElements[face.get3DDataValue()][i][logic.ordinal()] = new BlockElement(element.from, element.to, Map.of(face, new BlockElementFace(face, tintIndex, "", new BlockFaceUV(logic.remapUVs(element.uvsByFace(face)), 0))), null, true, emissivity);
 				}
 			}
 		}
 	}
 
 	@Override
-	public BakedModel bake(IGeometryBakingContext context, ModelBaker baker, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelState, ItemOverrides overrides) {
+	public BakedModel bake(IGeometryBakingContext context, ModelBaker baker, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelState, List<ItemOverride> overrides) {
 		Transformation transformation = context.getRootTransform();
 		if (!transformation.isIdentity()) {
 			modelState = new SimpleModelState(modelState.getRotation().compose(transformation), modelState.isUvLocked());
 		}
 
-		//making an array list like this is cursed, would not recommend
 		@SuppressWarnings("unchecked") //this is fine, I hope
 		List<BakedQuad>[] baseQuads = (List<BakedQuad>[]) Array.newInstance(List.class, 6);
 
@@ -86,7 +84,7 @@ public class UnbakedConnectedTextureModel implements IUnbakedGeometry<UnbakedCon
 				baseQuads[dir] = new ArrayList<>();
 
 				for (BlockElement element : this.baseElements[dir]) {
-					baseQuads[dir].add(UnbakedGeometryHelper.bakeElementFace(element, element.faces.values().iterator().next(), baseTexture, Direction.values()[dir], modelState));
+					baseQuads[dir].add(FACE_BAKERY.bakeQuad(element.from, element.to, element.faces.values().iterator().next(), baseTexture, Direction.values()[dir], modelState, element.rotation, element.shade, element.lightEmission));
 				}
 			}
 		} else {
@@ -106,13 +104,13 @@ public class UnbakedConnectedTextureModel implements IUnbakedGeometry<UnbakedCon
 			for (int quad = 0; quad < 4; quad++) {
 				for (int type = 0; type < 5; type++) {
 					BlockElement element = this.faceElements[dir][quad][type];
-					quads[dir][quad][type] = UnbakedGeometryHelper.bakeElementFace(element, element.faces.values().iterator().next(), ConnectionLogic.values()[type].chooseTexture(sprites), Direction.values()[dir], modelState);
+					quads[dir][quad][type] = FACE_BAKERY.bakeQuad(element.from, element.to, element.faces.values().iterator().next(), ConnectionLogic.values()[type].chooseTexture(sprites), Direction.values()[dir], modelState, element.rotation, element.shade, element.lightEmission);
 				}
 			}
 		}
 
 		ResourceLocation renderTypeHint = context.getRenderTypeHint();
 		RenderTypeGroup renderTypes = renderTypeHint != null ? context.getRenderType(renderTypeHint) : RenderTypeGroup.EMPTY;
-		return new ConnectedTextureModel(this.enabledFaces, this.renderOnDisabledFaces, this.connectableBlocks, baseQuads, quads, sprites[2], overrides, context.getTransforms(), renderTypes);
+		return new ConnectedTextureModel(this.enabledFaces, this.renderOnDisabledFaces, this.connectableBlocks, baseQuads, quads, sprites[2], new BakedOverrides(baker, overrides, spriteGetter), context.getTransforms(), renderTypes);
 	}
 }

@@ -1,6 +1,7 @@
 package twilightforest.client.model.block.giantblock;
 
-import net.minecraft.client.renderer.block.model.ItemOverrides;
+import net.minecraft.client.renderer.block.model.BakedOverrides;
+import net.minecraft.client.renderer.block.model.ItemOverride;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.Material;
@@ -13,13 +14,14 @@ import net.neoforged.neoforge.client.model.geometry.IGeometryBakingContext;
 import net.neoforged.neoforge.client.model.geometry.IUnbakedGeometry;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.function.Function;
 
 public record UnbakedGiantBlockModel(ResourceLocation parent) implements IUnbakedGeometry<UnbakedGiantBlockModel> {
 
 	@Override
-	public BakedModel bake(IGeometryBakingContext context, ModelBaker baker, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelState, ItemOverrides overrides) {
+	public BakedModel bake(IGeometryBakingContext context, ModelBaker baker, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelState, List<ItemOverride> overrides) {
 		TextureAtlasSprite[] sprites;
 		if (context.hasMaterial("all")) {
 			sprites = new TextureAtlasSprite[]{spriteGetter.apply(context.getMaterial("all"))};
@@ -33,6 +35,6 @@ public record UnbakedGiantBlockModel(ResourceLocation parent) implements IUnbake
 
 		ResourceLocation renderTypeHint = context.getRenderTypeHint();
 		RenderTypeGroup renderTypes = renderTypeHint != null ? context.getRenderType(renderTypeHint) : RenderTypeGroup.EMPTY;
-		return new GiantBlockModel(sprites, spriteGetter.apply(context.getMaterial("particle")), overrides, context.getTransforms(), renderTypes);
+		return new GiantBlockModel(sprites, spriteGetter.apply(context.getMaterial("particle")), new BakedOverrides(baker, overrides, spriteGetter), context.getTransforms(), renderTypes);
 	}
 }

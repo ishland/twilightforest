@@ -1,8 +1,8 @@
 package twilightforest.client.model.block.connected;
 
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.block.model.BakedOverrides;
 import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
@@ -29,22 +29,19 @@ public class ConnectedTextureModel implements IDynamicBakedModel {
 
 	private final EnumSet<Direction> enabledFaces;
 	private final boolean renderOnDisabledFaces;
-	@Nullable
-	private final List<BakedQuad>[] baseQuads;
+	private final List<BakedQuad>@Nullable[] baseQuads;
 	private final BakedQuad[][][] quads;
 	private final TextureAtlasSprite particle;
-	private final ItemOverrides overrides;
+	private final BakedOverrides overrides;
 	private final ItemTransforms transforms;
 	@Nullable
 	private final ChunkRenderTypeSet blockRenderTypes;
 	@Nullable
 	private final List<RenderType> itemRenderTypes;
-	@Nullable
-	private final List<RenderType> fabulousItemRenderTypes;
 	private final List<Block> validConnectors;
-	private static final ModelProperty<CastleDoorData> DATA = new ModelProperty<>();
+	private static final ModelProperty<ConnectedTextureData> DATA = new ModelProperty<>();
 
-	public ConnectedTextureModel(EnumSet<Direction> enabledFaces, boolean renderOnDisabledFaces, List<Block> connectableBlocks, @Nullable List<BakedQuad>[] baseQuads, BakedQuad[][][] quads, TextureAtlasSprite particle, ItemOverrides overrides, ItemTransforms transforms, RenderTypeGroup group) {
+	public ConnectedTextureModel(EnumSet<Direction> enabledFaces, boolean renderOnDisabledFaces, List<Block> connectableBlocks, List<BakedQuad>@Nullable[] baseQuads, BakedQuad[][][] quads, TextureAtlasSprite particle, BakedOverrides overrides, ItemTransforms transforms, RenderTypeGroup group) {
 		this.enabledFaces = enabledFaces;
 		this.renderOnDisabledFaces = renderOnDisabledFaces;
 		this.validConnectors = connectableBlocks;
@@ -55,7 +52,6 @@ public class ConnectedTextureModel implements IDynamicBakedModel {
 		this.transforms = transforms;
 		this.blockRenderTypes = !group.isEmpty() ? ChunkRenderTypeSet.of(group.block()) : null;
 		this.itemRenderTypes = !group.isEmpty() ? List.of(group.entity()) : null;
-		this.fabulousItemRenderTypes = !group.isEmpty() ? List.of(group.entityFabulous()) : null;
 	}
 
 	@NotNull
@@ -63,7 +59,7 @@ public class ConnectedTextureModel implements IDynamicBakedModel {
 	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @NotNull RandomSource random, @NotNull ModelData extraData, @Nullable RenderType type) {
 		if (side != null) {
 			int faceIndex = side.get3DDataValue();
-			CastleDoorData data = extraData.get(DATA);
+			ConnectedTextureData data = extraData.get(DATA);
 			ArrayList<BakedQuad> quads = new ArrayList<>(4 + (this.baseQuads != null ? 4 : 0));
 			if (this.baseQuads != null) {
 				quads.addAll(this.baseQuads[faceIndex]);
@@ -87,7 +83,7 @@ public class ConnectedTextureModel implements IDynamicBakedModel {
 	@NotNull
 	@Override
 	public ModelData getModelData(@NotNull BlockAndTintGetter getter, @NotNull BlockPos pos, @NotNull BlockState state, @NotNull ModelData modelData) {
-		CastleDoorData data = new CastleDoorData();
+		ConnectedTextureData data = new ConnectedTextureData();
 
 		for (Direction face : Direction.values()) {
 			Direction[] directions = ConnectionLogic.AXIS_PLANE_DIRECTIONS[face.getAxis().ordinal()];
@@ -95,7 +91,7 @@ public class ConnectedTextureModel implements IDynamicBakedModel {
 
 			int faceIndex;
 			for (faceIndex = 0; faceIndex < directions.length; faceIndex++) {
-				sideStates[faceIndex] = this.shouldConnectSide(getter, pos, face, directions[faceIndex]);
+				sideStates[faceIndex] = this.shouldConnectSide(getter, pos, state, face, directions[faceIndex]);
 			}
 
 			faceIndex = face.get3DDataValue();
@@ -104,7 +100,7 @@ public class ConnectedTextureModel implements IDynamicBakedModel {
 				int cornerOffset = (dir + 1) % directions.length;
 				boolean side1 = sideStates[dir];
 				boolean side2 = sideStates[cornerOffset];
-				boolean corner = side1 && side2 && this.isCornerBlockPresent(getter, pos, face, directions[dir], directions[cornerOffset]);
+				boolean corner = side1 && side2 && this.isCornerBlockPresent(getter, pos, state, face, directions[dir], directions[cornerOffset]);
 				data.logic[faceIndex][dir] = dir % 2 == 0 ? ConnectionLogic.of(side1, side2, corner) : ConnectionLogic.of(side2, side1, corner);
 			}
 		}
@@ -112,14 +108,14 @@ public class ConnectedTextureModel implements IDynamicBakedModel {
 		return modelData.derive().with(DATA, data).build();
 	}
 
-	private boolean shouldConnectSide(BlockAndTintGetter getter, BlockPos pos, Direction face, Direction side) {
+	private boolean shouldConnectSide(BlockAndTintGetter getter, BlockPos pos, BlockState state, Direction face, Direction side) {
 		BlockState neighborState = getter.getBlockState(pos.relative(side));
-		return this.validConnectors.stream().anyMatch(neighborState::is) && Block.shouldRenderFace(neighborState, getter, pos, face, pos.relative(face));
+		return this.validConnectors.stream().anyMatch(neighborState::is) && Block.shouldRenderFace(getter, pos, state, neighborState, face);
 	}
 
-	private boolean isCornerBlockPresent(BlockAndTintGetter getter, BlockPos pos, Direction face, Direction side1, Direction side2) {
+	private boolean isCornerBlockPresent(BlockAndTintGetter getter, BlockPos pos, BlockState state, Direction face, Direction side1, Direction side2) {
 		BlockState neighborState = getter.getBlockState(pos.relative(side1).relative(side2));
-		return this.validConnectors.stream().anyMatch(neighborState::is) && Block.shouldRenderFace(neighborState, getter, pos, face, pos.relative(face));
+		return this.validConnectors.stream().anyMatch(neighborState::is) && Block.shouldRenderFace(getter, pos, state, neighborState, face);
 	}
 
 	@Override
@@ -148,9 +144,8 @@ public class ConnectedTextureModel implements IDynamicBakedModel {
 		return this.particle;
 	}
 
-	@NotNull
 	@Override
-	public ItemOverrides getOverrides() {
+	public BakedOverrides overrides() {
 		return this.overrides;
 	}
 
@@ -168,23 +163,14 @@ public class ConnectedTextureModel implements IDynamicBakedModel {
 
 	@NotNull
 	@Override
-	public List<RenderType> getRenderTypes(@NotNull ItemStack stack, boolean fabulous) {
-		if (!fabulous) {
-			if (this.itemRenderTypes != null) {
-				return this.itemRenderTypes;
-			}
-		} else if (this.fabulousItemRenderTypes != null) {
-			return this.fabulousItemRenderTypes;
-		}
-
-		return IDynamicBakedModel.super.getRenderTypes(stack, fabulous);
+	public List<RenderType> getRenderTypes(@NotNull ItemStack stack) {
+		return this.itemRenderTypes != null ? this.itemRenderTypes : IDynamicBakedModel.super.getRenderTypes(stack);
 	}
 
-	//we need a class to make model data. Fine, here you go
-	private static final class CastleDoorData {
+	private static final class ConnectedTextureData {
 		private final ConnectionLogic[][] logic = new ConnectionLogic[6][4];
 
-		private CastleDoorData() {
+		private ConnectedTextureData() {
 		}
 	}
 }

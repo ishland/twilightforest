@@ -35,15 +35,13 @@ public class ForceFieldModel implements IDynamicBakedModel {
 	private final Function<Material, TextureAtlasSprite> spriteFunction;
 	private final IGeometryBakingContext context;
 	private final TextureAtlasSprite particle;
-	private final ItemOverrides overrides;
+	private final BakedOverrides overrides;
 	@Nullable
 	private final ChunkRenderTypeSet blockRenderTypes;
 	@Nullable
 	private final List<RenderType> itemRenderTypes;
-	@Nullable
-	private final List<RenderType> fabulousItemRenderTypes;
 
-	public ForceFieldModel(Map<BlockElement, ForceFieldModelLoader.Condition> parts, Function<Material, TextureAtlasSprite> spriteFunction, IGeometryBakingContext context, ItemOverrides overrides) {
+	public ForceFieldModel(Map<BlockElement, ForceFieldModelLoader.Condition> parts, Function<Material, TextureAtlasSprite> spriteFunction, IGeometryBakingContext context, BakedOverrides overrides) {
 		this.parts = parts;
 		this.spriteFunction = spriteFunction;
 		this.context = context;
@@ -53,7 +51,6 @@ public class ForceFieldModel implements IDynamicBakedModel {
 		RenderTypeGroup group = renderTypeHint != null ? context.getRenderType(renderTypeHint) : RenderTypeGroup.EMPTY;
 		this.blockRenderTypes = !group.isEmpty() ? ChunkRenderTypeSet.of(group.block()) : null;
 		this.itemRenderTypes = !group.isEmpty() ? List.of(group.entity()) : null;
-		this.fabulousItemRenderTypes = !group.isEmpty() ? List.of(group.entityFabulous()) : null;
 	}
 
 	@Override
@@ -86,8 +83,9 @@ public class ForceFieldModel implements IDynamicBakedModel {
 					sprite,
 					side,
 					BlockModelRotation.X0_Y0,
-					null,
-					false)
+					entry.getKey().rotation,
+					entry.getKey().shade,
+					entry.getKey().lightEmission)
 				);
 			}
 		}
@@ -192,7 +190,7 @@ public class ForceFieldModel implements IDynamicBakedModel {
 	}
 
 	@Override
-	public ItemOverrides getOverrides() {
+	public BakedOverrides overrides() {
 		return this.overrides;
 	}
 
@@ -211,16 +209,8 @@ public class ForceFieldModel implements IDynamicBakedModel {
 
 	@NotNull
 	@Override
-	public List<RenderType> getRenderTypes(@NotNull ItemStack stack, boolean fabulous) {
-		if (!fabulous) {
-			if (this.itemRenderTypes != null) {
-				return this.itemRenderTypes;
-			}
-		} else if (this.fabulousItemRenderTypes != null) {
-			return this.fabulousItemRenderTypes;
-		}
-
-		return IDynamicBakedModel.super.getRenderTypes(stack, fabulous);
+	public List<RenderType> getRenderTypes(@NotNull ItemStack stack) {
+		return this.itemRenderTypes != null ? this.itemRenderTypes : IDynamicBakedModel.super.getRenderTypes(stack);
 	}
 
 	public enum ExtraDirection implements StringRepresentable {

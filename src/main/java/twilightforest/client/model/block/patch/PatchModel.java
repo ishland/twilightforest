@@ -17,13 +17,13 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 import twilightforest.block.PatchBlock;
+import twilightforest.client.model.block.connected.UnbakedConnectedTextureModel;
 import twilightforest.init.TFBlocks;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public record PatchModel(TextureAtlasSprite texture, boolean shaggify) implements BakedModel {
-	private static final FaceBakery BAKERY = new FaceBakery();
 
 	@Override
 	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource random) {
@@ -152,7 +152,7 @@ public record PatchModel(TextureAtlasSprite texture, boolean shaggify) implement
 			default -> new BlockFaceUV(new float[]{minX, minZ, maxX, maxZ}, 0);
 		});
 
-		return BAKERY.bakeQuad(new Vector3f(minX, minY, minZ), new Vector3f(maxX, maxY, maxZ), face, this.texture, direction, new SimpleModelState(Transformation.identity()), null, true);
+		return UnbakedConnectedTextureModel.FACE_BAKERY.bakeQuad(new Vector3f(minX, minY, minZ), new Vector3f(maxX, maxY, maxZ), face, this.texture, direction, new SimpleModelState(Transformation.identity()), null, true, 0);
 	}
 
 	// --- Boilerplating ---------------------------------------------------
@@ -180,11 +180,6 @@ public record PatchModel(TextureAtlasSprite texture, boolean shaggify) implement
 	@Override
 	public TextureAtlasSprite getParticleIcon() {
 		return this.texture;
-	}
-
-	@Override
-	public ItemOverrides getOverrides() {
-		return ItemOverrides.EMPTY; //I doubt we need to do anything here
 	}
 
 	@Override

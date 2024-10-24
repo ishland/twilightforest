@@ -1,7 +1,7 @@
 package twilightforest.client.model.block.aurorablock;
 
 import net.minecraft.client.renderer.block.model.BlockModel;
-import net.minecraft.client.renderer.block.model.ItemOverrides;
+import net.minecraft.client.renderer.block.model.ItemOverride;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.*;
 import net.minecraft.resources.ResourceLocation;
@@ -23,7 +23,7 @@ public class UnbakedNoiseVaryingModel implements IUnbakedGeometry<UnbakedNoiseVa
 	}
 
 	@Override
-	public void resolveParents(Function<ResourceLocation, UnbakedModel> modelGetter, IGeometryBakingContext context) {
+	public void resolveDependencies(UnbakedModel.Resolver modelGetter, IGeometryBakingContext context) {
 		for (String variant : this.importVariants) {
 			BlockModel checkedParent = resolveParent(modelGetter, variant);
 
@@ -32,22 +32,22 @@ public class UnbakedNoiseVaryingModel implements IUnbakedGeometry<UnbakedNoiseVa
 	}
 
 	@NotNull
-	private static BlockModel resolveParent(Function<ResourceLocation, UnbakedModel> modelGetter, String variant) {
-		if (modelGetter.apply(ResourceLocation.parse(variant)) instanceof BlockModel blockModel) {
-			blockModel.resolveParents(modelGetter);
+	private static BlockModel resolveParent(UnbakedModel.Resolver modelGetter, String variant) {
+		if (modelGetter.resolve(ResourceLocation.parse(variant)) instanceof BlockModel blockModel) {
+			blockModel.resolveDependencies(modelGetter);
 			return blockModel;
 		}
 
-		return (BlockModel) modelGetter.apply(ModelBakery.MISSING_MODEL_LOCATION);
+		return (BlockModel) modelGetter.resolve(ResourceLocation.withDefaultNamespace("builtin/missing"));
 	}
 
 	@Override
-	public BakedModel bake(IGeometryBakingContext context, ModelBaker baker, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelState, ItemOverrides overrides) {
+	public BakedModel bake(IGeometryBakingContext context, ModelBaker baker, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelState, List<ItemOverride> overrides) {
 		BakedModel[] bakedVariants = new BakedModel[this.importVariants.length];
 
 		for (int i = 0; i < bakedVariants.length; i++) {
 			BlockModel variant = this.variants.get(i);
-			bakedVariants[i] = variant.bake(baker, variant, spriteGetter, modelState, variant.getGuiLight().lightLikeBlock());
+			bakedVariants[i] = variant.bake(baker, spriteGetter, modelState);
 		}
 
 		return new NoiseVaryingModel(bakedVariants);

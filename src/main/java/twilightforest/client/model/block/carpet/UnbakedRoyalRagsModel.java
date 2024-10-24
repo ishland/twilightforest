@@ -17,17 +17,19 @@ import net.neoforged.neoforge.client.model.geometry.IUnbakedGeometry;
 import net.neoforged.neoforge.client.model.geometry.UnbakedGeometryHelper;
 import org.apache.commons.lang3.mutable.MutableObject;
 import org.joml.Vector3f;
+import twilightforest.client.model.block.connected.ConnectedTextureModel;
 import twilightforest.client.model.block.connected.ConnectionLogic;
+import twilightforest.client.model.block.connected.UnbakedConnectedTextureModel;
+import twilightforest.init.TFBlocks;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-//for now, im keeping this hardcoded to a 2 layer block, with the overlay layer being fullbright and tinted.
-//It might be worth expanding this in the future to be more flexible for other kinds of blocks (1 layer blocks, determining emissivity and tinting per layer, maybe >2 layer blocks?) but for now, I see no point.
-//I only wanted this system for castle doors after all!
+//FIXME remove this once the connected texture loader supports custom geometry
 public class UnbakedRoyalRagsModel implements IUnbakedGeometry<UnbakedRoyalRagsModel> {
 
 	private final BlockElement[][] baseElements;
@@ -48,14 +50,14 @@ public class UnbakedRoyalRagsModel implements IUnbakedGeometry<UnbakedRoyalRagsM
 			Direction[] planeDirections = ConnectionLogic.AXIS_PLANE_DIRECTIONS[face.getAxis().ordinal()];
 
 			for (int quad = 0; quad < 4; quad++) {
-				Vec3i corner = face.getNormal().offset(planeDirections[quad].getNormal()).offset(planeDirections[(quad + 1) % 4].getNormal()).offset(1, 1, 1).multiply(8);
-				BlockElement element = new BlockElement(new Vector3f((float) Math.min(center.getX(), corner.getX()), (float) Math.min(center.getY(), corner.getY()) / 16f, (float) Math.min(center.getZ(), corner.getZ())), new Vector3f((float) Math.max(center.getX(), corner.getX()), (float) Math.max(center.getY(), corner.getY()) / 16f, (float) Math.max(center.getZ(), corner.getZ())), Map.of(), null, true);
+				Vec3i corner = face.getUnitVec3i().offset(planeDirections[quad].getUnitVec3i()).offset(planeDirections[(quad + 1) % 4].getUnitVec3i()).offset(1, 1, 1).multiply(8);
+				BlockElement element = new BlockElement(new Vector3f((float) Math.min(center.getX(), corner.getX()), (float) Math.min(center.getY(), corner.getY()) / 16f, (float) Math.min(center.getZ(), corner.getZ())), new Vector3f((float) Math.max(center.getX(), corner.getX()), (float) Math.max(center.getY(), corner.getY()) / 16f, (float) Math.max(center.getZ(), corner.getZ())), Map.of(), null, true, 0);
 
 				if (face.getAxis().isHorizontal()) {
-					this.baseElements[face.get2DDataValue()][quad] = new BlockElement(element.from, element.to, Map.of(face, new BlockElementFace(face, -1, "", new BlockFaceUV(ConnectionLogic.NONE.remapUVs(element.uvsByFace(face)), 0))), null, true);
+					this.baseElements[face.get2DDataValue()][quad] = new BlockElement(element.from, element.to, Map.of(face, new BlockElementFace(face, -1, "", new BlockFaceUV(ConnectionLogic.NONE.remapUVs(element.uvsByFace(face)), 0))), null, true, 0);
 				} else {
 					for (ConnectionLogic connectionType : ConnectionLogic.values()) {
-						this.faceElements[face.get3DDataValue()][quad][connectionType.ordinal()] = new BlockElement(element.from, element.to, Map.of(face, new BlockElementFace(face, 0, "", new BlockFaceUV(connectionType.remapUVs(element.uvsByFace(face)), 0), null, new MutableObject<>())), null, true);
+						this.faceElements[face.get3DDataValue()][quad][connectionType.ordinal()] = new BlockElement(element.from, element.to, Map.of(face, new BlockElementFace(face, 0, "", new BlockFaceUV(connectionType.remapUVs(element.uvsByFace(face)), 0), null, new MutableObject<>())), null, true, 0);
 					}
 				}
 			}
@@ -63,14 +65,13 @@ public class UnbakedRoyalRagsModel implements IUnbakedGeometry<UnbakedRoyalRagsM
 	}
 
 	@Override
-	public BakedModel bake(IGeometryBakingContext context, ModelBaker baker, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelState, ItemOverrides overrides) {
+	public BakedModel bake(IGeometryBakingContext context, ModelBaker baker, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelState, List<ItemOverride> overrides) {
 		Transformation transformation = context.getRootTransform();
 
 		if (!transformation.isIdentity()) {
 			modelState = new SimpleModelState(modelState.getRotation().compose(transformation), modelState.isUvLocked());
 		}
 
-		//making an array list like this is cursed, would not recommend
 		@SuppressWarnings("unchecked") //this is fine, I hope
 		List<BakedQuad>[] baseQuads = (List<BakedQuad>[]) Array.newInstance(List.class, 4);
 		TextureAtlasSprite baseTexture = spriteGetter.apply(context.getMaterial("wool"));
@@ -79,7 +80,7 @@ public class UnbakedRoyalRagsModel implements IUnbakedGeometry<UnbakedRoyalRagsM
 			baseQuads[direction.get2DDataValue()] = new ArrayList<>();
 
 			for (BlockElement element : this.baseElements[direction.get2DDataValue()]) {
-				baseQuads[direction.get2DDataValue()].add(UnbakedGeometryHelper.bakeElementFace(element, element.faces.values().iterator().next(), baseTexture, direction, modelState));
+				baseQuads[direction.get2DDataValue()].add(UnbakedConnectedTextureModel.FACE_BAKERY.bakeQuad(element.from, element.to, element.faces.values().iterator().next(), baseTexture, direction, modelState, element.rotation, element.shade, element.lightEmission));
 			}
 		}
 
@@ -93,13 +94,13 @@ public class UnbakedRoyalRagsModel implements IUnbakedGeometry<UnbakedRoyalRagsM
 			for (int quad = 0; quad < 4; quad++) {
 				for (int type = 0; type < 5; type++) {
 					BlockElement element = this.faceElements[dir][quad][type];
-					quads[dir][quad][type] = UnbakedGeometryHelper.bakeElementFace(element, element.faces.values().iterator().next(), ConnectionLogic.values()[type].chooseTexture(sprites), Direction.values()[dir], modelState);
+					quads[dir][quad][type] = UnbakedConnectedTextureModel.FACE_BAKERY.bakeQuad(element.from, element.to, element.faces.values().iterator().next(), ConnectionLogic.values()[type].chooseTexture(sprites), Direction.values()[dir], modelState, element.rotation, element.shade, element.lightEmission);
 				}
 			}
 		}
 
 		ResourceLocation renderTypeHint = context.getRenderTypeHint();
 		RenderTypeGroup renderTypes = renderTypeHint != null ? context.getRenderType(renderTypeHint) : RenderTypeGroup.EMPTY;
-		return new RoyalRagsModel(baseQuads, quads, spriteGetter.apply(context.getMaterial("wool")), overrides, context.getTransforms(), renderTypes);
+		return new ConnectedTextureModel(EnumSet.of(Direction.UP), false, List.of(TFBlocks.ROYAL_RAGS.get()), baseQuads, quads, spriteGetter.apply(context.getMaterial("wool")), new BakedOverrides(baker, overrides, spriteGetter), context.getTransforms(), renderTypes);
 	}
 }
