@@ -52,7 +52,7 @@ public class TwilightForestRenderInfo extends DimensionSpecialEffects {
 
 	@Override
 	public boolean renderSky(ClientLevel level, int ticks, float partialTick, Matrix4f modelViewMatrix, Camera camera, Matrix4f projectionMatrix, Runnable setupFog) {
-		return TFSkyRenderer.renderSky(level, partialTick, modelViewMatrix, camera, projectionMatrix, setupFog);
+		return TFSkyRenderer.renderSky(level, partialTick, camera, setupFog);
 	}
 
 	@Override

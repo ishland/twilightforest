@@ -284,7 +284,6 @@ public class RegistrationEvents {
 	}
 
 	private static void registerDimEffects(RegisterDimensionSpecialEffectsEvent event) {
-		TFSkyRenderer.createStars();
 		event.register(TFDimension.DIMENSION_RENDERER, new TwilightForestRenderInfo(128.0F, false, DimensionSpecialEffects.SkyType.NONE, false, false));
 	}
 

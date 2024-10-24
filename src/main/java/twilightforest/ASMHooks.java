@@ -72,17 +72,6 @@ public class ASMHooks {
 	// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/**
-	 * {@link twilightforest.asm.transformers.armor.ArmorColorRenderingTransformer}<p/>
-	 *
-	 * Injection Point:<br/>
-	 * {@link net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer#renderArmorPiece(PoseStack, MultiBufferSource, LivingEntity, EquipmentSlot, int, HumanoidModel)} <br/>
-	 * Targets: {@link net.minecraft.world.item.component.DyedItemColor#getOrDefault(net.minecraft.world.item.ItemStack, int)}
-	 */
-	public static int armorColorRendering(int color, ItemStack armorStack) {
-		return armorUtil.getArmorColor(armorStack).orElse(color);
-	}
-
-	/**
 	 * {@link twilightforest.asm.transformers.armor.ArmorVisibilityRenderingTransformer}<p/>
 	 *
 	 * Injection Point:<br/>
@@ -288,7 +277,7 @@ public class ASMHooks {
 	 * Targets: {@link net.minecraft.client.renderer.entity.EntityRenderDispatcher#renderers}
 	 */
 	@Nullable
-	public static EntityRenderer<?> resolveEntityRenderer(@Nullable EntityRenderer<?> renderer, Entity entity) {
+	public static EntityRenderer<?, ?> resolveEntityRenderer(@Nullable EntityRenderer<?, ?> renderer, Entity entity) {
 		return multipartEntityUtil.tryLookupTFPartRenderer(renderer, entity);
 	}
 
