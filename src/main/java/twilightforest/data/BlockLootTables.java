@@ -333,6 +333,7 @@ public class BlockLootTables extends BlockLootSubProvider {
 		add(TFBlocks.HOLLOW_TRANSFORMATION_LOG_HORIZONTAL.get(), hollowLog(TFBlocks.HOLLOW_TRANSFORMATION_LOG_HORIZONTAL.get()));
 		add(TFBlocks.HOLLOW_MINING_LOG_HORIZONTAL.get(), hollowLog(TFBlocks.HOLLOW_MINING_LOG_HORIZONTAL.get()));
 		add(TFBlocks.HOLLOW_SORTING_LOG_HORIZONTAL.get(), hollowLog(TFBlocks.HOLLOW_SORTING_LOG_HORIZONTAL.get()));
+		add(TFBlocks.HOLLOW_VEILWOOD_LOG_HORIZONTAL.get(), hollowLog(TFBlocks.HOLLOW_VEILWOOD_LOG_HORIZONTAL.get()));
 
 		add(TFBlocks.HOLLOW_OAK_LOG_VERTICAL.get(), verticalHollowLog(TFBlocks.HOLLOW_OAK_LOG_VERTICAL.get()));
 		add(TFBlocks.HOLLOW_SPRUCE_LOG_VERTICAL.get(), verticalHollowLog(TFBlocks.HOLLOW_SPRUCE_LOG_VERTICAL.get()));
@@ -352,6 +353,7 @@ public class BlockLootTables extends BlockLootSubProvider {
 		add(TFBlocks.HOLLOW_TRANSFORMATION_LOG_VERTICAL.get(), verticalHollowLog(TFBlocks.HOLLOW_TRANSFORMATION_LOG_VERTICAL.get()));
 		add(TFBlocks.HOLLOW_MINING_LOG_VERTICAL.get(), verticalHollowLog(TFBlocks.HOLLOW_MINING_LOG_VERTICAL.get()));
 		add(TFBlocks.HOLLOW_SORTING_LOG_VERTICAL.get(), verticalHollowLog(TFBlocks.HOLLOW_SORTING_LOG_VERTICAL.get()));
+		add(TFBlocks.HOLLOW_VEILWOOD_LOG_VERTICAL.get(), verticalHollowLog(TFBlocks.HOLLOW_VEILWOOD_LOG_VERTICAL.get()));
 
 		add(TFBlocks.HOLLOW_OAK_LOG_CLIMBABLE.get(), hollowLog(TFBlocks.HOLLOW_OAK_LOG_CLIMBABLE.get()));
 		add(TFBlocks.HOLLOW_SPRUCE_LOG_CLIMBABLE.get(), hollowLog(TFBlocks.HOLLOW_SPRUCE_LOG_CLIMBABLE.get()));
@@ -371,6 +373,7 @@ public class BlockLootTables extends BlockLootSubProvider {
 		add(TFBlocks.HOLLOW_TRANSFORMATION_LOG_CLIMBABLE.get(), hollowLog(TFBlocks.HOLLOW_TRANSFORMATION_LOG_CLIMBABLE.get()));
 		add(TFBlocks.HOLLOW_MINING_LOG_CLIMBABLE.get(), hollowLog(TFBlocks.HOLLOW_MINING_LOG_CLIMBABLE.get()));
 		add(TFBlocks.HOLLOW_SORTING_LOG_CLIMBABLE.get(), hollowLog(TFBlocks.HOLLOW_SORTING_LOG_CLIMBABLE.get()));
+		add(TFBlocks.HOLLOW_VEILWOOD_LOG_CLIMBABLE.get(), hollowLog(TFBlocks.HOLLOW_VEILWOOD_LOG_CLIMBABLE.get()));
 
 
 		dropSelf(TFBlocks.TWILIGHT_OAK_LOG.get());
@@ -567,6 +570,26 @@ public class BlockLootTables extends BlockLootSubProvider {
 		dropSelf(TFBlocks.SORTING_CHEST.get());
 		dropSelf(TFBlocks.SORTING_TRAPPED_CHEST.get());
 
+		dropSelf(TFBlocks.VEILWOOD_LOG.get());
+		dropSelf(TFBlocks.STRIPPED_VEILWOOD_LOG.get());
+		dropSelf(TFBlocks.VEILWOOD_WOOD.get());
+		dropSelf(TFBlocks.STRIPPED_VEILWOOD_WOOD.get());
+		dropSelf(TFBlocks.VEILWOOD_PLANKS.get());
+		dropSelf(TFBlocks.VEILWOOD_STAIRS.get());
+		add(TFBlocks.VEILWOOD_SLAB.get(), createSlabItemTable(TFBlocks.VEILWOOD_SLAB.get()));
+		dropSelf(TFBlocks.VEILWOOD_BUTTON.get());
+		dropSelf(TFBlocks.VEILWOOD_FENCE.get());
+		dropSelf(TFBlocks.VEILWOOD_GATE.get());
+		dropSelf(TFBlocks.VEILWOOD_PLATE.get());
+		add(TFBlocks.VEILWOOD_DOOR.get(), createSinglePropConditionTable(TFBlocks.VEILWOOD_DOOR.get(), DoorBlock.HALF, DoubleBlockHalf.LOWER));
+		dropSelf(TFBlocks.VEILWOOD_TRAPDOOR.get());
+		add(TFBlocks.VEILWOOD_SIGN.get(), createSingleItemTable(TFBlocks.VEILWOOD_SIGN.get().asItem()));
+		add(TFBlocks.VEILWOOD_WALL_SIGN.get(), createSingleItemTable(TFBlocks.VEILWOOD_SIGN.get().asItem()));
+		add(TFBlocks.VEILWOOD_HANGING_SIGN.get(), createSingleItemTable(TFBlocks.VEILWOOD_HANGING_SIGN.get().asItem()));
+		add(TFBlocks.VEILWOOD_WALL_HANGING_SIGN.get(), createSingleItemTable(TFBlocks.VEILWOOD_HANGING_SIGN.get().asItem()));
+		dropSelf(TFBlocks.VEILWOOD_BANISTER.get());
+		dropSelf(TFBlocks.VEILWOOD_CHEST.get());
+		dropSelf(TFBlocks.VEILWOOD_TRAPPED_CHEST.get());
 	}
 
 	private void registerLeavesNoSapling(Block leaves, HolderLookup.RegistryLookup<Enchantment> registrylookup) {

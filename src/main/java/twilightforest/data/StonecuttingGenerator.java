@@ -128,6 +128,7 @@ public class StonecuttingGenerator {
 		stonecutting(output, TFBlocks.TRANSFORMATION_LOG.get(), TFItems.HOLLOW_TRANSFORMATION_LOG.get());
 		stonecutting(output, TFBlocks.MINING_LOG.get(), TFItems.HOLLOW_MINING_LOG.get());
 		stonecutting(output, TFBlocks.SORTING_LOG.get(), TFItems.HOLLOW_SORTING_LOG.get());
+		stonecutting(output, TFBlocks.VEILWOOD_LOG.get(), TFItems.HOLLOW_VEILWOOD_LOG.get());
 
 		stonecutting(output, Blocks.OAK_LOG, TFItems.HOLLOW_OAK_LOG.get());
 		stonecutting(output, Blocks.SPRUCE_LOG, TFItems.HOLLOW_SPRUCE_LOG.get());

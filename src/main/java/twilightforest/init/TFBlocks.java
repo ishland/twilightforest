@@ -292,6 +292,7 @@ public class TFBlocks {
 	public static final BlockBehaviour.Properties TRANSFORMATION_LOG_PROPS = logProperties(MapColor.WOOD, MapColor.PODZOL).strength(2.0F).sound(SoundType.WOOD);
 	public static final BlockBehaviour.Properties MINING_LOG_PROPS = logProperties(MapColor.SAND, MapColor.QUARTZ).strength(2.0F).sound(SoundType.WOOD);
 	public static final BlockBehaviour.Properties SORTING_LOG_PROPS = logProperties(MapColor.PODZOL, MapColor.COLOR_BROWN).strength(2.0F).sound(SoundType.WOOD);
+	public static final BlockBehaviour.Properties VEILWOOD_LOG_PROPS = logProperties(MapColor.STONE, MapColor.COLOR_GRAY).strength(2.0F).sound(SoundType.CHERRY_WOOD);
 
 	public static final BlockBehaviour.Properties TWILIGHT_OAK_BARK_PROPS = logProperties(MapColor.PODZOL).strength(2.0F).sound(SoundType.WOOD);
 	public static final BlockBehaviour.Properties CANOPY_BARK_PROPS = logProperties(MapColor.COLOR_BROWN).strength(2.0F).sound(SoundType.WOOD);
@@ -301,6 +302,7 @@ public class TFBlocks {
 	public static final BlockBehaviour.Properties TRANSFORMATION_BARK_PROPS = logProperties(MapColor.PODZOL).strength(2.0F).sound(SoundType.WOOD);
 	public static final BlockBehaviour.Properties MINING_BARK_PROPS = logProperties(MapColor.QUARTZ).strength(2.0F).sound(SoundType.WOOD);
 	public static final BlockBehaviour.Properties SORTING_BARK_PROPS = logProperties(MapColor.COLOR_BROWN).strength(2.0F).sound(SoundType.WOOD);
+	public static final BlockBehaviour.Properties VEILWOOD_BARK_PROPS = logProperties(MapColor.COLOR_GRAY).strength(2.0F).sound(SoundType.CHERRY_WOOD);
 
 	public static final BlockBehaviour.Properties TWILIGHT_OAK_STRIPPED_PROPS = logProperties(MapColor.WOOD).strength(2.0F).sound(SoundType.WOOD);
 	public static final BlockBehaviour.Properties CANOPY_STRIPPED_PROPS = logProperties(MapColor.PODZOL).strength(2.0F).sound(SoundType.WOOD);
@@ -310,6 +312,7 @@ public class TFBlocks {
 	public static final BlockBehaviour.Properties TRANSFORMATION_STRIPPED_PROPS = logProperties(MapColor.WOOD).strength(2.0F).sound(SoundType.WOOD);
 	public static final BlockBehaviour.Properties MINING_STRIPPED_PROPS = logProperties(MapColor.SAND).strength(2.0F).sound(SoundType.WOOD);
 	public static final BlockBehaviour.Properties SORTING_STRIPPED_PROPS = logProperties(MapColor.PODZOL).strength(2.0F).sound(SoundType.WOOD);
+	public static final BlockBehaviour.Properties VEILWOOD_STRIPPED_PROPS = logProperties(MapColor.STONE).strength(2.0F).sound(SoundType.CHERRY_WOOD);
 
 	public static final DeferredBlock<RotatedPillarBlock> TWILIGHT_OAK_LOG = register("twilight_oak_log", () -> new RotatedPillarBlock(TWILIGHT_OAK_LOG_PROPS));
 	public static final DeferredBlock<RotatedPillarBlock> CANOPY_LOG = register("canopy_log", () -> new RotatedPillarBlock(CANOPY_LOG_PROPS));
@@ -319,6 +322,7 @@ public class TFBlocks {
 	public static final DeferredBlock<RotatedPillarBlock> TRANSFORMATION_LOG = register("transformation_log", () -> new RotatedPillarBlock(TRANSFORMATION_LOG_PROPS));
 	public static final DeferredBlock<RotatedPillarBlock> MINING_LOG = register("mining_log", () -> new RotatedPillarBlock(MINING_LOG_PROPS));
 	public static final DeferredBlock<RotatedPillarBlock> SORTING_LOG = register("sorting_log", () -> new RotatedPillarBlock(SORTING_LOG_PROPS));
+	public static final DeferredBlock<RotatedPillarBlock> VEILWOOD_LOG = register("veilwood_log", () -> new RotatedPillarBlock(VEILWOOD_LOG_PROPS));
 
 	public static final DeferredBlock<HorizontalHollowLogBlock> HOLLOW_TWILIGHT_OAK_LOG_HORIZONTAL = BLOCKS.register("hollow_twilight_oak_log_horizontal", () -> new HorizontalHollowLogBlock(TWILIGHT_OAK_BARK_PROPS));
 	public static final DeferredBlock<HorizontalHollowLogBlock> HOLLOW_CANOPY_LOG_HORIZONTAL = BLOCKS.register("hollow_canopy_log_horizontal", () -> new HorizontalHollowLogBlock(CANOPY_BARK_PROPS));
@@ -328,6 +332,7 @@ public class TFBlocks {
 	public static final DeferredBlock<HorizontalHollowLogBlock> HOLLOW_TRANSFORMATION_LOG_HORIZONTAL = BLOCKS.register("hollow_transformation_log_horizontal", () -> new HorizontalHollowLogBlock(TRANSFORMATION_BARK_PROPS));
 	public static final DeferredBlock<HorizontalHollowLogBlock> HOLLOW_MINING_LOG_HORIZONTAL = BLOCKS.register("hollow_mining_log_horizontal", () -> new HorizontalHollowLogBlock(MINING_BARK_PROPS));
 	public static final DeferredBlock<HorizontalHollowLogBlock> HOLLOW_SORTING_LOG_HORIZONTAL = BLOCKS.register("hollow_sorting_log_horizontal", () -> new HorizontalHollowLogBlock(SORTING_BARK_PROPS));
+	public static final DeferredBlock<HorizontalHollowLogBlock> HOLLOW_VEILWOOD_LOG_HORIZONTAL = BLOCKS.register("hollow_veilwood_log_horizontal", () -> new HorizontalHollowLogBlock(VEILWOOD_BARK_PROPS));
 
 	public static final DeferredBlock<VerticalHollowLogBlock> HOLLOW_TWILIGHT_OAK_LOG_VERTICAL = BLOCKS.register("hollow_twilight_oak_log_vertical", () -> new VerticalHollowLogBlock(TWILIGHT_OAK_STRIPPED_PROPS, TFBlocks.HOLLOW_TWILIGHT_OAK_LOG_CLIMBABLE));
 	public static final DeferredBlock<VerticalHollowLogBlock> HOLLOW_CANOPY_LOG_VERTICAL = BLOCKS.register("hollow_canopy_log_vertical", () -> new VerticalHollowLogBlock(CANOPY_STRIPPED_PROPS, TFBlocks.HOLLOW_CANOPY_LOG_CLIMBABLE));
@@ -337,6 +342,7 @@ public class TFBlocks {
 	public static final DeferredBlock<VerticalHollowLogBlock> HOLLOW_TRANSFORMATION_LOG_VERTICAL = BLOCKS.register("hollow_transformation_log_vertical", () -> new VerticalHollowLogBlock(TRANSFORMATION_STRIPPED_PROPS, TFBlocks.HOLLOW_TRANSFORMATION_LOG_CLIMBABLE));
 	public static final DeferredBlock<VerticalHollowLogBlock> HOLLOW_MINING_LOG_VERTICAL = BLOCKS.register("hollow_mining_log_vertical", () -> new VerticalHollowLogBlock(MINING_STRIPPED_PROPS, TFBlocks.HOLLOW_MINING_LOG_CLIMBABLE));
 	public static final DeferredBlock<VerticalHollowLogBlock> HOLLOW_SORTING_LOG_VERTICAL = BLOCKS.register("hollow_sorting_log_vertical", () -> new VerticalHollowLogBlock(SORTING_STRIPPED_PROPS, TFBlocks.HOLLOW_SORTING_LOG_CLIMBABLE));
+	public static final DeferredBlock<VerticalHollowLogBlock> HOLLOW_VEILWOOD_LOG_VERTICAL = BLOCKS.register("hollow_veilwood_log_vertical", () -> new VerticalHollowLogBlock(VEILWOOD_STRIPPED_PROPS, TFBlocks.HOLLOW_VEILWOOD_LOG_CLIMBABLE));
 
 	public static final DeferredBlock<ClimbableHollowLogBlock> HOLLOW_TWILIGHT_OAK_LOG_CLIMBABLE = BLOCKS.register("hollow_twilight_oak_log_climbable", () -> new ClimbableHollowLogBlock(TFBlocks.HOLLOW_TWILIGHT_OAK_LOG_VERTICAL, TWILIGHT_OAK_STRIPPED_PROPS));
 	public static final DeferredBlock<ClimbableHollowLogBlock> HOLLOW_CANOPY_LOG_CLIMBABLE = BLOCKS.register("hollow_canopy_log_climbable", () -> new ClimbableHollowLogBlock(TFBlocks.HOLLOW_CANOPY_LOG_VERTICAL, CANOPY_STRIPPED_PROPS));
@@ -346,6 +352,7 @@ public class TFBlocks {
 	public static final DeferredBlock<ClimbableHollowLogBlock> HOLLOW_TRANSFORMATION_LOG_CLIMBABLE = BLOCKS.register("hollow_transformation_log_climbable", () -> new ClimbableHollowLogBlock(TFBlocks.HOLLOW_TRANSFORMATION_LOG_VERTICAL, TRANSFORMATION_STRIPPED_PROPS));
 	public static final DeferredBlock<ClimbableHollowLogBlock> HOLLOW_MINING_LOG_CLIMBABLE = BLOCKS.register("hollow_mining_log_climbable", () -> new ClimbableHollowLogBlock(TFBlocks.HOLLOW_MINING_LOG_VERTICAL, MINING_STRIPPED_PROPS));
 	public static final DeferredBlock<ClimbableHollowLogBlock> HOLLOW_SORTING_LOG_CLIMBABLE = BLOCKS.register("hollow_sorting_log_climbable", () -> new ClimbableHollowLogBlock(TFBlocks.HOLLOW_SORTING_LOG_VERTICAL, SORTING_STRIPPED_PROPS));
+	public static final DeferredBlock<ClimbableHollowLogBlock> HOLLOW_VEILWOOD_LOG_CLIMBABLE = BLOCKS.register("hollow_veilwood_log_climbable", () -> new ClimbableHollowLogBlock(TFBlocks.HOLLOW_VEILWOOD_LOG_VERTICAL, VEILWOOD_STRIPPED_PROPS));
 
 	public static final DeferredBlock<HorizontalHollowLogBlock> HOLLOW_OAK_LOG_HORIZONTAL = BLOCKS.register("hollow_oak_log_horizontal", () -> new HorizontalHollowLogBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_WOOD)));
 	public static final DeferredBlock<HorizontalHollowLogBlock> HOLLOW_SPRUCE_LOG_HORIZONTAL = BLOCKS.register("hollow_spruce_log_horizontal", () -> new HorizontalHollowLogBlock((BlockBehaviour.Properties.ofFullCopy(Blocks.SPRUCE_WOOD))));
@@ -390,6 +397,7 @@ public class TFBlocks {
 	public static final DeferredBlock<RotatedPillarBlock> STRIPPED_TRANSFORMATION_LOG = register("stripped_transformation_log", () -> new RotatedPillarBlock(TRANSFORMATION_STRIPPED_PROPS));
 	public static final DeferredBlock<RotatedPillarBlock> STRIPPED_MINING_LOG = register("stripped_mining_log", () -> new RotatedPillarBlock(MINING_STRIPPED_PROPS));
 	public static final DeferredBlock<RotatedPillarBlock> STRIPPED_SORTING_LOG = register("stripped_sorting_log", () -> new RotatedPillarBlock(SORTING_STRIPPED_PROPS));
+	public static final DeferredBlock<RotatedPillarBlock> STRIPPED_VEILWOOD_LOG = register("stripped_veilwood_log", () -> new RotatedPillarBlock(VEILWOOD_STRIPPED_PROPS));
 
 	public static final DeferredBlock<RotatedPillarBlock> TWILIGHT_OAK_WOOD = register("twilight_oak_wood", () -> new RotatedPillarBlock(TWILIGHT_OAK_BARK_PROPS));
 	public static final DeferredBlock<RotatedPillarBlock> CANOPY_WOOD = register("canopy_wood", () -> new RotatedPillarBlock(CANOPY_BARK_PROPS));
@@ -399,6 +407,7 @@ public class TFBlocks {
 	public static final DeferredBlock<RotatedPillarBlock> TRANSFORMATION_WOOD = register("transformation_wood", () -> new RotatedPillarBlock(TRANSFORMATION_BARK_PROPS));
 	public static final DeferredBlock<RotatedPillarBlock> MINING_WOOD = register("mining_wood", () -> new RotatedPillarBlock(MINING_BARK_PROPS));
 	public static final DeferredBlock<RotatedPillarBlock> SORTING_WOOD = register("sorting_wood", () -> new RotatedPillarBlock(SORTING_BARK_PROPS));
+	public static final DeferredBlock<RotatedPillarBlock> VEILWOOD_WOOD = register("veilwood_wood", () -> new RotatedPillarBlock(VEILWOOD_BARK_PROPS));
 
 	public static final DeferredBlock<RotatedPillarBlock> STRIPPED_TWILIGHT_OAK_WOOD = register("stripped_twilight_oak_wood", () -> new RotatedPillarBlock(TWILIGHT_OAK_STRIPPED_PROPS));
 	public static final DeferredBlock<RotatedPillarBlock> STRIPPED_CANOPY_WOOD = register("stripped_canopy_wood", () -> new RotatedPillarBlock(CANOPY_STRIPPED_PROPS));
@@ -408,6 +417,7 @@ public class TFBlocks {
 	public static final DeferredBlock<RotatedPillarBlock> STRIPPED_TRANSFORMATION_WOOD = register("stripped_transformation_wood", () -> new RotatedPillarBlock(TRANSFORMATION_STRIPPED_PROPS));
 	public static final DeferredBlock<RotatedPillarBlock> STRIPPED_MINING_WOOD = register("stripped_mining_wood", () -> new RotatedPillarBlock(MINING_STRIPPED_PROPS));
 	public static final DeferredBlock<RotatedPillarBlock> STRIPPED_SORTING_WOOD = register("stripped_sorting_wood", () -> new RotatedPillarBlock(SORTING_STRIPPED_PROPS));
+	public static final DeferredBlock<RotatedPillarBlock> STRIPPED_VEILWOOD_WOOD = register("stripped_veilwood_wood", () -> new RotatedPillarBlock(VEILWOOD_STRIPPED_PROPS));
 
 	public static final DeferredBlock<Block> TIME_LOG_CORE = register("time_log_core", () -> new TimeLogCoreBlock(TIME_LOG_PROPS));
 	public static final DeferredBlock<Block> TRANSFORMATION_LOG_CORE = register("transformation_log_core", () -> new TransLogCoreBlock(TRANSFORMATION_LOG_PROPS));
@@ -559,6 +569,21 @@ public class TFBlocks {
 	public static final DeferredBlock<WallHangingSignBlock> SORTING_WALL_HANGING_SIGN = BLOCKS.register("sorting_wall_hanging_sign", () -> new WallHangingSignBlock(TFWoodTypes.SORTING_WOOD_TYPE, BlockBehaviour.Properties.ofFullCopy(SORTING_PLANKS.get()).noCollission().strength(1.0F)));
 	public static final DeferredBlock<BanisterBlock> SORTING_BANISTER = register("sorting_banister", () -> new BanisterBlock(BlockBehaviour.Properties.ofFullCopy(SORTING_PLANKS.get())));
 
+	public static final DeferredBlock<Block> VEILWOOD_PLANKS = register("veilwood_planks", () -> new Block(BlockBehaviour.Properties.of().ignitedByLava().instrument(NoteBlockInstrument.BASS).mapColor(MapColor.STONE).strength(2.0F, 3.0F).sound(SoundType.CHERRY_WOOD)));
+	public static final DeferredBlock<StairBlock> VEILWOOD_STAIRS = register("veilwood_stairs", () -> new StairBlock(VEILWOOD_PLANKS.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(VEILWOOD_PLANKS.get())));
+	public static final DeferredBlock<Block> VEILWOOD_SLAB = register("veilwood_slab", () -> new SlabBlock(BlockBehaviour.Properties.ofFullCopy(VEILWOOD_PLANKS.get())));
+	public static final DeferredBlock<Block> VEILWOOD_BUTTON = register("veilwood_button", () -> new ButtonBlock(TFWoodTypes.VEILWOOD_WOOD_SET, 30, BlockBehaviour.Properties.ofFullCopy(VEILWOOD_PLANKS.get()).noCollission().strength(0.5F)));
+	public static final DeferredBlock<Block> VEILWOOD_FENCE = register("veilwood_fence", () -> new FenceBlock(BlockBehaviour.Properties.ofFullCopy(VEILWOOD_PLANKS.get())));
+	public static final DeferredBlock<Block> VEILWOOD_GATE = register("veilwood_fence_gate", () -> new FenceGateBlock(TFWoodTypes.VEILWOOD_WOOD_TYPE, BlockBehaviour.Properties.ofFullCopy(VEILWOOD_PLANKS.get()).forceSolidOn()));
+	public static final DeferredBlock<Block> VEILWOOD_PLATE = register("veilwood_pressure_plate", () -> new PressurePlateBlock(TFWoodTypes.VEILWOOD_WOOD_SET, BlockBehaviour.Properties.ofFullCopy(VEILWOOD_PLANKS.get()).forceSolidOn().noCollission().strength(0.5F)));
+	public static final DeferredBlock<DoorBlock> VEILWOOD_DOOR = registerDoubleBlockItem("veilwood_door", () -> new DoorBlock(TFWoodTypes.VEILWOOD_WOOD_SET, BlockBehaviour.Properties.ofFullCopy(VEILWOOD_PLANKS.get()).strength(3.0F).noOcclusion()));
+	public static final DeferredBlock<TrapDoorBlock> VEILWOOD_TRAPDOOR = register("veilwood_trapdoor", () -> new TrapDoorBlock(TFWoodTypes.VEILWOOD_WOOD_SET, BlockBehaviour.Properties.ofFullCopy(VEILWOOD_PLANKS.get()).strength(3.0F).noOcclusion()));
+	public static final DeferredBlock<StandingSignBlock> VEILWOOD_SIGN = BLOCKS.register("veilwood_sign", () -> new StandingSignBlock(TFWoodTypes.VEILWOOD_WOOD_TYPE, BlockBehaviour.Properties.ofFullCopy(VEILWOOD_PLANKS.get()).strength(1.0F).noOcclusion().noCollission()));
+	public static final DeferredBlock<WallSignBlock> VEILWOOD_WALL_SIGN = BLOCKS.register("veilwood_wall_sign", () -> new WallSignBlock(TFWoodTypes.VEILWOOD_WOOD_TYPE, BlockBehaviour.Properties.ofFullCopy(VEILWOOD_PLANKS.get()).strength(1.0F).noOcclusion().noCollission()));
+	public static final DeferredBlock<CeilingHangingSignBlock> VEILWOOD_HANGING_SIGN = BLOCKS.register("veilwood_hanging_sign", () -> new CeilingHangingSignBlock(TFWoodTypes.VEILWOOD_WOOD_TYPE, BlockBehaviour.Properties.ofFullCopy(VEILWOOD_PLANKS.get()).noCollission().strength(1.0F)));
+	public static final DeferredBlock<WallHangingSignBlock> VEILWOOD_WALL_HANGING_SIGN = BLOCKS.register("veilwood_wall_hanging_sign", () -> new WallHangingSignBlock(TFWoodTypes.VEILWOOD_WOOD_TYPE, BlockBehaviour.Properties.ofFullCopy(VEILWOOD_PLANKS.get()).noCollission().strength(1.0F)));
+	public static final DeferredBlock<BanisterBlock> VEILWOOD_BANISTER = register("veilwood_banister", () -> new BanisterBlock(BlockBehaviour.Properties.ofFullCopy(VEILWOOD_PLANKS.get())));
+
 	public static final DeferredBlock<ChestBlock> TWILIGHT_OAK_CHEST = register("twilight_oak_chest", () -> new TFChestBlock(BlockBehaviour.Properties.ofFullCopy(TWILIGHT_OAK_PLANKS.get()).strength(2.5F)));
 	public static final DeferredBlock<ChestBlock> CANOPY_CHEST = register("canopy_chest", () -> new TFChestBlock(BlockBehaviour.Properties.ofFullCopy(CANOPY_PLANKS.get()).strength(2.5F)));
 	public static final DeferredBlock<ChestBlock> MANGROVE_CHEST = register("mangrove_chest", () -> new TFChestBlock(BlockBehaviour.Properties.ofFullCopy(MANGROVE_PLANKS.get()).strength(2.5F)));
@@ -567,6 +592,7 @@ public class TFBlocks {
 	public static final DeferredBlock<ChestBlock> TRANSFORMATION_CHEST = register("transformation_chest", () -> new TFChestBlock(BlockBehaviour.Properties.ofFullCopy(TRANSFORMATION_PLANKS.get()).strength(2.5F)));
 	public static final DeferredBlock<ChestBlock> MINING_CHEST = register("mining_chest", () -> new TFChestBlock(BlockBehaviour.Properties.ofFullCopy(MINING_PLANKS.get()).strength(2.5F)));
 	public static final DeferredBlock<ChestBlock> SORTING_CHEST = register("sorting_chest", () -> new TFChestBlock(BlockBehaviour.Properties.ofFullCopy(SORTING_PLANKS.get()).strength(2.5F)));
+	public static final DeferredBlock<ChestBlock> VEILWOOD_CHEST = register("veilwood_chest", () -> new TFChestBlock(BlockBehaviour.Properties.ofFullCopy(VEILWOOD_PLANKS.get()).strength(2.5F)));
 
 	public static final DeferredBlock<TFTrappedChestBlock> TWILIGHT_OAK_TRAPPED_CHEST = register("twilight_oak_trapped_chest", () -> new TFTrappedChestBlock(BlockBehaviour.Properties.ofFullCopy(TWILIGHT_OAK_PLANKS.get()).strength(2.5F)));
 	public static final DeferredBlock<TFTrappedChestBlock> CANOPY_TRAPPED_CHEST = register("canopy_trapped_chest", () -> new TFTrappedChestBlock(BlockBehaviour.Properties.ofFullCopy(CANOPY_PLANKS.get()).strength(2.5F)));
@@ -576,6 +602,7 @@ public class TFBlocks {
 	public static final DeferredBlock<TFTrappedChestBlock> TRANSFORMATION_TRAPPED_CHEST = register("transformation_trapped_chest", () -> new TFTrappedChestBlock(BlockBehaviour.Properties.ofFullCopy(TRANSFORMATION_PLANKS.get()).strength(2.5F)));
 	public static final DeferredBlock<TFTrappedChestBlock> MINING_TRAPPED_CHEST = register("mining_trapped_chest", () -> new TFTrappedChestBlock(BlockBehaviour.Properties.ofFullCopy(MINING_PLANKS.get()).strength(2.5F)));
 	public static final DeferredBlock<TFTrappedChestBlock> SORTING_TRAPPED_CHEST = register("sorting_trapped_chest", () -> new TFTrappedChestBlock(BlockBehaviour.Properties.ofFullCopy(SORTING_PLANKS.get()).strength(2.5F)));
+	public static final DeferredBlock<TFTrappedChestBlock> VEILWOOD_TRAPPED_CHEST = register("veilwood_trapped_chest", () -> new TFTrappedChestBlock(BlockBehaviour.Properties.ofFullCopy(VEILWOOD_PLANKS.get()).strength(2.5F)));
 
 	//Flower Pots
 	public static final DeferredBlock<FlowerPotBlock> POTTED_TWILIGHT_OAK_SAPLING = BLOCKS.register("potted_twilight_oak_sapling", () -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, TWILIGHT_OAK_SAPLING, BlockBehaviour.Properties.ofFullCopy(Blocks.FLOWER_POT)));

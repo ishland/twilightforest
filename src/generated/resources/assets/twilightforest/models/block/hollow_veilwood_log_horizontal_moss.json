@@ -1,0 +1,9 @@
+{
+  "parent": "twilightforest:block/hollow_log_moss",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "inner": "twilightforest:block/stripped_veilwood_log",
+    "side": "twilightforest:block/veilwood_log",
+    "top": "twilightforest:block/veilwood_log_top"
+  }
+}

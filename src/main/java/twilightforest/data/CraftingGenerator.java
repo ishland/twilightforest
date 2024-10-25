@@ -666,6 +666,7 @@ public class CraftingGenerator extends CraftingDataHelper {
 		buttonBlock(output, "time", TFBlocks.TIME_BUTTON, TFBlocks.TIME_PLANKS);
 		buttonBlock(output, "transformation", TFBlocks.TRANSFORMATION_BUTTON, TFBlocks.TRANSFORMATION_PLANKS);
 		buttonBlock(output, "twilight_oak", TFBlocks.TWILIGHT_OAK_BUTTON, TFBlocks.TWILIGHT_OAK_PLANKS);
+		buttonBlock(output, "veilwood", TFBlocks.VEILWOOD_BUTTON, TFBlocks.VEILWOOD_PLANKS);
 
 		doorBlock(output, "canopy", TFBlocks.CANOPY_DOOR, TFBlocks.CANOPY_PLANKS);
 		doorBlock(output, "dark", TFBlocks.DARK_DOOR, TFBlocks.DARK_PLANKS);
@@ -675,6 +676,7 @@ public class CraftingGenerator extends CraftingDataHelper {
 		doorBlock(output, "time", TFBlocks.TIME_DOOR, TFBlocks.TIME_PLANKS);
 		doorBlock(output, "transformation", TFBlocks.TRANSFORMATION_DOOR, TFBlocks.TRANSFORMATION_PLANKS);
 		doorBlock(output, "twilight_oak", TFBlocks.TWILIGHT_OAK_DOOR, TFBlocks.TWILIGHT_OAK_PLANKS);
+		doorBlock(output, "veilwood", TFBlocks.VEILWOOD_DOOR, TFBlocks.VEILWOOD_PLANKS);
 
 		fenceBlock(output, "canopy", TFBlocks.CANOPY_FENCE, TFBlocks.CANOPY_PLANKS);
 		fenceBlock(output, "dark", TFBlocks.DARK_FENCE, TFBlocks.DARK_PLANKS);
@@ -684,6 +686,7 @@ public class CraftingGenerator extends CraftingDataHelper {
 		fenceBlock(output, "time", TFBlocks.TIME_FENCE, TFBlocks.TIME_PLANKS);
 		fenceBlock(output, "transformation", TFBlocks.TRANSFORMATION_FENCE, TFBlocks.TRANSFORMATION_PLANKS);
 		fenceBlock(output, "twilight_oak", TFBlocks.TWILIGHT_OAK_FENCE, TFBlocks.TWILIGHT_OAK_PLANKS);
+		fenceBlock(output, "veilwood", TFBlocks.VEILWOOD_FENCE, TFBlocks.VEILWOOD_PLANKS);
 
 		gateBlock(output, "canopy", TFBlocks.CANOPY_GATE, TFBlocks.CANOPY_PLANKS);
 		gateBlock(output, "dark", TFBlocks.DARK_GATE, TFBlocks.DARK_PLANKS);
@@ -693,6 +696,7 @@ public class CraftingGenerator extends CraftingDataHelper {
 		gateBlock(output, "time", TFBlocks.TIME_GATE, TFBlocks.TIME_PLANKS);
 		gateBlock(output, "transformation", TFBlocks.TRANSFORMATION_GATE, TFBlocks.TRANSFORMATION_PLANKS);
 		gateBlock(output, "twilight_oak", TFBlocks.TWILIGHT_OAK_GATE, TFBlocks.TWILIGHT_OAK_PLANKS);
+		gateBlock(output, "veilwood", TFBlocks.VEILWOOD_GATE, TFBlocks.VEILWOOD_PLANKS);
 
 		planksBlock(output, "canopy", TFBlocks.CANOPY_PLANKS, ItemTagGenerator.CANOPY_LOGS);
 		planksBlock(output, "dark", TFBlocks.DARK_PLANKS, ItemTagGenerator.DARKWOOD_LOGS);
@@ -702,6 +706,7 @@ public class CraftingGenerator extends CraftingDataHelper {
 		planksBlock(output, "time", TFBlocks.TIME_PLANKS, ItemTagGenerator.TIME_LOGS);
 		planksBlock(output, "transformation", TFBlocks.TRANSFORMATION_PLANKS, ItemTagGenerator.TRANSFORMATION_LOGS);
 		planksBlock(output, "twilight_oak", TFBlocks.TWILIGHT_OAK_PLANKS, ItemTagGenerator.TWILIGHT_OAK_LOGS);
+		planksBlock(output, "veilwood", TFBlocks.VEILWOOD_PLANKS, ItemTagGenerator.VEILWOOD_LOGS);
 
 		woodBlock(output, "canopy", TFBlocks.CANOPY_WOOD, TFBlocks.CANOPY_LOG);
 		woodBlock(output, "dark", TFBlocks.DARK_WOOD, TFBlocks.DARK_LOG);
@@ -711,6 +716,7 @@ public class CraftingGenerator extends CraftingDataHelper {
 		woodBlock(output, "time", TFBlocks.TIME_WOOD, TFBlocks.TIME_LOG);
 		woodBlock(output, "transformation", TFBlocks.TRANSFORMATION_WOOD, TFBlocks.TRANSFORMATION_LOG);
 		woodBlock(output, "twilight_oak", TFBlocks.TWILIGHT_OAK_WOOD, TFBlocks.TWILIGHT_OAK_LOG);
+		woodBlock(output, "veilwood", TFBlocks.VEILWOOD_WOOD, TFBlocks.VEILWOOD_LOG);
 
 		strippedWoodBlock(output, "canopy", TFBlocks.STRIPPED_CANOPY_WOOD, TFBlocks.STRIPPED_CANOPY_LOG);
 		strippedWoodBlock(output, "dark", TFBlocks.STRIPPED_DARK_WOOD, TFBlocks.STRIPPED_DARK_LOG);
@@ -720,6 +726,7 @@ public class CraftingGenerator extends CraftingDataHelper {
 		strippedWoodBlock(output, "time", TFBlocks.STRIPPED_TIME_WOOD, TFBlocks.STRIPPED_TIME_LOG);
 		strippedWoodBlock(output, "transformation", TFBlocks.STRIPPED_TRANSFORMATION_WOOD, TFBlocks.STRIPPED_TRANSFORMATION_LOG);
 		strippedWoodBlock(output, "twilight_oak", TFBlocks.STRIPPED_TWILIGHT_OAK_WOOD, TFBlocks.STRIPPED_TWILIGHT_OAK_LOG);
+		strippedWoodBlock(output, "veilwood", TFBlocks.STRIPPED_VEILWOOD_WOOD, TFBlocks.STRIPPED_VEILWOOD_LOG);
 
 		plateBlock(output, "canopy", TFBlocks.CANOPY_PLATE, TFBlocks.CANOPY_PLANKS);
 		plateBlock(output, "dark", TFBlocks.DARK_PLATE, TFBlocks.DARK_PLANKS);
@@ -729,6 +736,7 @@ public class CraftingGenerator extends CraftingDataHelper {
 		plateBlock(output, "time", TFBlocks.TIME_PLATE, TFBlocks.TIME_PLANKS);
 		plateBlock(output, "transformation", TFBlocks.TRANSFORMATION_PLATE, TFBlocks.TRANSFORMATION_PLANKS);
 		plateBlock(output, "twilight_oak", TFBlocks.TWILIGHT_OAK_PLATE, TFBlocks.TWILIGHT_OAK_PLANKS);
+		plateBlock(output, "veilwood", TFBlocks.VEILWOOD_PLATE, TFBlocks.VEILWOOD_PLANKS);
 
 		woodenSlabBlock(output, "canopy", TFBlocks.CANOPY_SLAB, TFBlocks.CANOPY_PLANKS);
 		woodenSlabBlock(output, "dark", TFBlocks.DARK_SLAB, TFBlocks.DARK_PLANKS);
@@ -738,6 +746,7 @@ public class CraftingGenerator extends CraftingDataHelper {
 		woodenSlabBlock(output, "time", TFBlocks.TIME_SLAB, TFBlocks.TIME_PLANKS);
 		woodenSlabBlock(output, "transformation", TFBlocks.TRANSFORMATION_SLAB, TFBlocks.TRANSFORMATION_PLANKS);
 		woodenSlabBlock(output, "twilight_oak", TFBlocks.TWILIGHT_OAK_SLAB, TFBlocks.TWILIGHT_OAK_PLANKS);
+		woodenSlabBlock(output, "veilwood", TFBlocks.VEILWOOD_SLAB, TFBlocks.VEILWOOD_PLANKS);
 
 		woodenStairsBlock(output, locWood("canopy_stairs"), TFBlocks.CANOPY_STAIRS, TFBlocks.CANOPY_PLANKS, TFBlocks.CANOPY_PLANKS.get());
 		woodenStairsBlock(output, locWood("dark_stairs"), TFBlocks.DARK_STAIRS, TFBlocks.DARK_PLANKS, TFBlocks.DARK_PLANKS.get());
@@ -747,6 +756,7 @@ public class CraftingGenerator extends CraftingDataHelper {
 		woodenStairsBlock(output, locWood("time_stairs"), TFBlocks.TIME_STAIRS, TFBlocks.TIME_PLANKS, TFBlocks.TIME_PLANKS.get());
 		woodenStairsBlock(output, locWood("transformation_stairs"), TFBlocks.TRANSFORMATION_STAIRS, TFBlocks.TRANSFORMATION_PLANKS, TFBlocks.TRANSFORMATION_PLANKS.get());
 		woodenStairsBlock(output, locWood("twilight_oak_stairs"), TFBlocks.TWILIGHT_OAK_STAIRS, TFBlocks.TWILIGHT_OAK_PLANKS, TFBlocks.TWILIGHT_OAK_PLANKS.get());
+		woodenStairsBlock(output, locWood("veilwood_stairs"), TFBlocks.VEILWOOD_STAIRS, TFBlocks.VEILWOOD_PLANKS, TFBlocks.VEILWOOD_PLANKS.get());
 
 		trapdoorBlock(output, "canopy", TFBlocks.CANOPY_TRAPDOOR, TFBlocks.CANOPY_PLANKS);
 		trapdoorBlock(output, "dark", TFBlocks.DARK_TRAPDOOR, TFBlocks.DARK_PLANKS);
@@ -756,6 +766,7 @@ public class CraftingGenerator extends CraftingDataHelper {
 		trapdoorBlock(output, "time", TFBlocks.TIME_TRAPDOOR, TFBlocks.TIME_PLANKS);
 		trapdoorBlock(output, "transformation", TFBlocks.TRANSFORMATION_TRAPDOOR, TFBlocks.TRANSFORMATION_PLANKS);
 		trapdoorBlock(output, "twilight_oak", TFBlocks.TWILIGHT_OAK_TRAPDOOR, TFBlocks.TWILIGHT_OAK_PLANKS);
+		trapdoorBlock(output, "veilwood", TFBlocks.VEILWOOD_TRAPDOOR, TFBlocks.VEILWOOD_PLANKS);
 
 		signBlock(output, "canopy", TFItems.CANOPY_SIGN, TFBlocks.CANOPY_PLANKS);
 		signBlock(output, "dark", TFItems.DARK_SIGN, TFBlocks.DARK_PLANKS);
@@ -765,6 +776,7 @@ public class CraftingGenerator extends CraftingDataHelper {
 		signBlock(output, "time", TFItems.TIME_SIGN, TFBlocks.TIME_PLANKS);
 		signBlock(output, "transformation", TFItems.TRANSFORMATION_SIGN, TFBlocks.TRANSFORMATION_PLANKS);
 		signBlock(output, "twilight_oak", TFItems.TWILIGHT_OAK_SIGN, TFBlocks.TWILIGHT_OAK_PLANKS);
+		signBlock(output, "veilwood", TFItems.VEILWOOD_SIGN, TFBlocks.VEILWOOD_PLANKS);
 
 		hangingSignBlock(output, "canopy", TFItems.CANOPY_HANGING_SIGN, TFBlocks.STRIPPED_CANOPY_LOG);
 		hangingSignBlock(output, "dark", TFItems.DARK_HANGING_SIGN, TFBlocks.STRIPPED_DARK_LOG);
@@ -774,6 +786,7 @@ public class CraftingGenerator extends CraftingDataHelper {
 		hangingSignBlock(output, "time", TFItems.TIME_HANGING_SIGN, TFBlocks.STRIPPED_TIME_LOG);
 		hangingSignBlock(output, "transformation", TFItems.TRANSFORMATION_HANGING_SIGN, TFBlocks.STRIPPED_TRANSFORMATION_LOG);
 		hangingSignBlock(output, "twilight_oak", TFItems.TWILIGHT_OAK_HANGING_SIGN, TFBlocks.STRIPPED_TWILIGHT_OAK_LOG);
+		hangingSignBlock(output, "veilwood", TFItems.VEILWOOD_HANGING_SIGN, TFBlocks.STRIPPED_VEILWOOD_LOG);
 
 		banisterBlock(output, "canopy", TFBlocks.CANOPY_BANISTER, TFBlocks.CANOPY_SLAB);
 		banisterBlock(output, "dark", TFBlocks.DARK_BANISTER, TFBlocks.DARK_SLAB);
@@ -783,6 +796,7 @@ public class CraftingGenerator extends CraftingDataHelper {
 		banisterBlock(output, "time", TFBlocks.TIME_BANISTER, TFBlocks.TIME_SLAB);
 		banisterBlock(output, "transformation", TFBlocks.TRANSFORMATION_BANISTER, TFBlocks.TRANSFORMATION_SLAB);
 		banisterBlock(output, "twilight_oak", TFBlocks.TWILIGHT_OAK_BANISTER, TFBlocks.TWILIGHT_OAK_SLAB);
+		banisterBlock(output, "veilwood", TFBlocks.VEILWOOD_BANISTER, TFBlocks.VEILWOOD_SLAB);
 
 		banisterBlock(output, "oak", TFBlocks.OAK_BANISTER, Blocks.OAK_SLAB);
 		banisterBlock(output, "spruce", TFBlocks.SPRUCE_BANISTER, Blocks.SPRUCE_SLAB);
@@ -804,6 +818,7 @@ public class CraftingGenerator extends CraftingDataHelper {
 		chestBlock(output, "transformation", TFBlocks.TRANSFORMATION_CHEST, TFBlocks.TRANSFORMATION_TRAPPED_CHEST, TFBlocks.TRANSFORMATION_PLANKS);
 		chestBlock(output, "mining", TFBlocks.MINING_CHEST, TFBlocks.MINING_TRAPPED_CHEST, TFBlocks.MINING_PLANKS);
 		chestBlock(output, "sorting", TFBlocks.SORTING_CHEST, TFBlocks.SORTING_TRAPPED_CHEST, TFBlocks.SORTING_PLANKS);
+		chestBlock(output, "veilwood", TFBlocks.VEILWOOD_CHEST, TFBlocks.VEILWOOD_TRAPPED_CHEST, TFBlocks.VEILWOOD_PLANKS);
 
 		buildBoats(output, TFItems.TWILIGHT_OAK_BOAT, TFItems.TWILIGHT_OAK_CHEST_BOAT, TFBlocks.TWILIGHT_OAK_PLANKS);
 		buildBoats(output, TFItems.CANOPY_BOAT, TFItems.CANOPY_CHEST_BOAT, TFBlocks.CANOPY_PLANKS);
@@ -813,6 +828,7 @@ public class CraftingGenerator extends CraftingDataHelper {
 		buildBoats(output, TFItems.TRANSFORMATION_BOAT, TFItems.TRANSFORMATION_CHEST_BOAT, TFBlocks.TRANSFORMATION_PLANKS);
 		buildBoats(output, TFItems.MINING_BOAT, TFItems.MINING_CHEST_BOAT, TFBlocks.MINING_PLANKS);
 		buildBoats(output, TFItems.SORTING_BOAT, TFItems.SORTING_CHEST_BOAT, TFBlocks.SORTING_PLANKS);
+		buildBoats(output, TFItems.VEILWOOD_BOAT, TFItems.VEILWOOD_CHEST_BOAT, TFBlocks.VEILWOOD_PLANKS);
 	}
 
 	private void nagastoneRecipes(RecipeOutput output) {

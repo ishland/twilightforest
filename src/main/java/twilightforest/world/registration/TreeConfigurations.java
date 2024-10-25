@@ -25,6 +25,7 @@ import net.minecraft.world.level.levelgen.feature.trunkplacers.GiantTrunkPlacer;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.StraightTrunkPlacer;
 import twilightforest.block.FireflyBlock;
 import twilightforest.init.TFBlocks;
+import twilightforest.world.components.feature.config.VeilwoodTreeConfig;
 import twilightforest.world.components.feature.config.TFTreeFeatureConfig;
 import twilightforest.world.components.feature.trees.treeplacers.*;
 
@@ -111,15 +112,22 @@ public class TreeConfigurations {
 		.ignoreVines()
 		.build();
 
-	public static final TreeConfiguration CANOPY_TREE_DEAD = new TreeConfiguration.TreeConfigurationBuilder(
-		BlockStateProvider.simple(TFBlocks.CANOPY_LOG.get()),
-		new BranchingTrunkPlacer(20, 5, 5, 12, new BranchesConfig(BlockStateProvider.simple(TFBlocks.CANOPY_WOOD.get()), 3, 1, 10, 1, 0.3, 0.2), false),
-		BlockStateProvider.simple(Blocks.AIR),
-		LeafSpheroidFoliagePlacer.NO_OP,
-		new TwoLayersFeatureSize(20, 0, canopyDistancing)
+	public static final VeilwoodTreeConfig VEILWOOD_TREE = new VeilwoodTreeConfig.Builder(
+		BlockStateProvider.simple(TFBlocks.VEILWOOD_LOG.get()),
+		BlockStateProvider.simple(TFBlocks.VEILWOOD_WOOD.get()),
+		BlockStateProvider.simple(TFBlocks.ROOT_BLOCK.get())
 	)
-		.decorators(ImmutableList.of(TreeDecorators.FIREFLY, TreeDecorators.LIVING_ROOTS))
-		.ignoreVines()
+		.addDecorator(TreeDecorators.FIREFLY)
+		.build();
+
+	public static final VeilwoodTreeConfig BIG_VEILWOOD_TREE = new VeilwoodTreeConfig.Builder(
+		BlockStateProvider.simple(TFBlocks.VEILWOOD_LOG.get()),
+		BlockStateProvider.simple(TFBlocks.VEILWOOD_WOOD.get()),
+		BlockStateProvider.simple(TFBlocks.ROOT_BLOCK.get())
+	)
+		.minSize(20)
+		.maxSize(27)
+		.scale(1.25D)
 		.build();
 
 	public static final TFTreeFeatureConfig MEGA_CANOPY = new TFTreeFeatureConfig.Builder(

@@ -35,6 +35,7 @@ public class WoodPalettes {
 	public static final ResourceKey<WoodPalette> TRANSWOOD = makeKey("transwood");
 	public static final ResourceKey<WoodPalette> MINEWOOD = makeKey("minewood");
 	public static final ResourceKey<WoodPalette> SORTWOOD = makeKey("sortwood");
+	public static final ResourceKey<WoodPalette> VEILWOOD = makeKey("veilwood");
 
 	private static ResourceKey<WoodPalette> makeKey(String name) {
 		return makeKey(TwilightForestMod.prefix(name.toLowerCase(Locale.ROOT)));
@@ -63,5 +64,6 @@ public class WoodPalettes {
 		context.register(TRANSWOOD, new WoodPalette(TFBlocks.TRANSFORMATION_PLANKS, TFBlocks.TRANSFORMATION_STAIRS, TFBlocks.TRANSFORMATION_SLAB, TFBlocks.TRANSFORMATION_BUTTON, TFBlocks.TRANSFORMATION_FENCE, TFBlocks.TRANSFORMATION_GATE, TFBlocks.TRANSFORMATION_PLATE, TFBlocks.TRANSFORMATION_BANISTER));
 		context.register(MINEWOOD, new WoodPalette(TFBlocks.MINING_PLANKS, TFBlocks.MINING_STAIRS, TFBlocks.MINING_SLAB, TFBlocks.MINING_BUTTON, TFBlocks.MINING_FENCE, TFBlocks.MINING_GATE, TFBlocks.MINING_PLATE, TFBlocks.MINING_BANISTER));
 		context.register(SORTWOOD, new WoodPalette(TFBlocks.SORTING_PLANKS, TFBlocks.SORTING_STAIRS, TFBlocks.SORTING_SLAB, TFBlocks.SORTING_BUTTON, TFBlocks.SORTING_FENCE, TFBlocks.SORTING_GATE, TFBlocks.SORTING_PLATE, TFBlocks.SORTING_BANISTER));
+		context.register(VEILWOOD, new WoodPalette(TFBlocks.VEILWOOD_PLANKS, TFBlocks.VEILWOOD_STAIRS, TFBlocks.VEILWOOD_SLAB, TFBlocks.VEILWOOD_BUTTON, TFBlocks.VEILWOOD_FENCE, TFBlocks.VEILWOOD_GATE, TFBlocks.VEILWOOD_PLATE, TFBlocks.VEILWOOD_BANISTER));
 	}
 }

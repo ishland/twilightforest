@@ -476,6 +476,8 @@ public class BlockstateGenerator extends BlockModelBuilders {
 		builtinEntity(TFBlocks.MINING_WALL_SIGN.get(), "twilightforest:block/wood/planks_mine_0");
 		builtinEntity(TFBlocks.SORTING_SIGN.get(), "twilightforest:block/wood/planks_sort_0");
 		builtinEntity(TFBlocks.SORTING_WALL_SIGN.get(), "twilightforest:block/wood/planks_sort_0");
+		builtinEntity(TFBlocks.VEILWOOD_SIGN.get(), "twilightforest:block/wood/planks_veilwood_0");
+		builtinEntity(TFBlocks.VEILWOOD_WALL_SIGN.get(), "twilightforest:block/wood/planks_veilwood_0");
 
 		builtinEntity(TFBlocks.TWILIGHT_OAK_HANGING_SIGN.get(), "twilightforest:block/stripped_twilight_oak_log");
 		builtinEntity(TFBlocks.TWILIGHT_OAK_WALL_HANGING_SIGN.get(), "twilightforest:block/stripped_twilight_oak_log");
@@ -493,6 +495,8 @@ public class BlockstateGenerator extends BlockModelBuilders {
 		builtinEntity(TFBlocks.MINING_WALL_HANGING_SIGN.get(), "twilightforest:block/stripped_mining_log");
 		builtinEntity(TFBlocks.SORTING_HANGING_SIGN.get(), "twilightforest:block/stripped_sorting_log");
 		builtinEntity(TFBlocks.SORTING_WALL_HANGING_SIGN.get(), "twilightforest:block/stripped_sorting_log");
+		builtinEntity(TFBlocks.VEILWOOD_HANGING_SIGN.get(), "twilightforest:block/stripped_veilwood_log");
+		builtinEntity(TFBlocks.VEILWOOD_WALL_HANGING_SIGN.get(), "twilightforest:block/stripped_veilwood_log");
 
 		builtinEntity(TFBlocks.TWILIGHT_OAK_CHEST.get(), "twilightforest:block/wood/planks_twilight_oak_0");
 		builtinEntity(TFBlocks.CANOPY_CHEST.get(), "twilightforest:block/wood/planks_canopy_0");
@@ -502,6 +506,7 @@ public class BlockstateGenerator extends BlockModelBuilders {
 		builtinEntity(TFBlocks.TRANSFORMATION_CHEST.get(), "twilightforest:block/wood/planks_trans_0");
 		builtinEntity(TFBlocks.MINING_CHEST.get(), "twilightforest:block/wood/planks_mine_0");
 		builtinEntity(TFBlocks.SORTING_CHEST.get(), "twilightforest:block/wood/planks_sort_0");
+		builtinEntity(TFBlocks.VEILWOOD_CHEST.get(), "twilightforest:block/wood/planks_veilwood_0");
 
 		builtinEntity(TFBlocks.TWILIGHT_OAK_TRAPPED_CHEST.get(), "twilightforest:block/wood/planks_twilight_oak_0");
 		builtinEntity(TFBlocks.CANOPY_TRAPPED_CHEST.get(), "twilightforest:block/wood/planks_canopy_0");
@@ -511,6 +516,7 @@ public class BlockstateGenerator extends BlockModelBuilders {
 		builtinEntity(TFBlocks.TRANSFORMATION_TRAPPED_CHEST.get(), "twilightforest:block/wood/planks_trans_0");
 		builtinEntity(TFBlocks.MINING_TRAPPED_CHEST.get(), "twilightforest:block/wood/planks_mine_0");
 		builtinEntity(TFBlocks.SORTING_TRAPPED_CHEST.get(), "twilightforest:block/wood/planks_sort_0");
+		builtinEntity(TFBlocks.VEILWOOD_TRAPPED_CHEST.get(), "twilightforest:block/wood/planks_veilwood_0");
 
 		casketStuff();
 		stonePillar();
@@ -928,6 +934,9 @@ public class BlockstateGenerator extends BlockModelBuilders {
 		buildSortingLeaves();
 		magicLogCore(TFBlocks.SORTING_LOG_CORE.get());
 
+		logWoodNoSapling(TFBlocks.VEILWOOD_LOG.get(), TFBlocks.STRIPPED_VEILWOOD_LOG.get(), TFBlocks.VEILWOOD_WOOD.get(), TFBlocks.STRIPPED_VEILWOOD_WOOD.get());
+		plankBlocks("veilwood", TFBlocks.VEILWOOD_PLANKS.get(), TFBlocks.VEILWOOD_SLAB.get(), TFBlocks.VEILWOOD_STAIRS.get(), TFBlocks.VEILWOOD_BUTTON.get(), TFBlocks.VEILWOOD_FENCE.get(), TFBlocks.VEILWOOD_GATE.get(), TFBlocks.VEILWOOD_PLATE.get(), TFBlocks.VEILWOOD_DOOR.get(), TFBlocks.VEILWOOD_TRAPDOOR.get(), true, true, TFBlocks.VEILWOOD_BANISTER.get());
+
 		banisterVanilla(TFBlocks.OAK_BANISTER.get(), "oak_planks", "oak");
 		banisterVanilla(TFBlocks.SPRUCE_BANISTER.get(), "spruce_planks", "spruce");
 		banisterVanilla(TFBlocks.BIRCH_BANISTER.get(), "birch_planks", "birch");
@@ -974,6 +983,7 @@ public class BlockstateGenerator extends BlockModelBuilders {
 		hollowLogs(TFBlocks.TRANSFORMATION_LOG, TFBlocks.STRIPPED_TRANSFORMATION_LOG, TFBlocks.HOLLOW_TRANSFORMATION_LOG_HORIZONTAL, TFBlocks.HOLLOW_TRANSFORMATION_LOG_VERTICAL, TFBlocks.HOLLOW_TRANSFORMATION_LOG_CLIMBABLE, EMPTY_LOG, MOSS_LOG, MOSS_LOG_GRASS, SNOW_LOG, HOLLOW_LOG, VINE_LOG, LADDER_LOG);
 		hollowLogs(TFBlocks.MINING_LOG, TFBlocks.STRIPPED_MINING_LOG, TFBlocks.HOLLOW_MINING_LOG_HORIZONTAL, TFBlocks.HOLLOW_MINING_LOG_VERTICAL, TFBlocks.HOLLOW_MINING_LOG_CLIMBABLE, EMPTY_LOG, MOSS_LOG, MOSS_LOG_GRASS, SNOW_LOG, HOLLOW_LOG, VINE_LOG, LADDER_LOG);
 		hollowLogs(TFBlocks.SORTING_LOG, TFBlocks.STRIPPED_SORTING_LOG, TFBlocks.HOLLOW_SORTING_LOG_HORIZONTAL, TFBlocks.HOLLOW_SORTING_LOG_VERTICAL, TFBlocks.HOLLOW_SORTING_LOG_CLIMBABLE, EMPTY_LOG, MOSS_LOG, MOSS_LOG_GRASS, SNOW_LOG, HOLLOW_LOG, VINE_LOG, LADDER_LOG);
+		hollowLogs(TFBlocks.VEILWOOD_LOG, TFBlocks.STRIPPED_VEILWOOD_LOG, TFBlocks.HOLLOW_VEILWOOD_LOG_HORIZONTAL, TFBlocks.HOLLOW_VEILWOOD_LOG_VERTICAL, TFBlocks.HOLLOW_VEILWOOD_LOG_CLIMBABLE, EMPTY_LOG, MOSS_LOG, MOSS_LOG_GRASS, SNOW_LOG, HOLLOW_LOG, VINE_LOG, LADDER_LOG);
 	}
 
 	private void buildSortingLeaves() {

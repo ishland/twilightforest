@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "twilightforest:veilwood_log"
+  },
+  "result": {
+    "count": 1,
+    "id": "twilightforest:hollow_veilwood_log"
+  }
+}

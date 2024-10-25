@@ -19,7 +19,6 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import twilightforest.TFRegistries;
 import twilightforest.TwilightForestMod;
 import twilightforest.components.item.SkullCandles;
 import twilightforest.config.TFConfig;
@@ -45,6 +44,7 @@ public class TFCreativeTabs {
 			output.accept(TFBlocks.TRANSFORMATION_PLANKS);
 			output.accept(TFBlocks.MINING_PLANKS);
 			output.accept(TFBlocks.SORTING_PLANKS);
+			output.accept(TFBlocks.VEILWOOD_PLANKS);
 			output.accept(TFBlocks.TWILIGHT_OAK_LEAVES);
 			output.accept(TFBlocks.TWILIGHT_OAK_STAIRS);
 			output.accept(TFBlocks.CANOPY_STAIRS);
@@ -54,6 +54,7 @@ public class TFCreativeTabs {
 			output.accept(TFBlocks.TRANSFORMATION_STAIRS);
 			output.accept(TFBlocks.MINING_STAIRS);
 			output.accept(TFBlocks.SORTING_STAIRS);
+			output.accept(TFBlocks.VEILWOOD_STAIRS);
 			output.accept(TFBlocks.CANOPY_LEAVES);
 			output.accept(TFBlocks.TWILIGHT_OAK_SLAB);
 			output.accept(TFBlocks.CANOPY_SLAB);
@@ -63,6 +64,7 @@ public class TFCreativeTabs {
 			output.accept(TFBlocks.TRANSFORMATION_SLAB);
 			output.accept(TFBlocks.MINING_SLAB);
 			output.accept(TFBlocks.SORTING_SLAB);
+			output.accept(TFBlocks.VEILWOOD_SLAB);
 			output.accept(TFBlocks.MANGROVE_LEAVES);
 			output.accept(TFBlocks.TWILIGHT_OAK_FENCE);
 			output.accept(TFBlocks.CANOPY_FENCE);
@@ -72,6 +74,7 @@ public class TFCreativeTabs {
 			output.accept(TFBlocks.TRANSFORMATION_FENCE);
 			output.accept(TFBlocks.MINING_FENCE);
 			output.accept(TFBlocks.SORTING_FENCE);
+			output.accept(TFBlocks.VEILWOOD_FENCE);
 			output.accept(TFBlocks.DARK_LEAVES);
 			output.accept(TFBlocks.TWILIGHT_OAK_BANISTER);
 			output.accept(TFBlocks.CANOPY_BANISTER);
@@ -81,6 +84,7 @@ public class TFCreativeTabs {
 			output.accept(TFBlocks.TRANSFORMATION_BANISTER);
 			output.accept(TFBlocks.MINING_BANISTER);
 			output.accept(TFBlocks.SORTING_BANISTER);
+			output.accept(TFBlocks.VEILWOOD_BANISTER);
 			output.accept(TFBlocks.TIME_LEAVES);
 			output.accept(TFBlocks.TWILIGHT_OAK_GATE);
 			output.accept(TFBlocks.CANOPY_GATE);
@@ -90,6 +94,7 @@ public class TFCreativeTabs {
 			output.accept(TFBlocks.TRANSFORMATION_GATE);
 			output.accept(TFBlocks.MINING_GATE);
 			output.accept(TFBlocks.SORTING_GATE);
+			output.accept(TFBlocks.VEILWOOD_GATE);
 			output.accept(TFBlocks.TRANSFORMATION_LEAVES);
 			output.accept(TFBlocks.TWILIGHT_OAK_TRAPDOOR);
 			output.accept(TFBlocks.CANOPY_TRAPDOOR);
@@ -99,6 +104,7 @@ public class TFCreativeTabs {
 			output.accept(TFBlocks.TRANSFORMATION_TRAPDOOR);
 			output.accept(TFBlocks.MINING_TRAPDOOR);
 			output.accept(TFBlocks.SORTING_TRAPDOOR);
+			output.accept(TFBlocks.VEILWOOD_TRAPDOOR);
 			output.accept(TFBlocks.MINING_LEAVES);
 			output.accept(TFBlocks.TWILIGHT_OAK_PLATE);
 			output.accept(TFBlocks.CANOPY_PLATE);
@@ -108,6 +114,7 @@ public class TFCreativeTabs {
 			output.accept(TFBlocks.TRANSFORMATION_PLATE);
 			output.accept(TFBlocks.MINING_PLATE);
 			output.accept(TFBlocks.SORTING_PLATE);
+			output.accept(TFBlocks.VEILWOOD_PLATE);
 			output.accept(TFBlocks.SORTING_LEAVES);
 			output.accept(TFBlocks.TWILIGHT_OAK_BUTTON);
 			output.accept(TFBlocks.CANOPY_BUTTON);
@@ -117,6 +124,7 @@ public class TFCreativeTabs {
 			output.accept(TFBlocks.TRANSFORMATION_BUTTON);
 			output.accept(TFBlocks.MINING_BUTTON);
 			output.accept(TFBlocks.SORTING_BUTTON);
+			output.accept(TFBlocks.VEILWOOD_BUTTON);
 			output.accept(TFBlocks.RAINBOW_OAK_LEAVES);
 			output.accept(TFBlocks.TWILIGHT_OAK_DOOR);
 			output.accept(TFBlocks.CANOPY_DOOR);
@@ -126,6 +134,7 @@ public class TFCreativeTabs {
 			output.accept(TFBlocks.TRANSFORMATION_DOOR);
 			output.accept(TFBlocks.MINING_DOOR);
 			output.accept(TFBlocks.SORTING_DOOR);
+			output.accept(TFBlocks.VEILWOOD_DOOR);
 			output.accept(TFBlocks.TWILIGHT_OAK_SAPLING);
 			output.accept(TFItems.TWILIGHT_OAK_SIGN);
 			output.accept(TFItems.CANOPY_SIGN);
@@ -135,6 +144,7 @@ public class TFCreativeTabs {
 			output.accept(TFItems.TRANSFORMATION_SIGN);
 			output.accept(TFItems.MINING_SIGN);
 			output.accept(TFItems.SORTING_SIGN);
+			output.accept(TFItems.VEILWOOD_SIGN);
 			output.accept(TFBlocks.CANOPY_SAPLING);
 			output.accept(TFItems.TWILIGHT_OAK_HANGING_SIGN);
 			output.accept(TFItems.CANOPY_HANGING_SIGN);
@@ -144,6 +154,7 @@ public class TFCreativeTabs {
 			output.accept(TFItems.TRANSFORMATION_HANGING_SIGN);
 			output.accept(TFItems.MINING_HANGING_SIGN);
 			output.accept(TFItems.SORTING_HANGING_SIGN);
+			output.accept(TFItems.VEILWOOD_HANGING_SIGN);
 			output.accept(TFBlocks.MANGROVE_SAPLING);
 			output.accept(TFBlocks.TWILIGHT_OAK_CHEST);
 			output.accept(TFBlocks.CANOPY_CHEST);
@@ -153,6 +164,7 @@ public class TFCreativeTabs {
 			output.accept(TFBlocks.TRANSFORMATION_CHEST);
 			output.accept(TFBlocks.MINING_CHEST);
 			output.accept(TFBlocks.SORTING_CHEST);
+			output.accept(TFBlocks.VEILWOOD_CHEST);
 			output.accept(TFBlocks.DARKWOOD_SAPLING);
 			output.accept(TFBlocks.TWILIGHT_OAK_TRAPPED_CHEST);
 			output.accept(TFBlocks.CANOPY_TRAPPED_CHEST);
@@ -162,6 +174,7 @@ public class TFCreativeTabs {
 			output.accept(TFBlocks.TRANSFORMATION_TRAPPED_CHEST);
 			output.accept(TFBlocks.MINING_TRAPPED_CHEST);
 			output.accept(TFBlocks.SORTING_TRAPPED_CHEST);
+			output.accept(TFBlocks.VEILWOOD_TRAPPED_CHEST);
 			output.accept(TFBlocks.TIME_SAPLING);
 			output.accept(TFBlocks.TWILIGHT_OAK_WOOD);
 			output.accept(TFBlocks.CANOPY_WOOD);
@@ -171,6 +184,7 @@ public class TFCreativeTabs {
 			output.accept(TFBlocks.TRANSFORMATION_WOOD);
 			output.accept(TFBlocks.MINING_WOOD);
 			output.accept(TFBlocks.SORTING_WOOD);
+			output.accept(TFBlocks.VEILWOOD_WOOD);
 			output.accept(TFBlocks.TRANSFORMATION_SAPLING);
 			output.accept(TFBlocks.TWILIGHT_OAK_LOG);
 			output.accept(TFBlocks.CANOPY_LOG);
@@ -180,6 +194,7 @@ public class TFCreativeTabs {
 			output.accept(TFBlocks.TRANSFORMATION_LOG);
 			output.accept(TFBlocks.MINING_LOG);
 			output.accept(TFBlocks.SORTING_LOG);
+			output.accept(TFBlocks.VEILWOOD_LOG);
 			output.accept(TFBlocks.MINING_SAPLING);
 			output.accept(TFBlocks.STRIPPED_TWILIGHT_OAK_LOG);
 			output.accept(TFBlocks.STRIPPED_CANOPY_LOG);
@@ -189,6 +204,7 @@ public class TFCreativeTabs {
 			output.accept(TFBlocks.STRIPPED_TRANSFORMATION_LOG);
 			output.accept(TFBlocks.STRIPPED_MINING_LOG);
 			output.accept(TFBlocks.STRIPPED_SORTING_LOG);
+			output.accept(TFBlocks.STRIPPED_VEILWOOD_LOG);
 			output.accept(TFBlocks.SORTING_SAPLING);
 			output.accept(TFBlocks.STRIPPED_TWILIGHT_OAK_WOOD);
 			output.accept(TFBlocks.STRIPPED_CANOPY_WOOD);
@@ -198,6 +214,7 @@ public class TFCreativeTabs {
 			output.accept(TFBlocks.STRIPPED_TRANSFORMATION_WOOD);
 			output.accept(TFBlocks.STRIPPED_MINING_WOOD);
 			output.accept(TFBlocks.STRIPPED_SORTING_WOOD);
+			output.accept(TFBlocks.STRIPPED_VEILWOOD_WOOD);
 			output.accept(TFBlocks.RAINBOW_OAK_SAPLING);
 			output.accept(TFBlocks.ROOT_BLOCK);
 			output.accept(TFBlocks.LIVEROOT_BLOCK);
@@ -216,6 +233,7 @@ public class TFCreativeTabs {
 			output.accept(TFItems.HOLLOW_TRANSFORMATION_LOG);
 			output.accept(TFItems.HOLLOW_MINING_LOG);
 			output.accept(TFItems.HOLLOW_SORTING_LOG);
+			output.accept(TFItems.HOLLOW_VEILWOOD_LOG);
 			output.accept(TFBlocks.OAK_BANISTER);
 			output.accept(TFBlocks.SPRUCE_BANISTER);
 			output.accept(TFBlocks.BIRCH_BANISTER);
@@ -459,6 +477,7 @@ public class TFCreativeTabs {
 			output.accept(TFItems.TRANSFORMATION_BOAT);
 			output.accept(TFItems.MINING_BOAT);
 			output.accept(TFItems.SORTING_BOAT);
+			output.accept(TFItems.VEILWOOD_BOAT);
 			output.accept(TFItems.TWILIGHT_OAK_CHEST_BOAT);
 			output.accept(TFItems.CANOPY_CHEST_BOAT);
 			output.accept(TFItems.MANGROVE_CHEST_BOAT);
@@ -467,6 +486,7 @@ public class TFCreativeTabs {
 			output.accept(TFItems.TRANSFORMATION_CHEST_BOAT);
 			output.accept(TFItems.MINING_CHEST_BOAT);
 			output.accept(TFItems.SORTING_CHEST_BOAT);
+			output.accept(TFItems.VEILWOOD_CHEST_BOAT);
 			createSpawnEggsAlphabetical(output);
 		}).build());
 

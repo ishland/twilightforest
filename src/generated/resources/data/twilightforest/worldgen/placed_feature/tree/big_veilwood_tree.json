@@ -1,5 +1,5 @@
 {
-  "feature": "twilightforest:tree/dead_canopy_tree",
+  "feature": "twilightforest:tree/big_veilwood_tree",
   "placement": [
     {
       "type": "minecraft:count",
@@ -7,11 +7,11 @@
         "type": "minecraft:weighted_list",
         "distribution": [
           {
-            "data": 2,
+            "data": 0,
             "weight": 9
           },
           {
-            "data": 3,
+            "data": 1,
             "weight": 1
           }
         ]

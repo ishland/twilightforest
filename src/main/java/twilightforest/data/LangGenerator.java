@@ -372,6 +372,9 @@ public class LangGenerator extends TFLangProvider {
 		this.createLogs("sorting", "Sortingwood");
 		this.createWoodSet("sorting", "Sortingwood");
 
+		this.createLogs("veilwood", "Veilwood");
+		this.createWoodSet("veilwood", "Veilwood");
+
 		this.addBlock(TFBlocks.RAINBOW_OAK_LEAVES, "Rainbow Oak Leaves");
 		this.addSapling("rainbow_oak", "Rainbow Oak Sapling");
 		this.addSapling("hollow_oak", "Robust Twilight Oak Sapling");
@@ -1008,6 +1011,7 @@ public class LangGenerator extends TFLangProvider {
 		this.translateTag(ItemTagGenerator.REPAIRS_KNIGHTMETAL_TOOLS, "Repairs Knightmetal Tools");
 		this.translateTag(ItemTagGenerator.REPAIRS_STEELEAF_TOOLS, "Repairs Steeleaf Tools");
 		this.translateTag(ItemTagGenerator.SORTING_LOGS, "Sortingwood Logs");
+		this.translateTag(ItemTagGenerator.VEILWOOD_LOGS, "Dead Logs");
 		this.translateTag(ItemTagGenerator.TIME_LOGS, "Timewood Logs");
 		this.translateTag(ItemTagGenerator.TOWERWOOD, "Towerwood Blocks");
 		this.translateTag(ItemTagGenerator.TRANSFORMATION_LOGS, "Transformation Logs");

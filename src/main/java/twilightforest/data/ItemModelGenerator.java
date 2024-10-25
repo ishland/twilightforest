@@ -435,6 +435,25 @@ public class ItemModelGenerator extends ItemModelProvider {
 		withExistingParent(TFBlocks.SORTING_CHEST.getId().toString(), "item/chest").texture("particle", prefix("block/wood/planks_sort_0"));
 		withExistingParent(TFBlocks.SORTING_TRAPPED_CHEST.getId().toString(), "item/chest").texture("particle", prefix("block/wood/planks_sort_0"));
 
+		toBlock(TFBlocks.VEILWOOD_LOG.get());
+		toBlock(TFBlocks.STRIPPED_VEILWOOD_LOG.get());
+		toBlock(TFBlocks.VEILWOOD_WOOD.get());
+		toBlock(TFBlocks.STRIPPED_VEILWOOD_WOOD.get());
+		woodBlock(TFBlocks.VEILWOOD_PLANKS.get(), "planks/veilwood");
+		woodBlock(TFBlocks.VEILWOOD_STAIRS.get(), "stairs/veilwood");
+		woodBlock(TFBlocks.VEILWOOD_SLAB.get(), "slab/veilwood");
+		woodenButton(TFBlocks.VEILWOOD_BUTTON.get(), "veilwood");
+		woodenFence(TFBlocks.VEILWOOD_FENCE.get(), "veilwood");
+		woodBlock(TFBlocks.VEILWOOD_GATE.get(), "fence_gate/veilwood");
+		woodBlock(TFBlocks.VEILWOOD_PLATE.get(), "pressure_plate/veilwood");
+		woodBlockModel(TFBlocks.VEILWOOD_TRAPDOOR.get(), "veilwood_trapdoor_bottom", "trapdoor/veilwood");
+		singleTex(TFItems.VEILWOOD_SIGN);
+		singleTex(TFItems.VEILWOOD_HANGING_SIGN);
+		withExistingParent(TFBlocks.VEILWOOD_BANISTER.getId().toString(), prefix("item/banister_item")).texture("texture", "block/wood/planks_veilwood_0");
+		generated(TFBlocks.VEILWOOD_DOOR.getId().getPath(), prefix("item/" + TFBlocks.VEILWOOD_DOOR.getId().getPath()));
+		withExistingParent(TFBlocks.VEILWOOD_CHEST.getId().toString(), "item/chest").texture("particle", prefix("block/wood/planks_veilwood_0"));
+		withExistingParent(TFBlocks.VEILWOOD_TRAPPED_CHEST.getId().toString(), "item/chest").texture("particle", prefix("block/wood/planks_veilwood_0"));
+
 		ResourceLocation templateTrophy = prefix("item/template_trophy");
 		withExistingParent(TFItems.NAGA_TROPHY.getId().toString(), templateTrophy);
 		withExistingParent(TFItems.LICH_TROPHY.getId().toString(), templateTrophy);
@@ -482,6 +501,7 @@ public class ItemModelGenerator extends ItemModelProvider {
 		hollowLog(TFItems.HOLLOW_TRANSFORMATION_LOG);
 		hollowLog(TFItems.HOLLOW_MINING_LOG);
 		hollowLog(TFItems.HOLLOW_SORTING_LOG);
+		hollowLog(TFItems.HOLLOW_VEILWOOD_LOG);
 
 		singleTex(TFItems.NAGA_SCALE);
 		singleTex(TFItems.NAGA_CHESTPLATE);
@@ -685,6 +705,7 @@ public class ItemModelGenerator extends ItemModelProvider {
 		singleTex(TFItems.TRANSFORMATION_BOAT);
 		singleTex(TFItems.MINING_BOAT);
 		singleTex(TFItems.SORTING_BOAT);
+		singleTex(TFItems.VEILWOOD_BOAT);
 
 		singleTex(TFItems.TWILIGHT_OAK_CHEST_BOAT);
 		singleTex(TFItems.CANOPY_CHEST_BOAT);
@@ -694,6 +715,7 @@ public class ItemModelGenerator extends ItemModelProvider {
 		singleTex(TFItems.TRANSFORMATION_CHEST_BOAT);
 		singleTex(TFItems.MINING_CHEST_BOAT);
 		singleTex(TFItems.SORTING_CHEST_BOAT);
+		singleTex(TFItems.VEILWOOD_CHEST_BOAT);
 
 		generated(TFItems.NAGA_BANNER_PATTERN.getId().getPath(), prefix("item/tf_banner_pattern"));
 		generated(TFItems.LICH_BANNER_PATTERN.getId().getPath(), prefix("item/tf_banner_pattern"));

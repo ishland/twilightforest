@@ -55,15 +55,18 @@ public abstract class BlockModelHelpers extends BlockStateProvider {
 	}
 
 	protected void logWoodSapling(RotatedPillarBlock log, RotatedPillarBlock slog, RotatedPillarBlock wood, RotatedPillarBlock swood, Block sapling) {
+		this.logWoodNoSapling(log, slog, wood, swood);
+		ResourceLocation saplingTex = prefix("block/" + name(sapling));
+		simpleBlock(sapling, models().cross(name(sapling), saplingTex).renderType(CUTOUT));
+	}
+
+	protected void logWoodNoSapling(RotatedPillarBlock log, RotatedPillarBlock slog, RotatedPillarBlock wood, RotatedPillarBlock swood) {
 		logBlock(log);
 		logBlock(slog);
 		ResourceLocation sideTex = blockTexture(log);
 		axisBlock(wood, sideTex, sideTex);
 		ResourceLocation sSideTex = blockTexture(slog);
 		axisBlock(swood, sSideTex, sSideTex);
-
-		ResourceLocation saplingTex = prefix("block/" + name(sapling));
-		simpleBlock(sapling, models().cross(name(sapling), saplingTex).renderType(CUTOUT));
 	}
 
 	protected void plankBlocks(String variant, Block plank, Block slab, StairBlock stair, Block button, Block fence, Block gate, Block plate, DoorBlock door, TrapDoorBlock trapdoor, BanisterBlock banister) {

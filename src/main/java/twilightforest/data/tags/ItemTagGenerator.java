@@ -28,6 +28,7 @@ public class ItemTagGenerator extends ModdedItemTagGenerator {
 	public static final TagKey<Item> TRANSFORMATION_LOGS = create("transwood_logs");
 	public static final TagKey<Item> MINING_LOGS = create("mining_logs");
 	public static final TagKey<Item> SORTING_LOGS = create("sortwood_logs");
+	public static final TagKey<Item> VEILWOOD_LOGS = create("veilwood_logs");
 	public static final TagKey<Item> TWILIGHT_LOGS = create("logs");
 
 	public static final TagKey<Item> BANISTERS = create("banisters");
@@ -98,12 +99,14 @@ public class ItemTagGenerator extends ModdedItemTagGenerator {
 		this.copy(BlockTagGenerator.TRANSFORMATION_LOGS, TRANSFORMATION_LOGS);
 		this.copy(BlockTagGenerator.MINING_LOGS, MINING_LOGS);
 		this.copy(BlockTagGenerator.SORTING_LOGS, SORTING_LOGS);
+		this.copy(BlockTagGenerator.VEILWOOD_LOGS, VEILWOOD_LOGS);
 
 		this.copy(BlockTagGenerator.TF_LOGS, TWILIGHT_LOGS);
 		this.tag(ItemTags.LOGS).addTag(TWILIGHT_LOGS);
 		this.tag(ItemTags.LOGS_THAT_BURN)
 			.addTag(TWILIGHT_OAK_LOGS).addTag(CANOPY_LOGS).addTag(MANGROVE_LOGS)
-			.addTag(TIME_LOGS).addTag(TRANSFORMATION_LOGS).addTag(MINING_LOGS).addTag(SORTING_LOGS);
+			.addTag(TIME_LOGS).addTag(TRANSFORMATION_LOGS).addTag(MINING_LOGS)
+			.addTag(SORTING_LOGS).addTag(VEILWOOD_LOGS);
 
 		this.copy(BlockTags.SAPLINGS, ItemTags.SAPLINGS);
 		this.copy(BlockTags.LEAVES, ItemTags.LEAVES);
@@ -172,14 +175,16 @@ public class ItemTagGenerator extends ModdedItemTagGenerator {
 			TFItems.TWILIGHT_OAK_BOAT.get(), TFItems.CANOPY_BOAT.get(),
 			TFItems.MANGROVE_BOAT.get(), TFItems.DARK_BOAT.get(),
 			TFItems.TIME_BOAT.get(), TFItems.TRANSFORMATION_BOAT.get(),
-			TFItems.MINING_BOAT.get(), TFItems.SORTING_BOAT.get()
+			TFItems.MINING_BOAT.get(), TFItems.SORTING_BOAT.get(),
+			TFItems.VEILWOOD_BOAT.get()
 		);
 
 		this.tag(ItemTags.CHEST_BOATS).add(
 			TFItems.TWILIGHT_OAK_CHEST_BOAT.get(), TFItems.CANOPY_CHEST_BOAT.get(),
 			TFItems.MANGROVE_CHEST_BOAT.get(), TFItems.DARK_CHEST_BOAT.get(),
 			TFItems.TIME_CHEST_BOAT.get(), TFItems.TRANSFORMATION_CHEST_BOAT.get(),
-			TFItems.MINING_CHEST_BOAT.get(), TFItems.SORTING_CHEST_BOAT.get()
+			TFItems.MINING_CHEST_BOAT.get(), TFItems.SORTING_CHEST_BOAT.get(),
+			TFItems.VEILWOOD_CHEST_BOAT.get()
 		);
 
 		this.tag(ItemTags.FREEZE_IMMUNE_WEARABLES).add(

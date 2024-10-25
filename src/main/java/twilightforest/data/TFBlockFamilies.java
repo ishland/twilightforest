@@ -124,6 +124,20 @@ public class TFBlockFamilies {
 		.recipeUnlockedBy("has_planks")
 		.getFamily();
 
+	public static final BlockFamily DEAD = familyBuilder(TFBlocks.VEILWOOD_PLANKS.value())
+		.stairs(TFBlocks.VEILWOOD_STAIRS.value())
+		.slab(TFBlocks.VEILWOOD_SLAB.value())
+		.button(TFBlocks.VEILWOOD_BUTTON.value())
+		.fence(TFBlocks.VEILWOOD_FENCE.value())
+		.fenceGate(TFBlocks.VEILWOOD_GATE.value())
+		.pressurePlate(TFBlocks.VEILWOOD_PLATE.value())
+		.door(TFBlocks.VEILWOOD_DOOR.value())
+		.trapdoor(TFBlocks.VEILWOOD_TRAPDOOR.value())
+		.sign(TFBlocks.VEILWOOD_SIGN.value(), TFBlocks.VEILWOOD_WALL_SIGN.value())
+		.recipeGroupPrefix("wooden")
+		.recipeUnlockedBy("has_planks")
+		.getFamily();
+
 	public static void verifyFamilyShapes(BlockFamily family, BlockFamily.Variant... required) {
 		List<BlockFamily.Variant> missing = findMissingFamilyShapes(family, required);
 

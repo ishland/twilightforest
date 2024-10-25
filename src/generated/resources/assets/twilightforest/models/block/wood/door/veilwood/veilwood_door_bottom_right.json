@@ -1,0 +1,9 @@
+{
+  "parent": "twilightforest:block/util/corrected_door_bottom_right",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "bottom": "twilightforest:block/wood/door/veilwood_lower",
+    "side": "twilightforest:block/wood/door/veilwood_side",
+    "top": "twilightforest:block/wood/door/veilwood_upper"
+  }
+}

@@ -86,6 +86,7 @@ public class ISTER extends BlockEntityWithoutLevelRenderer {
 		makeInstance(map, TFBlocks.TRANSFORMATION_CHEST);
 		makeInstance(map, TFBlocks.MINING_CHEST);
 		makeInstance(map, TFBlocks.SORTING_CHEST);
+		makeInstance(map, TFBlocks.VEILWOOD_CHEST);
 	});
 	private final Map<Block, TFTrappedChestBlockEntity> trappedChestEntities = Util.make(new HashMap<>(), map -> {
 		makeTrappedInstance(map, TFBlocks.TWILIGHT_OAK_TRAPPED_CHEST);
@@ -96,6 +97,7 @@ public class ISTER extends BlockEntityWithoutLevelRenderer {
 		makeTrappedInstance(map, TFBlocks.TRANSFORMATION_TRAPPED_CHEST);
 		makeTrappedInstance(map, TFBlocks.MINING_TRAPPED_CHEST);
 		makeTrappedInstance(map, TFBlocks.SORTING_TRAPPED_CHEST);
+		makeTrappedInstance(map, TFBlocks.VEILWOOD_TRAPPED_CHEST);
 	});
 	private KnightmetalShieldModel shield = new KnightmetalShieldModel(Minecraft.getInstance().getEntityModels().bakeLayer(TFModelLayers.KNIGHTMETAL_SHIELD));
 	private Map<BossVariant, TrophyBlockModel> trophies = TrophyRenderer.createTrophyRenderers(Minecraft.getInstance().getEntityModels());

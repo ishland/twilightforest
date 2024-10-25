@@ -136,7 +136,8 @@ public final class TFConfiguredFeatures {
 	public static final ResourceKey<ConfiguredFeature<?, ?>> CANOPY_TREE = registerKey("tree/canopy_tree");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> MEGA_CANOPY_TREE = registerKey("tree/mega_canopy_tree");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> FIREFLY_CANOPY_TREE = registerKey("tree/firefly_canopy_tree");
-	public static final ResourceKey<ConfiguredFeature<?, ?>> DEAD_CANOPY_TREE = registerKey("tree/dead_canopy_tree");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> VEILWOOD_TREE = registerKey("tree/veilwood_tree");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> BIG_VEILWOOD_TREE = registerKey("tree/big_veilwood_tree");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> MANGROVE_TREE = registerKey("tree/mangrove_tree");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> DARKWOOD_TREE = registerKey("tree/darkwood_tree");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> HOMEGROWN_DARKWOOD_TREE = registerKey("tree/homegrown_darkwood_tree");
@@ -311,7 +312,8 @@ public final class TFConfiguredFeatures {
 		context.register(CANOPY_TREE, new ConfiguredFeature<>(Feature.TREE, TreeConfigurations.CANOPY_TREE));
 		context.register(MEGA_CANOPY_TREE, new ConfiguredFeature<>(TFFeatures.MEGA_CANOPY.get(), TreeConfigurations.MEGA_CANOPY));
 		context.register(FIREFLY_CANOPY_TREE, new ConfiguredFeature<>(Feature.TREE, TreeConfigurations.CANOPY_TREE_FIREFLY));
-		context.register(DEAD_CANOPY_TREE, new ConfiguredFeature<>(Feature.TREE, TreeConfigurations.CANOPY_TREE_DEAD));
+		context.register(VEILWOOD_TREE, new ConfiguredFeature<>(TFFeatures.VEILWOOD_TREE.get(), TreeConfigurations.VEILWOOD_TREE));
+		context.register(BIG_VEILWOOD_TREE, new ConfiguredFeature<>(TFFeatures.VEILWOOD_TREE.get(), TreeConfigurations.BIG_VEILWOOD_TREE));
 		context.register(MANGROVE_TREE, new ConfiguredFeature<>(Feature.TREE, TreeConfigurations.MANGROVE_TREE));
 		context.register(DARKWOOD_TREE, new ConfiguredFeature<>(TFFeatures.DARK_CANOPY_TREE.get(), TreeConfigurations.DARKWOOD_TREE));
 		context.register(HOMEGROWN_DARKWOOD_TREE, new ConfiguredFeature<>(TFFeatures.DARK_CANOPY_TREE.get(), TreeConfigurations.HOMEGROWN_DARKWOOD_TREE));

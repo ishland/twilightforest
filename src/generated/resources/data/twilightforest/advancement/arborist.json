@@ -581,6 +581,16 @@
       },
       "trigger": "minecraft:inventory_changed"
     },
+    "hollow_veilwood_log": {
+      "conditions": {
+        "items": [
+          {
+            "items": "twilightforest:hollow_veilwood_log"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
     "huge_stalk": {
       "conditions": {
         "items": [
@@ -1431,6 +1441,26 @@
       },
       "trigger": "minecraft:inventory_changed"
     },
+    "stripped_veilwood_log": {
+      "conditions": {
+        "items": [
+          {
+            "items": "twilightforest:stripped_veilwood_log"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "stripped_veilwood_wood": {
+      "conditions": {
+        "items": [
+          {
+            "items": "twilightforest:stripped_veilwood_wood"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
     "thorn_leaves": {
       "conditions": {
         "items": [
@@ -2060,6 +2090,186 @@
         ]
       },
       "trigger": "minecraft:inventory_changed"
+    },
+    "veilwood_banister": {
+      "conditions": {
+        "items": [
+          {
+            "items": "twilightforest:veilwood_banister"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "veilwood_boat": {
+      "conditions": {
+        "items": [
+          {
+            "items": "twilightforest:veilwood_boat"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "veilwood_button": {
+      "conditions": {
+        "items": [
+          {
+            "items": "twilightforest:veilwood_button"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "veilwood_chest": {
+      "conditions": {
+        "items": [
+          {
+            "items": "twilightforest:veilwood_chest"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "veilwood_chest_boat": {
+      "conditions": {
+        "items": [
+          {
+            "items": "twilightforest:veilwood_chest_boat"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "veilwood_door": {
+      "conditions": {
+        "items": [
+          {
+            "items": "twilightforest:veilwood_door"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "veilwood_fence": {
+      "conditions": {
+        "items": [
+          {
+            "items": "twilightforest:veilwood_fence"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "veilwood_fence_gate": {
+      "conditions": {
+        "items": [
+          {
+            "items": "twilightforest:veilwood_fence_gate"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "veilwood_hanging_sign": {
+      "conditions": {
+        "items": [
+          {
+            "items": "twilightforest:veilwood_hanging_sign"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "veilwood_log": {
+      "conditions": {
+        "items": [
+          {
+            "items": "twilightforest:veilwood_log"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "veilwood_planks": {
+      "conditions": {
+        "items": [
+          {
+            "items": "twilightforest:veilwood_planks"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "veilwood_pressure_plate": {
+      "conditions": {
+        "items": [
+          {
+            "items": "twilightforest:veilwood_pressure_plate"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "veilwood_sign": {
+      "conditions": {
+        "items": [
+          {
+            "items": "twilightforest:veilwood_sign"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "veilwood_slab": {
+      "conditions": {
+        "items": [
+          {
+            "items": "twilightforest:veilwood_slab"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "veilwood_stairs": {
+      "conditions": {
+        "items": [
+          {
+            "items": "twilightforest:veilwood_stairs"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "veilwood_trapdoor": {
+      "conditions": {
+        "items": [
+          {
+            "items": "twilightforest:veilwood_trapdoor"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "veilwood_trapped_chest": {
+      "conditions": {
+        "items": [
+          {
+            "items": "twilightforest:veilwood_trapped_chest"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "veilwood_wood": {
+      "conditions": {
+        "items": [
+          {
+            "items": "twilightforest:veilwood_wood"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
     }
   },
   "display": {
@@ -2645,6 +2855,69 @@
     ],
     [
       "encased_towerwood"
+    ],
+    [
+      "veilwood_log"
+    ],
+    [
+      "veilwood_wood"
+    ],
+    [
+      "stripped_veilwood_log"
+    ],
+    [
+      "stripped_veilwood_wood"
+    ],
+    [
+      "hollow_veilwood_log"
+    ],
+    [
+      "veilwood_planks"
+    ],
+    [
+      "veilwood_slab"
+    ],
+    [
+      "veilwood_stairs"
+    ],
+    [
+      "veilwood_button"
+    ],
+    [
+      "veilwood_fence"
+    ],
+    [
+      "veilwood_fence_gate"
+    ],
+    [
+      "veilwood_pressure_plate"
+    ],
+    [
+      "veilwood_door"
+    ],
+    [
+      "veilwood_trapdoor"
+    ],
+    [
+      "veilwood_sign"
+    ],
+    [
+      "veilwood_hanging_sign"
+    ],
+    [
+      "veilwood_chest"
+    ],
+    [
+      "veilwood_trapped_chest"
+    ],
+    [
+      "veilwood_banister"
+    ],
+    [
+      "veilwood_boat"
+    ],
+    [
+      "veilwood_chest_boat"
     ],
     [
       "root"

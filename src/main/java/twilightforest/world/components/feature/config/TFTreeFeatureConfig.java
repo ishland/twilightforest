@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Follows similar structure to HugeTreeFeatureConfig
  */
-public class TFTreeFeatureConfig implements FeatureConfiguration {
+public class TFTreeFeatureConfig implements FeatureConfiguration, DecoratedTree {
 	public static final Codec<TFTreeFeatureConfig> codecTFTreeConfig = RecordCodecBuilder.create(instance -> instance.group(
 		BlockStateProvider.CODEC.fieldOf("trunk_provider").forGetter(obj -> obj.trunkProvider),
 		BlockStateProvider.CODEC.fieldOf("leaves_provider").forGetter(obj -> obj.leavesProvider),
@@ -55,6 +55,11 @@ public class TFTreeFeatureConfig implements FeatureConfiguration {
 
 	public void forcePlacement() {
 		this.forcePlacement = true;
+	}
+
+	@Override
+	public List<TreeDecorator> getDecorators() {
+		return this.decorators;
 	}
 
 	public static class Builder {

@@ -202,6 +202,7 @@ public class TFItems {
 	public static final DeferredItem<HollowLogItem> HOLLOW_TRANSFORMATION_LOG = ITEMS.register("hollow_transformation_log", () -> new HollowLogItem(TFBlocks.HOLLOW_TRANSFORMATION_LOG_HORIZONTAL, TFBlocks.HOLLOW_TRANSFORMATION_LOG_VERTICAL, TFBlocks.HOLLOW_TRANSFORMATION_LOG_CLIMBABLE, new Item.Properties()));
 	public static final DeferredItem<HollowLogItem> HOLLOW_MINING_LOG = ITEMS.register("hollow_mining_log", () -> new HollowLogItem(TFBlocks.HOLLOW_MINING_LOG_HORIZONTAL, TFBlocks.HOLLOW_MINING_LOG_VERTICAL, TFBlocks.HOLLOW_MINING_LOG_CLIMBABLE, new Item.Properties()));
 	public static final DeferredItem<HollowLogItem> HOLLOW_SORTING_LOG = ITEMS.register("hollow_sorting_log", () -> new HollowLogItem(TFBlocks.HOLLOW_SORTING_LOG_HORIZONTAL, TFBlocks.HOLLOW_SORTING_LOG_VERTICAL, TFBlocks.HOLLOW_SORTING_LOG_CLIMBABLE, new Item.Properties()));
+	public static final DeferredItem<HollowLogItem> HOLLOW_VEILWOOD_LOG = ITEMS.register("hollow_veilwood_log", () -> new HollowLogItem(TFBlocks.HOLLOW_VEILWOOD_LOG_HORIZONTAL, TFBlocks.HOLLOW_VEILWOOD_LOG_VERTICAL, TFBlocks.HOLLOW_VEILWOOD_LOG_CLIMBABLE, new Item.Properties()));
 
 	public static final DeferredItem<HollowLogItem> HOLLOW_OAK_LOG = ITEMS.register("hollow_oak_log", () -> new HollowLogItem(TFBlocks.HOLLOW_OAK_LOG_HORIZONTAL, TFBlocks.HOLLOW_OAK_LOG_VERTICAL, TFBlocks.HOLLOW_OAK_LOG_CLIMBABLE, new Item.Properties()));
 	public static final DeferredItem<HollowLogItem> HOLLOW_SPRUCE_LOG = ITEMS.register("hollow_spruce_log", () -> new HollowLogItem(TFBlocks.HOLLOW_SPRUCE_LOG_HORIZONTAL, TFBlocks.HOLLOW_SPRUCE_LOG_VERTICAL, TFBlocks.HOLLOW_SPRUCE_LOG_CLIMBABLE, new Item.Properties()));
@@ -230,6 +231,8 @@ public class TFItems {
 	public static final DeferredItem<Item> MINING_HANGING_SIGN = ITEMS.register("mining_hanging_sign", () -> new HangingSignItem(TFBlocks.MINING_HANGING_SIGN.get(), TFBlocks.MINING_WALL_HANGING_SIGN.get(), new Item.Properties().stacksTo(16)));
 	public static final DeferredItem<Item> SORTING_SIGN = ITEMS.register("sorting_sign", () -> new SignItem(new Item.Properties().stacksTo(16), TFBlocks.SORTING_SIGN.get(), TFBlocks.SORTING_WALL_SIGN.get()));
 	public static final DeferredItem<Item> SORTING_HANGING_SIGN = ITEMS.register("sorting_hanging_sign", () -> new HangingSignItem(TFBlocks.SORTING_HANGING_SIGN.get(), TFBlocks.SORTING_WALL_HANGING_SIGN.get(), new Item.Properties().stacksTo(16)));
+	public static final DeferredItem<Item> VEILWOOD_SIGN = ITEMS.register("veilwood_sign", () -> new SignItem(new Item.Properties().stacksTo(16), TFBlocks.VEILWOOD_SIGN.get(), TFBlocks.VEILWOOD_WALL_SIGN.get()));
+	public static final DeferredItem<Item> VEILWOOD_HANGING_SIGN = ITEMS.register("veilwood_hanging_sign", () -> new HangingSignItem(TFBlocks.VEILWOOD_HANGING_SIGN.get(), TFBlocks.VEILWOOD_WALL_HANGING_SIGN.get(), new Item.Properties().stacksTo(16)));
 
 	public static final DeferredItem<Item> TWILIGHT_OAK_BOAT = ITEMS.register("twilight_oak_boat", () -> new BoatItem(false, boatTypeEnumExtension.TWILIGHT_OAK.get(), new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> TWILIGHT_OAK_CHEST_BOAT = ITEMS.register("twilight_oak_chest_boat", () -> new BoatItem(true, boatTypeEnumExtension.TWILIGHT_OAK.get(), new Item.Properties().stacksTo(1)));
@@ -247,6 +250,8 @@ public class TFItems {
 	public static final DeferredItem<Item> MINING_CHEST_BOAT = ITEMS.register("mining_chest_boat", () -> new BoatItem(true, boatTypeEnumExtension.MINING.get(), new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> SORTING_BOAT = ITEMS.register("sorting_boat", () -> new BoatItem(false, boatTypeEnumExtension.SORTING.get(), new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> SORTING_CHEST_BOAT = ITEMS.register("sorting_chest_boat", () -> new BoatItem(true, boatTypeEnumExtension.SORTING.get(), new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> VEILWOOD_BOAT = ITEMS.register("veilwood_boat", () -> new BoatItem(false, boatTypeEnumExtension.VEILWOOD.get(), new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> VEILWOOD_CHEST_BOAT = ITEMS.register("veilwood_chest_boat", () -> new BoatItem(true, boatTypeEnumExtension.VEILWOOD.get(), new Item.Properties().stacksTo(1)));
 
 	public static final DeferredItem<Item> MUSIC_DISC_RADIANCE = ITEMS.register("music_disc_radiance", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(TFJukeboxSongs.RADIANCE)));
 	public static final DeferredItem<Item> MUSIC_DISC_STEPS = ITEMS.register("music_disc_steps", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(TFJukeboxSongs.STEPS)));

@@ -1,0 +1,49 @@
+{
+  "type": "twilightforest:veilwood_tree",
+  "config": {
+    "branch_provider": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "twilightforest:veilwood_wood",
+        "Properties": {
+          "axis": "y"
+        }
+      }
+    },
+    "decorators": [
+      {
+        "type": "twilightforest:trunkside_decorator",
+        "deco_provider": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "twilightforest:firefly",
+            "Properties": {
+              "facing": "up",
+              "waterlogged": "false"
+            }
+          }
+        },
+        "placement_count": 2,
+        "probability_of_placement": 1.0
+      }
+    ],
+    "max_size": 17,
+    "min_size": 10,
+    "roots_provider": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "twilightforest:root"
+      }
+    },
+    "scale": 0.75,
+    "trunk_provider": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "twilightforest:veilwood_log",
+        "Properties": {
+          "axis": "y"
+        }
+      }
+    }
+  }
+}

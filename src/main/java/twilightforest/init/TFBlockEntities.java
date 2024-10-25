@@ -69,13 +69,13 @@ public class TFBlockEntities {
 		BlockEntityType.Builder.of(TFChestBlockEntity::new,
 			TFBlocks.TWILIGHT_OAK_CHEST.get(), TFBlocks.CANOPY_CHEST.get(), TFBlocks.MANGROVE_CHEST.get(),
 			TFBlocks.DARK_CHEST.get(), TFBlocks.TIME_CHEST.get(), TFBlocks.TRANSFORMATION_CHEST.get(),
-			TFBlocks.MINING_CHEST.get(), TFBlocks.SORTING_CHEST.get()).build(null));
+			TFBlocks.MINING_CHEST.get(), TFBlocks.SORTING_CHEST.get(), TFBlocks.VEILWOOD_CHEST.get()).build(null));
 
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<TFChestBlockEntity>> TF_TRAPPED_CHEST = BLOCK_ENTITIES.register("tf_trapped_chest", () ->
 		BlockEntityType.Builder.of(TFChestBlockEntity::new,
 			TFBlocks.TWILIGHT_OAK_TRAPPED_CHEST.get(), TFBlocks.CANOPY_TRAPPED_CHEST.get(), TFBlocks.MANGROVE_TRAPPED_CHEST.get(),
 			TFBlocks.DARK_TRAPPED_CHEST.get(), TFBlocks.TIME_TRAPPED_CHEST.get(), TFBlocks.TRANSFORMATION_TRAPPED_CHEST.get(),
-			TFBlocks.MINING_TRAPPED_CHEST.get(), TFBlocks.SORTING_TRAPPED_CHEST.get()).build(null));
+			TFBlocks.MINING_TRAPPED_CHEST.get(), TFBlocks.SORTING_TRAPPED_CHEST.get(), TFBlocks.VEILWOOD_TRAPPED_CHEST.get()).build(null));
 
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<SkullCandleBlockEntity>> SKULL_CANDLE = BLOCK_ENTITIES.register("skull_candle", () ->
 		BlockEntityType.Builder.of(SkullCandleBlockEntity::new,

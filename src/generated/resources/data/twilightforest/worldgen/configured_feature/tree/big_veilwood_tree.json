@@ -1,0 +1,33 @@
+{
+  "type": "twilightforest:veilwood_tree",
+  "config": {
+    "branch_provider": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "twilightforest:veilwood_wood",
+        "Properties": {
+          "axis": "y"
+        }
+      }
+    },
+    "decorators": [],
+    "max_size": 27,
+    "min_size": 20,
+    "roots_provider": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "twilightforest:root"
+      }
+    },
+    "scale": 1.25,
+    "trunk_provider": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "twilightforest:veilwood_log",
+        "Properties": {
+          "axis": "y"
+        }
+      }
+    }
+  }
+}

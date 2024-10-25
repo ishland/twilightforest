@@ -200,7 +200,9 @@ public final class TwilightForestMod {
 			TFBlocks.MINING_CHEST.get(),
 			TFBlocks.MINING_TRAPPED_CHEST.get(),
 			TFBlocks.SORTING_CHEST.get(),
-			TFBlocks.SORTING_TRAPPED_CHEST.get()
+			TFBlocks.SORTING_TRAPPED_CHEST.get(),
+			TFBlocks.VEILWOOD_CHEST.get(),
+			TFBlocks.VEILWOOD_TRAPPED_CHEST.get()
 		);
 
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, TFBlockEntities.MASON_JAR.get(), (masonJarBlock, side) ->
@@ -216,7 +218,8 @@ public final class TwilightForestMod {
 			TFBlocks.TIME_HANGING_SIGN.get(), TFBlocks.TIME_WALL_HANGING_SIGN.get(),
 			TFBlocks.TRANSFORMATION_HANGING_SIGN.get(), TFBlocks.TRANSFORMATION_WALL_HANGING_SIGN.get(),
 			TFBlocks.MINING_HANGING_SIGN.get(), TFBlocks.MINING_WALL_HANGING_SIGN.get(),
-			TFBlocks.SORTING_HANGING_SIGN.get(), TFBlocks.SORTING_WALL_HANGING_SIGN.get());
+			TFBlocks.SORTING_HANGING_SIGN.get(), TFBlocks.SORTING_WALL_HANGING_SIGN.get(),
+			TFBlocks.VEILWOOD_HANGING_SIGN.get(), TFBlocks.VEILWOOD_WALL_HANGING_SIGN.get());
 
 		event.modify(BlockEntityType.SIGN,
 			TFBlocks.TWILIGHT_OAK_SIGN.get(), TFBlocks.TWILIGHT_WALL_SIGN.get(),
@@ -226,7 +229,8 @@ public final class TwilightForestMod {
 			TFBlocks.TIME_SIGN.get(), TFBlocks.TIME_WALL_SIGN.get(),
 			TFBlocks.TRANSFORMATION_SIGN.get(), TFBlocks.TRANSFORMATION_WALL_SIGN.get(),
 			TFBlocks.MINING_SIGN.get(), TFBlocks.MINING_WALL_SIGN.get(),
-			TFBlocks.SORTING_SIGN.get(), TFBlocks.SORTING_WALL_SIGN.get());
+			TFBlocks.SORTING_SIGN.get(), TFBlocks.SORTING_WALL_SIGN.get(),
+			TFBlocks.VEILWOOD_SIGN.get(), TFBlocks.VEILWOOD_WALL_SIGN.get());
 	}
 
 	public void createNewRegistries(NewRegistryEvent event) {
@@ -310,6 +314,7 @@ public final class TwilightForestMod {
 			AxeItem.STRIPPABLES.put(TFBlocks.TRANSFORMATION_LOG.get(), TFBlocks.STRIPPED_TRANSFORMATION_LOG.get());
 			AxeItem.STRIPPABLES.put(TFBlocks.MINING_LOG.get(), TFBlocks.STRIPPED_MINING_LOG.get());
 			AxeItem.STRIPPABLES.put(TFBlocks.SORTING_LOG.get(), TFBlocks.STRIPPED_SORTING_LOG.get());
+			AxeItem.STRIPPABLES.put(TFBlocks.VEILWOOD_LOG.get(), TFBlocks.STRIPPED_VEILWOOD_LOG.get());
 
 			AxeItem.STRIPPABLES.put(TFBlocks.TWILIGHT_OAK_WOOD.get(), TFBlocks.STRIPPED_TWILIGHT_OAK_WOOD.get());
 			AxeItem.STRIPPABLES.put(TFBlocks.CANOPY_WOOD.get(), TFBlocks.STRIPPED_CANOPY_WOOD.get());
@@ -319,6 +324,7 @@ public final class TwilightForestMod {
 			AxeItem.STRIPPABLES.put(TFBlocks.TRANSFORMATION_WOOD.get(), TFBlocks.STRIPPED_TRANSFORMATION_WOOD.get());
 			AxeItem.STRIPPABLES.put(TFBlocks.MINING_WOOD.get(), TFBlocks.STRIPPED_MINING_WOOD.get());
 			AxeItem.STRIPPABLES.put(TFBlocks.SORTING_WOOD.get(), TFBlocks.STRIPPED_SORTING_WOOD.get());
+			AxeItem.STRIPPABLES.put(TFBlocks.VEILWOOD_WOOD.get(), TFBlocks.STRIPPED_VEILWOOD_WOOD.get());
 
 			FlowerPotBlock pot = (FlowerPotBlock) Blocks.FLOWER_POT;
 
@@ -454,6 +460,20 @@ public final class TwilightForestMod {
 			fireblock.setFlammable(TFBlocks.SORTING_FENCE.get(), 5, 20);
 			fireblock.setFlammable(TFBlocks.SORTING_GATE.get(), 5, 20);
 
+			fireblock.setFlammable(TFBlocks.VEILWOOD_LOG.get(), 5, 5);
+			fireblock.setFlammable(TFBlocks.VEILWOOD_WOOD.get(), 5, 5);
+			fireblock.setFlammable(TFBlocks.STRIPPED_VEILWOOD_LOG.get(), 5, 5);
+			fireblock.setFlammable(TFBlocks.STRIPPED_VEILWOOD_WOOD.get(), 5, 5);
+			fireblock.setFlammable(TFBlocks.HOLLOW_VEILWOOD_LOG_HORIZONTAL.get(), 5, 5);
+			fireblock.setFlammable(TFBlocks.HOLLOW_VEILWOOD_LOG_VERTICAL.get(), 5, 5);
+			fireblock.setFlammable(TFBlocks.HOLLOW_VEILWOOD_LOG_CLIMBABLE.get(), 5, 5);
+			fireblock.setFlammable(TFBlocks.VEILWOOD_BANISTER.get(), 5, 5);
+			fireblock.setFlammable(TFBlocks.VEILWOOD_PLANKS.get(), 5, 20);
+			fireblock.setFlammable(TFBlocks.VEILWOOD_SLAB.get(), 5, 20);
+			fireblock.setFlammable(TFBlocks.VEILWOOD_STAIRS.get(), 5, 20);
+			fireblock.setFlammable(TFBlocks.VEILWOOD_FENCE.get(), 5, 20);
+			fireblock.setFlammable(TFBlocks.VEILWOOD_GATE.get(), 5, 20);
+
 			fireblock.setFlammable(TFBlocks.CLOVER_PATCH.get(), 60, 100);
 			fireblock.setFlammable(TFBlocks.FALLEN_LEAVES.get(), 60, 100);
 			fireblock.setFlammable(TFBlocks.FIDDLEHEAD.get(), 60, 100);
@@ -538,6 +558,7 @@ public final class TwilightForestMod {
 			JarBlockEntity.addLid(TFBlocks.DARK_LOG.asItem());
 			JarBlockEntity.addLid(TFBlocks.MINING_LOG.asItem());
 			JarBlockEntity.addLid(TFBlocks.SORTING_LOG.asItem());
+			JarBlockEntity.addLid(TFBlocks.VEILWOOD_LOG.asItem());
 			JarBlockEntity.addLid(TFBlocks.TIME_LOG.asItem());
 			JarBlockEntity.addLid(TFBlocks.TRANSFORMATION_LOG.asItem());
 			JarBlockEntity.addLid(TFBlocks.TWILIGHT_OAK_LOG.asItem());
@@ -556,6 +577,7 @@ public final class TwilightForestMod {
 			JarBlockEntity.addLid(TFBlocks.STRIPPED_DARK_LOG.asItem());
 			JarBlockEntity.addLid(TFBlocks.STRIPPED_MINING_LOG.asItem());
 			JarBlockEntity.addLid(TFBlocks.STRIPPED_SORTING_LOG.asItem());
+			JarBlockEntity.addLid(TFBlocks.STRIPPED_VEILWOOD_LOG.asItem());
 			JarBlockEntity.addLid(TFBlocks.STRIPPED_TIME_LOG.asItem());
 			JarBlockEntity.addLid(TFBlocks.STRIPPED_TRANSFORMATION_LOG.asItem());
 			JarBlockEntity.addLid(TFBlocks.STRIPPED_TWILIGHT_OAK_LOG.asItem());
