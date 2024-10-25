@@ -105,18 +105,20 @@ public class VeilwoodTreeFeature extends TFTreeFeature<VeilwoodTreeConfig> {
 		int radius = (int) (scale * 4.0D);
 		int minY = pos.getY();
 		int maxY = minY + height - 1;
-		int branch = height / 2;
 
+		Map<Integer, List<BlockPos>> trunk = new HashMap<>();
 		Map<Direction, BlockPos> starters = new HashMap<>();
-		List<BlockPos> trunk = new ArrayList<>();
-		List<BlockPos> bottoms = new ArrayList<>();
+		int tallest = 0;
 
 		for (BlockPos blockPos : BlockPos.betweenClosed(pos.offset(radius, 0, radius), pos.offset(-radius, height + 1, -radius))) {
 			if (isInside(blockPos, minY, maxY)) {
 				boolean exposed = false;
+				int current = blockPos.getY() - minY;
 				if (!isInside(blockPos.above(), minY, maxY)) {
 					if (random.nextBoolean() && FeaturePlacers.placeIfValidTreePos(world, trunkPlacer, random, blockPos.above(), config.branchProvider)) {
-						trunk.add(blockPos.above().mutable());
+						if (!trunk.containsKey(current + 1)) trunk.put(current + 1, new ArrayList<>());
+						trunk.get(current + 1).add(blockPos.above().mutable());
+						if (current + 1 > tallest) tallest = current + 1;
 					} else {
 						exposed = true;
 					}
@@ -124,34 +126,51 @@ public class VeilwoodTreeFeature extends TFTreeFeature<VeilwoodTreeConfig> {
 
 				if (!isInside(blockPos.below(), minY, maxY)) {
 					if (random.nextBoolean() && FeaturePlacers.placeIfValidTreePos(world, trunkPlacer, random, blockPos.below(), config.branchProvider)) {
-						trunk.add(blockPos.below().mutable());
+						if (!trunk.containsKey(current - 1)) trunk.put(current - 1, new ArrayList<>());
+						trunk.get(current - 1).add(blockPos.below().mutable());
+						if (current - 1 > tallest) tallest = current - 1;
 					} else {
 						exposed = true;
 					}
 				}
 
 				if (FeaturePlacers.placeIfValidTreePos(world, trunkPlacer, random, blockPos, !exposed ? config.trunkProvider : config.branchProvider)) {
-					if (blockPos.getY() == minY) bottoms.add(blockPos.mutable());
-					else trunk.add(blockPos.mutable());
-					if (starters.size() < 4) {
-						int diff = blockPos.getY() - minY;
-						if (diff >= branch && diff <= branch + 4) {
-							Direction direction = DIRECTIONS.get(random.nextInt(DIRECTIONS.size()));
-							if (!starters.containsKey(direction)) starters.put(direction, blockPos.mutable());
-						}
-					}
+					if (!trunk.containsKey(current)) trunk.put(current, new ArrayList<>());
+					trunk.get(current).add(blockPos.mutable());
+					if (current > tallest) tallest = current;
 				}
 			}
 		}
 
 		if (trunk.isEmpty()) return;
 
-		if (starters.isEmpty()) {
-			Collections.sort(trunk);
-			for (Direction direction : DIRECTIONS) {
-				starters.put(direction, trunk.get(Math.min(trunk.size() / 2 + random.nextInt(4), trunk.size() - 1)));
+		for (int i = tallest; i >= 0; i--) {
+			List<BlockPos> possibilities = trunk.get(i);
+			if (possibilities != null && possibilities.size() > 2) {
+				for (Direction direction : DIRECTIONS) {
+					Collections.shuffle(possibilities);
+					for (BlockPos blockPos : possibilities) {
+						if (TreeFeature.validTreePos(world, blockPos.relative(direction))) {
+							starters.put(direction, blockPos.mutable());
+							break;
+						}
+					}
+				}
+
+				if (tallest - i == 0) {
+					BlockPos blockPos = possibilities.get(random.nextInt(possibilities.size()));
+					FeaturePlacers.placeIfValidTreePos(world, trunkPlacer, random, blockPos.above(1), config.branchProvider);
+					FeaturePlacers.placeIfValidTreePos(world, trunkPlacer, random, blockPos.above(2), config.branchProvider);
+				} else if (tallest - i == 1) {
+					BlockPos blockPos = trunk.get(i + 1).getFirst();
+					FeaturePlacers.placeIfValidTreePos(world, trunkPlacer, random, blockPos.above(), config.branchProvider);
+				}
+
+				break;
 			}
-		} else {
+		}
+
+		if (starters.size() < 4) {
 			List<Direction> viable = new ArrayList<>();
 			for (Direction direction : DIRECTIONS) if (starters.containsKey(direction)) viable.add(direction);
 			for (Direction direction : DIRECTIONS) {
@@ -159,33 +178,37 @@ public class VeilwoodTreeFeature extends TFTreeFeature<VeilwoodTreeConfig> {
 			}
 		}
 
-		List<BlockPos> rootStarters = new ArrayList<>();
+		List<BlockPos> bottoms = trunk.get(0);
+		if (bottoms != null) {
+			Collections.shuffle(bottoms);
+			List<BlockPos> rootStarters = new ArrayList<>();
+			int i = random.nextBoolean() ? 3 : 4;
 
-		int i = random.nextBoolean() ? 3 : 4;
-		for (BlockPos blockPos : bottoms) {
-			for (Direction direction : DIRECTIONS) {
-				BlockPos relative = blockPos.relative(direction);
-				if (!rootStarters.contains(relative) && bottoms.stream().noneMatch(trunks -> trunks.equals(relative) || trunks.equals(relative.relative(direction.getClockWise())) || trunks.equals(relative.relative(direction.getCounterClockWise()))) && !isInside(relative.above(), minY, maxY)) {
-					if (rootStarters.contains(relative.north()) || rootStarters.contains(relative.east()) || rootStarters.contains(relative.south()) || rootStarters.contains(relative.west())) continue;
-					if (FeaturePlacers.placeIfValidTreePos(world, trunkPlacer, random, relative, config.branchProvider)) {
-						rootStarters.add(relative.mutable());
-						i--;
+			for (BlockPos blockPos : bottoms) {
+				for (Direction direction : DIRECTIONS) {
+					BlockPos relative = blockPos.relative(direction);
+					if (!rootStarters.contains(relative) && bottoms.stream().noneMatch(trunks -> trunks.equals(relative) || trunks.equals(relative.relative(direction.getClockWise())) || trunks.equals(relative.relative(direction.getCounterClockWise()))) && !isInside(relative.above(), minY, maxY)) {
+						if (rootStarters.contains(relative.north()) || rootStarters.contains(relative.east()) || rootStarters.contains(relative.south()) || rootStarters.contains(relative.west())) continue;
+						if (FeaturePlacers.placeIfValidTreePos(world, trunkPlacer, random, relative, config.branchProvider)) {
+							rootStarters.add(relative.mutable());
+							i--;
+						}
 					}
+					if (i <= 0) break;
 				}
-				if (i <= 0) break;
+				if (i == 0) break;
 			}
-			if (i == 0) break;
-		}
 
-		for (BlockPos starter : rootStarters) {
-			// root bulb
-			FeaturePlacers.placeIfValidRootPos(world, decorationPlacer, random, starter.below(), config.rootsProvider);
+			for (BlockPos starter : rootStarters) {
+				// root bulb
+				FeaturePlacers.placeIfValidRootPos(world, decorationPlacer, random, starter.below(), config.rootsProvider);
 
-			// roots!
-			int numRoots = 2 + random.nextInt(2);
-			float offset = random.nextFloat();
-			for (int b = 0; b < numRoots; b++) {
-				FeaturePlacers.buildRoot(world, decorationPlacer, random, starter, offset, b, config.rootsProvider);
+				// roots!
+				int numRoots = 2 + random.nextInt(2);
+				float offset = random.nextFloat();
+				for (int b = 0; b < numRoots; b++) {
+					FeaturePlacers.buildRoot(world, decorationPlacer, random, starter, offset, b, config.rootsProvider);
+				}
 			}
 		}
 
