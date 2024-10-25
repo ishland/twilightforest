@@ -125,9 +125,9 @@ public class TreeConfigurations {
 		BlockStateProvider.simple(TFBlocks.VEILWOOD_WOOD.get()),
 		BlockStateProvider.simple(TFBlocks.ROOT_BLOCK.get())
 	)
-		.minSize(20)
-		.maxSize(27)
-		.scale(1.25D)
+		.minSize(24)
+		.maxSize(30)
+		.scale(1.5D)
 		.minBranchLength(8)
 		.maxBranchLength(11)
 		.branchOffCount(2.0D)
