@@ -1,6 +1,7 @@
 {
   "type": "twilightforest:veilwood_tree",
   "config": {
+    "branch_off_count": 1.0,
     "branch_provider": {
       "type": "minecraft:simple_state_provider",
       "state": {
@@ -27,7 +28,9 @@
         "probability_of_placement": 1.0
       }
     ],
+    "max_branch_length": 7,
     "max_size": 17,
+    "min_branch_length": 5,
     "min_size": 10,
     "roots_provider": {
       "type": "minecraft:simple_state_provider",

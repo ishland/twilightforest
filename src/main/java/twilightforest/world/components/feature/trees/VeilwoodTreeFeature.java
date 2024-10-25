@@ -9,12 +9,11 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.TreeFeature;
 import net.minecraft.world.phys.Vec3;
-import twilightforest.TwilightForestMod;
 import twilightforest.init.TFBlocks;
-import twilightforest.item.LifedrainScepterItem;
 import twilightforest.util.RootPlacer;
 import twilightforest.util.features.FeaturePlacers;
 import twilightforest.util.features.FeatureUtil;
@@ -99,10 +98,6 @@ public class VeilwoodTreeFeature extends TFTreeFeature<VeilwoodTreeConfig> {
 		// build the trunk
 		this.buildTrunk(world, trunkPlacer, random, pos, config.scale, height, config, decorationPlacer);
 
-
-		//buildTinyCrown(world, trunkPlacer, leavesPlacer, random, pos, radius, height, config);
-
-		TwilightForestMod.LOGGER.error("SUCCESS {} = {}", config.scale, height);
 		return true;
 	}
 
@@ -196,46 +191,55 @@ public class VeilwoodTreeFeature extends TFTreeFeature<VeilwoodTreeConfig> {
 
 		// build the crown
 		starters.forEach((direction, start) -> {
-			int length = 5 + random.nextInt(3);
+			int length = config.minBranchLength + random.nextInt(config.maxBranchLength - config.minBranchLength + 1);
 			BlockPos end = start.relative(direction, length).relative(Direction.UP, random.nextBoolean() ? 3 : 2);
-			VoxelBresenhamIterator iterator = new VoxelBresenhamIterator(start, end);
+			this.createBranch(world, trunkPlacer, length, direction, random, config, random.nextDouble() <= config.branchOffCount, config.branchOffCount - 1, new VoxelBresenhamIterator(start, end));
+		});
+	}
 
-			int distance = 0;
-			boolean clockwise = false;
-			boolean counterclockwise = false;
-			while (iterator.hasNext()) {
-				BlockPos blockPos = iterator.next();
-				distance++;
-				if (FeaturePlacers.placeIfValidTreePos(world, trunkPlacer, random, blockPos, config.branchProvider) && iterator.hasNext() && distance > 2) {
-					boolean both = !clockwise && !counterclockwise && random.nextBoolean() && random.nextBoolean();
-					boolean one = random.nextBoolean();
+	public void createBranch(LevelAccessor world, BiConsumer<BlockPos, BlockState> trunkPlacer, int length, Direction direction, RandomSource random, VeilwoodTreeConfig config, boolean shouldBranch, double branchOffCount, VoxelBresenhamIterator iterator) {
+		int distance = 0;
+		int count = Mth.ceil(branchOffCount);
+		boolean clockwise = false;
+		boolean counterclockwise = false;
+		while (iterator.hasNext()) {
+			BlockPos blockPos = iterator.next();
+			distance++;
+			if (FeaturePlacers.placeIfValidTreePos(world, trunkPlacer, random, blockPos, config.branchProvider, state -> state.trySetValue(RotatedPillarBlock.AXIS, direction.getAxis())) && shouldBranch && iterator.hasNext() && distance > 2 + count) {
+				boolean both = !clockwise && !counterclockwise && random.nextBoolean() && random.nextBoolean();
+				boolean one = random.nextBoolean();
 
-					blockPos = blockPos.relative(direction);
+				blockPos = blockPos.relative(direction);
 
-					if (!clockwise && (one || both)) {
+				if (!clockwise && (one || both || length - distance == 0)) {
+					clockwise = true;
+					int newLength = length - distance + random.nextInt(3);
+					if (newLength > 0) {
 						Direction clockWise = direction.getClockWise();
 						BlockPos clock = blockPos.relative(clockWise);
-						clockwise = true;
-						int up = 1 + random.nextInt(2);
-						int side = 1 + random.nextInt(2);
-						BlockPos endClock = clock.relative(Direction.UP, up).relative(direction, length - distance + random.nextInt(4)).relative(clockWise, side);
-						for (BlockPos bos : new VoxelBresenhamIterator(clock, endClock)) FeaturePlacers.placeIfValidTreePos(world, trunkPlacer, random, bos, config.branchProvider);
+						int up = 1 + random.nextInt(2 + count * 2);
+						int side = 1 + random.nextInt(2) + count * 3;
+						BlockPos endClock = clock.relative(Direction.UP, up).relative(direction, newLength).relative(clockWise, side);
+						this.createBranch(world, trunkPlacer, newLength, direction, random, config, random.nextDouble() <= branchOffCount, branchOffCount - 1, new VoxelBresenhamIterator(clock, endClock));
 					}
+				}
 
-					if (!counterclockwise && (!one || both)) {
+				if (!counterclockwise && (!one || both || length - distance == 0)) {
+					counterclockwise = true;
+					int newLength = length - distance + random.nextInt(3);
+					if (newLength > 0) {
 						Direction counterWise = direction.getCounterClockWise();
 						BlockPos counter = blockPos.relative(counterWise);
-						counterclockwise = true;
-						int up = 1 + random.nextInt(2);
-						int side = 1 + random.nextInt(2);
-						BlockPos endCounter = counter.relative(Direction.UP, up).relative(direction, length - distance + random.nextInt(4)).relative(counterWise, side);
-						for (BlockPos bos : new VoxelBresenhamIterator(counter, endCounter)) FeaturePlacers.placeIfValidTreePos(world, trunkPlacer, random, bos, config.branchProvider);
+						int up = 1 + random.nextInt(2 + count * 2);
+						int side = 1 + random.nextInt(2) + count * 3;
+						BlockPos endCounter = counter.relative(Direction.UP, up).relative(direction, newLength).relative(counterWise, side);
+						this.createBranch(world, trunkPlacer, newLength, direction, random, config, random.nextDouble() <= branchOffCount, branchOffCount - 1, new VoxelBresenhamIterator(counter, endCounter));
 					}
-
-					if (clockwise && counterclockwise) break;
 				}
+
+				if (clockwise && counterclockwise) break;
 			}
-		});
+		}
 	}
 
 	protected static Vec3 calcNormal(Vec3 top, Vec3 a, Vec3 b) {
@@ -252,27 +256,5 @@ public class VeilwoodTreeFeature extends TFTreeFeature<VeilwoodTreeConfig> {
 			if (pos.getCenter().subtract(entry.getValue()).dot(entry.getKey()) < -0.33D + (diff * 0.025D)) return false;
 		}
 		return true;
-	}
-
-	/**
-	 * Build the crown of the tree. This builds a smaller crown, since the large
-	 * ones were causing some performance issues
-	 */
-	protected void buildTinyCrown(WorldGenLevel world, BiConsumer<BlockPos, BlockState> trunkPlacer, BiConsumer<BlockPos, BlockState> leavesPlacer, RandomSource random, BlockPos pos, int radius
-		, int height, VeilwoodTreeConfig config) {
-		final int crownRadius = 4;
-		final int bvar = 1;
-
-		// 3-5 medium branches starting at the bottom of the crown
-		//buildBranchRing(world, trunkPlacer, leavesPlacer, random, pos, radius, height - crownRadius, 0, crownRadius, 0.35D, bvar, bvar + 2, 1, true, config);
-
-		// 3-5 medium branches at the crown middle
-		//buildBranchRing(world, trunkPlacer, leavesPlacer, random, pos, radius, height - (crownRadius >> 1), 0, crownRadius, 0.28D, bvar, bvar + 2, 1, true, config);
-
-		// 2-4 medium branches at the crown top
-		//buildBranchRing(world, trunkPlacer, leavesPlacer, random, pos, radius, height, 0, crownRadius, 0.15D, 2, 4, 0, true, config);
-
-		// 3-6 medium branches going straight up
-		//buildBranchRing(world, trunkPlacer, leavesPlacer, random, pos, radius, height, 0, crownRadius >> 1, 0.05D, bvar, bvar + 2, 0, true, config);
 	}
 }

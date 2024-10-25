@@ -128,6 +128,9 @@ public class TreeConfigurations {
 		.minSize(20)
 		.maxSize(27)
 		.scale(1.25D)
+		.minBranchLength(8)
+		.maxBranchLength(11)
+		.branchOffCount(2.0D)
 		.build();
 
 	public static final TFTreeFeatureConfig MEGA_CANOPY = new TFTreeFeatureConfig.Builder(

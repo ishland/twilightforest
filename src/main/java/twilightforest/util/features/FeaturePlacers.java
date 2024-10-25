@@ -30,6 +30,7 @@ import twilightforest.util.iterators.VoxelBresenhamIterator;
 
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 /**
  * Feature Utility methods that invoke placement. For non-placement see FeatureLogic
@@ -233,6 +234,17 @@ public final class FeaturePlacers {
 					}
 				}
 			}
+		}
+	}
+
+	// [VanillaCopy] TrunkPlacer.placeLog - Swapped TreeConfiguration for BlockStateProvider
+	// If possible, use TrunkPlacer.placeLog instead
+	public static boolean placeIfValidTreePos(LevelSimulatedReader world, BiConsumer<BlockPos, BlockState> placer, RandomSource random, BlockPos pos, BlockStateProvider config, Function<BlockState, BlockState> propertySetter) {
+		if (TreeFeature.validTreePos(world, pos)) {
+			placer.accept(pos, propertySetter.apply(config.getState(random, pos)));
+			return true;
+		} else {
+			return false;
 		}
 	}
 

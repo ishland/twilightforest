@@ -21,6 +21,9 @@ public class VeilwoodTreeConfig implements FeatureConfiguration, DecoratedTree {
 		Codec.DOUBLE.fieldOf("scale").orElse(0.75D).forGetter(obj -> obj.scale),
 		Codec.INT.fieldOf("min_size").orElse(10).forGetter(obj -> obj.minSize),
 		Codec.INT.fieldOf("max_size").orElse(17).forGetter(obj -> obj.maxSize),
+		Codec.INT.fieldOf("min_branch_length").orElse(5).forGetter(obj -> obj.minBranchLength),
+		Codec.INT.fieldOf("max_branch_length").orElse(7).forGetter(obj -> obj.maxBranchLength),
+		Codec.DOUBLE.fieldOf("branch_off_count").orElse(1.0D).forGetter(obj -> obj.branchOffCount),
 		TreeDecorator.CODEC.listOf().fieldOf("decorators").orElseGet(ImmutableList::of).forGetter(obj -> obj.decorators)
 	).apply(instance, VeilwoodTreeConfig::new));
 
@@ -30,16 +33,22 @@ public class VeilwoodTreeConfig implements FeatureConfiguration, DecoratedTree {
 	public final double scale;
 	public final int minSize;
 	public final int maxSize;
+	public final int minBranchLength;
+	public final int maxBranchLength;
+	public final double branchOffCount;
 	public transient boolean forcePlacement;
 	public final List<TreeDecorator> decorators;
 
-	public VeilwoodTreeConfig(BlockStateProvider trunk, BlockStateProvider branch, BlockStateProvider roots, double scale, int minSize, int maxSize, List<TreeDecorator> decorators) {
+	public VeilwoodTreeConfig(BlockStateProvider trunk, BlockStateProvider branch, BlockStateProvider roots, double scale, int minSize, int maxSize, int minBranchLength, int maxBranchLength, double branchOffCount, List<TreeDecorator> decorators) {
 		this.trunkProvider = trunk;
 		this.branchProvider = branch;
 		this.rootsProvider = roots;
 		this.scale = scale;
 		this.minSize = minSize;
 		this.maxSize = Math.max(minSize + 1, maxSize);
+		this.minBranchLength = minBranchLength;
+		this.maxBranchLength = maxBranchLength;
+		this.branchOffCount = branchOffCount;
 		this.decorators = decorators;
 	}
 
@@ -59,6 +68,9 @@ public class VeilwoodTreeConfig implements FeatureConfiguration, DecoratedTree {
 		private double scale = 0.75D;
 		private int minSize = 10;
 		private int maxSize = 17;
+		private int minBranchLength = 5;
+		private int maxBranchLength = 7;
+		private double branchOffCount = 1.0D;
 		private final List<TreeDecorator> decorators = Lists.newArrayList();
 
 		public Builder(BlockStateProvider trunk, BlockStateProvider branch, BlockStateProvider roots) {
@@ -82,13 +94,28 @@ public class VeilwoodTreeConfig implements FeatureConfiguration, DecoratedTree {
 			return this;
 		}
 
+		public VeilwoodTreeConfig.Builder minBranchLength(int minBranchLength) {
+			this.minBranchLength = minBranchLength;
+			return this;
+		}
+
+		public VeilwoodTreeConfig.Builder maxBranchLength(int maxBranchLength) {
+			this.maxBranchLength = maxBranchLength;
+			return this;
+		}
+
+		public VeilwoodTreeConfig.Builder branchOffCount(double branchOffCount) {
+			this.branchOffCount = branchOffCount;
+			return this;
+		}
+
 		public VeilwoodTreeConfig.Builder addDecorator(TreeDecorator deco) {
 			decorators.add(deco);
 			return this;
 		}
 
 		public VeilwoodTreeConfig build() {
-			return new VeilwoodTreeConfig(trunkProvider, branchProvider, rootsProvider, scale, minSize, maxSize, decorators);
+			return new VeilwoodTreeConfig(trunkProvider, branchProvider, rootsProvider, scale, minSize, maxSize, minBranchLength, maxBranchLength, branchOffCount, decorators);
 		}
 	}
 }
