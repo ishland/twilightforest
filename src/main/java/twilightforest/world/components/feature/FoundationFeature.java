@@ -8,6 +8,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.util.valueproviders.FloatProvider;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
@@ -107,7 +108,7 @@ public class FoundationFeature extends Feature<RuinedFoundationConfig> {
 
 				for (int dY = 1 - depth; dY <= 0; dY++) {
 					BlockPos placeAt = ceilingPos.offset(dX, dY, dZ);
-					world.setBlock(placeAt, Blocks.AIR.defaultBlockState(), 3);
+					world.setBlock(placeAt, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
 					if (isInCorner) setAndUpdate(world, rand, basementPost, placeAt);
 				}
 
@@ -120,7 +121,7 @@ public class FoundationFeature extends Feature<RuinedFoundationConfig> {
 
 		// make chest
 		BlockPos lootPos = ceilingPos.offset(chestX, 1 - depth, chestZ);
-		world.setBlock(lootPos, lootContainer.getState(rand, lootPos), 3);
+		world.setBlock(lootPos, lootContainer.getState(rand, lootPos), Block.UPDATE_ALL);
 		if (world.getBlockEntity(lootPos) instanceof RandomizableContainerBlockEntity lootBE) {
 			lootBE.setLootTable(lootTable, world.getSeed() * lootPos.getX() + lootPos.getY() ^ lootPos.getZ());
 		}
@@ -146,7 +147,7 @@ public class FoundationFeature extends Feature<RuinedFoundationConfig> {
 				state = state.setValue(BlockStateProperties.WATERLOGGED, true);
 		}
 
-		world.setBlock(placeAt, state, 3);
+		world.setBlock(placeAt, state, Block.UPDATE_ALL);
 
 		world.getChunk(placeAt).markPosForPostprocessing(placeAt);
 	}

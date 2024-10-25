@@ -30,12 +30,12 @@ public class EncasedSmokerBlock extends TFSmokerBlock {
 		boolean powered = level.hasNeighborSignal(pos);
 
 		if (!state.getValue(ACTIVE) && powered) {
-			level.setBlock(pos, state.setValue(ACTIVE, true), 3);
+			level.setBlock(pos, state.setValue(ACTIVE, true), Block.UPDATE_ALL);
 			level.playSound(null, pos, TFSounds.SMOKER_START.get(), SoundSource.BLOCKS, 0.3F, 0.6F);
 		}
 
 		if (state.getValue(ACTIVE) && !powered) {
-			level.setBlock(pos, state.setValue(ACTIVE, false), 3);
+			level.setBlock(pos, state.setValue(ACTIVE, false), Block.UPDATE_ALL);
 			level.playSound(null, pos, TFSounds.SMOKER_START.get(), SoundSource.BLOCKS, 0.3F, 0.6F);
 		}
 	}

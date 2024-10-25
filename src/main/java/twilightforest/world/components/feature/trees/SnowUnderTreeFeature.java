@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.SnowyDirtBlock;
@@ -43,10 +44,10 @@ public class SnowUnderTreeFeature extends Feature<NoneFeatureConfiguration> {
 						stateBelow = world.getBlockState(mPosDown);
 
 						if (stateBelow.isFaceSturdy(world, mPosDown, Direction.UP)) {
-							world.setBlock(mPos, Blocks.SNOW.defaultBlockState(), 2);
+							world.setBlock(mPos, Blocks.SNOW.defaultBlockState(), Block.UPDATE_CLIENTS);
 
 							if (stateBelow.hasProperty(SnowyDirtBlock.SNOWY)) {
-								world.setBlock(mPosDown, stateBelow.setValue(SnowyDirtBlock.SNOWY, true), 2);
+								world.setBlock(mPosDown, stateBelow.setValue(SnowyDirtBlock.SNOWY, true), Block.UPDATE_CLIENTS);
 							}
 						}
 					}

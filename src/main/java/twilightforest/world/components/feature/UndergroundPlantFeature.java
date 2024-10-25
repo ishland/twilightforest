@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.BlockStateConfiguration;
@@ -28,9 +29,9 @@ public class UndergroundPlantFeature extends Feature<BlockStateConfiguration> {
 			if (world.isEmptyBlock(pos) && random.nextInt(6) > 0) {
 				if (ctx.config().state.canSurvive(ctx.level(), pos)) {
 					if (ctx.config().state.is(TFBlocks.TROLLVIDR) && random.nextInt(10) == 0) {
-						world.setBlock(pos, TFBlocks.UNRIPE_TROLLBER.get().defaultBlockState(), 16 | 2);
+						world.setBlock(pos, TFBlocks.UNRIPE_TROLLBER.get().defaultBlockState(), Block.UPDATE_KNOWN_SHAPE | Block.UPDATE_CLIENTS);
 					} else {
-						world.setBlock(pos, ctx.config().state, 16 | 2);
+						world.setBlock(pos, ctx.config().state, Block.UPDATE_KNOWN_SHAPE | Block.UPDATE_CLIENTS);
 					}
 				}
 			} else {

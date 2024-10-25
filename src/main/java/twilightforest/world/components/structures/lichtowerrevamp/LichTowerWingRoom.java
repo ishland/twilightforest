@@ -315,11 +315,11 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 			BlockPos placeAt = this.templatePosition.offset(sourceJigsaw.pos());
 			if (chunkBounds.isInside(placeAt)) {
 				BlockState ladderBlock = Blocks.LADDER.defaultBlockState().setValue(LadderBlock.FACING, sourceJigsaw.orientation().top());
-				level.setBlock(placeAt, ladderBlock, 2);
-				level.setBlock(placeAt.above(), ladderBlock, 2);
+				level.setBlock(placeAt, ladderBlock, Block.UPDATE_CLIENTS);
+				level.setBlock(placeAt.above(), ladderBlock, Block.UPDATE_CLIENTS);
 				BlockState airBlock = Blocks.AIR.defaultBlockState();
 				for (BlockPos pos : BlockPos.betweenClosed(placeAt.above(2), placeAt.above(5))) {
-					level.setBlock(pos, airBlock, 2);
+					level.setBlock(pos, airBlock, Block.UPDATE_CLIENTS);
 				}
 			}
 		}
@@ -332,7 +332,7 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 				BlockPos endPos = startPos.above(this.boundingBox.getYSpan() - ladderOffset.getY() - 1);
 				BlockState ladderBlock = Blocks.LADDER.defaultBlockState().setValue(LadderBlock.FACING, ladderJigsaw.orientation().top());
 				for (BlockPos placeAt : BlockPos.betweenClosed(startPos, endPos)) {
-					level.setBlock(placeAt, ladderBlock, 2);
+					level.setBlock(placeAt, ladderBlock, Block.UPDATE_CLIENTS);
 				}
 			}
 		}
@@ -349,8 +349,8 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 
 	private static void fillCorner(WorldGenLevel level, BlockPos pos, BoundingBox chunkBounds) {
 		if (chunkBounds.isInside(pos)) {
-			level.setBlock(pos, Blocks.STONE_BRICKS.defaultBlockState(), 3);
-			level.setBlock(pos.above(), Blocks.STONE_BRICKS.defaultBlockState(), 3);
+			level.setBlock(pos, Blocks.STONE_BRICKS.defaultBlockState(), Block.UPDATE_ALL);
+			level.setBlock(pos.above(), Blocks.STONE_BRICKS.defaultBlockState(), Block.UPDATE_ALL);
 		}
 	}
 

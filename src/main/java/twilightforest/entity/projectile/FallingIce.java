@@ -145,7 +145,7 @@ public class FallingIce extends Entity {
 								this.blockState = this.blockState.setValue(BlockStateProperties.WATERLOGGED, true);
 							}
 
-							if (this.level().setBlock(blockpos, this.blockState, 3)) {
+							if (this.level().setBlock(blockpos, this.blockState, Block.UPDATE_ALL)) {
 								((ServerLevel) this.level()).getChunkSource().chunkMap.broadcast(this, new ClientboundBlockUpdatePacket(blockpos, this.level().getBlockState(blockpos)));
 								this.discard();
 

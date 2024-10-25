@@ -6,6 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
@@ -100,18 +101,18 @@ public class TFSmallLakeFeature extends Feature<TFSmallLakeFeature.Configuration
 							if (!(worldgenlevel.getBlockState(offset).is(BlockTagGenerator.SMALL_LAKES_DONT_REPLACE) ||
 								worldgenlevel.getBlockState(offset.above()).is(BlockTagGenerator.SMALL_LAKES_DONT_REPLACE))) {
 								if (y >= 4) {
-									worldgenlevel.setBlock(offset, AIR, 2);
+									worldgenlevel.setBlock(offset, AIR, Block.UPDATE_CLIENTS);
                                     worldgenlevel.scheduleTick(offset, AIR.getBlock(), 0);
                                     this.markAboveForPostProcessing(worldgenlevel, offset);
 									continue;
                                 }
 
 								if (y == 3 && iceState != null) {
-									worldgenlevel.setBlock(offset, iceState, 2);
+									worldgenlevel.setBlock(offset, iceState, Block.UPDATE_CLIENTS);
 									continue;
 								}
 
-								worldgenlevel.setBlock(offset, fluidState, 2);
+								worldgenlevel.setBlock(offset, fluidState, Block.UPDATE_CLIENTS);
                             }
 						}
 					}
@@ -137,7 +138,7 @@ public class TFSmallLakeFeature extends Feature<TFSmallLakeFeature.Configuration
 									BlockState blockstate = worldgenlevel.getBlockState(blockpos.offset(x, y, z));
 									if (blockstate.isSolid() && !blockstate.is(BlockTags.LAVA_POOL_STONE_CANNOT_REPLACE)) {
 										BlockPos blockpos3 = blockpos.offset(x, y, z);
-										worldgenlevel.setBlock(blockpos3, barrierState, 2);
+										worldgenlevel.setBlock(blockpos3, barrierState, Block.UPDATE_CLIENTS);
 										this.markAboveForPostProcessing(worldgenlevel, blockpos3);
 									}
 								}

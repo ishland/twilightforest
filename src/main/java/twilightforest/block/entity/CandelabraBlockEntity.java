@@ -90,7 +90,7 @@ public class CandelabraBlockEntity extends BlockEntity {
 				blockstate = blockstate.setValue(CandelabraBlock.LIGHTING, LightableBlock.Lighting.NONE);
 			}
 
-			this.getLevel().setBlock(this.getBlockPos(), blockstate, 3);
+			this.getLevel().setBlock(this.getBlockPos(), blockstate, Block.UPDATE_ALL);
 			this.getLevel().gameEvent(GameEvent.BLOCK_CHANGE, this.getBlockPos(), GameEvent.Context.of(blockstate));
 		}
 	}

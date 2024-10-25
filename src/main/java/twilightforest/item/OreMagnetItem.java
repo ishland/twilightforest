@@ -177,7 +177,7 @@ public class OreMagnetItem extends Item {
 				BlockState replaceState = level.getBlockState(replacePos);
 
 				if (isReplaceable(replaceState) || replaceState.canBeReplaced() || replaceState.isAir()) {
-					level.setBlock(coord, replacementBlock, 2);
+					level.setBlock(coord, replacementBlock, Block.UPDATE_CLIENTS);
 
 					if (sourceIsMineCore && level instanceof ServerLevel serverLevel) {
 						Vec3 xyz = Vec3.atCenterOf(replacePos);
@@ -194,7 +194,7 @@ public class OreMagnetItem extends Item {
 					}
 
 					// set close to ore material
-					level.setBlock(replacePos, attactedOreBlock, 2);
+					level.setBlock(replacePos, attactedOreBlock, Block.UPDATE_CLIENTS);
 					blocksMoved++;
 				}
 			}

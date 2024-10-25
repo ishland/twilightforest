@@ -49,7 +49,7 @@ public final class FeaturePlacers {
 			home.setRestrictionPoint(GlobalPos.of(levelAccessor.getLevel().dimension(), pos));
 		}
 		levelAccessor.addFreshEntityWithPassengers(mob);
-		levelAccessor.setBlock(pos, Blocks.AIR.defaultBlockState(), 2);
+		levelAccessor.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS);
 	}
 
 	/**
@@ -277,7 +277,7 @@ public final class FeaturePlacers {
 
 	private static void setIfEmpty(LevelAccessor world, BlockPos pos, BlockState state) {
 		if (world.isEmptyBlock(pos)) {
-			world.setBlock(pos, state, 3);
+			world.setBlock(pos, state, Block.UPDATE_ALL);
 		}
 	}
 
@@ -395,7 +395,7 @@ public final class FeaturePlacers {
 			BlockPos posElevated = pos.above(dY);
 
 			if (level.getBlockState(posElevated).is(target)) {
-				level.setBlock(posElevated, replacement, 3);
+				level.setBlock(posElevated, replacement, Block.UPDATE_ALL);
 			}
 		}
 	}
@@ -407,7 +407,7 @@ public final class FeaturePlacers {
 			BlockPos posElevated = pos.above(dY);
 
 			if (level.getBlockState(posElevated).is(target)) {
-				level.setBlock(posElevated, replacement, 3);
+				level.setBlock(posElevated, replacement, Block.UPDATE_ALL);
 			}
 		}
 	}

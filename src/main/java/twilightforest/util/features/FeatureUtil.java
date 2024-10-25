@@ -5,6 +5,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.function.Predicate;
@@ -89,14 +90,14 @@ public final class FeatureUtil {
 					// if we're inside the blob, fill it
 					if (dist <= rad) {
 						// do eight at a time for easiness!
-						world.setBlock(pos.offset(+dx, +dy, +dz), state, 3);
-						world.setBlock(pos.offset(+dx, +dy, -dz), state, 3);
-						world.setBlock(pos.offset(-dx, +dy, +dz), state, 3);
-						world.setBlock(pos.offset(-dx, +dy, -dz), state, 3);
-						world.setBlock(pos.offset(+dx, -dy, +dz), state, 3);
-						world.setBlock(pos.offset(+dx, -dy, -dz), state, 3);
-						world.setBlock(pos.offset(-dx, -dy, +dz), state, 3);
-						world.setBlock(pos.offset(-dx, -dy, -dz), state, 3);
+						world.setBlock(pos.offset(+dx, +dy, +dz), state, Block.UPDATE_ALL);
+						world.setBlock(pos.offset(+dx, +dy, -dz), state, Block.UPDATE_ALL);
+						world.setBlock(pos.offset(-dx, +dy, +dz), state, Block.UPDATE_ALL);
+						world.setBlock(pos.offset(-dx, +dy, -dz), state, Block.UPDATE_ALL);
+						world.setBlock(pos.offset(+dx, -dy, +dz), state, Block.UPDATE_ALL);
+						world.setBlock(pos.offset(+dx, -dy, -dz), state, Block.UPDATE_ALL);
+						world.setBlock(pos.offset(-dx, -dy, +dz), state, Block.UPDATE_ALL);
+						world.setBlock(pos.offset(-dx, -dy, -dz), state, Block.UPDATE_ALL);
 					}
 				}
 			}

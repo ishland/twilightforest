@@ -14,6 +14,7 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.CommonLevelAccessor;
 import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkGenerator;
@@ -142,14 +143,14 @@ public class HollowHillComponent extends TFStructureComponentOld {
 					BlockState stateAt = level.getBlockState(posChecked);
 
 					if (stateAt.getFluidState().is(FluidTags.WATER)) {
-						level.setBlock(posChecked, airState, 3);
+						level.setBlock(posChecked, airState, Block.UPDATE_ALL);
 					} else {
 						crossedFloor = true;
 					}
 
 					if (crossedFloor) {
 						if (stateAt.is(Blocks.DIRT) || stateAt.is(Blocks.SAND)) {
-							level.setBlock(posChecked, undergroundBlock, 3);
+							level.setBlock(posChecked, undergroundBlock, Block.UPDATE_ALL);
 						}
 					}
 				}

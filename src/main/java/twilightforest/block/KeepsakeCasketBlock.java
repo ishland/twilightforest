@@ -193,7 +193,7 @@ public class KeepsakeCasketBlock extends BaseEntityBlock implements BlockLogging
 	public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
 		BlockItemStateProperties blockItemStateProperties = stack.get(DataComponents.BLOCK_STATE);
 		if (blockItemStateProperties != null) {
-			level.setBlock(pos, blockItemStateProperties.apply(state), 2);
+			level.setBlock(pos, blockItemStateProperties.apply(state), Block.UPDATE_CLIENTS);
 		}
 
 		Component customName = stack.get(DataComponents.CUSTOM_NAME);

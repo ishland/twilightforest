@@ -278,7 +278,7 @@ public class CandelabraBlock extends BaseEntityBlock implements LightableBlock, 
 			boolean flag = state.getValue(LIGHTING) != Lighting.NONE;
 			if (flag) this.extinguish(null, state, accessor, pos);
 
-			accessor.setBlock(pos, state.setValue(WATERLOGGED, true).setValue(LIGHTING, Lighting.NONE), 3);
+			accessor.setBlock(pos, state.setValue(WATERLOGGED, true).setValue(LIGHTING, Lighting.NONE), Block.UPDATE_ALL);
 			accessor.scheduleTick(pos, fluid.getType(), fluid.getType().getTickDelay(accessor));
 			return true;
 		} else {
