@@ -48,7 +48,7 @@ public class ThornFeature extends Feature<ThornsConfig> {
 			// Makes it avoid the troll clouds
 			if (!avoidGiantCloud || checkIsUnderCloud(world, pos, dPos)) {
 				if (Math.abs(dPos.getX() - oPos.getX()) < config.maxSpread() && Math.abs(dPos.getZ() - oPos.getZ()) < config.maxSpread() && canPlaceThorns(world, dPos)) {
-					world.setBlock(dPos, TFBlocks.BROWN_THORNS.get().defaultBlockState().setValue(RotatedPillarBlock.AXIS, dir.getAxis()), Block.UPDATE_ALL);
+					world.setBlock(dPos, TFBlocks.BROWN_THORNS.get().defaultBlockState().setValue(RotatedPillarBlock.AXIS, dir.getAxis()), Block.UPDATE_CLIENTS);
 					world.getChunk(dPos).markPosForPostprocessing(dPos);
 
 					// did we make it to the end?
