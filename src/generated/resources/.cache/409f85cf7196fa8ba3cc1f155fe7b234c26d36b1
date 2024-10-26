@@ -1,4 +1,4 @@
-// 1.21.1	2024-10-24T14:46:51.0450517	TwilightForest blockstates and block models
+// 1.21.1	2024-10-26T01:49:45.8509901	TwilightForest blockstates and block models
 cab88029518a1647ec691d136328ed93c18108be assets/twilightforest/blockstates/acacia_banister.json
 9472090eea384d675fee73a90ed033b799c88820 assets/twilightforest/blockstates/alpha_yeti_boss_spawner.json
 94ee00eebd82061338b6db439a84b3fdf98f3942 assets/twilightforest/blockstates/alpha_yeti_trophy.json
@@ -126,6 +126,7 @@ f722bd4d4a054fcdd352f9db8d286198c8ffe13c assets/twilightforest/blockstates/giant
 db9c74d13678fb4c7cf4b30b375164049f736a25 assets/twilightforest/blockstates/giant_obsidian.json
 f208a33fe25aec4bf37f22f588e06defb80b4a34 assets/twilightforest/blockstates/green_force_field.json
 b260c24871dfaa45243be1ae5852e6d88d937c48 assets/twilightforest/blockstates/green_thorns.json
+4e0bd91c3b4e9c6c664f9a4c4f6417a1466a2800 assets/twilightforest/blockstates/hanging_web.json
 741e7315c398c5bc49cde650c604a55849564960 assets/twilightforest/blockstates/hardened_dark_leaves.json
 a31529013c346ad627e4f5c426f1252fa73e760c assets/twilightforest/blockstates/hedge.json
 cc6b5b927aeee762ea2a0ec8274896d3570c1ee8 assets/twilightforest/blockstates/hollow_acacia_log_climbable.json
@@ -709,6 +710,7 @@ d8f4bbc8889aec16292774a1548cded7fdc9a9b9 assets/twilightforest/models/block/gree
 ea98fc47eb531f525edcf24d6d8955d24b70e1a9 assets/twilightforest/models/block/green_thorns_no_section_alt.json
 3fc2c2c7c7506fdf562c6cdd5fecc9d58973b297 assets/twilightforest/models/block/green_thorns_thorns.json
 e221514a37933ab9e92d605c246c3e54d55f31e9 assets/twilightforest/models/block/green_thorns_top.json
+fe535f547fdb9d33a3c60f3e087507e3fa6d0e2e assets/twilightforest/models/block/hanging_web.json
 ff73cf220e6bec60699a36e7d250d62b92e4e4d0 assets/twilightforest/models/block/hardened_dark_leaves.json
 f8e294e138e4b799803977718ce11ff07f04efb2 assets/twilightforest/models/block/hedge.json
 48786d9c139433bba4a3f0bc86bbac222e70a922 assets/twilightforest/models/block/hedge_rose.json

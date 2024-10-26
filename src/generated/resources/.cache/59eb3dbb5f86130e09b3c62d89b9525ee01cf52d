@@ -1,4 +1,4 @@
-// 1.21.1	2024-10-24T14:46:51.0274296	Loot Tables
+// 1.21.1	2024-10-26T00:55:43.8059795	Loot Tables
 483a7e0c99d5cabeab1ba9f04bd8e88d0a8f7386 data/twilightforest/loot_table/aurora_cache.json
 002a6e2eccdc92db019bd775911912877b26771f data/twilightforest/loot_table/aurora_room.json
 6b7c07d237e56f84d11d308552cd943af7a906e5 data/twilightforest/loot_table/basement.json
@@ -116,6 +116,7 @@ ffe4251762fbccaaa4b027e422ba2f80f337484f data/twilightforest/loot_table/blocks/f
 dbf3b959127bcd01376d0ae2c3e94e372c7b3dd8 data/twilightforest/loot_table/blocks/giant_leaves.json
 00fb0ae1d8efd9351061c156781474ce9d4336d8 data/twilightforest/loot_table/blocks/giant_log.json
 eef255f4573a76c35ca2e348b1a9010c5a5e8d53 data/twilightforest/loot_table/blocks/giant_obsidian.json
+f07488ce692cfdbcca6e79d0dd3cc17a0bb54aa4 data/twilightforest/loot_table/blocks/hanging_web.json
 550eae0055672b2a931567a8bf7e183942ecc63c data/twilightforest/loot_table/blocks/hardened_dark_leaves.json
 042f2501473c2e399fed84f172e06df21153c2e7 data/twilightforest/loot_table/blocks/hedge.json
 f8ba77ad5ea95d2154f6557193ad6f764c88c273 data/twilightforest/loot_table/blocks/hollow_acacia_log_climbable.json

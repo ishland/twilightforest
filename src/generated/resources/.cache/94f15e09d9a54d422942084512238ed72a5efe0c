@@ -1,4 +1,4 @@
-// 1.21.1	2024-10-24T14:46:51.0329059	TwilightForest Item and BlockItem models
+// 1.21.1	2024-10-26T00:55:43.8121268	TwilightForest Item and BlockItem models
 387b18dfa614fda790f7b8e8324e3b139fa177c2 assets/twilightforest/models/item/acacia_banister.json
 0ca7dc7b4daec376dd0f85d57465830781584c7d assets/twilightforest/models/item/alpha_yeti_banner_pattern.json
 061906a0c9a9a334fbb82acb809c3748e2b1f9cb assets/twilightforest/models/item/alpha_yeti_boss_spawner.json
@@ -291,6 +291,7 @@ cb9726352c900d4d75a3d745708f9771991b31c9 assets/twilightforest/models/item/great
 baebd9defaf1f02c26c13239dfbcdd088398b0de assets/twilightforest/models/item/greater_potion_flask.json
 bafbdd124434e7c4e216b9a36dc79bb302e97ecb assets/twilightforest/models/item/green_force_field.json
 e2fe7dcbd99ec57c36d0044e45543f01d1017ce7 assets/twilightforest/models/item/green_thorns.json
+c5fdf5f65df93b4bdd15aa35390002aa9dd838e2 assets/twilightforest/models/item/hanging_web.json
 1e327a05c018e4b6bce4ee0dacbb0e961b7ac96b assets/twilightforest/models/item/hedge.json
 63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/twilightforest/models/item/hedge_spider_spawn_egg.json
 63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/twilightforest/models/item/helmet_crab_spawn_egg.json
