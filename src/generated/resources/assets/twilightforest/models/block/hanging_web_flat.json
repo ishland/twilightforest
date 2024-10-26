@@ -25,7 +25,7 @@
   ],
   "render_type": "minecraft:cutout",
   "textures": {
-    "all": "twilightforest:block/hanging_web",
+    "all": "twilightforest:block/hanging_web_flat",
     "particle": "#all"
   }
 }

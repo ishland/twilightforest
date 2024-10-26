@@ -27,6 +27,7 @@ import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.BonusLevelTableCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.neoforged.neoforge.common.ItemAbilities;
@@ -275,7 +276,7 @@ public class BlockLootTables extends BlockLootSubProvider {
 		add(TFBlocks.ROPE.get(), this.rope());
 		dropWhenSilkTouch(TFBlocks.CANOPY_WINDOW.value());
 		dropWhenSilkTouch(TFBlocks.CANOPY_WINDOW_PANE.value());
-		dropWhenSilkTouch(TFBlocks.HANGING_WEB.value());
+		this.add(TFBlocks.HANGING_WEB.value(), block -> this.createShearsDispatchTable(block, this.applyExplosionDecay(block, LootItem.lootTableItem(Items.STRING).when(LootItemRandomChanceCondition.randomChance(0.125F)).apply(ApplyBonusCount.addUniformBonusCount(registrylookup.getOrThrow(Enchantments.FORTUNE), 2)))));
 		dropSelf(TFBlocks.TWISTED_STONE.get());
 		dropSelf(TFBlocks.TWISTED_STONE_PILLAR.get());
 		dropSelf(TFBlocks.BOLD_STONE_PILLAR.get());

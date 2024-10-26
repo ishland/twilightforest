@@ -4,13 +4,16 @@ import com.google.common.collect.ImmutableMap;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.Spider;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.*;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
@@ -58,14 +61,14 @@ public class HangingWebBlock extends Block implements IShearable {
 
 	@Override
 	protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
-		Vec3 vec3 = new Vec3(0.25, 0.05000000074505806, 0.25);
-		if (entity instanceof LivingEntity livingentity) {
-			if (livingentity.hasEffect(MobEffects.WEAVING)) {
-				vec3 = new Vec3(0.5, 0.25, 0.5);
-			}
-		}
+		if (entity instanceof Spider) return;
+		if (entity instanceof LivingEntity livingentity && (livingentity.hasEffect(MobEffects.WEAVING) || livingentity.isShiftKeyDown())) return;
+		entity.makeStuckInBlock(state, new Vec3(0.95, 0.95, 0.95));
 
-		entity.makeStuckInBlock(state, vec3);
+		// dissolve
+		if (!level.isClientSide() && ((entity instanceof LivingEntity living && living.getRandom().nextInt(20) == 1) || entity instanceof Projectile)) {
+			level.destroyBlock(pos, false);
+		}
 	}
 
 	private static VoxelShape calculateShape(BlockState state) {
@@ -183,124 +186,6 @@ public class HangingWebBlock extends Block implements IShearable {
 	protected BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos currentPos, BlockPos facingPos) {
 		BlockState blockstate = this.getUpdatedState(state, level, currentPos);
 		return !this.hasFaces(blockstate) ? Blocks.AIR.defaultBlockState() : blockstate;
-	}
-
-	@Override
-	protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-		if (level.getGameRules().getBoolean(GameRules.RULE_DO_VINES_SPREAD) && level.random.nextInt(4) == 0 && level.isAreaLoaded(pos, 4)) {
-			Direction direction = Direction.getRandom(random);
-			BlockPos blockpos = pos.above();
-			BlockPos blockpos4;
-			BlockState blockstate;
-			Direction direction2;
-			if (direction.getAxis().isHorizontal() && !state.getValue(getPropertyForFace(direction))) {
-				if (this.canSpread(level, pos)) {
-					blockpos4 = pos.relative(direction);
-					blockstate = level.getBlockState(blockpos4);
-					if (blockstate.isAir()) {
-						direction2 = direction.getClockWise();
-						Direction direction4 = direction.getCounterClockWise();
-						boolean flag = state.getValue(getPropertyForFace(direction2));
-						boolean flag1 = state.getValue(getPropertyForFace(direction4));
-						BlockPos blockpos2 = blockpos4.relative(direction2);
-						BlockPos blockpos3 = blockpos4.relative(direction4);
-						if (flag && isAcceptableNeighbour(level, blockpos2, direction2)) {
-							level.setBlock(blockpos4, this.defaultBlockState().setValue(getPropertyForFace(direction2), true), 2);
-						} else if (flag1 && isAcceptableNeighbour(level, blockpos3, direction4)) {
-							level.setBlock(blockpos4, this.defaultBlockState().setValue(getPropertyForFace(direction4), true), 2);
-						} else {
-							Direction direction1 = direction.getOpposite();
-							if (flag && level.isEmptyBlock(blockpos2) && isAcceptableNeighbour(level, pos.relative(direction2), direction1)) {
-								level.setBlock(blockpos2, this.defaultBlockState().setValue(getPropertyForFace(direction1), true), 2);
-							} else if (flag1 && level.isEmptyBlock(blockpos3) && isAcceptableNeighbour(level, pos.relative(direction4), direction1)) {
-								level.setBlock(blockpos3, this.defaultBlockState().setValue(getPropertyForFace(direction1), true), 2);
-							} else if ((double)random.nextFloat() < 0.05 && isAcceptableNeighbour(level, blockpos4.above(), Direction.UP)) {
-								level.setBlock(blockpos4, this.defaultBlockState().setValue(UP, true), 2);
-							}
-						}
-					} else if (isAcceptableNeighbour(level, blockpos4, direction)) {
-						level.setBlock(pos, state.setValue(getPropertyForFace(direction), true), 2);
-					}
-				}
-			} else {
-				if (direction == Direction.UP && pos.getY() < level.getMaxBuildHeight() - 1) {
-					if (this.canSupportAtFace(level, pos, direction)) {
-						level.setBlock(pos, state.setValue(UP, true), 2);
-						return;
-					}
-
-					if (level.isEmptyBlock(blockpos)) {
-						if (!this.canSpread(level, pos)) {
-							return;
-						}
-
-						BlockState blockstate3 = state;
-						Iterator<Direction> iterator = Direction.Plane.HORIZONTAL.iterator();
-
-						while(true) {
-							do {
-								if (!iterator.hasNext()) {
-									if (this.hasHorizontalConnection(blockstate3)) {
-										level.setBlock(blockpos, blockstate3, 2);
-									}
-
-									return;
-								}
-
-								direction2 = iterator.next();
-							} while(!random.nextBoolean() && isAcceptableNeighbour(level, blockpos.relative(direction2), direction2));
-
-							blockstate3 = blockstate3.setValue(getPropertyForFace(direction2), false);
-						}
-					}
-				}
-
-				if (pos.getY() > level.getMinBuildHeight()) {
-					blockpos4 = pos.below();
-					blockstate = level.getBlockState(blockpos4);
-					if (blockstate.isAir() || blockstate.is(this)) {
-						BlockState blockstate1 = blockstate.isAir() ? this.defaultBlockState() : blockstate;
-						BlockState blockstate2 = this.copyRandomFaces(state, blockstate1, random);
-						if (blockstate1 != blockstate2 && this.hasHorizontalConnection(blockstate2)) {
-							level.setBlock(blockpos4, blockstate2, 2);
-						}
-					}
-				}
-			}
-		}
-
-	}
-
-	private BlockState copyRandomFaces(BlockState sourceState, BlockState spreadState, RandomSource random) {
-
-		for (Direction direction : Direction.Plane.HORIZONTAL) {
-			if (random.nextBoolean()) {
-				BooleanProperty booleanproperty = getPropertyForFace(direction);
-				if (sourceState.getValue(booleanproperty)) {
-					spreadState = spreadState.setValue(booleanproperty, true);
-				}
-			}
-		}
-
-		return spreadState;
-	}
-
-	private boolean hasHorizontalConnection(BlockState state) {
-		return state.getValue(NORTH) || state.getValue(EAST) || state.getValue(SOUTH) || state.getValue(WEST);
-	}
-
-	private boolean canSpread(BlockGetter blockReader, BlockPos pos) {
-		Iterable<BlockPos> iterable = BlockPos.betweenClosed(pos.getX() - 4, pos.getY() - 1, pos.getZ() - 4, pos.getX() + 4, pos.getY() + 1, pos.getZ() + 4);
-		int j = 5;
-
-		for (BlockPos blockpos : iterable) {
-			if (blockReader.getBlockState(blockpos).is(this)) {
-				--j;
-				if (j <= 0) return false;
-			}
-		}
-
-		return true;
 	}
 
 	@Override

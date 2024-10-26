@@ -242,7 +242,7 @@ public class ItemModelGenerator extends ItemModelProvider {
 		generated(TFBlocks.ROPE.getId().getPath(), prefix("block/" + TFBlocks.ROPE.getId().getPath()));
 		toBlock(TFBlocks.CANOPY_WINDOW.value());
 		generated(TFBlocks.CANOPY_WINDOW_PANE.getId().getPath(), prefix("block/" + TFBlocks.CANOPY_WINDOW.getId().getPath()));
-		generated(TFBlocks.HANGING_WEB.getId().getPath(),ResourceLocation.withDefaultNamespace("block/cobweb"));
+		generated(TFBlocks.HANGING_WEB.getId().getPath(),prefix("block/hanging_web_flat"));
 
 		toBlockModel(TFBlocks.TERRORCOTTA_ARCS.get(), prefix("block/terrorcotta_arcs"));
 		toBlockModel(TFBlocks.TERRORCOTTA_LINES.get(), prefix("block/terrorcotta_lines_0"));

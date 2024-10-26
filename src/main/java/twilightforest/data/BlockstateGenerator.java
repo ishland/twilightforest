@@ -117,23 +117,52 @@ public class BlockstateGenerator extends BlockModelBuilders {
 			.nestedGroup().condition(RopeBlock.Z, true).condition(RopeBlock.X, true).end()
 			.end();
 
+		BlockModelBuilder webBuilder = models().getBuilder("hanging_web_flat").renderType(CUTOUT).texture("particle", "#all").texture("all", "block/hanging_web_flat")
+			.element().from(0, 0, 0).to(16, 0.2F, 16)
+			.face(Direction.UP).uvs(0, 0, 16, 16).tintindex(0).texture("#all").end()
+			.face(Direction.DOWN).uvs(0, 0, 16, 16).tintindex(0).texture("#all").end()
+			.end();
+
 		BlockModelBuilder hangingWebBuilder = models().getBuilder("hanging_web").renderType(CUTOUT).texture("particle", "#all").texture("all", "block/hanging_web")
 			.element().from(0, 0, 0).to(16, 0.2F, 16)
 			.face(Direction.UP).uvs(0, 0, 16, 16).tintindex(0).texture("#all").end()
 			.face(Direction.DOWN).uvs(0, 0, 16, 16).tintindex(0).texture("#all").end()
-			.face(Direction.NORTH).uvs(0, 0, 16, 0.2F).tintindex(0).texture("#all").end()
-			.face(Direction.SOUTH).uvs(0, 0, 16, 0.2F).tintindex(0).texture("#all").end()
-			.face(Direction.EAST).uvs(0, 0, 16, 0.2F).tintindex(0).texture("#all").end()
-			.face(Direction.WEST).uvs(0, 0, 16, 0.2F).tintindex(0).texture("#all").end()
 			.end();
 
-		getMultipartBuilder(TFBlocks.HANGING_WEB.value())
-			.part().modelFile(hangingWebBuilder).rotationX(180).addModel().condition(HangingWebBlock.UP, true).end()
-			.part().modelFile(hangingWebBuilder).addModel().condition(HangingWebBlock.DOWN, true).end()
-			.part().modelFile(hangingWebBuilder).rotationX(90).addModel().condition(HangingWebBlock.SOUTH, true).end()
-			.part().modelFile(hangingWebBuilder).rotationX(270).addModel().condition(HangingWebBlock.NORTH, true).end()
-			.part().modelFile(hangingWebBuilder).rotationY(90).rotationX(90).addModel().condition(HangingWebBlock.WEST, true).end()
-			.part().modelFile(hangingWebBuilder).rotationY(90).rotationX(270).addModel().condition(HangingWebBlock.EAST, true).end();
+		BlockModelBuilder altHangingWebBuilder = models().getBuilder("hanging_web_2").renderType(CUTOUT).texture("particle", "#all").texture("all", "block/hanging_web_2")
+			.element().from(0, 0, 0).to(16, 0.2F, 16)
+			.face(Direction.UP).uvs(0, 0, 16, 16).tintindex(0).texture("#all").end()
+			.face(Direction.DOWN).uvs(0, 0, 16, 16).tintindex(0).texture("#all").end()
+			.end();
+
+		getMultipartBuilder(TFBlocks.HANGING_WEB.value()).part()
+			.weight(1).modelFile(webBuilder).rotationX(180).nextModel()
+			.weight(1).modelFile(webBuilder).rotationX(180).rotationY(90).nextModel()
+			.weight(1).modelFile(webBuilder).rotationX(180).rotationY(180).nextModel()
+			.weight(1).modelFile(webBuilder).rotationX(180).rotationY(270)
+			.addModel().condition(HangingWebBlock.UP, true).end().part()
+
+			.weight(1).modelFile(webBuilder).nextModel()
+			.weight(1).modelFile(webBuilder).rotationY(90).nextModel()
+			.weight(1).modelFile(webBuilder).rotationY(180).nextModel()
+			.weight(1).modelFile(webBuilder).rotationY(270)
+			.addModel().condition(HangingWebBlock.DOWN, true).end().part()
+
+			.weight(2).modelFile(hangingWebBuilder).rotationX(270).rotationY(180).nextModel()
+			.weight(2).modelFile(altHangingWebBuilder).rotationX(270).rotationY(180)
+			.addModel().condition(HangingWebBlock.SOUTH, true).end().part()
+
+			.weight(2).modelFile(hangingWebBuilder).rotationX(270).nextModel()
+			.weight(2).modelFile(altHangingWebBuilder).rotationX(270)
+			.addModel().condition(HangingWebBlock.NORTH, true).end().part()
+
+			.weight(2).modelFile(hangingWebBuilder).rotationY(270).rotationX(270).nextModel()
+			.weight(2).modelFile(altHangingWebBuilder).rotationY(270).rotationX(270)
+			.addModel().condition(HangingWebBlock.WEST, true).end().part()
+
+			.weight(2).modelFile(hangingWebBuilder).rotationY(90).rotationX(270).nextModel()
+			.weight(2).modelFile(altHangingWebBuilder).rotationY(90).rotationX(270)
+			.addModel().condition(HangingWebBlock.EAST, true).end();
 
 		simpleBlock(TFBlocks.CANOPY_WINDOW.value(), this.models().cubeAll(this.name(TFBlocks.CANOPY_WINDOW.value()), this.blockTexture(TFBlocks.CANOPY_WINDOW.value())).renderType(CUTOUT));
 		paneBlockWithRenderType(TFBlocks.CANOPY_WINDOW_PANE.value(), TFBlocks.CANOPY_WINDOW.getId().withPrefix("block/"), TFBlocks.CANOPY_WINDOW.getId().withPrefix("block/"), CUTOUT);
