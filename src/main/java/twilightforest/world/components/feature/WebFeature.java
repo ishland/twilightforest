@@ -44,17 +44,15 @@ public class WebFeature extends Feature<NoneFeatureConfiguration> {
 		BlockPos pos = config.origin().above(config.random().nextInt(level.getMaxBuildHeight() - config.origin().getY()));
 		while (pos.getY() > config.origin().getY()) {
 			pos = pos.below();
-			if (level.isEmptyBlock(pos.below()) && isValidMaterial(level.getBlockState(pos))) {
+			if (isValidMaterial(level.getBlockState(pos)) && (level.isEmptyBlock(pos.below()) || (level.isEmptyBlock(pos.below(2)) && config.random().nextFloat() <= 0.25F))) {
 				BlockState web = TFBlocks.HANGING_WEB.get().defaultBlockState();
-				for (Direction direction : Direction.values()) {
-					if (!direction.getAxis().isHorizontal()) continue;
-					BlockPos.MutableBlockPos blockPos = pos.above().mutable();
-					for (int i = 0; i < config.random().nextInt(5) + 2; i++) {
-						blockPos.move(Direction.DOWN);
-						BlockPos relative = blockPos.relative(direction);
-						Direction opposite = direction.getOpposite();
-						if (level.isEmptyBlock(relative) && (i != 0 || HangingWebBlock.isAcceptableNeighbour(level, blockPos, opposite))) {
-							if (!level.setBlock(relative, web.setValue(HangingWebBlock.getPropertyForFace(opposite), true), HangingWebBlock.UPDATE_CLIENTS)) break;
+				for (Direction direction : Direction.Plane.HORIZONTAL) {
+					BlockPos.MutableBlockPos relative = pos.relative(direction).mutable();
+					Direction opposite = direction.getOpposite();
+					if (level.isEmptyBlock(relative) && HangingWebBlock.isAcceptableNeighbour(level, pos, opposite) && level.setBlock(relative, web.setValue(HangingWebBlock.getPropertyForFace(opposite), true), HangingWebBlock.UPDATE_CLIENTS)) {
+						for (int i = 0; i < 1 + config.random().nextInt(7); i++) {
+							relative.move(Direction.DOWN);
+							if (level.isEmptyBlock(relative) && !level.setBlock(relative, web.setValue(HangingWebBlock.getPropertyForFace(opposite), true), HangingWebBlock.UPDATE_CLIENTS)) break;
 						}
 					}
 				}

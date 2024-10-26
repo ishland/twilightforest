@@ -1,4 +1,4 @@
-// 1.21.1	2024-10-26T12:00:56.3824809	TwilightForest blockstates and block models
+// 1.21.1	2024-10-26T17:56:44.1080274	TwilightForest blockstates and block models
 cab88029518a1647ec691d136328ed93c18108be assets/twilightforest/blockstates/acacia_banister.json
 9472090eea384d675fee73a90ed033b799c88820 assets/twilightforest/blockstates/alpha_yeti_boss_spawner.json
 94ee00eebd82061338b6db439a84b3fdf98f3942 assets/twilightforest/blockstates/alpha_yeti_trophy.json
@@ -710,9 +710,9 @@ d8f4bbc8889aec16292774a1548cded7fdc9a9b9 assets/twilightforest/models/block/gree
 ea98fc47eb531f525edcf24d6d8955d24b70e1a9 assets/twilightforest/models/block/green_thorns_no_section_alt.json
 3fc2c2c7c7506fdf562c6cdd5fecc9d58973b297 assets/twilightforest/models/block/green_thorns_thorns.json
 e221514a37933ab9e92d605c246c3e54d55f31e9 assets/twilightforest/models/block/green_thorns_top.json
-056382f6b5fbaa355aaaeaf5efcdee248d94cad2 assets/twilightforest/models/block/hanging_web.json
-7180dbc9c5ac9bae3160a0f68e4d04ff5f1535ba assets/twilightforest/models/block/hanging_web_2.json
-a1e7717aadbdecc4b93be7df6272a25c410de5af assets/twilightforest/models/block/hanging_web_flat.json
+1c9c87865aa7f73a03f7345baaf7bfe8f80b3c35 assets/twilightforest/models/block/hanging_web.json
+8c3c4b7bebb8c0f58a7aefc44832a35a2bad16cd assets/twilightforest/models/block/hanging_web_2.json
+34eb5866abd87154c5a76822a7b8be4d0e4280bf assets/twilightforest/models/block/hanging_web_flat.json
 ff73cf220e6bec60699a36e7d250d62b92e4e4d0 assets/twilightforest/models/block/hardened_dark_leaves.json
 f8e294e138e4b799803977718ce11ff07f04efb2 assets/twilightforest/models/block/hedge.json
 48786d9c139433bba4a3f0bc86bbac222e70a922 assets/twilightforest/models/block/hedge_rose.json

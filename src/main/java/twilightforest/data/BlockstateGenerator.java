@@ -117,19 +117,19 @@ public class BlockstateGenerator extends BlockModelBuilders {
 			.nestedGroup().condition(RopeBlock.Z, true).condition(RopeBlock.X, true).end()
 			.end();
 
-		BlockModelBuilder webBuilder = models().getBuilder("hanging_web_flat").renderType(CUTOUT).texture("particle", "#all").texture("all", "block/hanging_web_flat")
+		BlockModelBuilder webBuilder = models().getBuilder("hanging_web_flat").renderType(TRANSLUCENT).texture("particle", "#all").texture("all", "block/hanging_web_flat")
 			.element().from(0, 0, 0).to(16, 0.2F, 16)
 			.face(Direction.UP).uvs(0, 0, 16, 16).tintindex(0).texture("#all").end()
 			.face(Direction.DOWN).uvs(0, 0, 16, 16).tintindex(0).texture("#all").end()
 			.end();
 
-		BlockModelBuilder hangingWebBuilder = models().getBuilder("hanging_web").renderType(CUTOUT).texture("particle", "#all").texture("all", "block/hanging_web")
+		BlockModelBuilder hangingWebBuilder = models().getBuilder("hanging_web").renderType(TRANSLUCENT).texture("particle", "#all").texture("all", "block/hanging_web")
 			.element().from(0, 0, 0).to(16, 0.2F, 16)
 			.face(Direction.UP).uvs(0, 0, 16, 16).tintindex(0).texture("#all").end()
 			.face(Direction.DOWN).uvs(0, 0, 16, 16).tintindex(0).texture("#all").end()
 			.end();
 
-		BlockModelBuilder altHangingWebBuilder = models().getBuilder("hanging_web_2").renderType(CUTOUT).texture("particle", "#all").texture("all", "block/hanging_web_2")
+		BlockModelBuilder altHangingWebBuilder = models().getBuilder("hanging_web_2").renderType(TRANSLUCENT).texture("particle", "#all").texture("all", "block/hanging_web_2")
 			.element().from(0, 0, 0).to(16, 0.2F, 16)
 			.face(Direction.UP).uvs(0, 0, 16, 16).tintindex(0).texture("#all").end()
 			.face(Direction.DOWN).uvs(0, 0, 16, 16).tintindex(0).texture("#all").end()
