@@ -401,7 +401,7 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 
 			if (ropeLength > 0) {
 				for (BlockPos hangSupportAt : BlockPos.betweenClosed(pos, pos.below(ropeLength - 1))) {
-					level.setBlock(hangSupportAt, TFBlocks.ROPE.value().defaultBlockState(), 2);
+					level.setBlock(hangSupportAt, TFBlocks.ROPE.value().defaultBlockState(), Block.UPDATE_CLIENTS);
 				}
 
 				pos = pos.below(ropeLength);
@@ -433,12 +433,12 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 	private void handleDataParams(BlockPos pos, WorldGenLevel level, RegistryAccess registryAccess, RandomSource random, String[] parameters, Rotation dataRotation) {
 		switch (parameters[0]) {
 			case "air", "empty" -> {} // No-Op; block already replaced
-			case "bookshelf" -> level.setBlock(pos, Blocks.BOOKSHELF.defaultBlockState(), 2);
-			case "canopy_shelf", "canopy_bookshelf" -> level.setBlock(pos, TFBlocks.CANOPY_BOOKSHELF.value().defaultBlockState(), 2);
-			case "stone_brick_slab" -> level.setBlock(pos, Blocks.STONE_BRICK_SLAB.defaultBlockState(), 2);
-			case "firefly_jar" -> level.setBlock(pos, TFBlocks.FIREFLY_JAR.value().defaultBlockState(), 2);
+			case "bookshelf" -> level.setBlock(pos, Blocks.BOOKSHELF.defaultBlockState(), Block.UPDATE_CLIENTS);
+			case "canopy_shelf", "canopy_bookshelf" -> level.setBlock(pos, TFBlocks.CANOPY_BOOKSHELF.value().defaultBlockState(), Block.UPDATE_CLIENTS);
+			case "stone_brick_slab" -> level.setBlock(pos, Blocks.STONE_BRICK_SLAB.defaultBlockState(), Block.UPDATE_CLIENTS);
+			case "firefly_jar" -> level.setBlock(pos, TFBlocks.FIREFLY_JAR.value().defaultBlockState(), Block.UPDATE_CLIENTS);
 			case "mason_jar" -> this.putMasonJar(pos, level, random, parameters);
-			case "canopy_slab" -> level.setBlock(pos, TFBlocks.CANOPY_SLAB.value().defaultBlockState(), 2);
+			case "canopy_slab" -> level.setBlock(pos, TFBlocks.CANOPY_SLAB.value().defaultBlockState(), Block.UPDATE_CLIENTS);
 			case "creeper_head" -> this.putHead(pos, level, random, parameters, Blocks.CREEPER_HEAD, dataRotation);
 			case "skeleton_skull" -> this.putHead(pos, level, random, parameters, Blocks.SKELETON_SKULL, dataRotation);
 			case "wither_skull" -> this.putHead(pos, level, random, parameters, Blocks.WITHER_SKELETON_SKULL, dataRotation);
@@ -456,7 +456,7 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 			case "candle", "candles" -> this.putCandles(parameters, random, level, pos);
 			case "empty_lectern" -> {
 				Rotation stateRotation = this.placeSettings.getRotation().getRotated(dataRotation);
-				level.setBlock(pos, Blocks.LECTERN.defaultBlockState().rotate(stateRotation), 2);
+				level.setBlock(pos, Blocks.LECTERN.defaultBlockState().rotate(stateRotation), Block.UPDATE_CLIENTS);
 			}
 			case "candled_lectern" -> {
 				if (random.nextInt(4) != 0) {
@@ -466,13 +466,13 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 				}
 
 				Rotation stateRotation = this.placeSettings.getRotation().getRotated(dataRotation);
-				level.setBlock(pos, Blocks.LECTERN.defaultBlockState().rotate(stateRotation), 2);
+				level.setBlock(pos, Blocks.LECTERN.defaultBlockState().rotate(stateRotation), Block.UPDATE_CLIENTS);
 			}
 			default -> {
 				Rotation stateRotation = this.placeSettings.getRotation().getRotated(dataRotation);
 				BlockState blockState = this.blockFromLabel(parameters[0]).rotate(stateRotation);
 				if (!blockState.isAir()) {
-					level.setBlock(pos, blockState, 2);
+					level.setBlock(pos, blockState, Block.UPDATE_CLIENTS);
 				} else if (!FMLLoader.isProduction()) {
 					TwilightForestMod.LOGGER.warn("Variation label {} ({}) obtained {} in {}", parameters[0], parameters, blockState, this.templateName);
 				}
@@ -482,7 +482,7 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 
 	private void putMasonJar(BlockPos pos, WorldGenLevel level, RandomSource random, String[] parameters) {
 		BlockState jar = TFBlocks.MASON_JAR.value().defaultBlockState();
-		level.setBlock(pos, jar, 2);
+		level.setBlock(pos, jar, Block.UPDATE_CLIENTS);
 
 		if (parameters.length == 2 && level.getBlockEntity(pos) instanceof MasonJarBlockEntity jarEntity) {
 			ResourceLocation lootTableId = switch (parameters[1]) {
@@ -496,7 +496,7 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 		}
 
 		if (level.getBlockState(pos.above()).is(TFBlocks.CANOPY_BOOKSHELF)) {
-			level.setBlock(pos.above(), TFBlocks.CANOPY_SLAB.value().defaultBlockState().setValue(SlabBlock.TYPE, SlabType.TOP), 2);
+			level.setBlock(pos.above(), TFBlocks.CANOPY_SLAB.value().defaultBlockState().setValue(SlabBlock.TYPE, SlabType.TOP), Block.UPDATE_CLIENTS);
 		}
 	}
 
@@ -511,7 +511,7 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 			}
 		}
 
-		level.setBlock(pos, brewingStandBlock, 2);
+		level.setBlock(pos, brewingStandBlock, Block.UPDATE_CLIENTS);
 		if (level.getBlockEntity(pos) instanceof BrewingStandBlockEntity brewingStandBE) {
 			for (int index = 0; index < 3; index++) {
 				ItemStack potionStack = new ItemStack(random.nextInt(4) == 0 ? Items.SPLASH_POTION : Items.POTION);
@@ -529,7 +529,7 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 	}
 
 	private void putSpawner(BlockPos pos, WorldGenLevel level, RandomSource random, String[] parameters) {
-		level.setBlock(pos, Blocks.SPAWNER.defaultBlockState(), 2);
+		level.setBlock(pos, Blocks.SPAWNER.defaultBlockState(), Block.UPDATE_CLIENTS);
 
 		if (parameters.length >= 2 && level.getBlockEntity(pos) instanceof SpawnerBlockEntity spawner) {
 			String[] monsters = parameters[1].split(",");
@@ -564,7 +564,7 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 		int amount = Math.min(4, parameters.length == 2 ? this.getCandleRanged(parameters[1], random) : random.nextIntBetweenInclusive(1, 3));
 		if (amount == 0) return;
 		BlockState candles = Blocks.CANDLE.defaultBlockState().setValue(CandleBlock.LIT, true).setValue(CandleBlock.CANDLES, amount);
-		level.setBlock(pos, candles, 2);
+		level.setBlock(pos, candles, Block.UPDATE_CLIENTS);
 	}
 
 	private BlockState blockFromLabel(String label) {
@@ -578,7 +578,7 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 	private void putChest(BlockPos pos, WorldGenLevel level, RandomSource random, String[] parameters, Rotation dataRotation, BlockState chestState) {
 		Rotation stateRotation = this.placeSettings.getRotation().getRotated(dataRotation);
 		BlockState chest = chestState.rotate(stateRotation);
-		level.setBlock(pos, chest, 2);
+		level.setBlock(pos, chest, Block.UPDATE_CLIENTS);
 
 		if (parameters.length == 2 && level.getBlockEntity(pos) instanceof RandomizableContainer lootBlock) {
 			ResourceLocation lootTableId = switch (parameters[1]) {
@@ -592,7 +592,7 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 		}
 
 		if (level.getBlockState(pos.above()).is(TFBlocks.CANOPY_BOOKSHELF)) {
-			level.setBlock(pos.above(), TFBlocks.CANOPY_SLAB.value().defaultBlockState().setValue(SlabBlock.TYPE, SlabType.TOP), 2);
+			level.setBlock(pos.above(), TFBlocks.CANOPY_SLAB.value().defaultBlockState().setValue(SlabBlock.TYPE, SlabType.TOP), Block.UPDATE_CLIENTS);
 		}
 	}
 
@@ -609,7 +609,7 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 			}
 		}
 
-		level.setBlock(pos, shelf, 2);
+		level.setBlock(pos, shelf, Block.UPDATE_CLIENTS);
 		if (level.getBlockEntity(pos) instanceof ChiseledCanopyShelfBlockEntity shelfBlockEntity) {
 			for (int index : filledSlots) {
 				// Spawner shelves never contain enchanted books; Otherwise Chiseled Shelves have a 1/5 chance of generating an enchanted book instead of only a book
@@ -628,7 +628,7 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 		Rotation stateRotation = this.placeSettings.getRotation().getRotated(dataRotation.getRotated(Rotation.CLOCKWISE_180));
 
 		BlockState candledHeadState = headBlock.defaultBlockState().setValue(BlockStateProperties.ROTATION_16, rotation).rotate(stateRotation);
-		level.setBlock(pos, candledHeadState, 2);
+		level.setBlock(pos, candledHeadState, Block.UPDATE_CLIENTS);
 	}
 
 	private void putHeadCandles(BlockPos pos, WorldGenLevel level, RandomSource random, String[] parameters, Block candledHeadBlock, Rotation dataRotation) {
@@ -642,7 +642,7 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 			.setValue(BlockStateProperties.CANDLES, amount)
 			.setValue(BlockStateProperties.ROTATION_16, rotation)
 			.rotate(stateRotation);
-		level.setBlock(pos, candledHeadState, 2);
+		level.setBlock(pos, candledHeadState, Block.UPDATE_CLIENTS);
 	}
 
 	private int getCandleRanged(String amountLabel, RandomSource random) {
@@ -682,7 +682,7 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 			.setValue(LecternBlock.HAS_BOOK, !putMimic)
 			.rotate(stateRotation);
 
-		level.setBlock(pos, lectern, 2);
+		level.setBlock(pos, lectern, Block.UPDATE_CLIENTS);
 
 		if (putMimic) {
 			DeathTome tomeMimic = TFEntities.DEATH_TOME.value().create(level.getLevel());

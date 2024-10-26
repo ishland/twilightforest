@@ -1847,7 +1847,7 @@ public class TowerWingComponent extends TFStructureComponentOld {
 			for (int dy = this.getWorldY(startHeight); dy > 0; dy--) {
 				final BlockPos pos = new BlockPos(dx, dy, dz);
 				if (world.getBlockState(pos).is(BlockTagGenerator.CASTLE_BLOCKS) && world.getBlockState(pos).isRedstoneConductor(world, pos)) {
-					world.setBlock(pos, colour, 2);
+					world.setBlock(pos, colour, Block.UPDATE_CLIENTS);
 				} else {
 					break;
 				}

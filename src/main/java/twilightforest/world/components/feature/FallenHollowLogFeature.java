@@ -75,7 +75,7 @@ public class FallenHollowLogFeature extends Feature<NoneFeatureConfiguration> {
 				this.markAboveForPostProcessing(world, pos.offset(1, -1, dz + 3));
 			}
 			if (rand.nextBoolean()) {
-				world.setBlock(pos.offset(2, -1, dz + 3), oakLogWithZAxis, 3);
+				world.setBlock(pos.offset(2, -1, dz + 3), oakLogWithZAxis, Block.UPDATE_ALL);
 				if (rand.nextBoolean()) {
 					world.setBlock(pos.offset(2, 0, dz + 3), mossPatch, Block.UPDATE_ALL);
 					this.markAboveForPostProcessing(world, pos.offset(2, -1, dz + 3));

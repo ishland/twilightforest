@@ -86,7 +86,7 @@ public class IceBomb extends TFThrowable {
 				this.level().setBlockAndUpdate(pos, Blocks.SNOW.defaultBlockState());
 			}
 			if (state.is(BlockTagGenerator.ICE_BOMB_REPLACEABLES)) {
-				this.level().setBlock(pos, Blocks.SNOW.defaultBlockState().canSurvive(this.level(), pos) ? Blocks.SNOW.defaultBlockState() : Blocks.AIR.defaultBlockState(), 3);
+				this.level().setBlock(pos, Blocks.SNOW.defaultBlockState().canSurvive(this.level(), pos) ? Blocks.SNOW.defaultBlockState() : Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
 			}
 			if (state.is(Blocks.SNOW) && state.getValue(SnowLayerBlock.LAYERS) < 8) {
 				this.level().setBlockAndUpdate(pos, state.setValue(SnowLayerBlock.LAYERS, state.getValue(SnowLayerBlock.LAYERS) + 1));

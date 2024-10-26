@@ -183,8 +183,8 @@ public class HollowHillComponent extends TFStructureComponentOld {
 				this.placeTreasureAtWorldPosition(world, this.getTreasureType(), false, writeableBounds, pos.above());
 			}
 
-			world.setBlock(pos.below(), Blocks.COBBLESTONE.defaultBlockState(), 50);
-			world.setBlock(pos, Blocks.COBBLESTONE.defaultBlockState(), 50);
+			world.setBlock(pos.below(), Blocks.COBBLESTONE.defaultBlockState(), Block.UPDATE_SUPPRESS_DROPS | Block.UPDATE_KNOWN_SHAPE | Block.UPDATE_CLIENTS);
+			world.setBlock(pos, Blocks.COBBLESTONE.defaultBlockState(), Block.UPDATE_SUPPRESS_DROPS | Block.UPDATE_KNOWN_SHAPE | Block.UPDATE_CLIENTS);
 		} else if (this.speleothemConfig.shouldDoAStalagmite(rand)) {
 			pos.setY(floorY);
 
