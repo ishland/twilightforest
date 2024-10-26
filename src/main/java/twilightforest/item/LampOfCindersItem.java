@@ -6,12 +6,11 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.LevelEvent;
@@ -31,20 +30,15 @@ public class LampOfCindersItem extends Item {
 	}
 
 	@Override
-	public boolean isEnchantable(ItemStack pStack) {
-		return false;
-	}
-
-	@Override
 	public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
 		return false;
 	}
 
 	@Nonnull
 	@Override
-	public InteractionResultHolder<ItemStack> use(Level level, Player player, @Nonnull InteractionHand hand) {
+	public InteractionResult use(Level level, Player player, @Nonnull InteractionHand hand) {
 		player.startUsingItem(hand);
-		return new InteractionResultHolder<>(InteractionResult.SUCCESS, player.getItemInHand(hand));
+		return InteractionResult.SUCCESS;
 	}
 
 	@Nonnull
@@ -81,12 +75,14 @@ public class LampOfCindersItem extends Item {
 	}
 
 	@Override
-	public void releaseUsing(ItemStack stack, Level level, LivingEntity living, int useRemaining) {
+	public boolean releaseUsing(ItemStack stack, Level level, LivingEntity living, int useRemaining) {
 		int useTime = this.getUseDuration(stack, living) - useRemaining;
 
 		if (useTime > FIRING_TIME && (stack.getDamageValue() + 1) < this.getMaxDamage(stack)) {
 			this.doBurnEffect(level, living);
+			return true;
 		}
+		return false;
 	}
 
 	private void doBurnEffect(Level level, LivingEntity living) {
@@ -125,8 +121,8 @@ public class LampOfCindersItem extends Item {
 	}
 
 	@Override
-	public UseAnim getUseAnimation(ItemStack stack) {
-		return UseAnim.BOW;
+	public ItemUseAnimation getUseAnimation(ItemStack stack) {
+		return ItemUseAnimation.BOW;
 	}
 
 	@Override

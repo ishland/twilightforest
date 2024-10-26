@@ -81,6 +81,16 @@ public class ItemTagGenerator extends ModdedItemTagGenerator {
 	public static final TagKey<Item> REPAIRS_FIERY_TOOLS = create("repairs_fiery_tools");
 	public static final TagKey<Item> REPAIRS_GIANT_TOOLS = create("repairs_giant_tools");
 	public static final TagKey<Item> REPAIRS_ICE_TOOLS = create("repairs_ice_tools");
+	public static final TagKey<Item> REPAIRS_GLASS_TOOLS = create("repairs_glass_tools");
+
+	public static final TagKey<Item> REPAIRS_IRONWOOD_ARMOR = create("repairs_ironwood_armor");
+	public static final TagKey<Item> REPAIRS_STEELEAF_ARMOR = create("repairs_steeleaf_armor");
+	public static final TagKey<Item> REPAIRS_NAGA_ARMOR = create("repairs_naga_armor");
+	public static final TagKey<Item> REPAIRS_FIERY_ARMOR = create("repairs_fiery_armor");
+	public static final TagKey<Item> REPAIRS_KNIGHTMETAL_ARMOR = create("repairs_knightmetal_armor");
+	public static final TagKey<Item> REPAIRS_PHANTOM_ARMOR = create("repairs_phantom_armor");
+	public static final TagKey<Item> REPAIRS_ARCTIC_ARMOR = create("repairs_arctic_armor");
+	public static final TagKey<Item> REPAIRS_YETI_ARMOR = create("repairs_yeti_armor");
 
 	public ItemTagGenerator(PackOutput output, CompletableFuture<HolderLookup.Provider> future, CompletableFuture<TagLookup<Block>> provider, ExistingFileHelper helper) {
 		super(output, future, provider, helper);

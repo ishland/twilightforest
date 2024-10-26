@@ -45,7 +45,7 @@ public class VerticalHollowLogBlock extends Block implements SimpleWaterloggedBl
 
 	private final Holder<Block> climbable;
 
-	public VerticalHollowLogBlock(Properties properties, Holder<Block> climbable) {
+	public VerticalHollowLogBlock(Holder<Block> climbable, Properties properties) {
 		super(properties);
 		this.climbable = climbable;
 

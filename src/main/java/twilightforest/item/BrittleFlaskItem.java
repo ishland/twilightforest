@@ -3,11 +3,12 @@ package twilightforest.item;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
-import net.minecraft.util.FastColor;
+import net.minecraft.util.ARGB;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.SlotAccess;
@@ -46,7 +47,7 @@ public class BrittleFlaskItem extends Item {
 
 	@Override
 	public int getBarColor(ItemStack stack) {
-		return FastColor.ARGB32.opaque(stack.getOrDefault(TFDataComponents.POTION_FLASK_CONTENTS, PotionFlaskComponent.EMPTY).potion().getColor());
+		return ARGB.opaque(stack.getOrDefault(TFDataComponents.POTION_FLASK_CONTENTS, PotionFlaskComponent.EMPTY).potion().getColor());
 	}
 
 	@Override
@@ -73,19 +74,19 @@ public class BrittleFlaskItem extends Item {
 	}
 
 	@Override
-	public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+	public InteractionResult use(Level level, Player player, InteractionHand hand) {
 		ItemStack stack = player.getItemInHand(hand);
 		PotionFlaskComponent flaskContents = stack.getOrDefault(TFDataComponents.POTION_FLASK_CONTENTS, PotionFlaskComponent.EMPTY);
 
 		if (flaskContents.potion() == PotionContents.EMPTY) {
-			return InteractionResultHolder.fail(player.getItemInHand(hand));
+			return InteractionResult.FAIL;
 		}
 
 		if (flaskContents.doses() > 0) {
 			return ItemUtils.startUsingInstantly(level, player, hand);
 		}
 
-		return InteractionResultHolder.fail(player.getItemInHand(hand));
+		return InteractionResult.FAIL;
 	}
 
 	@Override
@@ -94,8 +95,8 @@ public class BrittleFlaskItem extends Item {
 	}
 
 	@Override
-	public UseAnim getUseAnimation(ItemStack stack) {
-		return UseAnim.DRINK;
+	public ItemUseAnimation getUseAnimation(ItemStack stack) {
+		return ItemUseAnimation.DRINK;
 	}
 
 	@Override
@@ -103,13 +104,13 @@ public class BrittleFlaskItem extends Item {
 		PotionFlaskComponent flaskContents = stack.getOrDefault(TFDataComponents.POTION_FLASK_CONTENTS, PotionFlaskComponent.EMPTY);
 		if (flaskContents.potion() != PotionContents.EMPTY) {
 			if (entity instanceof Player player) {
-				if (!level.isClientSide()) {
+				if (level instanceof ServerLevel serverLevel) {
 					if (!player.isCreative() && !player.isSpectator() && player instanceof ServerPlayer serverPlayer) {
 						flaskContents.potion().potion().ifPresent(potion -> player.getData(TFDataAttachments.FLASK_DOSES).trackDrink(potion, serverPlayer));
 					}
 					for (MobEffectInstance mobeffectinstance : flaskContents.potion().getAllEffects()) {
 						if (mobeffectinstance.getEffect().value().isInstantenous()) {
-							mobeffectinstance.getEffect().value().applyInstantenousEffect(player, player, player, mobeffectinstance.getAmplifier(), 1.0D);
+							mobeffectinstance.getEffect().value().applyInstantenousEffect(serverLevel, player, player, entity, mobeffectinstance.getAmplifier(), 1.0D);
 						} else {
 							player.addEffect(new MobEffectInstance(mobeffectinstance));
 						}

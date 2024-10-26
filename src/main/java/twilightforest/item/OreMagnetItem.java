@@ -2,6 +2,7 @@ package twilightforest.item;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -11,12 +12,11 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -51,11 +51,6 @@ public class OreMagnetItem extends Item {
 	}
 
 	@Override
-	public boolean isEnchantable(ItemStack stack) {
-		return false;
-	}
-
-	@Override
 	public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
 		AtomicBoolean badEnchant = new AtomicBoolean();
 		book.getEnchantments().entrySet().forEach(enchantment -> {
@@ -69,13 +64,13 @@ public class OreMagnetItem extends Item {
 
 	@Nonnull
 	@Override
-	public InteractionResultHolder<ItemStack> use(Level level, Player player, @Nonnull InteractionHand hand) {
+	public InteractionResult use(Level level, Player player, @Nonnull InteractionHand hand) {
 		player.startUsingItem(hand);
-		return new InteractionResultHolder<>(InteractionResult.SUCCESS, player.getItemInHand(hand));
+		return InteractionResult.SUCCESS;
 	}
 
 	@Override
-	public void releaseUsing(ItemStack stack, Level level, LivingEntity living, int useRemaining) {
+	public boolean releaseUsing(ItemStack stack, Level level, LivingEntity living, int useRemaining) {
 		int useTime = this.getUseDuration(stack, living) - useRemaining;
 
 		if (!level.isClientSide() && useTime > 10) {
@@ -109,14 +104,16 @@ public class OreMagnetItem extends Item {
 			if (moved > 0) {
 				stack.hurtAndBreak(moved, living, LivingEntity.getSlotForHand(living.getUsedItemHand()));
 				level.playSound(null, living.getX(), living.getY(), living.getZ(), TFSounds.MAGNET_GRAB.get(), living.getSoundSource(), 1.0F, 1.0F);
+				return true;
 			}
 		}
+		return false;
 	}
 
 	@Nonnull
 	@Override
-	public UseAnim getUseAnimation(ItemStack stack) {
-		return UseAnim.BOW;
+	public ItemUseAnimation getUseAnimation(ItemStack stack) {
+		return ItemUseAnimation.BOW;
 	}
 
 	@Override
@@ -258,16 +255,16 @@ public class OreMagnetItem extends Item {
 		ORE_TO_BLOCK_REPLACEMENTS.clear();
 
 		//collect all tags
-		for (TagKey<Block> tag : BuiltInRegistries.BLOCK.getTagNames().filter(location -> location.location().getNamespace().equals("c")).toList()) {
+		for (HolderSet.Named<Block> tag : BuiltInRegistries.BLOCK.getTags().filter(location -> location.key().location().getNamespace().equals("c")).toList()) {
 			//check if the tag is a valid ore tag
-			if (tag.location().getPath().contains("ores_in_ground/")) {
+			if (tag.key().location().getPath().contains("ores_in_ground/")) {
 				//grab the part after the slash for use later
-				String oreground = tag.location().getPath().substring(15);
+				String oreground = tag.key().location().getPath().substring(15);
 				//check if a tag for ore grounds matches up with our ores in ground tag
-				if (BuiltInRegistries.BLOCK.getTagNames().filter(location -> location.location().getNamespace().equals("c")).anyMatch(blockTagKey -> blockTagKey.location().getPath().equals("ore_bearing_ground/" + oreground))) {
+				if (BuiltInRegistries.BLOCK.getTags().filter(location -> location.key().location().getNamespace().equals("c")).anyMatch(blockTagKey -> blockTagKey.key().location().getPath().equals("ore_bearing_ground/" + oreground))) {
 					//add each ground type to each ore
-					BuiltInRegistries.BLOCK.getTag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("c", "ore_bearing_ground/" + oreground))).get().forEach(ground ->
-						BuiltInRegistries.BLOCK.getTag(tag).get().forEach(ore -> {
+					BuiltInRegistries.BLOCK.get(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("c", "ore_bearing_ground/" + oreground))).get().forEach(ground ->
+						tag.forEach(ore -> {
 							//exclude ignored ores
 							if (!ore.value().defaultBlockState().is(BlockTagGenerator.ORE_MAGNET_IGNORE)) {
 								ORE_TO_BLOCK_REPLACEMENTS.put(ore.value(), ground.value());

@@ -57,8 +57,8 @@ import twilightforest.enums.BossVariant;
 import twilightforest.enums.extensions.TFItemDisplayContextEnumExtension;
 import twilightforest.init.TFBlocks;
 import twilightforest.init.TFDataComponents;
+import twilightforest.init.TFItems;
 import twilightforest.item.KnightmetalShieldItem;
-import twilightforest.item.WearableLichCrown;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -224,7 +224,7 @@ public class ISTER extends BlockEntityWithoutLevelRenderer {
 			VertexConsumer vertexconsumer = material.sprite().wrap(ItemRenderer.getFoilBuffer(buffers, this.shield.renderType(material.atlasLocation()), true, stack.hasFoil()));
 			this.shield.renderToBuffer(pose, vertexconsumer, light, overlay);
 			pose.popPose();
-		} else if (item instanceof WearableLichCrown && this.trophies.get(BossVariant.LICH) instanceof LichModel<?> lichModel) {
+		} else if (stack.is(TFItems.MYSTIC_CROWN) && this.trophies.get(BossVariant.LICH) instanceof LichModel lichModel) {
 			pose.pushPose();
 			pose.scale(1.0F, -1.0F, -1.0F);
 			if (camera == ItemDisplayContext.GUI) {

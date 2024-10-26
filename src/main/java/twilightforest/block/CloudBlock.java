@@ -27,7 +27,7 @@ public class CloudBlock extends Block {
 	@Nullable
 	protected final Biome.Precipitation precipitation;
 
-	public CloudBlock(Properties properties, @Nullable Biome.Precipitation precipitation) {
+	public CloudBlock(@Nullable Biome.Precipitation precipitation, Properties properties) {
 		super(properties);
 		this.precipitation = precipitation;
 	}

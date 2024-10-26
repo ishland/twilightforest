@@ -120,7 +120,7 @@ public final class TwilightForestMod {
 		TFSounds.SOUNDS.register(bus);
 		TFLoot.FUNCTIONS.register(bus);
 		TFLoot.CONDITIONS.register(bus);
-		TFEntities.ENTITIES.register(bus);
+		TFEntities.ENTITY_TYPES.register(bus);
 		TFFeatures.FEATURES.register(bus);
 		TFCreativeTabs.TABS.register(bus);
 		TFLoot.CONDITIONALS.register(bus);

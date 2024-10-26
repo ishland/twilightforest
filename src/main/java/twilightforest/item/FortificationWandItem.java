@@ -4,7 +4,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -25,11 +25,11 @@ public class FortificationWandItem extends Item {
 
 	@Nonnull
 	@Override
-	public InteractionResultHolder<ItemStack> use(Level level, Player player, @Nonnull InteractionHand hand) {
+	public InteractionResult use(Level level, Player player, @Nonnull InteractionHand hand) {
 		ItemStack stack = player.getItemInHand(hand);
 
 		if (stack.getDamageValue() == stack.getMaxDamage() && !player.getAbilities().instabuild) {
-			return InteractionResultHolder.fail(stack);
+			return InteractionResult.FAIL;
 		}
 
 		if (!level.isClientSide()) {
@@ -41,14 +41,9 @@ public class FortificationWandItem extends Item {
 		player.playSound(TFSounds.SHIELD_ADD.get(), 1.0F, (player.getRandom().nextFloat() - player.getRandom().nextFloat()) * 0.2F + 1.0F);
 
 		if (!player.isCreative())
-			player.getCooldowns().addCooldown(this, 1200);
+			player.getCooldowns().addCooldown(stack, 1200);
 
-		return InteractionResultHolder.success(stack);
-	}
-
-	@Override
-	public boolean isEnchantable(ItemStack stack) {
-		return false;
+		return InteractionResult.SUCCESS;
 	}
 
 	@Override

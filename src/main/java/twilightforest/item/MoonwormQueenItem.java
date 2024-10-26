@@ -9,17 +9,15 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.item.component.BlockItemStateProperties;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
@@ -44,23 +42,18 @@ public class MoonwormQueenItem extends Item {
 	}
 
 	@Override
-	public boolean isEnchantable(ItemStack stack) {
-		return false;
-	}
-
-	@Override
 	public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
 		return false;
 	}
 
 	@Override
-	public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+	public InteractionResult use(Level level, Player player, InteractionHand hand) {
 		ItemStack stack = player.getItemInHand(hand);
 		if (stack.getDamageValue() == this.getMaxDamage(stack)) {
-			return InteractionResultHolder.fail(stack);
+			return InteractionResult.FAIL;
 		} else {
 			player.startUsingItem(hand);
-			return InteractionResultHolder.success(player.getItemInHand(hand));
+			return InteractionResult.SUCCESS;
 		}
 	}
 
@@ -81,7 +74,7 @@ public class MoonwormQueenItem extends Item {
 			ItemStack itemstack = player.getItemInHand(context.getHand());
 
 			if (itemstack.getDamageValue() < itemstack.getMaxDamage() && player.mayUseItemAt(pos, context.getClickedFace(), itemstack) && level.isUnobstructed(TFBlocks.MOONWORM.get().defaultBlockState(), pos, CollisionContext.empty())) {
-				if (this.tryPlace(blockItemUseContext).shouldSwing()) {
+				if (this.tryPlace(blockItemUseContext).consumesAction()) {
 					SoundType soundtype = level.getBlockState(pos).getBlock().getSoundType(level.getBlockState(pos), level, pos, player);
 					level.playSound(player, pos, soundtype.getPlaceSound(), SoundSource.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
 					// TF - damage stack instead of shrinking
@@ -98,7 +91,7 @@ public class MoonwormQueenItem extends Item {
 
 
 	@Override
-	public void releaseUsing(ItemStack stack, Level level, LivingEntity living, int useRemaining) {
+	public boolean releaseUsing(ItemStack stack, Level level, LivingEntity living, int useRemaining) {
 		int useTime = this.getUseDuration(stack, living) - useRemaining;
 
 		if (!level.isClientSide() && useTime > FIRING_TIME && (stack.getDamageValue() + 1) < stack.getMaxDamage()) {
@@ -107,15 +100,17 @@ public class MoonwormQueenItem extends Item {
 				if (living instanceof Player player && !player.getAbilities().instabuild) TFItemStackUtils.hurtButDontBreak(stack, 2, (ServerLevel) level, player);
 
 				level.playSound(null, living.getX(), living.getY(), living.getZ(), TFSounds.MOONWORM_SQUISH.get(), living instanceof Player ? SoundSource.PLAYERS : SoundSource.NEUTRAL, 1.0F, 1.0F);
+				return true;
 			}
 		}
 
+		return false;
 	}
 
 	@Nonnull
 	@Override
-	public UseAnim getUseAnimation(ItemStack stack) {
-		return UseAnim.BOW;
+	public ItemUseAnimation getUseAnimation(ItemStack stack) {
+		return ItemUseAnimation.BOW;
 	}
 
 	@Override

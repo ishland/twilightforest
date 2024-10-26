@@ -105,7 +105,7 @@ public class SwarmSpider extends Spider {
 		return TFEntities.SWARM_SPIDER.get();
 	}
 
-	public static boolean getCanSpawnHere(EntityType<? extends SwarmSpider> entity, ServerLevelAccessor accessor, EntitySpawnReason reason, BlockPos pos, RandomSource random) {
+	public static boolean checkSwarmSpawnRules(EntityType<? extends SwarmSpider> entity, ServerLevelAccessor accessor, EntitySpawnReason reason, BlockPos pos, RandomSource random) {
 		return accessor.getDifficulty() != Difficulty.PEACEFUL && isValidLightLevel(accessor, pos, random) && checkMobSpawnRules(entity, accessor, reason, pos, random);
 	}
 

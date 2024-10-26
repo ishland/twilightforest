@@ -40,7 +40,7 @@ public class MazeSlime extends Slime {
 		this.xpReward = size + 3;
 	}
 
-	public static boolean getCanSpawnHere(EntityType<MazeSlime> entity, ServerLevelAccessor world, EntitySpawnReason reason, BlockPos pos, RandomSource random) {
+	public static boolean checkSlimeSpawnRules(EntityType<MazeSlime> entity, ServerLevelAccessor world, EntitySpawnReason reason, BlockPos pos, RandomSource random) {
 		return world.getDifficulty() != Difficulty.PEACEFUL && checkMobSpawnRules(entity, world, reason, pos, random) && Monster.isDarkEnoughToSpawn(world, pos, random);
 	}
 

@@ -74,7 +74,7 @@ public class HedgeSpider extends Spider {
 		this.playSound(TFSounds.HEDGE_SPIDER_STEP.get(), 0.15F, 1.0F);
 	}
 
-	public static boolean canSpawn(EntityType<HedgeSpider> type, ServerLevelAccessor accessor, EntitySpawnReason reason, BlockPos pos, RandomSource random) {
+	public static boolean checkSpiderSpawnRules(EntityType<HedgeSpider> type, ServerLevelAccessor accessor, EntitySpawnReason reason, BlockPos pos, RandomSource random) {
 		return accessor.getDifficulty() != Difficulty.PEACEFUL && isValidLightLevel(accessor, pos, random);
 	}
 }

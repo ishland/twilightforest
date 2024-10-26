@@ -1,11 +1,9 @@
 package twilightforest.item;
 
-import net.minecraft.core.registries.Registries;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -15,7 +13,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.data.tags.BlockTagGenerator;
-import twilightforest.data.tags.ItemTagGenerator;
 import twilightforest.entity.projectile.ChainBlock;
 import twilightforest.init.TFDataComponents;
 import twilightforest.init.TFEnchantments;
@@ -38,11 +35,11 @@ public class ChainBlockItem extends Item {
 	}
 
 	@Override
-	public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+	public InteractionResult use(Level level, Player player, InteractionHand hand) {
 		ItemStack stack = player.getItemInHand(hand);
 
 		if (stack.get(TFDataComponents.THROWN_PROJECTILE) != null || !level.getWorldBorder().isWithinBounds(player.blockPosition()))
-			return new InteractionResultHolder<>(InteractionResult.PASS, stack);
+			return InteractionResult.PASS;
 
 		player.playSound(TFSounds.BLOCK_AND_CHAIN_FIRED.get(), 0.5F, 1.0F / (level.getRandom().nextFloat() * 0.4F + 1.2F));
 
@@ -53,7 +50,7 @@ public class ChainBlockItem extends Item {
 		}
 
 		player.startUsingItem(hand);
-		return new InteractionResultHolder<>(InteractionResult.SUCCESS, stack);
+		return InteractionResult.SUCCESS;
 	}
 
 	@Nullable
@@ -77,13 +74,8 @@ public class ChainBlockItem extends Item {
 	}
 
 	@Override
-	public UseAnim getUseAnimation(ItemStack stack) {
-		return UseAnim.BLOCK;
-	}
-
-	@Override
-	public boolean isValidRepairItem(ItemStack stack, ItemStack repairItem) {
-		return repairItem.is(ItemTagGenerator.KNIGHTMETAL_INGOTS);
+	public ItemUseAnimation getUseAnimation(ItemStack stack) {
+		return ItemUseAnimation.BLOCK;
 	}
 
 	@Override
@@ -92,17 +84,17 @@ public class ChainBlockItem extends Item {
 		if (stack.get(TFDataComponents.THROWN_PROJECTILE) == null || !state.is(BlockTagGenerator.MINEABLE_WITH_BLOCK_AND_CHAIN)) return false;
 		MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
 		if (server != null) {
-			int destruction = stack.getEnchantmentLevel(server.registryAccess().registryOrThrow(Registries.ENCHANTMENT).getHolderOrThrow(TFEnchantments.DESTRUCTION));
+			int destruction = stack.getEnchantmentLevel(server.registryAccess().holderOrThrow(TFEnchantments.DESTRUCTION));
 			if (destruction > 0) return this.getHarvestLevel(destruction).createToolProperties(BlockTagGenerator.MINEABLE_WITH_BLOCK_AND_CHAIN).isCorrectForDrops(state);
 		}
 		return false;
 	}
 
-	public Tier getHarvestLevel(int destruction) {
+	public ToolMaterial getHarvestLevel(int destruction) {
 		return switch (destruction) {
-			case 1 -> Tiers.WOOD;
-			case 2 -> Tiers.STONE;
-			default -> Tiers.IRON;
+			case 1 -> ToolMaterial.WOOD;
+			case 2 -> ToolMaterial.STONE;
+			default -> ToolMaterial.IRON;
 		};
 	}
 }

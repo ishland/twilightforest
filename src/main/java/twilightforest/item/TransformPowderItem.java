@@ -2,16 +2,15 @@ package twilightforest.item;
 
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.event.EventHooks;
@@ -39,7 +38,7 @@ public class TransformPowderItem extends Item {
 
 	@Nonnull
 	@Override
-	public InteractionResultHolder<ItemStack> use(Level level, Player player, @Nonnull InteractionHand hand) {
+	public InteractionResult use(Level level, Player player, @Nonnull InteractionHand hand) {
 		if (level.isClientSide()) {
 			AABB area = this.getEffectAABB(player);
 
@@ -53,7 +52,7 @@ public class TransformPowderItem extends Item {
 
 		}
 
-		return new InteractionResultHolder<>(InteractionResult.SUCCESS, player.getItemInHand(hand));
+		return InteractionResult.SUCCESS;
 	}
 
 	public static boolean transformEntityIfPossible(Level level, LivingEntity target, ItemStack powder, boolean shrinkStack) {
@@ -63,18 +62,18 @@ public class TransformPowderItem extends Item {
 		var datamap = target.getType().builtInRegistryHolder().getData(TFDataMaps.TRANSFORMATION_POWDER);
 
 		if (datamap != null) {
-			Entity newEntity = datamap.result().create(level);
+			Entity newEntity = datamap.result().create(level, EntitySpawnReason.CONVERSION);
 			if (newEntity == null) {
 				return false;
 			}
 
 			newEntity.moveTo(target.getX(), target.getY(), target.getZ(), target.getYRot(), target.getXRot());
-			if (newEntity instanceof Mob mob && target.level() instanceof ServerLevelAccessor world) {
-				EventHooks.finalizeMobSpawn(mob, world, target.level().getCurrentDifficultyAt(target.blockPosition()), MobSpawnType.CONVERSION, null);
-			}
+			if (newEntity instanceof Mob mob && target.level() instanceof ServerLevel world) {
+				EventHooks.finalizeMobSpawn(mob, world, target.level().getCurrentDifficultyAt(target.blockPosition()), EntitySpawnReason.CONVERSION, null);
 
-			if (target instanceof Saddleable saddleable && saddleable.isSaddled() && !(newEntity instanceof Saddleable)) {
-				newEntity.spawnAtLocation(Items.SADDLE);
+				if (target instanceof Saddleable saddleable && saddleable.isSaddled() && !(newEntity instanceof Saddleable)) {
+					newEntity.spawnAtLocation(world, Items.SADDLE);
+				}
 			}
 
 			try { // try copying what can be copied

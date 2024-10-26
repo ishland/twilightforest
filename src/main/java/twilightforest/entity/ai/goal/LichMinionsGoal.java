@@ -1,10 +1,11 @@
 package twilightforest.entity.ai.goal;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -53,7 +54,7 @@ public class LichMinionsGoal extends Goal {
 		if (this.lich.getAttackCooldown() == 0) {
 			if (dist < 2.0F) {
 				// melee attack
-				this.lich.doHurtTarget(targetedEntity);
+				this.lich.doHurtTarget((ServerLevel) this.lich.level(), targetedEntity);
 				this.lich.setAttackCooldown(20);
 			} else if (dist < 20F && this.lich.getSensing().hasLineOfSight(targetedEntity)) {
 				if (this.lich.getNextAttackType() == 0) {
@@ -95,7 +96,7 @@ public class LichMinionsGoal extends Goal {
 			// put a clone there
 			LichMinion minion = new LichMinion(this.lich.level(), this.lich);
 			minion.setPos(minionSpot.x(), minionSpot.y(), minionSpot.z());
-			EventHooks.finalizeMobSpawn(minion, accessor, this.lich.level().getCurrentDifficultyAt(BlockPos.containing(minionSpot)), MobSpawnType.MOB_SUMMONED, null);
+			EventHooks.finalizeMobSpawn(minion, accessor, this.lich.level().getCurrentDifficultyAt(BlockPos.containing(minionSpot)), EntitySpawnReason.MOB_SUMMONED, null);
 			this.lich.level().addFreshEntity(minion);
 
 			minion.setTarget(targetedEntity);

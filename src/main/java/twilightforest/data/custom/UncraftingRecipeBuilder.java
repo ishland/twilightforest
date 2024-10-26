@@ -1,12 +1,16 @@
 package twilightforest.data.custom;
 
 import net.minecraft.advancements.Criterion;
+import net.minecraft.core.HolderGetter;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeOutput;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.ShapedRecipePattern;
 import net.minecraft.world.level.ItemLike;
 import org.jetbrains.annotations.Nullable;
@@ -20,43 +24,45 @@ import java.util.Map;
 
 public class UncraftingRecipeBuilder implements RecipeBuilder {
 
+	private final HolderGetter<Item> items;
 	private final Ingredient input;
 	private final int count;
 	private int cost = -1;
 	private final List<String> rows = new ArrayList<>();
 	private final Map<Character, Ingredient> key = new LinkedHashMap<>();
 
-	public UncraftingRecipeBuilder(Ingredient input, int count) {
+	public UncraftingRecipeBuilder(HolderGetter<Item> getter, Ingredient input, int count) {
+		this.items = getter;
 		this.input = input;
 		this.count = count;
 	}
 
-	public static UncraftingRecipeBuilder uncrafting(ItemLike input) {
-		return uncrafting(Ingredient.of(input), 1);
+	public static UncraftingRecipeBuilder uncrafting(HolderGetter<Item> getter, ItemLike input) {
+		return uncrafting(getter, Ingredient.of(input), 1);
 	}
 
-	public static UncraftingRecipeBuilder uncrafting(TagKey<Item> input) {
-		return uncrafting(Ingredient.of(input), 1);
+	public static UncraftingRecipeBuilder uncrafting(HolderGetter<Item> getter, TagKey<Item> input) {
+		return uncrafting(getter, Ingredient.of(getter.getOrThrow(input)), 1);
 	}
 
-	public static UncraftingRecipeBuilder uncrafting(ItemLike input, int count) {
-		return uncrafting(Ingredient.of(input), count);
+	public static UncraftingRecipeBuilder uncrafting(HolderGetter<Item> getter, ItemLike input, int count) {
+		return uncrafting(getter, Ingredient.of(input), count);
 	}
 
-	public static UncraftingRecipeBuilder uncrafting(TagKey<Item> input, int count) {
-		return uncrafting(Ingredient.of(input), count);
+	public static UncraftingRecipeBuilder uncrafting(HolderGetter<Item> getter, TagKey<Item> input, int count) {
+		return uncrafting(getter, Ingredient.of(getter.getOrThrow(input)), count);
 	}
 
-	public static UncraftingRecipeBuilder uncrafting(Ingredient input, int count) {
-		return new UncraftingRecipeBuilder(input, count);
+	public static UncraftingRecipeBuilder uncrafting(HolderGetter<Item> getter, Ingredient input, int count) {
+		return new UncraftingRecipeBuilder(getter, input, count);
 	}
 
-	public UncraftingRecipeBuilder define(Character pSymbol, TagKey<Item> pTag) {
-		return this.define(pSymbol, Ingredient.of(pTag));
+	public UncraftingRecipeBuilder define(Character symbol, TagKey<Item> tag) {
+		return this.define(symbol, Ingredient.of(this.items.getOrThrow(tag)));
 	}
 
-	public UncraftingRecipeBuilder define(Character pSymbol, ItemLike pItem) {
-		return this.define(pSymbol, Ingredient.of(pItem));
+	public UncraftingRecipeBuilder define(Character symbol, ItemLike item) {
+		return this.define(symbol, Ingredient.of(item));
 	}
 
 	public UncraftingRecipeBuilder setCost(int cost) {
@@ -96,16 +102,16 @@ public class UncraftingRecipeBuilder implements RecipeBuilder {
 
 	@Override
 	public Item getResult() {
-		return this.input.getItems()[0].getItem();
+		return this.input.getValues().get(0).value();
 	}
 
 	@Override
 	public void save(RecipeOutput output) {
-		this.save(output, TwilightForestMod.prefix("uncrafting/" + RecipeBuilder.getDefaultRecipeId(this.getResult()).getPath()));
+		this.save(output, ResourceKey.create(Registries.RECIPE, TwilightForestMod.prefix("uncrafting/" + RecipeBuilder.getDefaultRecipeId(this.getResult()).getPath())));
 	}
 
 	@Override
-	public void save(RecipeOutput output, ResourceLocation id) {
+	public void save(RecipeOutput output, ResourceKey<Recipe<?>> id) {
 		ShapedRecipePattern pattern = ShapedRecipePattern.of(this.key, this.rows);
 		UncraftingRecipe recipe = new UncraftingRecipe(this.cost, this.input, this.count, pattern);
 		output.accept(id, recipe, null);

@@ -1,12 +1,14 @@
 package twilightforest.data.custom;
 
 import net.minecraft.data.recipes.RecipeOutput;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.ItemLike;
 import twilightforest.item.recipe.ScepterRepairRecipe;
 
@@ -45,7 +47,7 @@ public class ScepterRecipeBuilder {
 		return this;
 	}
 
-	public void save(RecipeOutput output, ResourceLocation id) {
+	public void save(RecipeOutput output, ResourceKey<Recipe<?>> id) {
 		ScepterRepairRecipe recipe = new ScepterRepairRecipe(this.scepter, this.repairItems, CraftingBookCategory.MISC);
 		output.accept(id, recipe, null);
 	}

@@ -16,6 +16,8 @@ import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import twilightforest.TwilightForestMod;
 import twilightforest.data.custom.stalactites.StalactiteGenerator;
+import twilightforest.data.recipes.CraftingGenerator;
+import twilightforest.data.recipes.CraftingGeneratorRunner;
 import twilightforest.data.tags.*;
 
 import java.util.Optional;
@@ -62,7 +64,7 @@ public class DataGenerators {
 		generator.addProvider(event.includeServer(), new FluidTagGenerator(output, lookupProvider, helper));
 		generator.addProvider(event.includeServer(), new ItemTagGenerator(output, lookupProvider, blocktags.contentsGetter(), helper));
 		generator.addProvider(event.includeServer(), new EntityTagGenerator(output, lookupProvider, helper));
-		generator.addProvider(event.includeServer(), new CraftingGenerator(output, lookupProvider));
+		generator.addProvider(event.includeServer(), new CraftingGeneratorRunner(output, lookupProvider));
 		generator.addProvider(event.includeServer(), new LootModifierGenerator(output, lookupProvider));
 
 		//these have to go last due to magic paintings

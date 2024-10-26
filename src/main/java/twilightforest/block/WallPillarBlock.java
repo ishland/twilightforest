@@ -38,7 +38,7 @@ public class WallPillarBlock extends ConnectableRotatedPillarBlock implements Si
 	private static final VoxelShape NORTH_FLAT = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 3.0D);
 	private static final VoxelShape SOUTH_FLAT = Block.box(0.0D, 0.0D, 13.0D, 16.0D, 16.0D, 16.0D);
 
-	public WallPillarBlock(BlockBehaviour.Properties properties, double width, double height) {
+	public WallPillarBlock(double width, double height, BlockBehaviour.Properties properties) {
 		super(properties, width);
 		this.registerDefaultState(this.defaultBlockState().setValue(WATERLOGGED, false));
 	}

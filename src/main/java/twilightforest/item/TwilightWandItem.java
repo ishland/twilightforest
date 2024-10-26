@@ -4,7 +4,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -25,11 +25,11 @@ public class TwilightWandItem extends Item {
 	}
 
 	@Override
-	public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+	public InteractionResult use(Level level, Player player, InteractionHand hand) {
 		ItemStack stack = player.getItemInHand(hand);
 
 		if (stack.getDamageValue() == stack.getMaxDamage() && !player.getAbilities().instabuild) {
-			return InteractionResultHolder.fail(player.getItemInHand(hand));
+			return InteractionResult.FAIL;
 		} else {
 			player.playSound(TFSounds.TWILIGHT_SCEPTER_USE.get(), 1.0F, (level.getRandom().nextFloat() - level.getRandom().nextFloat()) * 0.2F + 1.0F);
 
@@ -40,13 +40,8 @@ public class TwilightWandItem extends Item {
 				}
 			}
 
-			return InteractionResultHolder.success(player.getItemInHand(hand));
+			return InteractionResult.SUCCESS;
 		}
-	}
-
-	@Override
-	public boolean isEnchantable(ItemStack stack) {
-		return false;
 	}
 
 	@Override

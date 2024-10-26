@@ -13,7 +13,7 @@ public class TFRemapper {
 
 	public static void addRegistryAliases() {
 		DeferredRegister<Block> blockReg = TFBlocks.BLOCKS;
-		DeferredRegister<EntityType<?>> entityReg = TFEntities.ENTITIES;
+		DeferredRegister<EntityType<?>> entityReg = TFEntities.ENTITY_TYPES;
 		DeferredRegister<Item> itemReg = TFItems.ITEMS;
 
 		remapEntryFromRegistries("yeti_trophy", "alpha_yeti_trophy", blockReg, itemReg);

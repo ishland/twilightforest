@@ -161,7 +161,7 @@ public class CarminiteGhastguard extends Ghast implements EnforcedHomePoint {
 		return false;
 	}
 
-	public static boolean ghastSpawnHandler(EntityType<? extends CarminiteGhastguard> entityType, LevelAccessor accessor, EntitySpawnReason type, BlockPos pos, RandomSource random) {
+	public static boolean checkGhastguardSpawnRules(EntityType<? extends CarminiteGhastguard> entityType, LevelAccessor accessor, EntitySpawnReason type, BlockPos pos, RandomSource random) {
 		return accessor.getDifficulty() != Difficulty.PEACEFUL && checkMobSpawnRules(entityType, accessor, type, pos, random);
 	}
 

@@ -8,10 +8,9 @@ import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
 
 public class FieryArmorModel<S extends HumanoidRenderState> extends HumanoidArmorModel<S> {
 
-	public FieryArmorModel(ModelPart part) {
-		super(part);
+	public FieryArmorModel(ModelPart root) {
+		super(root);
 	}
-
 
 	@Override
 	public void renderToBuffer(PoseStack stack, VertexConsumer builder, int light, int overlay, int color) {

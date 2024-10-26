@@ -91,7 +91,7 @@ public class CarminiteGhastling extends CarminiteGhastguard {
 	}
 
 	//This does not factor into whether the entity is a Minion or not. However, since it is spawned via MOB_SUMMONED, it will always spawn if that is the SpawnReason
-	public static boolean canSpawnHere(EntityType<CarminiteGhastling> entity, ServerLevelAccessor world, EntitySpawnReason reason, BlockPos pos, RandomSource random) {
+	public static boolean checkGhastlingSpawnRules(EntityType<CarminiteGhastling> entity, ServerLevelAccessor world, EntitySpawnReason reason, BlockPos pos, RandomSource random) {
 		return world.getDifficulty() != Difficulty.PEACEFUL && (reason == EntitySpawnReason.MOB_SUMMONED || Monster.isDarkEnoughToSpawn(world, pos, random)) && checkMobSpawnRules(entity, world, reason, pos, random);
 	}
 

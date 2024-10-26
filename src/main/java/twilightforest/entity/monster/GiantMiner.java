@@ -94,7 +94,7 @@ public class GiantMiner extends Monster {
 		return giantsNearby.size() < 5;
 	}
 
-	public static boolean canSpawn(EntityType<? extends GiantMiner> type, ServerLevelAccessor accessor, EntitySpawnReason reason, BlockPos pos, RandomSource rand) {
+	public static boolean checkGiantSpawnRules(EntityType<? extends GiantMiner> type, ServerLevelAccessor accessor, EntitySpawnReason reason, BlockPos pos, RandomSource rand) {
 		return accessor.getBlockState(pos.below()).is(BlockTagGenerator.GIANTS_SPAWNABLE_ON);
 	}
 

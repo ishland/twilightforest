@@ -13,6 +13,7 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -352,7 +353,7 @@ public class SnowQueen extends BaseTFBoss implements IBreathAttacker {
 	}
 
 	public void summonMinionAt(LivingEntity targetedEntity) {
-		IceCrystal minion = new IceCrystal(this.level());
+		IceCrystal minion = TFEntities.ICE_CRYSTAL.get().create(this.level(), EntitySpawnReason.MOB_SUMMONED);
 		minion.absMoveTo(this.getX(), this.getY(), this.getZ(), 0.0F, 0.0F);
 
 		this.level().addFreshEntity(minion);
@@ -392,8 +393,8 @@ public class SnowQueen extends BaseTFBoss implements IBreathAttacker {
 	}
 
 	@Override
-	public void doBreathAttack(Entity target) {
-		target.hurt(TFDamageTypes.getEntityDamageSource(this.level(), TFDamageTypes.CHILLING_BREATH, this, TFEntities.SNOW_QUEEN.get()), BREATH_DAMAGE);
+	public void doBreathAttack(ServerLevel level, Entity target) {
+		target.hurtServer(level, TFDamageTypes.getEntityDamageSource(this.level(), TFDamageTypes.CHILLING_BREATH, this, TFEntities.SNOW_QUEEN.get()), BREATH_DAMAGE);
 		// TODO: slow target?
 	}
 

@@ -4,9 +4,10 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -32,12 +33,12 @@ public class ZombieWandItem extends Item {
 	}
 
 	@Override
-	public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+	public InteractionResult use(Level level, Player player, InteractionHand hand) {
 
 		ItemStack stack = player.getItemInHand(hand);
 
 		if (stack.getDamageValue() == stack.getMaxDamage() && !player.getAbilities().instabuild) {
-			return InteractionResultHolder.fail(stack);
+			return InteractionResult.FAIL;
 		}
 
 		if (!level.isClientSide()) {
@@ -45,10 +46,10 @@ public class ZombieWandItem extends Item {
 			BlockHitResult result = getPlayerPOVHitResult(level, player, ClipContext.Fluid.NONE);
 
 			if (result.getType() != HitResult.Type.MISS) {
-				LoyalZombie zombie = TFEntities.LOYAL_ZOMBIE.get().create(level);
+				LoyalZombie zombie = TFEntities.LOYAL_ZOMBIE.get().create(level, EntitySpawnReason.MOB_SUMMONED);
 				zombie.moveTo(result.getLocation());
 				if (!level.noCollision(zombie, zombie.getBoundingBox())) {
-					return InteractionResultHolder.pass(stack);
+					return InteractionResult.PASS;
 				}
 				zombie.spawnAnim();
 				zombie.setTame(true, false);
@@ -67,12 +68,7 @@ public class ZombieWandItem extends Item {
 			}
 		}
 
-		return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
-	}
-
-	@Override
-	public boolean isEnchantable(ItemStack stack) {
-		return false;
+		return InteractionResult.SUCCESS;
 	}
 
 	@Override

@@ -610,6 +610,6 @@ public class EntityLootTables extends EntityLootSubProvider {
 
 	@Override
 	protected Stream<EntityType<?>> getKnownEntityTypes() {
-		return TFEntities.ENTITIES.getEntries().stream().map(DeferredHolder::value);
+		return TFEntities.ENTITY_TYPES.getEntries().stream().map(DeferredHolder::value);
 	}
 }

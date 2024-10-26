@@ -78,7 +78,7 @@ public class Penguin extends Bird {
 		return true;
 	}
 
-	public static boolean canSpawn(EntityType<? extends Penguin> type, LevelAccessor accessor, EntitySpawnReason reason, BlockPos pos, RandomSource rand) {
+	public static boolean checkPenguinSpawnRules(EntityType<? extends Penguin> type, LevelAccessor accessor, EntitySpawnReason reason, BlockPos pos, RandomSource rand) {
 		return accessor.getBlockState(pos.below()).is(BlockTagGenerator.PENGUINS_SPAWNABLE_ON);
 	}
 }

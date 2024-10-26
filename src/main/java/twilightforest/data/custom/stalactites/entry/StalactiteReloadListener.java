@@ -9,6 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.profiling.ProfilerFiller;
 import twilightforest.TwilightForestMod;
@@ -17,7 +18,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.*;
 
-public class StalactiteReloadListener extends SimpleJsonResourceReloadListener {
+public class StalactiteReloadListener extends SimpleJsonResourceReloadListener<JsonElement> {
 
 	public static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 	public static final String STALACTITE_DIRECTORY = "twilight/stalactites";
@@ -28,7 +29,7 @@ public class StalactiteReloadListener extends SimpleJsonResourceReloadListener {
 	public static final Map<String, List<Stalactite>> STALAGMITES_PER_HILL = new HashMap<>();
 
 	public StalactiteReloadListener() {
-		super(GSON, STALACTITE_DIRECTORY);
+		super(ExtraCodecs.JSON, STALACTITE_DIRECTORY);
 	}
 
 	@Override
