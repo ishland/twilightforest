@@ -102,7 +102,9 @@ public class NagaSegment extends TFPart<Naga> {
 				attackStrength *= 3;
 			}
 
-			entity.hurt(entity.level().damageSources().mobAttack(this.getParent()), attackStrength);
+			if (this.level() instanceof ServerLevel level) {
+				entity.hurtServer(level, level.damageSources().mobAttack(this.getParent()), attackStrength);
+			}
 		}
 	}
 

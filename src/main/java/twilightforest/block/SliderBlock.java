@@ -133,8 +133,7 @@ public class SliderBlock extends RotatedPillarBlock implements SimpleWaterlogged
 
 	@Override
 	public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
-		entity.hurt(TFDamageTypes.getDamageSource(level, TFDamageTypes.SLIDER), BLOCK_DAMAGE);
-		if (entity instanceof LivingEntity living) {
+		if (level instanceof ServerLevel serverLevel && entity instanceof LivingEntity living && entity.hurtServer(serverLevel, serverLevel.damageSources().source(TFDamageTypes.SLIDER), BLOCK_DAMAGE)) {
 			double kx = (pos.getX() + 0.5 - entity.getX()) * 2.0;
 			double kz = (pos.getZ() + 0.5 - entity.getZ()) * 2.0;
 

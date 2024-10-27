@@ -62,7 +62,7 @@ public class CubeOfAnnihilation extends ThrowableProjectile {
 	@Override
 	protected void onHitEntity(EntityHitResult result) {
 		super.onHitEntity(result);
-		if (result.getEntity() instanceof LivingEntity && result.getEntity().hurtServer((ServerLevel) this.level(), this.getDamageSource(), 10)) {
+		if (this.level() instanceof ServerLevel level && result.getEntity() instanceof LivingEntity && result.getEntity().hurtServer(level, this.getDamageSource(), 10)) {
 			this.tickCount += 60;
 		}
 	}
@@ -86,8 +86,8 @@ public class CubeOfAnnihilation extends ThrowableProjectile {
 
 	private DamageSource getDamageSource() {
 		LivingEntity thrower = (LivingEntity) this.getOwner();
-		if (thrower instanceof Player) {
-			return this.damageSources().playerAttack((Player) thrower);
+		if (thrower instanceof Player player) {
+			return this.damageSources().playerAttack(player);
 		} else if (thrower != null) {
 			return this.damageSources().mobAttack(thrower);
 		} else {

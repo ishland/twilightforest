@@ -2,6 +2,7 @@ package twilightforest.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
@@ -78,7 +79,9 @@ public class ThornsBlock extends ConnectableRotatedPillarBlock implements Simple
 
 	@Override
 	public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
-		entity.hurt(TFDamageTypes.getDamageSource(level, TFDamageTypes.THORNS), THORN_DAMAGE);
+		if (level instanceof ServerLevel serverLevel) {
+			entity.hurtServer(serverLevel, serverLevel.damageSources().source(TFDamageTypes.THORNS), THORN_DAMAGE);
+		}
 	}
 
 	@Override

@@ -372,7 +372,7 @@ public class Naga extends BaseTFBoss {
 					player.getUseItem().hurtAndBreak(5, player, LivingEntity.getSlotForHand(player.getUsedItemHand()));
 					PacketDistributor.sendToPlayer(player, new MovePlayerPacket(motion.x() * 3.0D, motion.y() + 0.75D, motion.z() * 3.0D));
 				}
-				this.hurt(this.damageSources().generic(), 2.0F);
+				this.hurtServer(level, this.damageSources().generic(), 2.0F);
 				this.level().playSound(null, toAttack.blockPosition(), SoundEvents.SHIELD_BLOCK, SoundSource.PLAYERS, 1.0F, 0.8F + this.level().getRandom().nextFloat() * 0.4F);
 				this.getMovementPattern().doDaze();
 				return false;
@@ -383,7 +383,7 @@ public class Naga extends BaseTFBoss {
 					player.stopUsingItem();
 					this.level().broadcastEntityEvent(player, (byte) 30);
 				}
-				living.hurt(this.damageSources().mobAttack(this), 4.0F);
+				living.hurtServer(level, this.damageSources().mobAttack(this), 4.0F);
 				this.playSound(SoundEvents.FOX_BITE, 2.0F, 0.5F);
 				this.getMovementPattern().doCircle();
 				return false;

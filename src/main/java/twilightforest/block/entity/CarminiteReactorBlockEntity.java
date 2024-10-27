@@ -134,7 +134,7 @@ public class CarminiteReactorBlockEntity extends BlockEntity {
 				if (te.counter >= 350) {
 					// deactivate & explode
 					level.destroyBlock(pos, false);
-					level.explode(null, TFDamageTypes.getDamageSource(level, TFDamageTypes.REACTOR), null, pos.getX(), pos.getY(), pos.getZ(), 4.0F, true, Level.ExplosionInteraction.BLOCK);
+					level.explode(null, level.damageSources().source(TFDamageTypes.REACTOR), null, pos.getX(), pos.getY(), pos.getZ(), 4.0F, true, Level.ExplosionInteraction.BLOCK);
 
 					// spawn mini ghasts near the secondary & tertiary points
 					for (int i = 0; i < 3; i++) {

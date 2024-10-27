@@ -59,8 +59,8 @@ public class IceSnowball extends TFThrowable implements ItemSupplier {
 	protected void onHitEntity(EntityHitResult result) {
 		super.onHitEntity(result);
 		Entity target = result.getEntity();
-		if (!this.level().isClientSide() && target instanceof LivingEntity)
-			target.hurt(TFDamageTypes.getIndirectEntityDamageSource(this.level(), TFDamageTypes.SNOWBALL_FIGHT, this, this.getOwner()), DAMAGE);
+		if (this.level() instanceof ServerLevel level && target instanceof LivingEntity)
+			target.hurtServer(level, this.damageSources().source(TFDamageTypes.SNOWBALL_FIGHT, this, this.getOwner()), DAMAGE);
 	}
 
 	@Override

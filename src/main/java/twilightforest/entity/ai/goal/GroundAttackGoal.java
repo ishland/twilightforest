@@ -88,7 +88,7 @@ public class GroundAttackGoal extends Goal {
 			for (Entity entity : hit) {
 				if (entity.onGround()) {
 					entity.push(0.0D, 0.23D, 0.0D);
-					entity.hurt(TFDamageTypes.getEntityDamageSource(this.attacker.level(), TFDamageTypes.SLAM, this.attacker), (float) (this.attacker.getAttributeValue(Attributes.ATTACK_DAMAGE) * 0.5F));
+					entity.hurtServer(getServerLevel(this.attacker), this.attacker.level().damageSources().source(TFDamageTypes.SLAM, this.attacker), (float) (this.attacker.getAttributeValue(Attributes.ATTACK_DAMAGE) * 0.5F));
 				}
 			}
 		}

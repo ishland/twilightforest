@@ -62,10 +62,6 @@ public class TFDamageTypes {
 		return ResourceKey.create(Registries.DAMAGE_TYPE, TwilightForestMod.prefix(name));
 	}
 
-	public static DamageSource getDamageSource(Level level, ResourceKey<DamageType> type, EntityType<?>... toIgnore) {
-		return getEntityDamageSource(level, type, null, toIgnore);
-	}
-
 	public static DamageSource getEntityDamageSource(Level level, ResourceKey<DamageType> type, @Nullable Entity attacker, EntityType<?>... toIgnore) {
 		return getIndirectEntityDamageSource(level, type, attacker, attacker, toIgnore);
 	}

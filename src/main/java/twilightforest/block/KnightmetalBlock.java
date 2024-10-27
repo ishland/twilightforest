@@ -5,6 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
@@ -78,7 +79,9 @@ public class KnightmetalBlock extends Block implements SimpleWaterloggedBlock {
 
 	@Override
 	public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
-		entity.hurt(TFDamageTypes.getDamageSource(level, TFDamageTypes.KNIGHTMETAL), BLOCK_DAMAGE);
+		if (level instanceof ServerLevel serverLevel) {
+			entity.hurtServer(serverLevel, serverLevel.damageSources().source(TFDamageTypes.KNIGHTMETAL), BLOCK_DAMAGE);
+		}
 	}
 
 	@Override

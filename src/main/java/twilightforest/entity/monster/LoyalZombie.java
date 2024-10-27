@@ -20,6 +20,7 @@ import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
+import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Ghast;
 import net.minecraft.world.entity.monster.Monster;
@@ -78,16 +79,15 @@ public class LoyalZombie extends TamableAnimal {
 	}
 
 	@Override
-	public void aiStep() {
+	protected void customServerAiStep(ServerLevel level) {
 		// once our damage boost effect wears out, start to decay
 		// the effect here is that we die shortly after our 60 second lifespan
-		if (!this.level().isClientSide() && this.getEffect(MobEffects.DAMAGE_BOOST) == null) {
+		if (this.getEffect(MobEffects.DAMAGE_BOOST) == null) {
 			if (this.tickCount % 20 == 0) {
-				this.hurt(TFDamageTypes.getDamageSource(this.level(), TFDamageTypes.EXPIRED), 2);
+				this.hurtServer(level, this.damageSources().source(TFDamageTypes.EXPIRED), 2);
 			}
 		}
-
-		super.aiStep();
+		super.customServerAiStep(level);
 	}
 
 	@Override
@@ -110,18 +110,18 @@ public class LoyalZombie extends TamableAnimal {
 	 */
 	@Override
 	public boolean wantsToAttack(LivingEntity target, LivingEntity owner) {
-		if (!(target instanceof Creeper) && !(target instanceof Ghast)) {
-			if (target instanceof LoyalZombie zombie) {
-				return !zombie.isTame() || zombie.getOwner() != owner;
-			} else if (target instanceof Player pTarget && owner instanceof Player pOwner && !pOwner.canHarmPlayer(pTarget)) {
-				return false;
-			} else if (target instanceof AbstractHorse horse && horse.isTamed()) {
-				return false;
-			} else {
-				return !(target instanceof TamableAnimal animal) || !animal.isTame();
-			}
-		} else {
+		if (target instanceof Creeper || target instanceof Ghast || target instanceof ArmorStand) {
 			return false;
+		} else if (target instanceof LoyalZombie zombie) {
+			return !zombie.isTame() || zombie.getOwner() != owner;
+		} else {
+			return switch (target) {
+				case Player player when owner instanceof Player player1 && !player1.canHarmPlayer(player) -> false;
+				case AbstractHorse abstracthorse when abstracthorse.isTamed() -> false;
+				case TamableAnimal tamableanimal when tamableanimal.isTame() -> false;
+				default -> true;
+			};
+
 		}
 	}
 

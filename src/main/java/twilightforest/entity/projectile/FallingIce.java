@@ -199,8 +199,8 @@ public class FallingIce extends Entity {
 		if (realDist >= 0) {
 			float dmg = (float) Math.min(Mth.floor((float) realDist * this.damagePerDifficulty[this.level().getDifficulty().getId()]), this.fallDamageMax);
 			this.level().getEntities(this, this.getBoundingBox().inflate(1.0F, 0.0F, 1.0F), EntitySelector.NO_SPECTATORS).forEach((entity) -> {
-				if (!(entity instanceof AlphaYeti)) {
-					entity.hurt(TFDamageTypes.getDamageSource(this.level(), TFDamageTypes.FALLING_ICE), dmg);
+				if (!(entity instanceof AlphaYeti) && this.level() instanceof ServerLevel level) {
+					entity.hurtServer(level, this.damageSources().source(TFDamageTypes.FALLING_ICE), dmg);
 				}
 			});
 		}

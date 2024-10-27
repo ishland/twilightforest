@@ -315,7 +315,7 @@ public class UrGhast extends BaseTFBoss {
 			}
 
 			if (this.tickCount % 10 == 0) {
-				this.doTantrumDamageEffects();
+				this.doTantrumDamageEffects(level);
 			}
 		}
 	}
@@ -358,13 +358,13 @@ public class UrGhast extends BaseTFBoss {
 			.collect(Collectors.toList());
 	}
 
-	private void doTantrumDamageEffects() {
+	private void doTantrumDamageEffects(ServerLevel level) {
 		// harm player below
 		AABB below = this.getBoundingBox().move(0.0D, -16.0D, 0.0D).inflate(0.0D, 16.0D, 0.0D);
 
 		for (Player player : this.level().getEntitiesOfClass(Player.class, below)) {
 			if (this.level().canSeeSkyFromBelowWater(player.blockPosition())) {
-				player.hurt(TFDamageTypes.getEntityDamageSource(this.level(), TFDamageTypes.GHAST_TEAR, this, TFEntities.UR_GHAST.get()), 3);
+				player.hurtServer(level, TFDamageTypes.getEntityDamageSource(this.level(), TFDamageTypes.GHAST_TEAR, this, TFEntities.UR_GHAST.get()), 3);
 			}
 		}
 

@@ -94,18 +94,22 @@ public class LichBolt extends TFThrowable {
 	}
 
 	@Override
+	protected boolean canHitEntity(Entity target) {
+		if (target instanceof LichBolt || target instanceof LichBomb || (target instanceof Lich lich && lich.isShadowClone())) {
+			return false;
+		}
+		return super.canHitEntity(target);
+	}
+
+	@Override
 	protected void onHitEntity(EntityHitResult result) {
 		Entity hit = result.getEntity();
-		if (hit instanceof LichBolt || hit instanceof LichBomb || (hit instanceof Lich lich && lich.isShadowClone())) {
-			return;
-		}
 
-		if (!this.level().isClientSide()) {
-			if (hit instanceof LivingEntity) {
-				hit.hurt(TFDamageTypes.getDamageSource(this.level(), TFDamageTypes.LICH_BOLT, TFEntities.LICH.get()), 6);
+		if (this.level() instanceof ServerLevel level) {
+			if (hit instanceof LivingEntity && hit.hurtServer(level, TFDamageTypes.getIndirectEntityDamageSource(level, TFDamageTypes.LICH_BOLT, this, this.getOwner(), TFEntities.LICH.get()), 6)) {
+				this.level().broadcastEntityEvent(this, (byte) 3);
+				this.discard();
 			}
-			this.level().broadcastEntityEvent(this, (byte) 3);
-			this.discard();
 		}
 	}
 }
