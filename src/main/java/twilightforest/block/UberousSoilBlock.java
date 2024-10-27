@@ -62,7 +62,7 @@ public class UberousSoilBlock extends Block implements BonemealableBlock {
 
 	@Override
 	public void onPlace(BlockState state, Level level, BlockPos pos, BlockState newState, boolean moving) {
-		if (!newState.is(state.getBlock()) && !level.getBlockState(pos.above()).isAir()) this.neighborChanged(state, level, pos, this, pos.above(), moving);
+		if (!newState.is(state.getBlock()) && !level.getBlockState(pos.above()).isAir()) this.neighborChanged(state, level, pos, this, Orientation.of(Direction.UP, Direction.UP, Orientation.SideBias.LEFT), moving);
 	}
 
 	@Override

@@ -81,21 +81,6 @@ public class TFItemStackUtils {
 		return result;
 	}
 
-	public static boolean hasToolMaterial(ItemStack stack, Tier tier) {
-
-		Item item = stack.getItem();
-
-		// see TileEntityFurnace.getItemBurnTime
-		if (item instanceof TieredItem tieredItem && tier.equals(tieredItem.getTier())) {
-			return true;
-		}
-		if (item instanceof SwordItem sword && tier.equals(sword.getTier())) {
-			return true;
-		}
-		return item instanceof HoeItem hoe && tier.equals(hoe.getTier());
-	}
-
-
 	public static boolean hasInfoTag(ItemStack stack, String key) {
 		CustomData customData = stack.get(DataComponents.CUSTOM_DATA);
 		return customData != null && customData.contains(key);

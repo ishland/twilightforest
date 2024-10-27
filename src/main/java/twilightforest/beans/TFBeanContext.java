@@ -159,7 +159,7 @@ public final class TFBeanContext {
 		final long ms = System.currentTimeMillis();
 		logger.debug("Processing registry objects");
 		AtomicReference<Object> curInj = new AtomicReference<>();
-		BuiltInRegistries.REGISTRY.holders().flatMap(r -> r.value().holders()).forEach(holder -> {
+		BuiltInRegistries.REGISTRY.listElements().flatMap(r -> r.value().listElements()).forEach(holder -> {
 			try {
 				Object o = holder.value();
 				if (classOrSuperHasAnnotation(o.getClass(), Configurable.class)) {

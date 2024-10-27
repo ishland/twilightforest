@@ -1094,7 +1094,7 @@ public class DarkTowerMainComponent extends DarkTowerWingComponent {
 			// grow a tree
 
 			for (int i = 0; i < 100; i++) {
-				if (world.registryAccess().registryOrThrow(Registries.CONFIGURED_FEATURE).get(treeGen).place(world, generator, world.getRandom(), new BlockPos(dx, dy, dz))) {
+				if (world.registryAccess().lookupOrThrow(Registries.CONFIGURED_FEATURE).getValue(treeGen).place(world, generator, world.getRandom(), new BlockPos(dx, dy, dz))) {
 					break;
 				}
 			}
@@ -1103,7 +1103,7 @@ public class DarkTowerMainComponent extends DarkTowerWingComponent {
 
 	private void placeRandomPlant(WorldGenLevel world, RandomSource decoRNG, int x, int y, int z, Rotation rotation, BoundingBox sbb) {
 		Optional<Block> optional = BuiltInRegistries.BLOCK
-			.getTag(BlockTagGenerator.DARK_TOWER_ALLOWED_POTS)
+			.get(BlockTagGenerator.DARK_TOWER_ALLOWED_POTS)
 			.flatMap(tag -> tag.getRandomElement(decoRNG))
 			.map(Holder::value);
 		setBlockStateRotated(world, decoRNG.nextInt(10) != 0 && optional.isPresent() ? optional.get().defaultBlockState() : Blocks.FLOWER_POT.defaultBlockState(), x, y, z, rotation, sbb);

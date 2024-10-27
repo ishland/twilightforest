@@ -37,7 +37,7 @@ public abstract class CanopyMushroomFeature extends AbstractHugeMushroomFeature 
 	protected void placeTrunk(LevelAccessor levelAccessor, RandomSource random, BlockPos pos, HugeMushroomFeatureConfiguration featureConfiguration, int height, BlockPos.MutableBlockPos mutableBlockPos) {
 		for (int i = 0; i < height; ++i) {
 			mutableBlockPos.set(pos).move(Direction.UP, i);
-			if (!levelAccessor.getBlockState(mutableBlockPos).isSolidRender(levelAccessor, mutableBlockPos)) {
+			if (!levelAccessor.getBlockState(mutableBlockPos).isSolidRender()) {
 				this.setBlock(levelAccessor, mutableBlockPos, featureConfiguration.stemProvider.getState(random, pos));
 
 				if (this.bugsLeft > 0 && i > height / 2 && random.nextInt(10) == 9) addFirefly(levelAccessor, mutableBlockPos, random);
@@ -62,7 +62,7 @@ public abstract class CanopyMushroomFeature extends AbstractHugeMushroomFeature 
 		if (direction.getAxis() != Direction.Axis.Y) {
 			BlockPos.MutableBlockPos bugPos = new BlockPos.MutableBlockPos();
 			bugPos.set(pos).move(direction);
-			if (!levelAccessor.getBlockState(bugPos).isSolidRender(levelAccessor, bugPos)) {
+			if (!levelAccessor.getBlockState(bugPos).isSolidRender()) {
 				BlockState bugState = TFBlocks.FIREFLY.get().defaultBlockState().setValue(DirectionalBlock.FACING, direction);
 				this.setBlock(levelAccessor, bugPos, bugState);
 				this.bugsLeft--;
@@ -120,7 +120,7 @@ public abstract class CanopyMushroomFeature extends AbstractHugeMushroomFeature 
 			for (int z = -foliageRadius; z <= foliageRadius; ++z) {
 				if (!FeatureLogic.isCornerInSquare(x, z, foliageRadius)) {
 					mutableBlockPos.setWithOffset(pos, x, height, z);
-					if (!levelAccessor.getBlockState(mutableBlockPos).isSolidRender(levelAccessor, mutableBlockPos)) {
+					if (!levelAccessor.getBlockState(mutableBlockPos).isSolidRender()) {
 						BlockState blockState = featureConfiguration.capProvider.getState(random, pos);
 						blockState = FeatureLogic.getHorizontalMushroomBlockState(blockState, x, z, foliageRadius);
 						this.setBlock(levelAccessor, mutableBlockPos, blockState);

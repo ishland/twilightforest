@@ -3,6 +3,7 @@ package twilightforest.util.landmarks;
 import net.minecraft.core.*;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.ChunkPos;
@@ -35,9 +36,9 @@ public final class LandmarkUtil {
 	}
 
 	public static Optional<StructureStart> locateNearestMatchingLandmark(LevelAccessor level, TagKey<Structure> matching, int chunkX, int chunkZ) {
-		var structureRegistry = level.registryAccess().registry(Registries.STRUCTURE);
+		var structureRegistry = level.registryAccess().lookup(Registries.STRUCTURE);
 		if (structureRegistry.isEmpty()) return Optional.empty();
-		var holders = structureRegistry.get().getTag(matching);
+		var holders = structureRegistry.get().get(matching);
 		if (holders.isEmpty()) return Optional.empty();
 
 		return locateNearestMatchingLandmark(level, holders.get(), chunkX, chunkZ);
@@ -88,9 +89,9 @@ public final class LandmarkUtil {
 
 	@Nullable
 	public static Structure structureForKey(LevelReader level, ResourceKey<Structure> structureKey) {
-		Optional<Registry<Structure>> registry = level.registryAccess().registry(Registries.STRUCTURE);
+		Optional<Registry<Structure>> registry = level.registryAccess().lookup(Registries.STRUCTURE);
 
-		return registry.isPresent() ? registry.get().get(structureKey) : null;
+		return registry.isPresent() ? registry.get().getValue(structureKey) : null;
 	}
 
 	public static Optional<StructureStart> locateNearestLandmarkStart(LevelAccessor level, ResourceKey<Structure> structureKey, BlockPos pos) {
@@ -123,8 +124,8 @@ public final class LandmarkUtil {
 		return Optional.empty();
 	}
 
-	public static boolean isProgressionEnforced(Level world) {
-		return world.getGameRules().getBoolean(TwilightForestMod.ENFORCED_PROGRESSION_RULE);
+	public static boolean isProgressionEnforced(ServerLevel level) {
+		return level.getGameRules().getBoolean(TwilightForestMod.ENFORCED_PROGRESSION_RULE);
 	}
 
 	private LandmarkUtil() {

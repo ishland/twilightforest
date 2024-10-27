@@ -317,7 +317,7 @@ public class TFAdvancementGenerator implements AdvancementProvider.AdvancementGe
 				Component.translatable("advancement.twilightforest.uncraft_uncrafting_table"),
 				Component.translatable("advancement.twilightforest.uncraft_uncrafting_table.desc"),
 				null, AdvancementType.TASK, true, true, true)
-			.addCriterion("uncraft_table", UncraftItemTrigger.TriggerInstance.uncraftedItem(TFBlocks.UNCRAFTING_TABLE))
+			.addCriterion("uncraft_table", UncraftItemTrigger.TriggerInstance.uncraftedItem(registries.lookupOrThrow(Registries.ITEM), TFBlocks.UNCRAFTING_TABLE))
 			.save(consumer, "twilightforest:uncraft_uncrafting_table");
 
 		AdvancementHolder focus = Advancement.Builder.advancement().parent(silence).display(

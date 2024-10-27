@@ -32,7 +32,6 @@ public class FinalCastleMainComponent extends TFStructureComponentOld {
 		super(TFStructurePieceTypes.TFFCMain.get(), nbt);
 	}
 
-	@SuppressWarnings("this-escape")
 	public FinalCastleMainComponent(int i, int x, int y, int z) {
 		super(TFStructurePieceTypes.TFFCMain.get(), i, x, y, z);
 		this.setOrientation(Direction.SOUTH);

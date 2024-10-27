@@ -704,7 +704,7 @@ public class BlockLootTables extends BlockLootSubProvider {
 		return createSelfDropDispatchTable(block, HAS_SHEARS.or(this.hasSilkTouch()), builder);
 	}
 
-	protected static LootTable.Builder createShearsOnlyDrop(ItemLike p_124287_) {
+	protected LootTable.Builder createShearsOnlyDrop(ItemLike p_124287_) {
 		return LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).when(HAS_SHEARS).add(LootItem.lootTableItem(p_124287_)));
 	}
 

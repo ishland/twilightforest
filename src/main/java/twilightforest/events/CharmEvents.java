@@ -7,6 +7,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -31,7 +32,6 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import twilightforest.TwilightForestMod;
 import twilightforest.block.KeepsakeCasketBlock;
 import twilightforest.block.entity.KeepsakeCasketBlockEntity;
-import twilightforest.compat.curios.CuriosCompat;
 import twilightforest.config.TFConfig;
 import twilightforest.data.tags.ItemTagGenerator;
 import twilightforest.enums.BlockLoggingEnum;
@@ -71,10 +71,10 @@ public class CharmEvents {
 		LivingEntity living = event.getEntity();
 
 		//ensure our player is real and in survival before attempting anything
-		if (event.isCanceled() || living.level().isClientSide() || !(living instanceof Player player) || living instanceof FakePlayer ||
+		if (event.isCanceled() || !(living.level() instanceof ServerLevel level) || !(living instanceof Player player) || living instanceof FakePlayer ||
 				player.isCreative() || player.isSpectator()) return;
 
-		if (!living.level().getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY)) {
+		if (!level.getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY)) {
 			// Did the player recover? No? Let's give them their stuff based on the keeping charms
 			charmOfKeeping(player);
 
@@ -310,9 +310,9 @@ public class CharmEvents {
 	}
 
 	private static boolean hasCharmCurio(Item item, Player player) {
-		if (ModList.get().isLoaded("curios")) {
-			return CuriosCompat.findAndConsumeCurio(item, player);
-		}
+//		if (ModList.get().isLoaded("curios")) {
+//			return CuriosCompat.findAndConsumeCurio(item, player);
+//		}
 
 		return false;
 	}

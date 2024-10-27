@@ -58,7 +58,7 @@ public class TFEnchantments {
 				EnchantmentTarget.ATTACKER,
 				AllOf.entityEffects(
 					new Ignite(LevelBasedValue.perLevel(2.0F, 3.0F)),
-					new DamageItem(LevelBasedValue.constant(2.0F))),
+					new ChangeItemDamage(LevelBasedValue.constant(2.0F))),
 				LootItemRandomChanceCondition.randomChance(EnchantmentLevelProvider.forEnchantmentLevel(LevelBasedValue.perLevel(0.15F)))));
 
 		register(context, CHILL_AURA, new Enchantment.Builder(Enchantment.definition(
@@ -76,7 +76,7 @@ public class TFEnchantments {
 				EnchantmentTarget.ATTACKER,
 				AllOf.entityEffects(
 					new ApplyFrostedEffect(LevelBasedValue.constant(200), LevelBasedValue.perLevel(0.0F, 1.0F)),
-					new DamageItem(LevelBasedValue.constant(2.0F))),
+					new ChangeItemDamage(LevelBasedValue.constant(2.0F))),
 				LootItemRandomChanceCondition.randomChance(EnchantmentLevelProvider.forEnchantmentLevel(LevelBasedValue.perLevel(0.15F)))));
 
 		register(context, DESTRUCTION, new Enchantment.Builder(Enchantment.definition(

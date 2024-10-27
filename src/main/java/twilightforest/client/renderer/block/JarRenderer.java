@@ -157,7 +157,7 @@ public class JarRenderer<T extends JarBlockEntity> implements BlockEntityRendere
 			blockRenderer.getModelRenderer()
 				.renderModel(
 					stack.last(),
-					buffer.getBuffer(RenderTypeHelper.getEntityRenderType(rt, false)),
+					buffer.getBuffer(RenderTypeHelper.getEntityRenderType(rt)),
 					blockState,
 					bakedModel,
 					r,

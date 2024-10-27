@@ -153,6 +153,7 @@ public class ForceFieldModelBuilder<T extends ModelBuilder<T>> extends CustomLoa
 		private Vector3f from = new Vector3f();
 		private Vector3f to = new Vector3f(16, 16, 16);
 		private final Map<Direction, ForceFieldElementBuilder.FaceBuilder> faces = new LinkedHashMap<>();
+		@Nullable
 		private ForceFieldElementBuilder.RotationBuilder rotation;
 		private boolean shade = true;
 		private int color = 0xFFFFFFFF;
@@ -272,7 +273,7 @@ public class ForceFieldModelBuilder<T extends ModelBuilder<T>> extends CustomLoa
 				.collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().build(), (k1, k2) -> {
 					throw new IllegalArgumentException();
 				}, LinkedHashMap::new));
-			return new BlockElement(from, to, faces, rotation == null ? null : rotation.build(), shade, new ExtraFaceData(this.color, this.blockLight, this.skyLight, this.hasAmbientOcclusion));
+			return new BlockElement(from, to, faces, this.rotation == null ? null : this.rotation.build(), this.shade, this.skyLight, new ExtraFaceData(this.color, this.blockLight, this.skyLight, this.hasAmbientOcclusion));
 		}
 
 		public ForceFieldModelBuilder<T> end() {
@@ -280,6 +281,7 @@ public class ForceFieldModelBuilder<T extends ModelBuilder<T>> extends CustomLoa
 		}
 
 		public class FaceBuilder {
+			@Nullable
 			private Direction cullface;
 			private int tintindex = -1;
 			private String texture = MissingTextureAtlasSprite.getLocation().toString();

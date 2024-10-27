@@ -10,6 +10,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.storage.loot.*;
+import net.minecraft.world.level.storage.loot.entries.EmptyLootItem;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.entries.NestedLootTable;
 import net.minecraft.world.level.storage.loot.functions.*;
@@ -105,7 +106,7 @@ public class EntityLootTables extends EntityLootSubProvider {
 			LootTable.lootTable()
 				.withPool(LootPool.lootPool()
 					.setRolls(ConstantValue.exactly(1))
-					.add(NestedLootTable.lootTableReference(EntityType.GHAST.getDefaultLootTable()))
+					.add(NestedLootTable.lootTableReference(EntityType.GHAST.getDefaultLootTable().orElseThrow()))
 					.when(IsMinionCondition.builder(true))));
 
 		/*registerLootTable(TFEntities.BOGGARD.get(),
@@ -379,7 +380,7 @@ public class EntityLootTables extends EntityLootSubProvider {
 			LootTable.lootTable()
 				.withPool(LootPool.lootPool()
 					.setRolls(ConstantValue.exactly(1))
-					.add(NestedLootTable.lootTableReference(BuiltInLootTables.EMPTY))
+					.add(EmptyLootItem.emptyItem())
 					.add(LootItem.lootTableItem(Items.PAPER))));
 
 		add(TFEntities.DEATH_TOME.get(), TFLootTables.DEATH_TOME_BOOKS,
@@ -601,11 +602,11 @@ public class EntityLootTables extends EntityLootSubProvider {
 		return LootTable.lootTable()
 			.withPool(LootPool.lootPool()
 				.setRolls(ConstantValue.exactly(1))
-				.add(NestedLootTable.lootTableReference(parent.getDefaultLootTable())));
+				.add(NestedLootTable.lootTableReference(parent.getDefaultLootTable().orElseThrow())));
 	}
 
 	private static LootTable.Builder sheepLootTableBuilderWithDrop(ItemLike wool) {
-		return LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1)).add(LootItem.lootTableItem(wool))).withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1)).add(NestedLootTable.lootTableReference(EntityType.SHEEP.getDefaultLootTable())));
+		return LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1)).add(LootItem.lootTableItem(wool))).withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1)).add(NestedLootTable.lootTableReference(EntityType.SHEEP.getDefaultLootTable().orElseThrow())));
 	}
 
 	@Override

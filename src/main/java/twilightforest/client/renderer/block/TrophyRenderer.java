@@ -34,14 +34,14 @@ public class TrophyRenderer implements BlockEntityRenderer<TrophyBlockEntity> {
 	public static Map<BossVariant, TrophyBlockModel> createTrophyRenderers(EntityModelSet set) {
 		ImmutableMap.Builder<BossVariant, TrophyBlockModel> trophyList = ImmutableMap.builder();
 		trophyList.put(BossVariant.NAGA, new NagaModel<>(set.bakeLayer(TFModelLayers.NAGA_TROPHY)));
-		trophyList.put(BossVariant.LICH, new LichModel<>(set.bakeLayer(TFModelLayers.LICH_TROPHY)));
-		trophyList.put(BossVariant.MINOSHROOM, new MinoshroomModel<>(set.bakeLayer(TFModelLayers.MINOSHROOM_TROPHY)));
-		trophyList.put(BossVariant.HYDRA, new HydraHeadModel<>(set.bakeLayer(TFModelLayers.HYDRA_TROPHY)));
+		trophyList.put(BossVariant.LICH, new LichModel(set.bakeLayer(TFModelLayers.LICH_TROPHY)));
+		trophyList.put(BossVariant.MINOSHROOM, new MinoshroomModel(set.bakeLayer(TFModelLayers.MINOSHROOM_TROPHY)));
+		trophyList.put(BossVariant.HYDRA, new HydraHeadModel(set.bakeLayer(TFModelLayers.HYDRA_TROPHY)));
 		trophyList.put(BossVariant.KNIGHT_PHANTOM, new KnightPhantomModel(set.bakeLayer(TFModelLayers.KNIGHT_PHANTOM_TROPHY)));
 		trophyList.put(BossVariant.UR_GHAST, new UrGhastModel(set.bakeLayer(TFModelLayers.UR_GHAST_TROPHY)));
 		trophyList.put(BossVariant.ALPHA_YETI, new AlphaYetiModel(set.bakeLayer(TFModelLayers.ALPHA_YETI_TROPHY)));
 		trophyList.put(BossVariant.SNOW_QUEEN, new SnowQueenModel(set.bakeLayer(TFModelLayers.SNOW_QUEEN_TROPHY)));
-		trophyList.put(BossVariant.QUEST_RAM, new QuestRamModel<>(set.bakeLayer(TFModelLayers.QUEST_RAM_TROPHY)));
+		trophyList.put(BossVariant.QUEST_RAM, new QuestRamModel(set.bakeLayer(TFModelLayers.QUEST_RAM_TROPHY)));
 		return trophyList.build();
 	}
 

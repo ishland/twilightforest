@@ -36,7 +36,6 @@ public class FinalCastleBossGazeboComponent extends TFStructureComponentOld {
 		super(TFStructurePieceTypes.TFFCBoGaz.get(), nbt);
 	}
 
-	@SuppressWarnings("this-escape")
 	public FinalCastleBossGazeboComponent(int i, TFStructureComponentOld keep, int x, int y, int z) {
 		super(TFStructurePieceTypes.TFFCBoGaz.get(), i, x, y, z);
 		this.spawnListIndex = -1; // no monsters

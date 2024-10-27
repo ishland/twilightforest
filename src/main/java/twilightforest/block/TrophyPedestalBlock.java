@@ -3,6 +3,7 @@ package twilightforest.block;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
@@ -87,9 +88,9 @@ public class TrophyPedestalBlock extends Block implements SimpleWaterloggedBlock
 	@Override
 	protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, @Nullable Orientation orientation, boolean isMoving) {
 		level.updateNeighbourForOutputSignal(pos, this);
-		if (level.isClientSide() || state.getValue(ACTIVE) || !isTrophyOnTop(level, pos)) return;
+		if (!(level instanceof ServerLevel serverLevel) || state.getValue(ACTIVE) || !isTrophyOnTop(level, pos)) return;
 
-		if (LandmarkUtil.isProgressionEnforced(level)) {
+		if (LandmarkUtil.isProgressionEnforced(serverLevel)) {
 			if (this.areNearbyPlayersEligible(level, pos)) {
 				this.doPedestalEffect(level, pos, state);
 			}

@@ -52,7 +52,7 @@ public class LichRenderer extends HumanoidMobRenderer<Lich, LichRenderState, Lic
 			if (state.deathTime > Lich.DEATH_ANIMATION_POINT_A) {
 				stack.translate(0.0D, -1.8D * Math.pow(Math.min(((state.deathTime - Lich.DEATH_ANIMATION_POINT_A) + state.partialTick) * 0.05D, 1.0D), 3.0D), 0.0D);
 			} else {
-				float time = (float) state.deathTime + state.partialTick;
+				float time = state.deathTime + state.partialTick;
 				stack.translate(Math.sin(time * time) * 0.01D, 0.0D, Math.cos(time * time) * 0.01D);
 			}
 			super.render(state, stack, buffer, packedLight);

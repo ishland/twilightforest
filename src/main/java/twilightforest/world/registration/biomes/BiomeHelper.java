@@ -239,7 +239,6 @@ public abstract class BiomeHelper {
 
 		biome.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, isLake ? AquaticPlacements.SEAGRASS_DEEP : AquaticPlacements.SEAGRASS_NORMAL);
 
-		BiomeDefaultFeatures.addDefaultSeagrass(biome);
 		BiomeDefaultFeatures.addSurfaceFreezing(biome);
 
 		addLegacyOres(biome);
@@ -434,7 +433,7 @@ public abstract class BiomeHelper {
 
 	//Caves!
 	public static void addCaves(BiomeGenerationSettings.Builder biome) {
-		biome.addCarver(GenerationStep.Carving.AIR, TFCaveCarvers.TFCAVES_CONFIGURED);
+		biome.addCarver(TFCaveCarvers.TFCAVES_CONFIGURED);
 		biome.addFeature(GenerationStep.Decoration.UNDERGROUND_DECORATION, TFPlacedFeatures.PLACED_PLANT_ROOTS);
 		biome.addFeature(GenerationStep.Decoration.UNDERGROUND_DECORATION, TFPlacedFeatures.PLACED_TORCH_BERRIES);
 		//biome.addFeature(GenerationStep.Decoration.UNDERGROUND_DECORATION, TFPlacedFeatures.PLACED_VANILLA_ROOTS);
@@ -442,7 +441,7 @@ public abstract class BiomeHelper {
 	}
 
 	public static void addHighlandCaves(BiomeGenerationSettings.Builder biome) {
-		biome.addCarver(GenerationStep.Carving.AIR, TFCaveCarvers.HIGHLANDCAVES_CONFIGURED);
+		biome.addCarver(TFCaveCarvers.HIGHLANDCAVES_CONFIGURED);
 		biome.addFeature(GenerationStep.Decoration.UNDERGROUND_DECORATION, TFPlacedFeatures.PLACED_TROLL_ROOTS);
 		biome.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, TFPlacedFeatures.PLACED_TROLL_MUSHGLOOMS);
 		addLegacyOres(biome);

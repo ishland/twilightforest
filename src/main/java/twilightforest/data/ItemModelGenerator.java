@@ -17,6 +17,7 @@ import net.neoforged.neoforge.client.model.generators.loaders.ItemLayerModelBuil
 import net.neoforged.neoforge.client.model.generators.loaders.SeparateTransformsModelBuilder;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredItem;
 import twilightforest.TwilightForestMod;
 import twilightforest.beans.Autowired;
 import twilightforest.enums.extensions.TFItemDisplayContextEnumExtension;
@@ -865,32 +866,24 @@ public class ItemModelGenerator extends ItemModelProvider {
 			.perspective(ItemDisplayContext.GUI, gui.texture("all", parent)).end();
 	}
 
-	private void trimmedArmor(DeferredHolder<Item, ArmorItem> armor) {
+	private ItemModelBuilder trimmedArmor(DeferredItem<ArmorItem> armor) {
 		ItemModelBuilder base = this.singleTex(armor);
 		for (ItemModelGenerators.TrimModelData trim : ItemModelGenerators.GENERATED_TRIM_MODELS) {
 			String material = trim.name();
 			String name = armor.getId().getPath() + "_" + material + "_trim";
 			ModelFile trimModel = this.withExistingParent(name, this.mcLoc("item/generated"))
 				.texture("layer0", prefix("item/" + armor.getId().getPath()))
-				.texture("layer1", this.mcLoc("trims/items/" + armor.get().getType().getName() + "_trim_" + material));
+				.texture("layer1", this.mcLoc("trims/items/" + armor.get().getEquipmentSlot(armor.toStack()).getName() + "_trim_" + material));
 			base.override().predicate(ResourceLocation.withDefaultNamespace("trim_type"), trim.itemModelIndex()).model(trimModel).end();
 		}
+		return base;
 	}
 
-	private void trimmedFullbrightArmor(DeferredHolder<Item, ArmorItem> armor) {
-		ItemModelBuilder base = this.singleTexFullbright(armor);
-		for (ItemModelGenerators.TrimModelData trim : ItemModelGenerators.GENERATED_TRIM_MODELS) {
-			String material = trim.name();
-			String name = armor.getId().getPath() + "_" + material + "_trim";
-			ModelFile trimModel = this.withExistingParent(name, this.mcLoc("item/generated"))
-				.texture("layer0", prefix("item/" + armor.getId().getPath()))
-				.texture("layer1", this.mcLoc("trims/items/" + armor.get().getType().getName() + "_trim_" + material));
-			base.override().predicate(ResourceLocation.withDefaultNamespace("trim_type"), trim.itemModelIndex()).model(trimModel).end();
-		}
-		base.customLoader(ItemLayerModelBuilder::begin).emissive(15, 15, 0).renderType("minecraft:translucent", 0).end();
+	private void trimmedFullbrightArmor(DeferredItem<ArmorItem> armor) {
+		this.trimmedArmor(armor).customLoader(ItemLayerModelBuilder::begin).emissive(15, 15, 0).renderType("minecraft:translucent", 0).end();
 	}
 
-	private void trimmedLayeredArmor(DeferredHolder<Item, ArmorItem> armor) {
+	private void trimmedLayeredArmor(DeferredItem<ArmorItem> armor) {
 		ItemModelBuilder base = this.generated(armor.getId().getPath(), prefix("item/" + armor.getId().getPath()), prefix("item/" + armor.getId().getPath() + "_0"));
 		for (ItemModelGenerators.TrimModelData trim : ItemModelGenerators.GENERATED_TRIM_MODELS) {
 			String material = trim.name();
@@ -898,7 +891,7 @@ public class ItemModelGenerator extends ItemModelProvider {
 			ModelFile trimModel = this.withExistingParent(name, this.mcLoc("item/generated"))
 				.texture("layer0", prefix("item/" + armor.getId().getPath()))
 				.texture("layer1", prefix("item/" + armor.getId().getPath() + "_0"))
-				.texture("layer2", this.mcLoc("trims/items/" + armor.get().getType().getName() + "_trim_" + material));
+				.texture("layer2", this.mcLoc("trims/items/" + armor.get().getEquipmentSlot(armor.toStack()).getName() + "_trim_" + material));
 			base.override().predicate(ResourceLocation.withDefaultNamespace("trim_type"), trim.itemModelIndex()).model(trimModel).end();
 		}
 	}

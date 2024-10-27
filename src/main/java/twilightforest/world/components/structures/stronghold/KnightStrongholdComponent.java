@@ -33,7 +33,6 @@ public abstract class KnightStrongholdComponent extends TFStructureComponentOld 
 		this.readOpeningsFromArray(nbt.getIntArray("doorInts"));
 	}
 
-	@SuppressWarnings("this-escape")
 	public KnightStrongholdComponent(StructurePieceType type, int i, Direction facing, int x, int y, int z) {
 		super(type, i, x, y, z);
 		this.boundingBox = generateBoundingBox(facing, x, y, z);

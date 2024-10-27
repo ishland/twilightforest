@@ -4,7 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.WorldGenLevel;
@@ -34,7 +34,6 @@ public class CloudCastleComponent extends TFStructureComponentOld {
 		this.warriorPlaced = nbt.getBoolean("warriorPlaced");
 	}
 
-	@SuppressWarnings("this-escape")
 	public CloudCastleComponent(int index, int x, int y, int z) {
 		super(TFStructurePieceTypes.TFClCa.get(), index, x, y, z);
 		this.setOrientation(Direction.SOUTH);
@@ -101,10 +100,10 @@ public class CloudCastleComponent extends TFStructureComponentOld {
 			if (sbb.isInside(pos)) {
 				this.minerPlaced = true;
 
-				GiantMiner miner = TFEntities.GIANT_MINER.get().create(world.getLevel());
+				GiantMiner miner = TFEntities.GIANT_MINER.get().create(world.getLevel(), EntitySpawnReason.STRUCTURE);
 				miner.setPos(bx, by, bz);
 				miner.setPersistenceRequired();
-				EventHooks.finalizeMobSpawn(miner, world, world.getCurrentDifficultyAt(pos), MobSpawnType.STRUCTURE, null);
+				EventHooks.finalizeMobSpawn(miner, world, world.getCurrentDifficultyAt(pos), EntitySpawnReason.STRUCTURE, null);
 
 				world.addFreshEntity(miner);
 			}
@@ -118,10 +117,10 @@ public class CloudCastleComponent extends TFStructureComponentOld {
 			if (sbb.isInside(pos)) {
 				this.warriorPlaced = true;
 
-				ArmoredGiant warrior = TFEntities.ARMORED_GIANT.get().create(world.getLevel());
+				ArmoredGiant warrior = TFEntities.ARMORED_GIANT.get().create(world.getLevel(), EntitySpawnReason.STRUCTURE);
 				warrior.setPos(bx, by, bz);
 				warrior.setPersistenceRequired();
-				EventHooks.finalizeMobSpawn(warrior, world, world.getCurrentDifficultyAt(pos), MobSpawnType.STRUCTURE, null);
+				EventHooks.finalizeMobSpawn(warrior, world, world.getCurrentDifficultyAt(pos), EntitySpawnReason.STRUCTURE, null);
 
 				world.addFreshEntity(warrior);
 			}

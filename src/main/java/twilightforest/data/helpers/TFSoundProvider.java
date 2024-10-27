@@ -54,7 +54,7 @@ public abstract class TFSoundProvider extends SoundDefinitionsProvider {
 	public void generateSoundWithExistingSubtitle(DeferredHolder<SoundEvent, SoundEvent> event, SoundEvent referencedSound, String subtitle) {
 		this.add(event, SoundDefinition.definition()
 			.subtitle(subtitle)
-			.with(SoundDefinition.Sound.sound(referencedSound.getLocation(), SoundDefinition.SoundType.EVENT)));
+			.with(SoundDefinition.Sound.sound(referencedSound.location(), SoundDefinition.SoundType.EVENT)));
 	}
 
 	public void generateExistingSound(DeferredHolder<SoundEvent, SoundEvent> event, SoundEvent referencedSound, @Nullable String subtitle, float volume, float pitch) {
@@ -63,13 +63,13 @@ public abstract class TFSoundProvider extends SoundDefinitionsProvider {
 			this.createSubtitleAndLangEntry(event, definition, subtitle);
 		}
 		this.add(event, definition
-			.with(SoundDefinition.Sound.sound(referencedSound.getLocation(), SoundDefinition.SoundType.EVENT).volume(volume).pitch(pitch)));
+			.with(SoundDefinition.Sound.sound(referencedSound.location(), SoundDefinition.SoundType.EVENT).volume(volume).pitch(pitch)));
 	}
 
 	public void makeStepSound(DeferredHolder<SoundEvent, SoundEvent> event, SoundEvent referencedSound) {
 		this.add(event, SoundDefinition.definition()
 			.subtitle("subtitles.block.generic.footsteps")
-			.with(SoundDefinition.Sound.sound(referencedSound.getLocation(), SoundDefinition.SoundType.EVENT)));
+			.with(SoundDefinition.Sound.sound(referencedSound.location(), SoundDefinition.SoundType.EVENT)));
 	}
 
 	public void makeNewStepjSound(DeferredHolder<SoundEvent, SoundEvent> event, String baseSoundDirectory, int numberOfSounds) {
@@ -99,7 +99,7 @@ public abstract class TFSoundProvider extends SoundDefinitionsProvider {
 		this.createSubtitleAndLangEntry(event, definition, subtitle);
 
 		this.add(event, definition
-			.with(SoundDefinition.Sound.sound(referencedSound.getLocation(), SoundDefinition.SoundType.EVENT).pitch(1.8F).volume(0.6F)));
+			.with(SoundDefinition.Sound.sound(referencedSound.location(), SoundDefinition.SoundType.EVENT).pitch(1.8F).volume(0.6F)));
 	}
 
 	private void createSubtitleAndLangEntry(DeferredHolder<SoundEvent, SoundEvent> event, SoundDefinition definition, String subtitle) {

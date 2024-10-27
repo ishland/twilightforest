@@ -50,8 +50,6 @@ import twilightforest.block.entity.JarBlockEntity;
 import twilightforest.client.event.ClientEvents;
 import twilightforest.client.event.RegistrationEvents;
 import twilightforest.command.TFCommand;
-import twilightforest.compat.CosmeticArmorCompat;
-import twilightforest.compat.curios.CuriosCompat;
 import twilightforest.config.ConfigSetup;
 import twilightforest.data.custom.stalactites.entry.Stalactite;
 import twilightforest.dispenser.TFDispenserBehaviors;
@@ -137,7 +135,6 @@ public final class TwilightForestMod {
 		TFParticleType.PARTICLE_TYPES.register(bus);
 		TFBlockEntities.BLOCK_ENTITIES.register(bus);
 		TFLootModifiers.LOOT_MODIFIERS.register(bus);
-		TFArmorMaterials.ARMOR_MATERIALS.register(bus);
 		TFStructureTypes.STRUCTURE_TYPES.register(bus);
 		TFFeatureModifiers.TRUNK_PLACERS.register(bus);
 		BiomeLayerTypes.BIOME_LAYER_TYPES.register(bus);
@@ -170,14 +167,14 @@ public final class TwilightForestMod {
 		NeoForge.EVENT_BUS.addListener(ConfigSetup::syncUncraftingConfig);
 
 		if (ModList.get().isLoaded("curios")) loadCuriosCompat(bus);
-		if (ModList.get().isLoaded("cosmeticarmorreworked")) NeoForge.EVENT_BUS.addListener(CosmeticArmorCompat::keepCosmeticArmor);
+		//if (ModList.get().isLoaded("cosmeticarmorreworked")) NeoForge.EVENT_BUS.addListener(CosmeticArmorCompat::keepCosmeticArmor);
 	}
 
 	private static void loadCuriosCompat(IEventBus bus) {
-		NeoForge.EVENT_BUS.addListener(CuriosCompat::keepCurios);
-		bus.addListener(CuriosCompat::registerCuriosCapabilities);
-		bus.addListener(CuriosCompat::registerCurioRenderers);
-		bus.addListener(CuriosCompat::registerCurioLayers);
+//		NeoForge.EVENT_BUS.addListener(CuriosCompat::keepCurios);
+//		bus.addListener(CuriosCompat::registerCuriosCapabilities);
+//		bus.addListener(CuriosCompat::registerCurioRenderers);
+//		bus.addListener(CuriosCompat::registerCurioLayers);
 	}
 
 	private void registerGenericItemHandlers(RegisterCapabilitiesEvent event) {
@@ -296,10 +293,10 @@ public final class TwilightForestMod {
 			TFDispenserBehaviors.init();
 			TFStats.init();
 
-			CauldronInteraction.WATER.map().put(TFItems.ARCTIC_HELMET.get(), CauldronInteraction.DYED_ITEM);
-			CauldronInteraction.WATER.map().put(TFItems.ARCTIC_CHESTPLATE.get(), CauldronInteraction.DYED_ITEM);
-			CauldronInteraction.WATER.map().put(TFItems.ARCTIC_LEGGINGS.get(), CauldronInteraction.DYED_ITEM);
-			CauldronInteraction.WATER.map().put(TFItems.ARCTIC_BOOTS.get(), CauldronInteraction.DYED_ITEM);
+			CauldronInteraction.WATER.map().put(TFItems.ARCTIC_HELMET.get(), CauldronInteraction::dyedItemIteration);
+			CauldronInteraction.WATER.map().put(TFItems.ARCTIC_CHESTPLATE.get(), CauldronInteraction::dyedItemIteration);
+			CauldronInteraction.WATER.map().put(TFItems.ARCTIC_LEGGINGS.get(), CauldronInteraction::dyedItemIteration);
+			CauldronInteraction.WATER.map().put(TFItems.ARCTIC_BOOTS.get(), CauldronInteraction::dyedItemIteration);
 
 			AxeItem.STRIPPABLES = Maps.newHashMap(AxeItem.STRIPPABLES);
 			AxeItem.STRIPPABLES.put(TFBlocks.TWILIGHT_OAK_LOG.get(), TFBlocks.STRIPPED_TWILIGHT_OAK_LOG.get());

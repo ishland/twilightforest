@@ -51,7 +51,6 @@ public class UpperGoblinKnight extends Monster {
 	private int shieldDisabledTicks;
 	public int heavySpearTimer;
 
-	@SuppressWarnings("this-escape")
 	public UpperGoblinKnight(EntityType<? extends UpperGoblinKnight> type, Level level) {
 		super(type, level);
 

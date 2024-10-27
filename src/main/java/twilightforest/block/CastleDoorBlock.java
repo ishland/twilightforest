@@ -20,6 +20,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.network.PacketDistributor;
+import org.jetbrains.annotations.Nullable;
 import twilightforest.init.TFParticleType;
 import twilightforest.init.TFSounds;
 import twilightforest.network.ParticlePacket;

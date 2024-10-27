@@ -14,10 +14,7 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
@@ -45,7 +42,7 @@ public class EntityRenderingUtil {
 				entity = Minecraft.getInstance().player;
 			} else {
 				entity = ENTITY_MAP.computeIfAbsent(type, t -> {
-					Entity created = t.create(level);
+					Entity created = t.create(level, EntitySpawnReason.LOAD);
 					if (created != null) {
 						created.setYRot(0.0F);
 						created.setYHeadRot(0.0F);
@@ -114,7 +111,7 @@ public class EntityRenderingUtil {
 		boolean hitboxes = dispatcher.shouldRenderHitBoxes();
 		dispatcher.setRenderShadow(false);
 		dispatcher.setRenderHitBoxes(false);
-		RenderSystem.runAsFancy(() -> dispatcher.render(entity, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, posestack, graphics.bufferSource(), 15728880));
+		graphics.drawSpecial(source -> dispatcher.render(entity, 0.0D, 0.0D, 0.0D, 1.0F, graphics.pose(), source, 15728880));
 		graphics.flush();
 		dispatcher.setRenderShadow(true);
 		dispatcher.setRenderHitBoxes(hitboxes);
@@ -154,7 +151,7 @@ public class EntityRenderingUtil {
 		quaternion1.conjugate();
 		ItemEntity item = (ItemEntity) fetchEntity(EntityType.ITEM, level);
 		Objects.requireNonNull(item).setItem(stack);
-		RenderSystem.runAsFancy(() -> render(item, Minecraft.getInstance().getTimer().getGameTimeDeltaTicks(), posestack, graphics.bufferSource(), bobOffset));
+		graphics.drawSpecial(source -> render(item, Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaTicks(), posestack, source, bobOffset));
 		graphics.flush();
 		posestack.popPose();
 		Lighting.setupFor3DItems();

@@ -5,9 +5,9 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.HolderSet;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelSimulatedReader;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -38,13 +38,13 @@ public final class FeaturePlacers {
 	public static final BiFunction<LevelSimulatedReader, BlockPos, Boolean> VALID_TREE_POS = TreeFeature::validTreePos;
 
 	public static <T extends Mob> void placeEntity(EntityType<T> entityType, BlockPos pos, ServerLevelAccessor levelAccessor) {
-		Mob mob = entityType.create(levelAccessor.getLevel());
+		Mob mob = entityType.create(levelAccessor.getLevel(), EntitySpawnReason.STRUCTURE);
 
 		if (mob == null) return;
 
 		mob.setPersistenceRequired();
 		mob.moveTo(pos, 0.0F, 0.0F);
-		EventHooks.finalizeMobSpawn(mob, levelAccessor, levelAccessor.getCurrentDifficultyAt(pos), MobSpawnType.STRUCTURE, null);
+		EventHooks.finalizeMobSpawn(mob, levelAccessor, levelAccessor.getCurrentDifficultyAt(pos), EntitySpawnReason.STRUCTURE, null);
 		if (mob instanceof EnforcedHomePoint home) {
 			home.setRestrictionPoint(GlobalPos.of(levelAccessor.getLevel().dimension(), pos));
 		}

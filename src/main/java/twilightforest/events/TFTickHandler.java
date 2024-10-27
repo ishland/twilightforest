@@ -45,28 +45,28 @@ public class TFTickHandler {
 		Player eventPlayer = event.getEntity();
 
 		if (!(eventPlayer instanceof ServerPlayer player)) return;
-		if (!(player.level() instanceof ServerLevel world)) return;
+		if (!(player.level() instanceof ServerLevel level)) return;
 
 		// check for portal creation, at least if it's not disabled
 		if (!TFConfig.disablePortalCreation && player.tickCount % (!TFConfig.checkPortalPlacement ? 100 : 20) == 0) {
 			// skip non admin players when the option is on
-			if (world.getServer().getProfilePermissions(player.getGameProfile()) >= TFConfig.portalCreationPermission) {
+			if (level.getServer().getProfilePermissions(player.getGameProfile()) >= TFConfig.portalCreationPermission) {
 				// reduce range to 4.0 if config is set to admins/owners only
-				checkForPortalCreation(player, world, TFConfig.portalCreationPermission >= Commands.LEVEL_ADMINS ? 4.0F : 32.0F);
+				checkForPortalCreation(player, level, TFConfig.portalCreationPermission >= Commands.LEVEL_ADMINS ? 4.0F : 32.0F);
 			}
 		}
 
 		// check the player for being in a forbidden progression area, only every 20 ticks
-		if (player.tickCount % 20 == 0 && LandmarkUtil.isProgressionEnforced(world) && !player.isCreative() && !player.isSpectator()) {
-			Enforcement.enforceBiomeProgression(player, world);
+		if (player.tickCount % 20 == 0 && LandmarkUtil.isProgressionEnforced(level) && !player.isCreative() && !player.isSpectator()) {
+			Enforcement.enforceBiomeProgression(player, level);
 		}
 
 		// check and send nearby forbidden structures, every 100 ticks or so
-		if (player.tickCount % 100 == 0 && LandmarkUtil.isProgressionEnforced(world)) {
+		if (player.tickCount % 100 == 0 && LandmarkUtil.isProgressionEnforced(level)) {
 			if (player.isCreative() || player.isSpectator()) {
 				sendAllClearPacket(player);
 			} else {
-				checkForLockedStructuresSendPacket(player, world);
+				checkForLockedStructuresSendPacket(player, level);
 			}
 		}
 	}
@@ -84,9 +84,9 @@ public class TFTickHandler {
 	}
 
 	@SuppressWarnings("UnusedReturnValue")
-	private static boolean checkForLockedStructuresSendPacket(Player player, ServerLevel world) {
+	private static boolean checkForLockedStructuresSendPacket(Player player, ServerLevel level) {
 		ChunkPos chunkPlayer = player.chunkPosition();
-		return LandmarkUtil.locateNearestLandmarkStart(world, chunkPlayer.x, chunkPlayer.z).map(structureStart -> {
+		return LandmarkUtil.locateNearestLandmarkStart(level, chunkPlayer.x, chunkPlayer.z).map(structureStart -> {
 			if (structureStart.getStructure() instanceof AdvancementLockedStructure advancementLockedStructure && !advancementLockedStructure.doesPlayerHaveRequiredAdvancements(player)) {
 				sendStructureProtectionPacket(player, structureStart.getBoundingBox());
 				return true;
@@ -97,17 +97,17 @@ public class TFTickHandler {
 		}).orElse(false);
 	}
 
-	private static void checkForPortalCreation(ServerPlayer player, Level world, float rangeToCheck) {
-		if (world.dimension().location().equals(ResourceLocation.parse(TFConfig.originDimension))
-			|| TFDimension.isTwilightPortalDestination(world)
+	private static void checkForPortalCreation(ServerPlayer player, ServerLevel level, float rangeToCheck) {
+		if (level.dimension().location().equals(ResourceLocation.parse(TFConfig.originDimension))
+			|| TFDimension.isTwilightPortalDestination(level)
 			|| TFConfig.allowPortalsInOtherDimensions) {
 
-			List<ItemEntity> itemList = world.getEntitiesOfClass(ItemEntity.class, player.getBoundingBox().inflate(rangeToCheck));
+			List<ItemEntity> itemList = level.getEntitiesOfClass(ItemEntity.class, player.getBoundingBox().inflate(rangeToCheck));
 			ItemEntity qualified = null;
 
 			for (ItemEntity entityItem : itemList) {
 				if (entityItem.getItem().is(ItemTagGenerator.PORTAL_ACTIVATOR) &&
-					TFBlocks.TWILIGHT_PORTAL.get().canFormPortal(world.getBlockState(entityItem.blockPosition())) &&
+					TFBlocks.TWILIGHT_PORTAL.get().canFormPortal(level.getBlockState(entityItem.blockPosition())) &&
 					Objects.equals(entityItem.getOwner(), player)) {
 
 					qualified = entityItem;
@@ -140,13 +140,11 @@ public class TFTickHandler {
 				double vy = rand.nextGaussian() * 0.02D;
 				double vz = rand.nextGaussian() * 0.02D;
 
-				world.addParticle(ParticleTypes.EFFECT, qualified.getX(), qualified.getY() + 0.2, qualified.getZ(), vx, vy, vz);
+				level.addParticle(ParticleTypes.EFFECT, qualified.getX(), qualified.getY() + 0.2, qualified.getZ(), vx, vy, vz);
 			}
 
-			if (TFBlocks.TWILIGHT_PORTAL.get().tryToCreatePortal(world, qualified.blockPosition(), qualified, player))
+			if (TFBlocks.TWILIGHT_PORTAL.get().tryToCreatePortal(level, qualified.blockPosition(), qualified, player))
 				TFAdvancements.MADE_TF_PORTAL.get().trigger(player);
-
 		}
 	}
-
 }

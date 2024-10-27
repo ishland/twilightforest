@@ -30,7 +30,7 @@ public class MoonwormRenderer implements BlockEntityRenderer<MoonwormBlockEntity
 	@Override
 	public void render(@Nullable MoonwormBlockEntity entity, float partialTicks, PoseStack stack, MultiBufferSource buffer, int light, int overlay) {
 		int yaw = entity != null ? entity.currentYaw : BugModelAnimationHelper.currentRotation;
-		if (entity == null) partialTicks = Minecraft.getInstance().getTimer().getGameTimeDeltaTicks();
+		if (entity == null) partialTicks = Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaTicks();
 		float randRot = entity != null ? entity.randRot : 0.0F;
 
 		stack.pushPose();

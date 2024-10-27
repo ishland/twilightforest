@@ -73,7 +73,7 @@ public class RedCanopyMushroomFeature extends CanopyMushroomFeature {
 					boolean zMinMax = zIsMin || zIsMax;
 					if (y >= height || xMinMax != zMinMax) {
 						mutableBlockPos.setWithOffset(pos, x, y, z);
-						if (!levelAccessor.getBlockState(mutableBlockPos).isSolidRender(levelAccessor, mutableBlockPos)) {
+						if (!levelAccessor.getBlockState(mutableBlockPos).isSolidRender()) {
 							BlockState blockstate = featureConfiguration.capProvider.getState(random, pos);
 
 							if (blockstate.hasProperty(HugeMushroomBlock.WEST) && blockstate.hasProperty(HugeMushroomBlock.EAST) && blockstate.hasProperty(HugeMushroomBlock.NORTH) && blockstate.hasProperty(HugeMushroomBlock.SOUTH) && blockstate.hasProperty(HugeMushroomBlock.UP)) {
@@ -101,7 +101,7 @@ public class RedCanopyMushroomFeature extends CanopyMushroomFeature {
 				for (int z = -j; z <= j; ++z) {
 					if (isInsideSmoothShape(height, j, x, y, z)) {
 						mutableBlockPos.setWithOffset(pos, x, y, z);
-						if (!levelAccessor.getBlockState(mutableBlockPos).isSolidRender(levelAccessor, mutableBlockPos)) {
+						if (!levelAccessor.getBlockState(mutableBlockPos).isSolidRender()) {
 							BlockState blockstate = featureConfiguration.capProvider.getState(random, pos);
 
 							if (blockstate.hasProperty(HugeMushroomBlock.WEST) && blockstate.hasProperty(HugeMushroomBlock.EAST) && blockstate.hasProperty(HugeMushroomBlock.NORTH) && blockstate.hasProperty(HugeMushroomBlock.SOUTH) && blockstate.hasProperty(HugeMushroomBlock.UP)) {
@@ -152,7 +152,7 @@ public class RedCanopyMushroomFeature extends CanopyMushroomFeature {
 					double maxDistance = (double) j + 0.1D;
 					if (distance <= maxDistance) {
 						mutableBlockPos.setWithOffset(pos, x, y, z);
-						if (!levelAccessor.getBlockState(mutableBlockPos).isSolidRender(levelAccessor, mutableBlockPos)) {
+						if (!levelAccessor.getBlockState(mutableBlockPos).isSolidRender()) {
 							BlockState blockstate = featureConfiguration.capProvider.getState(random, pos);
 
 							if (blockstate.hasProperty(HugeMushroomBlock.WEST) && blockstate.hasProperty(HugeMushroomBlock.EAST) && blockstate.hasProperty(HugeMushroomBlock.NORTH) && blockstate.hasProperty(HugeMushroomBlock.SOUTH) && blockstate.hasProperty(HugeMushroomBlock.UP)) {

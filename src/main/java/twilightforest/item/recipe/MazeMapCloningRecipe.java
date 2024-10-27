@@ -77,12 +77,7 @@ public class MazeMapCloningRecipe extends CustomRecipe {
 	}
 
 	@Override
-	public boolean canCraftInDimensions(int x, int y) {
-		return x >= 3 && y >= 3;
-	}
-
-	@Override
-	public RecipeSerializer<?> getSerializer() {
+	public RecipeSerializer<? extends CustomRecipe> getSerializer() {
 		return TFRecipes.MAZE_MAP_CLONING_RECIPE.get();
 	}
 }

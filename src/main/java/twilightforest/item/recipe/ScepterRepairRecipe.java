@@ -3,7 +3,6 @@ package twilightforest.item.recipe;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -54,22 +53,12 @@ public class ScepterRepairRecipe extends CustomRecipe {
 	}
 
 	@Override
-	public NonNullList<Ingredient> getIngredients() {
-		return NonNullList.copyOf(this.repairItems);
-	}
-
-	@Override
 	public ItemStack assemble(CraftingInput input, HolderLookup.Provider registries) {
 		return new ItemStack(this.scepter);
 	}
 
 	@Override
-	public boolean canCraftInDimensions(int width, int height) {
-		return this.repairItems.size() + 1 > width * height;
-	}
-
-	@Override
-	public RecipeSerializer<?> getSerializer() {
+	public RecipeSerializer<? extends CustomRecipe> getSerializer() {
 		return TFRecipes.SCEPTER_REPAIR_RECIPE.get();
 	}
 
@@ -77,7 +66,7 @@ public class ScepterRepairRecipe extends CustomRecipe {
 
 		public static final MapCodec<ScepterRepairRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 			BuiltInRegistries.ITEM.byNameCodec().fieldOf("scepter").forGetter(o -> o.scepter),
-				Ingredient.CODEC_NONEMPTY.listOf().fieldOf("repair_ingredients").forGetter(o -> o.repairItems),
+				Ingredient.CODEC.listOf().fieldOf("repair_ingredients").forGetter(o -> o.repairItems),
 				CraftingBookCategory.CODEC.optionalFieldOf("category", CraftingBookCategory.MISC).forGetter(CustomRecipe::category)
 			).apply(instance, ScepterRepairRecipe::new)
 		);

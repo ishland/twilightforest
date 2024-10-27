@@ -131,7 +131,7 @@ public class SoundGenerator extends TFSoundProvider {
 		this.generateNewSoundWithSubtitle(TFSounds.KOBOLD_AMBIENT, "mob/kobold/ambient", 6, "Kobold grumbles");
 		this.generateNewSoundWithSubtitle(TFSounds.KOBOLD_DEATH, "mob/kobold/death", 3, "Kobold dies");
 		this.generateNewSoundWithSubtitle(TFSounds.KOBOLD_HURT, "mob/kobold/hurt", 3, "Kobold hurts");
-		this.generateExistingSoundWithSubtitle(TFSounds.KOBOLD_MUNCH, SoundEvents.GENERIC_EAT, "Kobold munches");
+		this.generateExistingSoundWithSubtitle(TFSounds.KOBOLD_MUNCH, SoundEvents.GENERIC_EAT.value(), "Kobold munches");
 
 		this.generateExistingSoundWithSubtitle(TFSounds.LICH_AMBIENT, SoundEvents.BLAZE_AMBIENT, "Lich breathes");
 		this.generateExistingSoundWithSubtitle(TFSounds.LICH_CLONE_HURT, SoundEvents.FIRE_EXTINGUISH, "Lich clone ignores attack");

@@ -83,9 +83,9 @@ public interface StructureHints {
 	void trySpawnHintMonster(Level world, Player player, BlockPos pos);
 
 	static void tryHintForStructure(Player player, ServerLevel level, ResourceKey<Structure> forStructure) {
-		Optional<Registry<Structure>> optStructureReg = level.registryAccess().registry(Registries.STRUCTURE);
+		Optional<Registry<Structure>> optStructureReg = level.registryAccess().lookup(Registries.STRUCTURE);
 
-		if (optStructureReg.isEmpty() || !(optStructureReg.get().get(forStructure) instanceof StructureHints structureHints))
+		if (optStructureReg.isEmpty() || !(optStructureReg.get().getValue(forStructure) instanceof StructureHints structureHints))
 			return;
 
 		structureHints.trySpawnHintMonster(level, player);

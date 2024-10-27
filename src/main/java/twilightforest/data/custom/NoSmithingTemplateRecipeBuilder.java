@@ -15,10 +15,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import twilightforest.item.recipe.NoTemplateSmithingRecipe;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Supplier;
 
 public class NoSmithingTemplateRecipeBuilder {
@@ -60,7 +57,7 @@ public class NoSmithingTemplateRecipeBuilder {
 			.rewards(AdvancementRewards.Builder.recipe(id))
 			.requirements(AdvancementRequirements.Strategy.OR);
 		this.criteria.forEach(advancement$builder::addCriterion);
-		NoTemplateSmithingRecipe smithingtrimrecipe = new NoTemplateSmithingRecipe(this.base, this.addition, this.additionalData);
+		NoTemplateSmithingRecipe smithingtrimrecipe = new NoTemplateSmithingRecipe(Optional.of(this.base), Optional.of(this.addition), this.additionalData);
 		output.accept(id, smithingtrimrecipe, advancement$builder.build(id.location().withPrefix("recipes/" + this.category.getFolderName() + "/")));
 	}
 

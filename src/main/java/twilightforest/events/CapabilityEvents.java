@@ -122,7 +122,7 @@ public class CapabilityEvents {
 			if (level == null)
 				return;
 
-			player.changeDimension(TFConfig.portalForNewPlayerSpawn ?
+			player.teleport(TFConfig.portalForNewPlayerSpawn ?
 				TFTeleporter.createTransition(player, level, player.blockPosition(), true) :
 				NoReturnTeleporter.createNoPortalTransition(level, player, player.blockPosition()));
 			player.setRespawnPosition(TFDimension.DIMENSION_KEY, player.blockPosition(), player.getYRot(), true, false);

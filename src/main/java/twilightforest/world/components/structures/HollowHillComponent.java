@@ -60,7 +60,6 @@ public class HollowHillComponent extends TFStructureComponentOld {
 		this.speleothemConfigId = configHolder.key().location();
 	}
 
-	@SuppressWarnings("this-escape")
 	public HollowHillComponent(StructurePieceType piece, int i, int size, int x, int y, int z, Holder.Reference<StructureSpeleothemConfig> speleothemConfig) {
 		super(piece, i, x, y, z);
 

@@ -22,32 +22,32 @@ public class MoonwormQueenRepairRecipe extends CustomRecipe {
 
 	@Override
 	public boolean matches(CraftingInput input, Level level) {
-		ItemStack queen = null;
-		List<ItemStack> berries = new ArrayList<>();
+		ItemStack queen = ItemStack.EMPTY;
+		int berries = 0;
 
 		for (int i = 0; i < input.size(); ++i) {
-			ItemStack stackInQuestion = input.getItem(i);
-			if (!stackInQuestion.isEmpty()) {
-				if (stackInQuestion.is(TFItems.MOONWORM_QUEEN.get()) && stackInQuestion.isDamaged()) {
-					queen = stackInQuestion;
+			ItemStack checkedStack = input.getItem(i);
+			if (!checkedStack.isEmpty()) {
+				if (checkedStack.is(TFItems.MOONWORM_QUEEN.get()) && checkedStack.isDamaged()) {
+					queen = checkedStack;
 				}
-				if (stackInQuestion.is(TFItems.TORCHBERRIES.get())) {
-					berries.add(stackInQuestion);
+				if (checkedStack.is(TFItems.TORCHBERRIES.get())) {
+					berries++;
 				}
 			}
 		}
-		return queen != null && !berries.isEmpty();
+		return !queen.isEmpty() && berries > 0;
 	}
 
 	@Override
 	public ItemStack assemble(CraftingInput input, HolderLookup.Provider access) {
-		List<Item> berries = new ArrayList<>();
-		ItemStack queen = null;
+		int berries = 0;
+		ItemStack queen = ItemStack.EMPTY;
 		for (int i = 0; i < input.size(); ++i) {
 			ItemStack itemstack = input.getItem(i);
 			if (!itemstack.isEmpty()) {
 				if (itemstack.is(TFItems.MOONWORM_QUEEN.get())) {
-					if (queen == null) {
+					if (queen.isEmpty()) {
 						queen = itemstack;
 					} else {
 						//Only accept 1 queen
@@ -57,15 +57,15 @@ public class MoonwormQueenRepairRecipe extends CustomRecipe {
 
 				if (itemstack.is(TFItems.TORCHBERRIES.get())) {
 					//add all berries in the grid to a list to determine the amount to repair
-					berries.add(itemstack.getItem());
+					berries++;
 				}
 			}
 		}
 
-		if (!berries.isEmpty() && queen != null && queen.isDamaged()) {
-			ItemStack newQueen = TFItems.MOONWORM_QUEEN.get().getDefaultInstance();
+		if (berries > 0 && !queen.isEmpty() && queen.isDamaged()) {
+			ItemStack newQueen = TFItems.MOONWORM_QUEEN.toStack();
 			//each berry repairs 64 durability
-			newQueen.setDamageValue(queen.getDamageValue() - (berries.size() * 64));
+			newQueen.setDamageValue(queen.getDamageValue() - (berries * 64));
 			return newQueen;
 		}
 
@@ -73,12 +73,7 @@ public class MoonwormQueenRepairRecipe extends CustomRecipe {
 	}
 
 	@Override
-	public boolean canCraftInDimensions(int width, int height) {
-		return width * height >= 2;
-	}
-
-	@Override
-	public RecipeSerializer<?> getSerializer() {
+	public RecipeSerializer<? extends CustomRecipe> getSerializer() {
 		return TFRecipes.MOONWORM_QUEEN_REPAIR_RECIPE.get();
 	}
 }

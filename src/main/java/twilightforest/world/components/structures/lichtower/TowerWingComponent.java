@@ -70,7 +70,6 @@ public class TowerWingComponent extends TFStructureComponentOld {
 		this.highestOpening = 0;
 	}
 
-	@SuppressWarnings("this-escape")
 	protected TowerWingComponent(StructurePieceType type, int i, int x, int y, int z, int pSize, int pHeight, Direction direction) {
 		super(type, i, x, y, z);
 
@@ -1252,7 +1251,7 @@ public class TowerWingComponent extends TFStructureComponentOld {
 
 		final BlockPos pos = getBlockPosWithOffset(cx, 2, cx);
 
-		if (i > 4 && !world.registryAccess().registryOrThrow(Registries.CONFIGURED_FEATURE).get(TFStructureHelper.randomTree(rand.nextInt(4))).place(world, generator, world.getRandom(), pos)) {
+		if (i > 4 && !world.registryAccess().lookupOrThrow(Registries.CONFIGURED_FEATURE).getValue(TFStructureHelper.randomTree(rand.nextInt(4))).place(world, generator, world.getRandom(), pos)) {
 			//if tree placement fails, place the potted sapling
 			this.placeBlock(world, plant, cx, 2, cx, sbb);
 		} else {

@@ -59,7 +59,7 @@ public class JigsawUtil {
 			return List.of();
 		}
 
-		List<StructureTemplate.StructureBlockInfo> returnables = template.filterBlocks(BlockPos.ZERO, settings, Blocks.JIGSAW);
+		List<StructureTemplate.JigsawBlockInfo> returnables = template.getJigsaws(BlockPos.ZERO, settings.getRotation());
 
 		if (random != null) {
 			Util.shuffle(returnables, random);
@@ -67,6 +67,6 @@ public class JigsawUtil {
 			SinglePoolElement.sortBySelectionPriority(returnables);
 		}
 
-		return returnables;
+		return returnables.stream().map(StructureTemplate.JigsawBlockInfo::info).toList();
 	}
 }

@@ -45,12 +45,12 @@ public class UncraftingRecipe extends ShapedRecipe {
 	}
 
 	@Override
-	public RecipeSerializer<?> getSerializer() {
+	public RecipeSerializer<? extends ShapedRecipe> getSerializer() {
 		return TFRecipes.UNCRAFTING_SERIALIZER.get();
 	}
 
 	@Override
-	public RecipeType<?> getType() {
+	public RecipeType<CraftingRecipe> getType() {
 		return TFRecipes.UNCRAFTING_RECIPE.get();
 	}
 
@@ -70,7 +70,7 @@ public class UncraftingRecipe extends ShapedRecipe {
 
 		public static final MapCodec<UncraftingRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 				Codec.INT.optionalFieldOf("cost", -1).forGetter(o -> o.cost),
-				Ingredient.CODEC_NONEMPTY.fieldOf("input").forGetter(o -> o.input),
+				Ingredient.CODEC.fieldOf("input").forGetter(o -> o.input),
 				Codec.INT.optionalFieldOf("input_count", 1).forGetter(o -> o.count),
 				ShapedRecipePattern.MAP_CODEC.forGetter(o -> o.pattern)
 			).apply(instance, UncraftingRecipe::new)

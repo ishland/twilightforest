@@ -57,8 +57,8 @@ public class TFTeleporter {
 	@Nullable
 	protected static TeleportTransition createPosition(ServerLevel dest, Entity entity, BlockPos destPos, TeleporterCache cache, boolean locked) {
 		TeleportTransition info = moveToSafeCoords(dest, entity, destPos);
-		makePortal(cache, entity, dest, info.pos(), locked);
-		info = placeInExistingPortal(cache, dest, entity, BlockPos.containing(info.pos()));
+		makePortal(cache, entity, dest, info.position(), locked);
+		info = placeInExistingPortal(cache, dest, entity, BlockPos.containing(info.position()));
 		return info;
 	}
 

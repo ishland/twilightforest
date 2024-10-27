@@ -24,7 +24,6 @@ public class LichMinionsGoal extends Goal {
 
 	private final Lich lich;
 
-	@SuppressWarnings("this-escape")
 	public LichMinionsGoal(Lich boss) {
 		this.lich = boss;
 		this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));

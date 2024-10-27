@@ -86,8 +86,6 @@ public class Hydra extends BaseTFBoss {
 		}
 
 		this.partArray = parts.toArray(new HydraPart[0]);
-
-		this.noCulling = true;
 		this.xpReward = 511;
 	}
 

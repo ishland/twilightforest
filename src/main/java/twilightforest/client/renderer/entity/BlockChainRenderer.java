@@ -11,16 +11,15 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
 import twilightforest.TwilightForestMod;
 import twilightforest.client.model.TFModelLayers;
 import twilightforest.client.model.entity.ChainModel;
 import twilightforest.client.model.entity.SpikeBlockModel;
+import twilightforest.client.state.ChainBlockRenderState;
 import twilightforest.entity.projectile.ChainBlock;
 
-public class BlockChainRenderer extends EntityRenderer<ChainBlock> {
+public class BlockChainRenderer extends EntityRenderer<ChainBlock, ChainBlockRenderState> {
 
 	private static final ResourceLocation TEXTURE = TwilightForestMod.getModelTexture("block_and_chain.png");
 	private final Model model;
@@ -33,27 +32,25 @@ public class BlockChainRenderer extends EntityRenderer<ChainBlock> {
 	}
 
 	@Override
-	public void render(ChainBlock entity, float yaw, float partialTicks, PoseStack stack, MultiBufferSource buffer, int light) {
-		super.render(entity, yaw, partialTicks, stack, buffer, light);
+	public void render(ChainBlockRenderState state, PoseStack stack, MultiBufferSource buffer, int light) {
+		super.render(state, stack, buffer, light);
 
 		stack.pushPose();
-		VertexConsumer consumer = ItemRenderer.getFoilBufferDirect(buffer, this.model.renderType(TEXTURE), false, entity.isFoil());
+		VertexConsumer consumer = ItemRenderer.getFoilBuffer(buffer, this.model.renderType(TEXTURE), false, state.isFoil);
 
-		stack.mulPose(Axis.YP.rotationDegrees(Mth.lerp(partialTicks, entity.yRotO, entity.getYRot()) - 90.0F));
-		stack.mulPose(Axis.ZP.rotationDegrees(Mth.lerp(partialTicks, entity.xRotO, entity.getXRot())));
+		stack.mulPose(Axis.YP.rotationDegrees(state.yRot - 90.0F));
+		stack.mulPose(Axis.ZP.rotationDegrees(state.xRot));
 
 		stack.scale(-1.0F, -1.0F, 1.0F);
 		this.model.renderToBuffer(stack, consumer, light, OverlayTexture.NO_OVERLAY);
 		stack.popPose();
 
-		Entity owner = entity.getOwner();
-		if (owner != null) {
-			Vec3 xyz = owner.getEyePosition(partialTicks).subtract(entity.getEyePosition(partialTicks));
+		if (state.chainStartPos != null) {
+			Vec3 xyz = state.chainStartPos;
 			double links = xyz.length();
 			xyz = xyz.normalize();
-			int ownerLight = Minecraft.getInstance().getEntityRenderDispatcher().getPackedLightCoords(owner, partialTicks);
 			for (int i = 1; i < links; i++) {
-				renderChain(entity, xyz, links - i, stack, buffer, Math.max(light, ownerLight), this.chainModel);
+				renderChain(state.isFoil, xyz, links - i, stack, buffer, Math.max(light, state.ownerLight), this.chainModel);
 			}
 		}
 	}
@@ -72,7 +69,17 @@ public class BlockChainRenderer extends EntityRenderer<ChainBlock> {
 	}
 
 	@Override
-	public ResourceLocation getTextureLocation(ChainBlock entity) {
-		return TEXTURE;
+	public ChainBlockRenderState createRenderState() {
+		return new ChainBlockRenderState();
+	}
+
+	@Override
+	public void extractRenderState(ChainBlock entity, ChainBlockRenderState state, float partialTick) {
+		super.extractRenderState(entity, state, partialTick);
+		state.yRot = entity.getYRot(partialTick);
+		state.xRot = entity.getXRot(partialTick);
+		state.isFoil = entity.isFoil();
+		state.chainStartPos = entity.getOwner() != null ? entity.getOwner().getEyePosition(partialTick).subtract(entity.getEyePosition(partialTick)) : null;
+		state.ownerLight = entity.getOwner() != null ? Minecraft.getInstance().getEntityRenderDispatcher().getPackedLightCoords(entity.getOwner(), partialTick) : 0;
 	}
 }

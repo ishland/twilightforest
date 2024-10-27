@@ -74,7 +74,7 @@ public class ConnectedTextureModelLoader implements IGeometryLoader<UnbakedConne
 						throw new JsonParseException("Invalid block tag: " + element.getAsString());
 					}
 				} else {
-					Block block = BuiltInRegistries.BLOCK.get(ResourceLocation.tryParse(element.getAsString()));
+					Block block = BuiltInRegistries.BLOCK.getValue(ResourceLocation.tryParse(element.getAsString()));
 					if (block == Blocks.AIR) {
 						throw new JsonParseException("Invalid block: " + element.getAsString());
 					}

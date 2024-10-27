@@ -27,7 +27,6 @@ public class MinotaurMazeComponent extends TFStructureComponentOld {
 	final int[] rcoords;
 	private final int level;
 
-	@SuppressWarnings("this-escape")
 	public MinotaurMazeComponent(StructurePieceSerializationContext ctx, CompoundTag nbt) {
 		super(TFStructurePieceTypes.TFMMaze.get(), nbt);
 
@@ -51,7 +50,6 @@ public class MinotaurMazeComponent extends TFStructureComponentOld {
 		maze.generateRecursiveBacktracker(0, 0);
 	}
 
-	@SuppressWarnings("this-escape")
 	public MinotaurMazeComponent(int index, int x, int y, int z, int entranceX, int entranceZ, int level, RandomSource random) {
 		super(TFStructurePieceTypes.TFMMaze.get(), index, x, y, z);
 		this.setOrientation(Direction.SOUTH);

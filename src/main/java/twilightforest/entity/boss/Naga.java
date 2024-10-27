@@ -87,7 +87,6 @@ public class Naga extends BaseTFBoss {
 	public Naga(EntityType<? extends Naga> type, Level level) {
 		super(type, level);
 		this.xpReward = 217;
-		this.noCulling = true;
 
 		for (int i = 0; i < this.bodySegments.length; i++) {
 			this.bodySegments[i] = new NagaSegment(this);

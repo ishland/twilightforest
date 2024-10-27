@@ -1,5 +1,6 @@
 package twilightforest.data.custom;
 
+import net.minecraft.core.HolderGetter;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -16,15 +17,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ScepterRecipeBuilder {
+
+	private final HolderGetter<Item> getter;
 	private final Item scepter;
 	private final List<Ingredient> repairItems = new ArrayList<>();
 
-	private ScepterRecipeBuilder(Item scepter) {
+	private ScepterRecipeBuilder(HolderGetter<Item> getter, Item scepter) {
+		this.getter = getter;
 		this.scepter = scepter;
 	}
 
-	public static ScepterRecipeBuilder repairFor(Item scepter) {
-		return new ScepterRecipeBuilder(scepter);
+	public static ScepterRecipeBuilder repairFor(HolderGetter<Item> getter, Item scepter) {
+		return new ScepterRecipeBuilder(getter, scepter);
 	}
 
 	public <T> ScepterRecipeBuilder addRepairIngredient(Ingredient item) {
@@ -32,13 +36,8 @@ public class ScepterRecipeBuilder {
 		return this;
 	}
 
-	public <T> ScepterRecipeBuilder addRepairIngredient(ItemStack item) {
-		this.repairItems.add(Ingredient.of(item));
-		return this;
-	}
-
 	public <T> ScepterRecipeBuilder addRepairIngredient(TagKey<Item> item) {
-		this.repairItems.add(Ingredient.of(item));
+		this.repairItems.add(Ingredient.of(getter.getOrThrow(item)));
 		return this;
 	}
 

@@ -20,8 +20,8 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.RandomizableContainer;
 import net.minecraft.world.entity.Display;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionContents;
@@ -569,9 +569,9 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 
 	private BlockState blockFromLabel(String label) {
 		if (label.contains(".")) {
-			return BuiltInRegistries.BLOCK.get(ResourceLocation.bySeparator(label, '.')).defaultBlockState();
+			return BuiltInRegistries.BLOCK.getValue(ResourceLocation.bySeparator(label, '.')).defaultBlockState();
 		} else {
-			return BuiltInRegistries.BLOCK.get(ResourceLocation.parse(label)).defaultBlockState();
+			return BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(label)).defaultBlockState();
 		}
 	}
 
@@ -685,12 +685,12 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 		level.setBlock(pos, lectern, 2);
 
 		if (putMimic) {
-			DeathTome tomeMimic = TFEntities.DEATH_TOME.value().create(level.getLevel());
+			DeathTome tomeMimic = TFEntities.DEATH_TOME.value().create(level.getLevel(), EntitySpawnReason.STRUCTURE);
 			if (tomeMimic != null) {
 				tomeMimic.setPersistenceRequired();
 				tomeMimic.moveTo(pos, lectern.getValue(HorizontalDirectionalBlock.FACING).toYRot(), 0);
 				tomeMimic.setOnLectern(true);
-				tomeMimic.finalizeSpawn(level, level.getCurrentDifficultyAt(tomeMimic.blockPosition()), MobSpawnType.STRUCTURE, null);
+				tomeMimic.finalizeSpawn(level, level.getCurrentDifficultyAt(tomeMimic.blockPosition()), EntitySpawnReason.STRUCTURE, null);
 				level.addFreshEntityWithPassengers(tomeMimic);
 			}
 		} else if (level.getBlockEntity(pos) instanceof LecternBlockEntity lecternBlockEntity) {

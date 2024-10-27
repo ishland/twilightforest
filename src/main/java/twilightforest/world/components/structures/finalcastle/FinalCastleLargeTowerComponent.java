@@ -26,7 +26,6 @@ public class FinalCastleLargeTowerComponent extends TowerWingComponent {
 		super(TFStructurePieceTypes.TFFCLaTo.get(), nbt);
 	}
 
-	@SuppressWarnings("this-escape")
 	public FinalCastleLargeTowerComponent(int i, int x, int y, int z, Direction rotation) {
 		super(TFStructurePieceTypes.TFFCLaTo.get(), i, x, y, z);
 		this.setOrientation(rotation);
