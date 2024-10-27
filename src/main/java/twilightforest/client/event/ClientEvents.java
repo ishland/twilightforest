@@ -313,7 +313,7 @@ public class ClientEvents {
 	private static void unrenderHeadWithTrophies(RenderLivingEvent.Pre<?, ?, ?> event) {
 		ItemStack stack = event.getRenderState().headItem;
 		boolean visible = !(stack.getItem() instanceof TrophyItem) && !(stack.getItem() instanceof SkullCandleItem) && !areCuriosEquipped(event.getRenderState());
-		boolean isPlayer = event.getEntity() instanceof Player;
+		boolean isPlayer = event.getRenderState() instanceof PlayerRenderState;
 		if (event.getRenderer().getModel() instanceof HeadedModel headedModel) {
 			headedModel.getHead().visible = visible && (!isPlayer || headedModel.getHead().visible);  // some mods like Better Combat can move player's head and hide it in the first person view
 			if (event.getRenderer().getModel() instanceof HumanoidModel<?> humanoidModel) {
