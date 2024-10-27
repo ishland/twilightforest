@@ -99,6 +99,8 @@ public class BlockTagGenerator extends ModdedBlockTagGenerator {
 	public static final TagKey<Block> BLOCK_AND_CHAIN_NEVER_BREAKS = create("block_and_chain_never_breaks");
 
 	public static final TagKey<Block> SMALL_LAKES_DONT_REPLACE = create("small_lakes_dont_replace");
+	public static final TagKey<Block> WEBS_GENERATE_HANGING_FROM = create("webs_generate_hanging_from");
+	public static final TagKey<Block> WEBS_GENERATE_ON_TOP_OF = create("webs_generate_on_top_of");
 
 	public BlockTagGenerator(PackOutput output, CompletableFuture<HolderLookup.Provider> future, ExistingFileHelper helper) {
 		super(output, future, helper);
@@ -768,6 +770,12 @@ public class BlockTagGenerator extends ModdedBlockTagGenerator {
 
 		this.tag(BlockTags.SWORD_EFFICIENT)
 			.add(TFBlocks.HUGE_LILY_PAD.get());
+
+		this.tag(WEBS_GENERATE_HANGING_FROM)
+			.addTags(BlockTags.LOGS, BlockTags.LEAVES);
+
+		this.tag(WEBS_GENERATE_ON_TOP_OF)
+			.add(TFBlocks.HEDGE.get(), Blocks.JACK_O_LANTERN);
 	}
 
 	public static TagKey<Block> create(String tagName) {

@@ -43,19 +43,17 @@ public class HedgeBlock extends Block {
 	}
 
 	@Override
+	protected VoxelShape getBlockSupportShape(BlockState state, BlockGetter level, BlockPos pos) {
+		return Shapes.block();
+	}
+
+	@Override
 	public PathType getBlockPathType(BlockState state, BlockGetter getter, BlockPos pos, @Nullable Mob mob) {
 		return mob != null && this.shouldDamage(mob) ? PathType.DANGER_OTHER : null;
 	}
 
 	@Override
 	public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
-		if (this.shouldDamage(entity)) {
-			entity.hurt(level.damageSources().cactus(), DAMAGE);
-		}
-	}
-
-	@Override
-	public void stepOn(Level level, BlockPos pos, BlockState state, Entity entity) {
 		if (this.shouldDamage(entity)) {
 			entity.hurt(level.damageSources().cactus(), DAMAGE);
 		}
