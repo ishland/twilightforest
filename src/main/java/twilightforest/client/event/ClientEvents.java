@@ -1,6 +1,7 @@
 package twilightforest.client.event;
 
 import com.ibm.icu.text.RuleBasedNumberFormat;
+import com.mojang.blaze3d.shaders.Uniform;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.ChatFormatting;
@@ -10,8 +11,10 @@ import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.client.model.HeadedModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.CompiledShaderProgram;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
+import net.minecraft.client.renderer.entity.state.PlayerRenderState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
@@ -156,7 +159,15 @@ public class ClientEvents {
 	private static void renderAurora(RenderLevelStageEvent event) {
 		if (Minecraft.getInstance().level == null) return;
 
-		if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_WEATHER && (aurora > 0 || lastAurora > 0) && TFShaders.AURORA != null) {
+		if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_WEATHER && (aurora > 0 || lastAurora > 0)) {
+			CompiledShaderProgram auroraShader = Minecraft.getInstance().getShaderManager().getProgram(TFShaders.AURORA);
+			if (auroraShader == null)
+				return;
+			Uniform seedUniform = auroraShader.getUniform("SeedContext");
+			Uniform positionUniform = auroraShader.getUniform("PositionContext");
+			if (seedUniform == null || positionUniform == null)
+				return;
+
 			Tesselator tesselator = Tesselator.getInstance();
 			BufferBuilder buffer = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
 
@@ -171,13 +182,33 @@ public class ClientEvents {
 			RenderSystem.enableBlend();
 			RenderSystem.enableDepthTest();
 			RenderSystem.setShaderColor(1F, 1F, 1F, (Mth.lerp(event.getPartialTick().getGameTimeDeltaTicks(), lastAurora, aurora)) / 60F * 0.5F);
-			TFShaders.AURORA.invokeThenEndTesselator(
-				Minecraft.getInstance().level == null ? 0 : Mth.abs((int) Minecraft.getInstance().level.getBiomeManager().biomeZoomSeed),
-				(float) pos.x(), (float) pos.y(), (float) pos.z(), buffer);
+			int seed = Minecraft.getInstance().level == null ? 0 : Mth.abs((int) Minecraft.getInstance().level.getBiomeManager().biomeZoomSeed);
+			bindShaderDraw(auroraShader, seed, pos, buffer, seedUniform, positionUniform);
 			RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
 			RenderSystem.disableDepthTest();
 			RenderSystem.disableBlend();
 		}
+	}
+
+	private static void bindShaderDraw(CompiledShaderProgram auroraShader, int seed, Vec3 pos, BufferBuilder buffer, Uniform seedUniform, Uniform positionUniform) {
+		var last = RenderSystem.getShader();
+		RenderSystem.setShader(auroraShader);
+
+		// Set Uniforms
+		seedUniform.set(seed);
+		positionUniform.set((float) pos.x(), (float) pos.y(), (float) pos.z());
+
+		// Actually bind shader
+		auroraShader.apply();
+		BufferUploader.drawWithShader(buffer.buildOrThrow());
+
+		// Reset Uniforms
+		seedUniform.set(0);
+		positionUniform.set(0f, 0f, 0f);
+
+		// Unbind shader
+		auroraShader.clear();
+		RenderSystem.setShader(last);
 	}
 
 	private static void killVignette(RenderFrameEvent.Pre event) {
