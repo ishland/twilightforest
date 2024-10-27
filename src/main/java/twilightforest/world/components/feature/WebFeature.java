@@ -25,6 +25,13 @@ public class WebFeature extends Feature<NoneFeatureConfiguration> {
 		return state.is(BlockTagGenerator.WEBS_GENERATE_HANGING_FROM) && (level.isEmptyBlock(pos.below()) || (level.isEmptyBlock(pos.below(2)) && random.nextFloat() <= 0.25F));
 	}
 
+	private static boolean placeOrAdd(WorldGenLevel level, BlockPos pos, BlockState web, Direction direction) {
+		if (level.isEmptyBlock(pos)) return level.setBlock(pos, web.setValue(HangingWebBlock.getPropertyForFace(direction), true), HangingWebBlock.UPDATE_CLIENTS);
+		BlockState state = level.getBlockState(pos);
+		if (state.is(TFBlocks.HANGING_WEB)) return level.setBlock(pos, state.setValue(HangingWebBlock.getPropertyForFace(direction), true), HangingWebBlock.UPDATE_CLIENTS);
+		return false;
+	}
+
 	@Override
 	public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> config) {
 		WorldGenLevel level = config.level();
@@ -39,16 +46,16 @@ public class WebFeature extends Feature<NoneFeatureConfiguration> {
 				for (Direction direction : Direction.Plane.HORIZONTAL.shuffledCopy(random)) {
 					BlockPos.MutableBlockPos relative = pos.relative(direction).mutable();
 					Direction opposite = direction.getOpposite();
-					if (random.nextInt(4) + 1 > count && level.isEmptyBlock(relative) && HangingWebBlock.isAcceptableNeighbour(level, pos, opposite) && level.setBlock(relative, web.setValue(HangingWebBlock.getPropertyForFace(opposite), true), HangingWebBlock.UPDATE_CLIENTS)) {
+					if (random.nextInt(4) + 1 > count && HangingWebBlock.isAcceptableNeighbour(level, pos, opposite) && placeOrAdd(level, relative, web, opposite)) {
 						count++;
 						for (int i = 0; i < 1 + random.nextInt(7); i++) {
 							relative.move(Direction.DOWN);
-							if (!level.isEmptyBlock(relative) || !level.setBlock(relative, web.setValue(HangingWebBlock.getPropertyForFace(opposite), true), HangingWebBlock.UPDATE_CLIENTS)) break;
+							if (!placeOrAdd(level, relative, web, opposite)) break;
 						}
 					}
 				}
 
-				if (count > 1 && random.nextFloat() <= 0.33F && level.isEmptyBlock(pos.above()) && HangingWebBlock.isAcceptableNeighbour(level, pos, Direction.DOWN)) level.setBlock(pos.above(), web.setValue(HangingWebBlock.getPropertyForFace(Direction.DOWN), true), HangingWebBlock.UPDATE_CLIENTS);
+				if (count > 1 && random.nextFloat() <= 0.33F && HangingWebBlock.isAcceptableNeighbour(level, pos, Direction.DOWN)) placeOrAdd(level, pos.above(), web, Direction.DOWN);
 				return count > 0;
 			}
 		}
