@@ -26,7 +26,7 @@
   ],
   "render_type": "minecraft:translucent",
   "textures": {
-    "all": "twilightforest:block/hanging_web_2",
+    "all": "twilightforest:block/hanging_web_short",
     "particle": "#all"
   }
 }

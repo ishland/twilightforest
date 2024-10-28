@@ -51,6 +51,25 @@
     {
       "apply": [
         {
+          "model": "twilightforest:block/hanging_web_short",
+          "weight": 2,
+          "x": 270,
+          "y": 180
+        },
+        {
+          "model": "twilightforest:block/hanging_web_short_2",
+          "weight": 2,
+          "x": 270,
+          "y": 180
+        }
+      ],
+      "when": {
+        "web_south": "short"
+      }
+    },
+    {
+      "apply": [
+        {
           "model": "twilightforest:block/hanging_web",
           "weight": 2,
           "x": 270,
@@ -64,7 +83,24 @@
         }
       ],
       "when": {
-        "south": "true"
+        "web_south": "tall"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "twilightforest:block/hanging_web_short",
+          "weight": 2,
+          "x": 270
+        },
+        {
+          "model": "twilightforest:block/hanging_web_short_2",
+          "weight": 2,
+          "x": 270
+        }
+      ],
+      "when": {
+        "web_north": "short"
       }
     },
     {
@@ -81,7 +117,26 @@
         }
       ],
       "when": {
-        "north": "true"
+        "web_north": "tall"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "twilightforest:block/hanging_web_short",
+          "weight": 2,
+          "x": 270,
+          "y": 270
+        },
+        {
+          "model": "twilightforest:block/hanging_web_short_2",
+          "weight": 2,
+          "x": 270,
+          "y": 270
+        }
+      ],
+      "when": {
+        "web_west": "short"
       }
     },
     {
@@ -100,7 +155,26 @@
         }
       ],
       "when": {
-        "west": "true"
+        "web_west": "tall"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "twilightforest:block/hanging_web_short",
+          "weight": 2,
+          "x": 270,
+          "y": 90
+        },
+        {
+          "model": "twilightforest:block/hanging_web_short_2",
+          "weight": 2,
+          "x": 270,
+          "y": 90
+        }
+      ],
+      "when": {
+        "web_east": "short"
       }
     },
     {
@@ -119,7 +193,7 @@
         }
       ],
       "when": {
-        "east": "true"
+        "web_east": "tall"
       }
     }
   ]

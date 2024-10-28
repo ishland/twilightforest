@@ -3,6 +3,7 @@
     {
       "faces": {
         "down": {
+          "rotation": 180,
           "texture": "#all",
           "tintindex": 0
         },

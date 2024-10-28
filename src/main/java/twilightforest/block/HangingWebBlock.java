@@ -44,13 +44,9 @@ public class HangingWebBlock extends Block implements IShearable {
 	public static final VoxelShape UP_AABB = Block.box(0.0, 15.0, 0.0, 16.0, 16.0, 16.0);
 	public static final VoxelShape DOWN_AABB = Block.box(0.0, 0.0, 0.0, 16.0, 1.0, 16.0);
 	public static final VoxelShape WEST_AABB = Block.box(0.0, 0.0, 0.0, 1.0, 16.0, 16.0);
-	public static final VoxelShape WEST_SHORT_AABB = Block.box(0.0, 8.0, 0.0, 1.0, 16.0, 16.0);
 	public static final VoxelShape EAST_AABB = Block.box(15.0, 0.0, 0.0, 16.0, 16.0, 16.0);
-	public static final VoxelShape EAST_SHORT_AABB = Block.box(15.0, 8.0, 0.0, 16.0, 16.0, 16.0);
 	public static final VoxelShape NORTH_AABB = Block.box(0.0, 0.0, 0.0, 16.0, 16.0, 1.0);
-	public static final VoxelShape NORTH_SHORT_AABB = Block.box(0.0, 8.0, 0.0, 16.0, 16.0, 1.0);
 	public static final VoxelShape SOUTH_AABB = Block.box(0.0, 0.0, 15.0, 16.0, 16.0, 16.0);
-	public static final VoxelShape SOUTH_SHORT_AABB = Block.box(0.0, 8.0, 15.0, 16.0, 16.0, 16.0);
 	private final Map<BlockState, VoxelShape> shapesCache;
 
 	public HangingWebBlock(Properties properties) {
@@ -98,28 +94,20 @@ public class HangingWebBlock extends Block implements IShearable {
 			voxelshape = Shapes.or(voxelshape, DOWN_AABB);
 		}
 
-		if (state.getValue(NORTH) == WebShape.TALL) {
+		if (state.getValue(NORTH) != WebShape.NONE) {
 			voxelshape = Shapes.or(voxelshape, NORTH_AABB);
-		} else if (state.getValue(NORTH) == WebShape.SHORT) {
-			voxelshape = Shapes.or(voxelshape, NORTH_SHORT_AABB);
 		}
 
-		if (state.getValue(SOUTH) == WebShape.TALL) {
+		if (state.getValue(SOUTH) != WebShape.NONE) {
 			voxelshape = Shapes.or(voxelshape, SOUTH_AABB);
-		} else if (state.getValue(SOUTH) == WebShape.SHORT) {
-			voxelshape = Shapes.or(voxelshape, SOUTH_SHORT_AABB);
 		}
 
-		if (state.getValue(EAST) == WebShape.TALL) {
+		if (state.getValue(EAST) != WebShape.NONE) {
 			voxelshape = Shapes.or(voxelshape, EAST_AABB);
-		} else if (state.getValue(EAST) == WebShape.SHORT) {
-			voxelshape = Shapes.or(voxelshape, EAST_SHORT_AABB);
 		}
 
-		if (state.getValue(WEST) == WebShape.TALL) {
+		if (state.getValue(WEST) != WebShape.NONE) {
 			voxelshape = Shapes.or(voxelshape, WEST_AABB);
-		} else if (state.getValue(WEST) == WebShape.SHORT) {
-			voxelshape = Shapes.or(voxelshape, WEST_SHORT_AABB);
 		}
 
 		return voxelshape.isEmpty() ? Shapes.empty() : voxelshape;
@@ -252,13 +240,14 @@ public class HangingWebBlock extends Block implements IShearable {
 		return flag ? blockstate1 : null;
 	}
 
-	public static WebShape getPropertyForPlacement(BlockGetter level, BlockPos pos, Direction face) {
-		BlockState belowState = level.getBlockState(pos.below());
-		return isAWeb(belowState) && checkFace(belowState, face) ? WebShape.TALL : WebShape.SHORT;
-	}
 
 	public static boolean isAWeb(BlockState state) {
 		return state.is(TFBlocks.HANGING_WEB) || state.is(TFBlocks.WEBWORM);
+	}
+
+	public static WebShape getPropertyForPlacement(BlockGetter level, BlockPos pos, Direction face) {
+		BlockState belowState = level.getBlockState(pos.below());
+		return isAWeb(belowState) && checkFace(belowState, face) ? WebShape.TALL : WebShape.SHORT;
 	}
 
 	public static EnumProperty<WebShape> getPropertyForFace(Direction direction) {

@@ -65,7 +65,41 @@ public class WebwormBlock extends CritterBlock {
 
 	public WebwormBlock(Properties properties) {
 		super(properties);
-		this.shapesCache = ImmutableMap.copyOf(this.stateDefinition.getPossibleStates().stream().collect(Collectors.toMap(Function.identity(), HangingWebBlock::calculateShape)));
+		this.shapesCache = ImmutableMap.copyOf(this.stateDefinition.getPossibleStates().stream().collect(Collectors.toMap(Function.identity(), WebwormBlock::calculateShape)));
+	}
+
+	private static VoxelShape calculateShape(BlockState state) {
+		VoxelShape voxelshape = Shapes.empty();
+		if (state.getValue(UP)) {
+			voxelshape = HangingWebBlock.UP_AABB;
+		}
+
+		if (state.getValue(NORTH)) {
+			voxelshape = Shapes.or(voxelshape, HangingWebBlock.NORTH_AABB);
+		}
+
+		if (state.getValue(SOUTH)) {
+			voxelshape = Shapes.or(voxelshape, HangingWebBlock.SOUTH_AABB);
+		}
+
+		if (state.getValue(EAST)) {
+			voxelshape = Shapes.or(voxelshape, HangingWebBlock.EAST_AABB);
+		}
+
+		if (state.getValue(WEST)) {
+			voxelshape = Shapes.or(voxelshape, HangingWebBlock.WEST_AABB);
+		}
+
+		switch (state.getValue(FACING)) {
+			case DOWN -> voxelshape = Shapes.or(voxelshape, CritterBlock.DOWN_BB);
+			default -> voxelshape = Shapes.or(voxelshape, CritterBlock.UP_BB);
+			case NORTH -> voxelshape = Shapes.or(voxelshape, CritterBlock.NORTH_BB);
+			case SOUTH -> voxelshape = Shapes.or(voxelshape, CritterBlock.SOUTH_BB);
+			case WEST -> voxelshape = Shapes.or(voxelshape, CritterBlock.WEST_BB);
+			case EAST -> voxelshape = Shapes.or(voxelshape, CritterBlock.EAST_BB);
+		};
+
+		return voxelshape.isEmpty() ? Shapes.block() : voxelshape;
 	}
 
 	@Override
@@ -107,15 +141,18 @@ public class WebwormBlock extends CritterBlock {
 				if (level.isAreaLoaded(down, 4)) {
 					BlockState downState = level.getBlockState(down);
 					if (downState.is(this)) {
-                        if (!downState.getValue(faceProperty)) level.setBlockAndUpdate(down, downState.setValue(faceProperty, true));
+                        if (!downState.getValue(faceProperty)) {
+                            level.setBlockAndUpdate(down, downState.setValue(faceProperty, true));
+							return;
+                        }
                     } else if (downState.is(TFBlocks.HANGING_WEB)) {
 						if (!HangingWebBlock.checkFace(downState, face)) {
                             level.setBlockAndUpdate(down, downState.setValue(HangingWebBlock.getPropertyForFace(face), HangingWebBlock.getPropertyForPlacement(level, down, face)));
+							return;
                         }
-
-						level.setBlockAndUpdate(down, TFBlocks.HANGING_WEB.get().defaultBlockState().setValue(faceProperty, true));
 					} else if (downState.isAir()) {
 						level.setBlockAndUpdate(down, TFBlocks.HANGING_WEB.get().defaultBlockState().setValue(HangingWebBlock.getPropertyForFace(face), HangingWebBlock.getPropertyForPlacement(level, down, face)));
+						return;
 					}
 				} else return;
 			}
@@ -176,9 +213,9 @@ public class WebwormBlock extends CritterBlock {
 
 		if (entity instanceof Spider) return;
 		if (entity instanceof LivingEntity livingentity && (livingentity.hasEffect(MobEffects.WEAVING) || livingentity.isShiftKeyDown())) return;
-		List<BooleanProperty> propertyList = new ArrayList<>();
+		List<Direction> propertyList = new ArrayList<>();
 		for (Direction direction : Direction.values()) {
-			if (state.getValue(PipeBlock.PROPERTY_BY_DIRECTION.get(direction))) propertyList.add(PipeBlock.PROPERTY_BY_DIRECTION.get(direction));
+			if (state.getValue(PipeBlock.PROPERTY_BY_DIRECTION.get(direction))) propertyList.add(direction);
 		}
 		if (!propertyList.isEmpty()) {
 			entity.makeStuckInBlock(state, new Vec3(0.95, 0.95, 0.95));
@@ -188,8 +225,12 @@ public class WebwormBlock extends CritterBlock {
 				level.setBlockAndUpdate(pos, newState);
 
 				BlockState web = TFBlocks.HANGING_WEB.get().defaultBlockState();
-				for (BooleanProperty property : propertyList) {
-					web = web.setValue(property, true);
+				for (Direction property : propertyList) {
+					if (property.getAxis().isHorizontal()) {
+						web = web.setValue(HangingWebBlock.getPropertyForFace(property), HangingWebBlock.getPropertyForPlacement(level, pos, property));
+					} else {
+						web = web.setValue(PipeBlock.PROPERTY_BY_DIRECTION.get(property), true);
+					}
 				}
 
 				level.levelEvent(2001, pos, Block.getId(web));
@@ -215,7 +256,7 @@ public class WebwormBlock extends CritterBlock {
 
 		if (blockState.is(TFBlocks.HANGING_WEB)) {
 			for (Direction direction : Direction.values()) {
-				defaultState = defaultState.setValue(HangingWebBlock.getPropertyForFace(direction), blockState.getValue(HangingWebBlock.getPropertyForFace(direction)));
+				defaultState = defaultState.setValue(PipeBlock.PROPERTY_BY_DIRECTION.get(direction), HangingWebBlock.checkFace(blockState, direction));
 			}
         }
 
@@ -234,7 +275,7 @@ public class WebwormBlock extends CritterBlock {
 
 	@Override
 	public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-		return Shapes.or(this.shapesCache.get(state), super.getShape(state, level, pos, context));
+		return this.shapesCache.get(state);
 	}
 
 	@Override
