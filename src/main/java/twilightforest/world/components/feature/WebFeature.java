@@ -26,9 +26,9 @@ public class WebFeature extends Feature<NoneFeatureConfiguration> {
 	}
 
 	private static boolean placeOrAdd(WorldGenLevel level, BlockPos pos, BlockState web, Direction direction) {
-		if (level.isEmptyBlock(pos)) return level.setBlock(pos, web.setValue(HangingWebBlock.getPropertyForFace(direction), true), HangingWebBlock.UPDATE_CLIENTS);
+		if (level.isEmptyBlock(pos)) return level.setBlock(pos, web.setValue(HangingWebBlock.getPropertyForFace(direction), HangingWebBlock.getPropertyForPlacement(level, pos, direction)), HangingWebBlock.UPDATE_CLIENTS);
 		BlockState state = level.getBlockState(pos);
-		if (state.is(TFBlocks.HANGING_WEB)) return level.setBlock(pos, state.setValue(HangingWebBlock.getPropertyForFace(direction), true), HangingWebBlock.UPDATE_CLIENTS);
+		if (state.is(TFBlocks.HANGING_WEB)) return level.setBlock(pos, state.setValue(HangingWebBlock.getPropertyForFace(direction), HangingWebBlock.getPropertyForPlacement(level, pos, direction)), HangingWebBlock.UPDATE_CLIENTS);
 		return false;
 	}
 

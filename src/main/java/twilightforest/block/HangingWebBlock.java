@@ -15,15 +15,17 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.*;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.common.IShearable;
+import twilightforest.enums.WebShape;
+import twilightforest.init.TFBlocks;
 
 import javax.annotation.Nullable;
 import java.util.Iterator;
@@ -35,23 +37,38 @@ public class HangingWebBlock extends Block implements IShearable {
 	public static final MapCodec<HangingWebBlock> CODEC = simpleCodec(HangingWebBlock::new);
 	public static final BooleanProperty UP = PipeBlock.UP;
 	public static final BooleanProperty DOWN = PipeBlock.DOWN;
-	public static final BooleanProperty NORTH = PipeBlock.NORTH;
-	public static final BooleanProperty EAST = PipeBlock.EAST;
-	public static final BooleanProperty SOUTH = PipeBlock.SOUTH;
-	public static final BooleanProperty WEST = PipeBlock.WEST;
-	public static final Map<Direction, BooleanProperty> PROPERTY_BY_DIRECTION = PipeBlock.PROPERTY_BY_DIRECTION;
-	private static final VoxelShape UP_AABB = Block.box(0.0, 15.0, 0.0, 16.0, 16.0, 16.0);
-	private static final VoxelShape DOWN_AABB = Block.box(0.0, 0.0, 0.0, 16.0, 1.0, 16.0);
-	private static final VoxelShape WEST_AABB = Block.box(0.0, 0.0, 0.0, 1.0, 16.0, 16.0);
-	private static final VoxelShape EAST_AABB = Block.box(15.0, 0.0, 0.0, 16.0, 16.0, 16.0);
-	private static final VoxelShape NORTH_AABB = Block.box(0.0, 0.0, 0.0, 16.0, 16.0, 1.0);
-	private static final VoxelShape SOUTH_AABB = Block.box(0.0, 0.0, 15.0, 16.0, 16.0, 16.0);
+	public static final EnumProperty<WebShape> NORTH = EnumProperty.create("web_north", WebShape.class);
+	public static final EnumProperty<WebShape> EAST = EnumProperty.create("web_east", WebShape.class);
+	public static final EnumProperty<WebShape> SOUTH = EnumProperty.create("web_south", WebShape.class);
+	public static final EnumProperty<WebShape> WEST = EnumProperty.create("web_west", WebShape.class);
+	public static final VoxelShape UP_AABB = Block.box(0.0, 15.0, 0.0, 16.0, 16.0, 16.0);
+	public static final VoxelShape DOWN_AABB = Block.box(0.0, 0.0, 0.0, 16.0, 1.0, 16.0);
+	public static final VoxelShape WEST_AABB = Block.box(0.0, 0.0, 0.0, 1.0, 16.0, 16.0);
+	public static final VoxelShape WEST_SHORT_AABB = Block.box(0.0, 8.0, 0.0, 1.0, 16.0, 16.0);
+	public static final VoxelShape EAST_AABB = Block.box(15.0, 0.0, 0.0, 16.0, 16.0, 16.0);
+	public static final VoxelShape EAST_SHORT_AABB = Block.box(15.0, 8.0, 0.0, 16.0, 16.0, 16.0);
+	public static final VoxelShape NORTH_AABB = Block.box(0.0, 0.0, 0.0, 16.0, 16.0, 1.0);
+	public static final VoxelShape NORTH_SHORT_AABB = Block.box(0.0, 8.0, 0.0, 16.0, 16.0, 1.0);
+	public static final VoxelShape SOUTH_AABB = Block.box(0.0, 0.0, 15.0, 16.0, 16.0, 16.0);
+	public static final VoxelShape SOUTH_SHORT_AABB = Block.box(0.0, 8.0, 15.0, 16.0, 16.0, 16.0);
 	private final Map<BlockState, VoxelShape> shapesCache;
 
-	public HangingWebBlock(BlockBehaviour.Properties properties) {
+	public HangingWebBlock(Properties properties) {
 		super(properties);
-		this.registerDefaultState(this.stateDefinition.any().setValue(UP, false).setValue(DOWN, false).setValue(NORTH, false).setValue(EAST, false).setValue(SOUTH, false).setValue(WEST, false));
+		this.registerDefaultState(this.stateDefinition.any()
+			.setValue(UP, false)
+			.setValue(DOWN, false)
+			.setValue(NORTH, WebShape.NONE)
+			.setValue(EAST, WebShape.NONE)
+			.setValue(SOUTH, WebShape.NONE)
+			.setValue(WEST, WebShape.NONE)
+		);
 		this.shapesCache = ImmutableMap.copyOf(this.stateDefinition.getPossibleStates().stream().collect(Collectors.toMap(Function.identity(), HangingWebBlock::calculateShape)));
+	}
+
+	@Override
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+		builder.add(UP, DOWN, NORTH, EAST, SOUTH, WEST);
 	}
 
 	@Override
@@ -71,7 +88,7 @@ public class HangingWebBlock extends Block implements IShearable {
 		}
 	}
 
-	private static VoxelShape calculateShape(BlockState state) {
+	public static VoxelShape calculateShape(BlockState state) {
 		VoxelShape voxelshape = Shapes.empty();
 		if (state.getValue(UP)) {
 			voxelshape = UP_AABB;
@@ -81,23 +98,31 @@ public class HangingWebBlock extends Block implements IShearable {
 			voxelshape = Shapes.or(voxelshape, DOWN_AABB);
 		}
 
-		if (state.getValue(NORTH)) {
+		if (state.getValue(NORTH) == WebShape.TALL) {
 			voxelshape = Shapes.or(voxelshape, NORTH_AABB);
+		} else if (state.getValue(NORTH) == WebShape.SHORT) {
+			voxelshape = Shapes.or(voxelshape, NORTH_SHORT_AABB);
 		}
 
-		if (state.getValue(SOUTH)) {
+		if (state.getValue(SOUTH) == WebShape.TALL) {
 			voxelshape = Shapes.or(voxelshape, SOUTH_AABB);
+		} else if (state.getValue(SOUTH) == WebShape.SHORT) {
+			voxelshape = Shapes.or(voxelshape, SOUTH_SHORT_AABB);
 		}
 
-		if (state.getValue(EAST)) {
+		if (state.getValue(EAST) == WebShape.TALL) {
 			voxelshape = Shapes.or(voxelshape, EAST_AABB);
+		} else if (state.getValue(EAST) == WebShape.SHORT) {
+			voxelshape = Shapes.or(voxelshape, EAST_SHORT_AABB);
 		}
 
-		if (state.getValue(WEST)) {
+		if (state.getValue(WEST) == WebShape.TALL) {
 			voxelshape = Shapes.or(voxelshape, WEST_AABB);
+		} else if (state.getValue(WEST) == WebShape.SHORT) {
+			voxelshape = Shapes.or(voxelshape, WEST_SHORT_AABB);
 		}
 
-		return voxelshape.isEmpty() ? Shapes.block() : voxelshape;
+		return voxelshape.isEmpty() ? Shapes.empty() : voxelshape;
 	}
 
 	@Override
@@ -119,28 +144,34 @@ public class HangingWebBlock extends Block implements IShearable {
 		return this.countFaces(state) > 0;
 	}
 
+	public static boolean checkFace(BlockState state, Direction direction) {
+		if (state.is(TFBlocks.HANGING_WEB)) {
+			return switch (direction) {
+				case DOWN -> state.getValue(DOWN);
+				case UP -> state.getValue(UP);
+				case NORTH -> state.getValue(NORTH) != WebShape.NONE;
+				case SOUTH -> state.getValue(SOUTH) != WebShape.NONE;
+				case WEST -> state.getValue(WEST) != WebShape.NONE;
+				case EAST -> state.getValue(EAST) != WebShape.NONE;
+			};
+		} else return state.getValue(PipeBlock.PROPERTY_BY_DIRECTION.get(direction));
+	}
+
 	private int countFaces(BlockState state) {
 		int i = 0;
-
-		for (BooleanProperty booleanproperty : PROPERTY_BY_DIRECTION.values()) {
-			if (state.getValue(booleanproperty)) {
-				++i;
-			}
-		}
-
+		for (Direction direction : Direction.values()) if (checkFace(state, direction)) ++i;
 		return i;
 	}
 
-	private boolean canSupportAtFace(BlockGetter level, BlockPos pos, Direction direction) {
+	public boolean canSupportAtFace(BlockGetter level, BlockPos pos, Direction direction) {
 		BlockPos blockpos = pos.relative(direction);
 		if (isAcceptableNeighbour(level, blockpos, direction)) {
 			return true;
 		} else if (direction.getAxis() == Direction.Axis.Y) {
 			return false;
 		} else {
-			BooleanProperty booleanproperty = PROPERTY_BY_DIRECTION.get(direction);
 			BlockState blockstate = level.getBlockState(pos.above());
-			return blockstate.is(this) && blockstate.getValue(booleanproperty);
+			return blockstate.is(this) && checkFace(blockstate, direction);
 		}
 	}
 
@@ -153,13 +184,16 @@ public class HangingWebBlock extends Block implements IShearable {
 		if (state.getValue(UP)) {
 			state = state.setValue(UP, isAcceptableNeighbour(level, blockpos, Direction.DOWN));
 		}
+		if (state.getValue(DOWN)) {
+			state = state.setValue(DOWN, isAcceptableNeighbour(level, pos.below(), Direction.UP));
+		}
 
 		BlockState blockstate = null;
 		Iterator<Direction> iterator = Direction.Plane.HORIZONTAL.iterator();
 
 		while(true) {
 			Direction direction;
-			BooleanProperty booleanproperty;
+			EnumProperty<WebShape> booleanproperty;
 			do {
 				if (!iterator.hasNext()) {
 					return state;
@@ -167,7 +201,7 @@ public class HangingWebBlock extends Block implements IShearable {
 
 				direction = iterator.next();
 				booleanproperty = getPropertyForFace(direction);
-			} while(!state.getValue(booleanproperty));
+			} while(state.getValue(booleanproperty) == WebShape.NONE);
 
 			boolean flag = this.canSupportAtFace(level, pos, direction);
 			if (!flag) {
@@ -175,10 +209,13 @@ public class HangingWebBlock extends Block implements IShearable {
 					blockstate = level.getBlockState(blockpos);
 				}
 
-				flag = blockstate.is(this) && blockstate.getValue(booleanproperty);
+				flag = (blockstate.is(this) && blockstate.getValue(booleanproperty) != WebShape.NONE) || (blockstate.is(TFBlocks.WEBWORM) && blockstate.getValue(PipeBlock.PROPERTY_BY_DIRECTION.get(direction)));
 			}
 
-			state = state.setValue(booleanproperty, flag);
+			if (!flag) state = state.setValue(booleanproperty, WebShape.NONE);
+			else {
+				state = state.setValue(getPropertyForFace(direction), getPropertyForPlacement(level, pos, direction));
+			}
 		}
 	}
 
@@ -191,7 +228,7 @@ public class HangingWebBlock extends Block implements IShearable {
 	@Override
 	protected boolean canBeReplaced(BlockState state, BlockPlaceContext useContext) {
 		BlockState blockstate = useContext.getLevel().getBlockState(useContext.getClickedPos());
-		return blockstate.is(this) ? this.countFaces(blockstate) < PROPERTY_BY_DIRECTION.size() : super.canBeReplaced(state, useContext);
+		return blockstate.is(this) ? this.countFaces(blockstate) < 6 : super.canBeReplaced(state, useContext);
 	}
 
 	@Nullable
@@ -202,20 +239,36 @@ public class HangingWebBlock extends Block implements IShearable {
 		BlockState blockstate1 = flag ? blockstate : this.defaultBlockState();
 
 		for (Direction direction : context.getNearestLookingDirections()) {
-			BooleanProperty booleanproperty = getPropertyForFace(direction);
-			boolean flag1 = flag && blockstate.getValue(booleanproperty);
+			boolean flag1 = flag && checkFace(blockstate, direction);
 			if (!flag1 && this.canSupportAtFace(context.getLevel(), context.getClickedPos(), direction)) {
-				return blockstate1.setValue(booleanproperty, true);
+				if (direction.getAxis().isHorizontal()) {
+					return blockstate1.setValue(getPropertyForFace(direction), getPropertyForPlacement(context.getLevel(), context.getClickedPos(), direction));
+				} else {
+					return blockstate1.setValue(direction == Direction.UP ? UP : DOWN, true);
+				}
 			}
-
 		}
 
 		return flag ? blockstate1 : null;
 	}
 
-	@Override
-	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-		builder.add(UP, DOWN, NORTH, EAST, SOUTH, WEST);
+	public static WebShape getPropertyForPlacement(BlockGetter level, BlockPos pos, Direction face) {
+		BlockState belowState = level.getBlockState(pos.below());
+		return isAWeb(belowState) && checkFace(belowState, face) ? WebShape.TALL : WebShape.SHORT;
+	}
+
+	public static boolean isAWeb(BlockState state) {
+		return state.is(TFBlocks.HANGING_WEB) || state.is(TFBlocks.WEBWORM);
+	}
+
+	public static EnumProperty<WebShape> getPropertyForFace(Direction direction) {
+		return switch (direction) {
+			case NORTH -> NORTH;
+			case SOUTH -> SOUTH;
+			case WEST -> WEST;
+			case EAST -> EAST;
+			default -> throw new IllegalArgumentException("Unexpected parameter direction: " + direction);
+		};
 	}
 
 	@Override
@@ -240,9 +293,5 @@ public class HangingWebBlock extends Block implements IShearable {
 			case FRONT_BACK -> state.setValue(EAST, state.getValue(WEST)).setValue(WEST, state.getValue(EAST));
 			default -> super.mirror(state, mirror);
 		};
-	}
-
-	public static BooleanProperty getPropertyForFace(Direction face) {
-		return PROPERTY_BY_DIRECTION.get(face);
 	}
 }

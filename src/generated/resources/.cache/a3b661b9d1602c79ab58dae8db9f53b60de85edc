@@ -1,11 +1,11 @@
-// 1.21.1	2024-10-24T14:46:51.0613672	Twilight Forest Item Tags
+// 1.21.1	2024-10-27T13:26:11.659824	Twilight Forest Item Tags
 3c5895c72cfffe09615ec2b28267a726fcbf52e8 data/alexscaves/tags/item/ferns.json
 4c5df8d60b8f068b482a22fd807ddea22e1bfe00 data/alexscaves/tags/item/ferromagnetic_items.json
 42afac82c004061587d5b1ae20c2e66c0d399c8c data/alexscaves/tags/item/raw_meats.json
 4dced7c5c98b183e1d94bafa23126914eb919706 data/createaddition/tags/item/plants.json
 932db6906454527b9d89f0655bd6071261e0ebd3 data/createaddition/tags/item/plant_foods.json
 3fd61fbbfac1e6fc37d3e6300cb548fdf13b2688 data/curios/tags/item/charm.json
-8c9bf988d87251fa01c2ebab384b3140345c0ef4 data/curios/tags/item/head.json
+5d374b37c1e580bbb0c3b11fa74c988babeb5be6 data/curios/tags/item/head.json
 6aac44ec57edaf3fe8e50d474c50c98abd9cf1de data/c/tags/item/chests/wooden.json
 3fc964a8f6314a307c994f9481e1ad6ca6d39785 data/c/tags/item/feathers.json
 fd6d63568998358b68d7c3549ac337c9d4d08a96 data/c/tags/item/fence_gates/wooden.json

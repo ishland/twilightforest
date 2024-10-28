@@ -135,6 +135,18 @@ public class BlockstateGenerator extends BlockModelBuilders {
 			.face(Direction.DOWN).uvs(0, 0, 16, 16).tintindex(0).texture("#all").end()
 			.end();
 
+		BlockModelBuilder hangingWebBuilderShort = models().getBuilder("hanging_web_short").renderType(TRANSLUCENT).texture("particle", "#all").texture("all", "block/hanging_web_short")
+			.element().from(0, 0, 0).to(16, 0.2F, 16)
+			.face(Direction.UP).uvs(0, 0, 16, 16).tintindex(0).texture("#all").end()
+			.face(Direction.DOWN).uvs(0, 0, 16, 16).tintindex(0).texture("#all").end()
+			.end();
+
+		BlockModelBuilder altHangingWebBuilderShort = models().getBuilder("hanging_web_short_2").renderType(TRANSLUCENT).texture("particle", "#all").texture("all", "block/hanging_web_short_2")
+			.element().from(0, 0, 0).to(16, 0.2F, 16)
+			.face(Direction.UP).uvs(0, 0, 16, 16).tintindex(0).texture("#all").end()
+			.face(Direction.DOWN).uvs(0, 0, 16, 16).tintindex(0).texture("#all").end()
+			.end();
+
 		getMultipartBuilder(TFBlocks.HANGING_WEB.value()).part()
 			.weight(1).modelFile(webBuilder).rotationX(180).nextModel()
 			.weight(1).modelFile(webBuilder).rotationX(180).rotationY(90).nextModel()
@@ -148,21 +160,66 @@ public class BlockstateGenerator extends BlockModelBuilders {
 			.weight(1).modelFile(webBuilder).rotationY(270)
 			.addModel().condition(HangingWebBlock.DOWN, true).end().part()
 
+			.weight(2).modelFile(hangingWebBuilderShort).rotationX(270).rotationY(180).nextModel()
+			.weight(2).modelFile(altHangingWebBuilderShort).rotationX(270).rotationY(180)
+			.addModel().condition(HangingWebBlock.SOUTH, WebShape.SHORT).end().part()
+
 			.weight(2).modelFile(hangingWebBuilder).rotationX(270).rotationY(180).nextModel()
 			.weight(2).modelFile(altHangingWebBuilder).rotationX(270).rotationY(180)
-			.addModel().condition(HangingWebBlock.SOUTH, true).end().part()
+			.addModel().condition(HangingWebBlock.SOUTH, WebShape.TALL).end().part()
+
+			.weight(2).modelFile(hangingWebBuilderShort).rotationX(270).nextModel()
+			.weight(2).modelFile(altHangingWebBuilderShort).rotationX(270)
+			.addModel().condition(HangingWebBlock.NORTH, WebShape.SHORT).end().part()
 
 			.weight(2).modelFile(hangingWebBuilder).rotationX(270).nextModel()
 			.weight(2).modelFile(altHangingWebBuilder).rotationX(270)
-			.addModel().condition(HangingWebBlock.NORTH, true).end().part()
+			.addModel().condition(HangingWebBlock.NORTH, WebShape.TALL).end().part()
+
+			.weight(2).modelFile(hangingWebBuilderShort).rotationY(270).rotationX(270).nextModel()
+			.weight(2).modelFile(altHangingWebBuilderShort).rotationY(270).rotationX(270)
+			.addModel().condition(HangingWebBlock.WEST, WebShape.SHORT).end().part()
 
 			.weight(2).modelFile(hangingWebBuilder).rotationY(270).rotationX(270).nextModel()
 			.weight(2).modelFile(altHangingWebBuilder).rotationY(270).rotationX(270)
-			.addModel().condition(HangingWebBlock.WEST, true).end().part()
+			.addModel().condition(HangingWebBlock.WEST, WebShape.TALL).end().part()
+
+			.weight(2).modelFile(hangingWebBuilderShort).rotationY(90).rotationX(270).nextModel()
+			.weight(2).modelFile(altHangingWebBuilderShort).rotationY(90).rotationX(270)
+			.addModel().condition(HangingWebBlock.EAST, WebShape.SHORT).end().part()
 
 			.weight(2).modelFile(hangingWebBuilder).rotationY(90).rotationX(270).nextModel()
 			.weight(2).modelFile(altHangingWebBuilder).rotationY(90).rotationX(270)
-			.addModel().condition(HangingWebBlock.EAST, true).end();
+			.addModel().condition(HangingWebBlock.EAST, WebShape.TALL).end();
+
+		getMultipartBuilder(TFBlocks.WEBWORM.get()).part()
+			.weight(1).modelFile(webBuilder).rotationX(180).nextModel()
+			.weight(1).modelFile(webBuilder).rotationX(180).rotationY(90).nextModel()
+			.weight(1).modelFile(webBuilder).rotationX(180).rotationY(180).nextModel()
+			.weight(1).modelFile(webBuilder).rotationX(180).rotationY(270)
+			.addModel().condition(WebwormBlock.UP, true).end().part()
+
+			.weight(1).modelFile(webBuilder).nextModel()
+			.weight(1).modelFile(webBuilder).rotationY(90).nextModel()
+			.weight(1).modelFile(webBuilder).rotationY(180).nextModel()
+			.weight(1).modelFile(webBuilder).rotationY(270)
+			.addModel().condition(WebwormBlock.DOWN, true).end().part()
+
+			.weight(2).modelFile(webBuilder).rotationX(270).rotationY(180).nextModel()
+			.weight(2).modelFile(webBuilder).rotationX(270).rotationY(180)
+			.addModel().condition(WebwormBlock.SOUTH, true).end().part()
+
+			.weight(2).modelFile(webBuilder).rotationX(270).nextModel()
+			.weight(2).modelFile(webBuilder).rotationX(270)
+			.addModel().condition(WebwormBlock.NORTH, true).end().part()
+
+			.weight(2).modelFile(webBuilder).rotationY(270).rotationX(270).nextModel()
+			.weight(2).modelFile(webBuilder).rotationY(270).rotationX(270)
+			.addModel().condition(WebwormBlock.WEST, true).end().part()
+
+			.weight(2).modelFile(webBuilder ).rotationY(90).rotationX(270).nextModel()
+			.weight(2).modelFile(webBuilder).rotationY(90).rotationX(270)
+			.addModel().condition(WebwormBlock.EAST, true).end();
 
 		simpleBlock(TFBlocks.CANOPY_WINDOW.value(), this.models().cubeAll(this.name(TFBlocks.CANOPY_WINDOW.value()), this.blockTexture(TFBlocks.CANOPY_WINDOW.value())).renderType(CUTOUT));
 		paneBlockWithRenderType(TFBlocks.CANOPY_WINDOW_PANE.value(), TFBlocks.CANOPY_WINDOW.getId().withPrefix("block/"), TFBlocks.CANOPY_WINDOW.getId().withPrefix("block/"), CUTOUT);
@@ -433,30 +490,30 @@ public class BlockstateGenerator extends BlockModelBuilders {
 			Direction direction = pair.getFirst();
 			//add base block for each rotation
 			builder.part().uvLock(true).rotationY(pair.getSecond()).modelFile(models()
-				.withExistingParent("chiseled_canopy_bookshelf", "chiseled_bookshelf")
-				.texture("top", prefix("block/wood/chiseled_canopy_bookshelf_top"))
-				.texture("side", prefix("block/wood/chiseled_canopy_bookshelf_side"))).addModel()
+					.withExistingParent("chiseled_canopy_bookshelf", "chiseled_bookshelf")
+					.texture("top", prefix("block/wood/chiseled_canopy_bookshelf_top"))
+					.texture("side", prefix("block/wood/chiseled_canopy_bookshelf_side"))).addModel()
 				.condition(HorizontalDirectionalBlock.FACING, direction).end();
 			//add each bookshelf part for each slot
 			List.of(
-					Pair.of(BlockStateProperties.CHISELED_BOOKSHELF_SLOT_0_OCCUPIED, "_slot_top_left"),
-					Pair.of(BlockStateProperties.CHISELED_BOOKSHELF_SLOT_1_OCCUPIED, "_slot_top_mid"),
-					Pair.of(BlockStateProperties.CHISELED_BOOKSHELF_SLOT_2_OCCUPIED, "_slot_top_right"),
-					Pair.of(BlockStateProperties.CHISELED_BOOKSHELF_SLOT_3_OCCUPIED, "_slot_bottom_left"),
-					Pair.of(BlockStateProperties.CHISELED_BOOKSHELF_SLOT_4_OCCUPIED, "_slot_bottom_mid"),
-					Pair.of(BlockStateProperties.CHISELED_BOOKSHELF_SLOT_5_OCCUPIED, "_slot_bottom_right")
-				).forEach(pair1 -> {
-					//filled part
-					builder.part().uvLock(true).rotationY(pair.getSecond()).modelFile(models()
-							.withExistingParent("chiseled_canopy_bookshelf_occupied" + pair1.getSecond(), "template_chiseled_bookshelf" + pair1.getSecond())
-							.texture("texture", prefix("block/wood/chiseled_canopy_bookshelf_occupied"))).addModel()
-						.nestedGroup().condition(HorizontalDirectionalBlock.FACING, direction).condition(pair1.getFirst(), true).end();
-					//empty part
-					builder.part().uvLock(true).rotationY(pair.getSecond()).modelFile(models()
+				Pair.of(BlockStateProperties.CHISELED_BOOKSHELF_SLOT_0_OCCUPIED, "_slot_top_left"),
+				Pair.of(BlockStateProperties.CHISELED_BOOKSHELF_SLOT_1_OCCUPIED, "_slot_top_mid"),
+				Pair.of(BlockStateProperties.CHISELED_BOOKSHELF_SLOT_2_OCCUPIED, "_slot_top_right"),
+				Pair.of(BlockStateProperties.CHISELED_BOOKSHELF_SLOT_3_OCCUPIED, "_slot_bottom_left"),
+				Pair.of(BlockStateProperties.CHISELED_BOOKSHELF_SLOT_4_OCCUPIED, "_slot_bottom_mid"),
+				Pair.of(BlockStateProperties.CHISELED_BOOKSHELF_SLOT_5_OCCUPIED, "_slot_bottom_right")
+			).forEach(pair1 -> {
+				//filled part
+				builder.part().uvLock(true).rotationY(pair.getSecond()).modelFile(models()
+						.withExistingParent("chiseled_canopy_bookshelf_occupied" + pair1.getSecond(), "template_chiseled_bookshelf" + pair1.getSecond())
+						.texture("texture", prefix("block/wood/chiseled_canopy_bookshelf_occupied"))).addModel()
+					.nestedGroup().condition(HorizontalDirectionalBlock.FACING, direction).condition(pair1.getFirst(), true).end();
+				//empty part
+				builder.part().uvLock(true).rotationY(pair.getSecond()).modelFile(models()
 						.withExistingParent("chiseled_canopy_bookshelf_empty" + pair1.getSecond(), "template_chiseled_bookshelf" + pair1.getSecond())
 						.texture("texture", prefix("block/wood/chiseled_canopy_bookshelf_empty"))).addModel()
-						.nestedGroup().condition(HorizontalDirectionalBlock.FACING, direction).condition(pair1.getFirst(), false).end();
-				});
+					.nestedGroup().condition(HorizontalDirectionalBlock.FACING, direction).condition(pair1.getFirst(), false).end();
+			});
 		});
 
 		itemModels().getBuilder("chiseled_canopy_bookshelf").parent(models().orientable("chiseled_canopy_bookshelf_inventory", prefix("block/wood/chiseled_canopy_bookshelf_side"), prefix("block/wood/chiseled_canopy_bookshelf_empty"), prefix("block/wood/chiseled_canopy_bookshelf_top")));
@@ -619,113 +676,113 @@ public class BlockstateGenerator extends BlockModelBuilders {
 
 				//DOWN WEST
 				.forceFieldElement().ifState(ForceFieldModel.ExtraDirection.DOWN_WEST, true).parents(ForceFieldModel.ExtraDirection.DOWN, ForceFieldModel.ExtraDirection.WEST).from(0, 0, 7).to(7, 7, 9).shade(false)
-					.face(Direction.DOWN).cullface(Direction.DOWN).uvs(0, 7, 7, 9).end()
-					.face(Direction.WEST).cullface(Direction.WEST).uvs(7, 0, 9, 7).end()
-					.face(Direction.NORTH).uvs(0, 0, 7, 7).end()
-					.face(Direction.SOUTH).uvs(9, 0, 16, 7).end().faces((direction, builder) -> builder.texture("#pane").emissivity(15, 15))
+				.face(Direction.DOWN).cullface(Direction.DOWN).uvs(0, 7, 7, 9).end()
+				.face(Direction.WEST).cullface(Direction.WEST).uvs(7, 0, 9, 7).end()
+				.face(Direction.NORTH).uvs(0, 0, 7, 7).end()
+				.face(Direction.SOUTH).uvs(9, 0, 16, 7).end().faces((direction, builder) -> builder.texture("#pane").emissivity(15, 15))
 				.ifElse().from(7, 0, 7).to(9, 7, 9).parents(ForceFieldModel.ExtraDirection.DOWN).shade(false).face(Direction.WEST).uvs(7, 0, 9, 7).texture("#pane").emissivity(15, 15).end()
 				.ifSame().from(0, 7, 7).to(7, 9, 9).parents(ForceFieldModel.ExtraDirection.WEST).shade(false).face(Direction.DOWN).uvs(0, 7, 7, 9).texture("#pane").emissivity(15, 15).end().end()
 
 				//DOWN EAST
 				.forceFieldElement().ifState(ForceFieldModel.ExtraDirection.DOWN_EAST, true).parents(ForceFieldModel.ExtraDirection.DOWN, ForceFieldModel.ExtraDirection.EAST).from(9, 0, 7).to(16, 7, 9).shade(false)
-					.face(Direction.DOWN).cullface(Direction.DOWN).uvs(9, 7, 16, 9).end()
-					.face(Direction.EAST).cullface(Direction.EAST).uvs(7, 0, 9, 7).end()
-					.face(Direction.NORTH).uvs(9, 0, 16, 7).end()
-					.face(Direction.SOUTH).uvs(0, 0, 7, 7).end().faces((direction, builder) -> builder.texture("#pane").emissivity(15, 15))
+				.face(Direction.DOWN).cullface(Direction.DOWN).uvs(9, 7, 16, 9).end()
+				.face(Direction.EAST).cullface(Direction.EAST).uvs(7, 0, 9, 7).end()
+				.face(Direction.NORTH).uvs(9, 0, 16, 7).end()
+				.face(Direction.SOUTH).uvs(0, 0, 7, 7).end().faces((direction, builder) -> builder.texture("#pane").emissivity(15, 15))
 				.ifElse().from(7, 0, 7).to(9, 7, 9).parents(ForceFieldModel.ExtraDirection.DOWN).shade(false).face(Direction.EAST).uvs(7, 0, 9, 7).texture("#pane").emissivity(15, 15).end()
 				.ifSame().from(9, 7, 7).to(16, 9, 9).parents(ForceFieldModel.ExtraDirection.EAST).shade(false).face(Direction.DOWN).uvs(9, 7, 16, 9).texture("#pane").emissivity(15, 15).end().end()
 
 				//DOWN NORTH
 				.forceFieldElement().ifState(ForceFieldModel.ExtraDirection.DOWN_NORTH, true).from(7, 0, 0).to(9, 7, 7).parents(ForceFieldModel.ExtraDirection.DOWN, ForceFieldModel.ExtraDirection.NORTH).shade(false)
-					.face(Direction.DOWN).cullface(Direction.DOWN).uvs(7, 0, 9, 7).end()
-					.face(Direction.NORTH).cullface(Direction.NORTH).uvs(7, 0, 9, 7).end()
-					.face(Direction.WEST).uvs(0, 0, 7, 7).end()
-					.face(Direction.EAST).uvs(9, 9, 16, 16).end().faces((direction, builder) -> builder.texture("#pane").emissivity(15, 15))
+				.face(Direction.DOWN).cullface(Direction.DOWN).uvs(7, 0, 9, 7).end()
+				.face(Direction.NORTH).cullface(Direction.NORTH).uvs(7, 0, 9, 7).end()
+				.face(Direction.WEST).uvs(0, 0, 7, 7).end()
+				.face(Direction.EAST).uvs(9, 9, 16, 16).end().faces((direction, builder) -> builder.texture("#pane").emissivity(15, 15))
 				.ifElse().from(7, 0, 7).to(9, 7, 9).parents(ForceFieldModel.ExtraDirection.DOWN).shade(false).face(Direction.NORTH).uvs(7, 0, 9, 7).texture("#pane").emissivity(15, 15).end()
 				.ifSame().from(7, 7, 0).to(9, 9, 7).parents(ForceFieldModel.ExtraDirection.NORTH).shade(false).face(Direction.DOWN).uvs(7, 0, 9, 7).texture("#pane").emissivity(15, 15).end().end()
 
 				//DOWN SOUTH
 				.forceFieldElement().ifState(ForceFieldModel.ExtraDirection.DOWN_SOUTH, true).from(7, 0, 9).to(9, 7, 16).parents(ForceFieldModel.ExtraDirection.DOWN, ForceFieldModel.ExtraDirection.SOUTH).shade(false)
-					.face(Direction.DOWN).cullface(Direction.DOWN).uvs(7, 9, 9, 16).end()
-					.face(Direction.SOUTH).cullface(Direction.SOUTH).uvs(7, 0, 9, 7).end()
-					.face(Direction.WEST).uvs(9, 0, 16, 7).end()
-					.face(Direction.EAST).uvs(0, 0, 7, 7).end().faces((direction, builder) -> builder.texture("#pane").emissivity(15, 15))
+				.face(Direction.DOWN).cullface(Direction.DOWN).uvs(7, 9, 9, 16).end()
+				.face(Direction.SOUTH).cullface(Direction.SOUTH).uvs(7, 0, 9, 7).end()
+				.face(Direction.WEST).uvs(9, 0, 16, 7).end()
+				.face(Direction.EAST).uvs(0, 0, 7, 7).end().faces((direction, builder) -> builder.texture("#pane").emissivity(15, 15))
 				.ifElse().from(7, 0, 7).to(9, 7, 9).parents(ForceFieldModel.ExtraDirection.DOWN).shade(false).face(Direction.SOUTH).uvs(7, 0, 9, 7).texture("#pane").emissivity(15, 15).end()
 				.ifSame().from(7, 7, 9).to(9, 9, 16).parents(ForceFieldModel.ExtraDirection.SOUTH).shade(false).face(Direction.DOWN).uvs(7, 9, 9, 16).texture("#pane").emissivity(15, 15).end().end()
 
 				//UP WEST
 				.forceFieldElement().ifState(ForceFieldModel.ExtraDirection.UP_WEST, true).from(0, 9, 7).to(7, 16, 9).parents(ForceFieldModel.ExtraDirection.UP, ForceFieldModel.ExtraDirection.WEST).shade(false)
-					.face(Direction.UP).cullface(Direction.UP).uvs(0, 7, 7, 9).end()
-					.face(Direction.WEST).cullface(Direction.WEST).uvs(7, 9, 9, 16).end()
-					.face(Direction.NORTH).uvs(0, 9, 7, 16).end()
-					.face(Direction.SOUTH).uvs(9, 9, 16, 16).end().faces((direction, builder) -> builder.texture("#pane").emissivity(15, 15))
+				.face(Direction.UP).cullface(Direction.UP).uvs(0, 7, 7, 9).end()
+				.face(Direction.WEST).cullface(Direction.WEST).uvs(7, 9, 9, 16).end()
+				.face(Direction.NORTH).uvs(0, 9, 7, 16).end()
+				.face(Direction.SOUTH).uvs(9, 9, 16, 16).end().faces((direction, builder) -> builder.texture("#pane").emissivity(15, 15))
 				.ifElse().from(7, 9, 7).to(9, 16, 9).parents(ForceFieldModel.ExtraDirection.UP).shade(false).face(Direction.WEST).uvs(7, 9, 9, 16).texture("#pane").emissivity(15, 15).end()
 				.ifSame().from(0, 7, 7).to(7, 9, 9).parents(ForceFieldModel.ExtraDirection.WEST).shade(false).face(Direction.UP).uvs(0, 7, 7, 9).texture("#pane").emissivity(15, 15).end().end()
 
 				//UP EAST
 				.forceFieldElement().ifState(ForceFieldModel.ExtraDirection.UP_EAST, true).from(9, 9, 7).to(16, 16, 9).parents(ForceFieldModel.ExtraDirection.UP, ForceFieldModel.ExtraDirection.EAST).shade(false)
-					.face(Direction.UP).cullface(Direction.UP).uvs(9, 7, 16, 9).end()
-					.face(Direction.EAST).cullface(Direction.EAST).uvs(7, 9, 9, 16).end()
-					.face(Direction.NORTH).uvs(9, 9, 16, 16).end()
-					.face(Direction.SOUTH).uvs(0, 9, 7, 16).end().faces((direction, builder) -> builder.texture("#pane").emissivity(15, 15))
+				.face(Direction.UP).cullface(Direction.UP).uvs(9, 7, 16, 9).end()
+				.face(Direction.EAST).cullface(Direction.EAST).uvs(7, 9, 9, 16).end()
+				.face(Direction.NORTH).uvs(9, 9, 16, 16).end()
+				.face(Direction.SOUTH).uvs(0, 9, 7, 16).end().faces((direction, builder) -> builder.texture("#pane").emissivity(15, 15))
 				.ifElse().from(7, 9, 7).to(9, 16, 9).parents(ForceFieldModel.ExtraDirection.UP).shade(false).face(Direction.EAST).uvs(7, 9, 9, 16).texture("#pane").emissivity(15, 15).end()
 				.ifSame().from(9, 7, 7).to(16, 9, 9).parents(ForceFieldModel.ExtraDirection.EAST).shade(false).face(Direction.UP).uvs(9, 7, 16, 9).texture("#pane").emissivity(15, 15).end().end()
 
 				//UP NORTH
 				.forceFieldElement().ifState(ForceFieldModel.ExtraDirection.UP_NORTH, true).from(7, 9, 0).to(9, 16, 7).parents(ForceFieldModel.ExtraDirection.UP, ForceFieldModel.ExtraDirection.NORTH).shade(false)
-					.face(Direction.UP).cullface(Direction.UP).uvs(7, 0, 9, 7).end()
-					.face(Direction.NORTH).cullface(Direction.NORTH).uvs(7, 9, 9, 16).end()
-					.face(Direction.WEST).uvs(0, 9, 7, 16).end()
-					.face(Direction.EAST).uvs(9, 9, 16, 16).end().faces((direction, builder) -> builder.texture("#pane").emissivity(15, 15))
+				.face(Direction.UP).cullface(Direction.UP).uvs(7, 0, 9, 7).end()
+				.face(Direction.NORTH).cullface(Direction.NORTH).uvs(7, 9, 9, 16).end()
+				.face(Direction.WEST).uvs(0, 9, 7, 16).end()
+				.face(Direction.EAST).uvs(9, 9, 16, 16).end().faces((direction, builder) -> builder.texture("#pane").emissivity(15, 15))
 				.ifElse().from(7, 9, 7).to(9, 16, 9).parents(ForceFieldModel.ExtraDirection.UP).shade(false).face(Direction.NORTH).uvs(7, 9, 9, 16).texture("#pane").emissivity(15, 15).end()
 				.ifSame().from(7, 7, 0).to(9, 9, 7).parents(ForceFieldModel.ExtraDirection.NORTH).shade(false).face(Direction.UP).uvs(7, 0, 9, 7).texture("#pane").emissivity(15, 15).end().end()
 
 				//UP SOUTH
 				.forceFieldElement().ifState(ForceFieldModel.ExtraDirection.UP_SOUTH, true).from(7, 9, 9).to(9, 16, 16).parents(ForceFieldModel.ExtraDirection.UP, ForceFieldModel.ExtraDirection.SOUTH).shade(false)
-					.face(Direction.UP).cullface(Direction.UP).uvs(7, 9, 9, 16).end()
-					.face(Direction.SOUTH).cullface(Direction.SOUTH).uvs(7, 9, 9, 16).end()
-					.face(Direction.WEST).uvs(9, 9, 16, 16).end()
-					.face(Direction.EAST).uvs(0, 9, 7, 16).end().faces((direction, builder) -> builder.texture("#pane").emissivity(15, 15))
+				.face(Direction.UP).cullface(Direction.UP).uvs(7, 9, 9, 16).end()
+				.face(Direction.SOUTH).cullface(Direction.SOUTH).uvs(7, 9, 9, 16).end()
+				.face(Direction.WEST).uvs(9, 9, 16, 16).end()
+				.face(Direction.EAST).uvs(0, 9, 7, 16).end().faces((direction, builder) -> builder.texture("#pane").emissivity(15, 15))
 				.ifElse().from(7, 9, 7).to(9, 16, 9).parents(ForceFieldModel.ExtraDirection.UP).shade(false).face(Direction.SOUTH).uvs(7, 9, 9, 16).texture("#pane").emissivity(15, 15).end()
 				.ifSame().from(7, 7, 9).to(9, 9, 16).parents(ForceFieldModel.ExtraDirection.SOUTH).shade(false).face(Direction.UP).uvs(7, 9, 9, 16).texture("#pane").emissivity(15, 15).end().end()
 
 				//NORTH WEST
 				.forceFieldElement().ifState(ForceFieldModel.ExtraDirection.NORTH_WEST, true).from(0, 7, 0).to(7, 9, 7).parents(ForceFieldModel.ExtraDirection.NORTH, ForceFieldModel.ExtraDirection.WEST).shade(false)
-					.face(Direction.NORTH).cullface(Direction.NORTH).uvs(0, 7, 7, 9).end()
-					.face(Direction.WEST).cullface(Direction.WEST).uvs(9, 7, 16, 9).end()
-					.face(Direction.DOWN).uvs(0, 9, 7, 16).end()
-					.face(Direction.UP).uvs(9, 9, 16, 16).end().faces((direction, builder) -> builder.texture("#pane").emissivity(15, 15))
+				.face(Direction.NORTH).cullface(Direction.NORTH).uvs(0, 7, 7, 9).end()
+				.face(Direction.WEST).cullface(Direction.WEST).uvs(9, 7, 16, 9).end()
+				.face(Direction.DOWN).uvs(0, 9, 7, 16).end()
+				.face(Direction.UP).uvs(9, 9, 16, 16).end().faces((direction, builder) -> builder.texture("#pane").emissivity(15, 15))
 				.ifElse().from(7, 7, 0).to(9, 9, 7).parents(ForceFieldModel.ExtraDirection.NORTH).shade(false).face(Direction.WEST).uvs(9, 7, 16, 9).texture("#pane").emissivity(15, 15).end()
 				.ifSame().from(0, 7, 7).to(7, 9, 9).parents(ForceFieldModel.ExtraDirection.WEST).shade(false).face(Direction.NORTH).uvs(0, 7, 7, 9).texture("#pane").emissivity(15, 15).end().end()
 
 				//NORTH EAST
 				.forceFieldElement().ifState(ForceFieldModel.ExtraDirection.NORTH_EAST, true).from(9, 7, 0).to(16, 9, 7).parents(ForceFieldModel.ExtraDirection.NORTH, ForceFieldModel.ExtraDirection.EAST).shade(false)
-					.face(Direction.NORTH).cullface(Direction.NORTH).uvs(9, 7, 16, 9).end()
-					.face(Direction.EAST).cullface(Direction.EAST).uvs(0, 7, 7, 9).end()
-					.face(Direction.DOWN).uvs(9, 9, 16, 16).end()
-					.face(Direction.UP).uvs(0, 9, 7, 16).end().faces((direction, builder) -> builder.texture("#pane").emissivity(15, 15))
+				.face(Direction.NORTH).cullface(Direction.NORTH).uvs(9, 7, 16, 9).end()
+				.face(Direction.EAST).cullface(Direction.EAST).uvs(0, 7, 7, 9).end()
+				.face(Direction.DOWN).uvs(9, 9, 16, 16).end()
+				.face(Direction.UP).uvs(0, 9, 7, 16).end().faces((direction, builder) -> builder.texture("#pane").emissivity(15, 15))
 				.ifElse().from(7, 7, 0).to(9, 9, 7).parents(ForceFieldModel.ExtraDirection.NORTH).shade(false).face(Direction.EAST).uvs(0, 7, 7, 9).texture("#pane").emissivity(15, 15).end()
 				.ifSame().from(9, 7, 7).to(16, 9, 9).parents(ForceFieldModel.ExtraDirection.EAST).shade(false).face(Direction.NORTH).uvs(9, 7, 16, 9).texture("#pane").emissivity(15, 15).end().end()
 
 				//SOUTH WEST
 				.forceFieldElement().ifState(ForceFieldModel.ExtraDirection.SOUTH_WEST, true).from(0, 7, 9).to(7, 9, 16).parents(ForceFieldModel.ExtraDirection.SOUTH, ForceFieldModel.ExtraDirection.WEST).shade(false)
-					.face(Direction.SOUTH).cullface(Direction.SOUTH).uvs(0, 7, 7, 9).end()
-					.face(Direction.WEST).cullface(Direction.WEST).uvs(9, 7, 16, 9).end()
-					.face(Direction.DOWN).uvs(0, 9, 7, 16).end()
-					.face(Direction.UP).uvs(9, 9, 16, 16).end().faces((direction, builder) -> builder.texture("#pane").emissivity(15, 15))
+				.face(Direction.SOUTH).cullface(Direction.SOUTH).uvs(0, 7, 7, 9).end()
+				.face(Direction.WEST).cullface(Direction.WEST).uvs(9, 7, 16, 9).end()
+				.face(Direction.DOWN).uvs(0, 9, 7, 16).end()
+				.face(Direction.UP).uvs(9, 9, 16, 16).end().faces((direction, builder) -> builder.texture("#pane").emissivity(15, 15))
 				.ifElse().from(7, 7, 9).to(9, 9, 16).parents(ForceFieldModel.ExtraDirection.SOUTH).shade(false).face(Direction.WEST).uvs(9, 7, 16, 9).texture("#pane").emissivity(15, 15).end()
 				.ifSame().from(0, 7, 7).to(7, 9, 9).parents(ForceFieldModel.ExtraDirection.WEST).shade(false).face(Direction.SOUTH).uvs(0, 7, 7, 9).texture("#pane").emissivity(15, 15).end().end()
 
 				//SOUTH EAST
 				.forceFieldElement().ifState(ForceFieldModel.ExtraDirection.SOUTH_EAST, true).from(9, 7, 9).to(16, 9, 16).parents(ForceFieldModel.ExtraDirection.SOUTH, ForceFieldModel.ExtraDirection.EAST).shade(false)
-					.face(Direction.SOUTH).cullface(Direction.SOUTH).uvs(0, 7, 7, 9).end()
-					.face(Direction.EAST).cullface(Direction.EAST).uvs(9, 7, 16, 9).end()
-					.face(Direction.DOWN).uvs(9, 9, 16, 16).end()
-					.face(Direction.UP).uvs(0, 9, 7, 16).end().faces((direction, builder) -> builder.texture("#pane").emissivity(15, 15))
+				.face(Direction.SOUTH).cullface(Direction.SOUTH).uvs(0, 7, 7, 9).end()
+				.face(Direction.EAST).cullface(Direction.EAST).uvs(9, 7, 16, 9).end()
+				.face(Direction.DOWN).uvs(9, 9, 16, 16).end()
+				.face(Direction.UP).uvs(0, 9, 7, 16).end().faces((direction, builder) -> builder.texture("#pane").emissivity(15, 15))
 				.ifElse().from(7, 7, 9).to(9, 9, 16).parents(ForceFieldModel.ExtraDirection.SOUTH).shade(false).face(Direction.EAST).uvs(9, 7, 16, 9).texture("#pane").emissivity(15, 15).end()
 				.ifSame().from(9, 7, 7).to(16, 9, 9).parents(ForceFieldModel.ExtraDirection.EAST).shade(false).face(Direction.SOUTH).uvs(0, 7, 7, 9).texture("#pane").emissivity(15, 15).end().end()
 
-			.end());
+				.end());
 		}
 	}
 

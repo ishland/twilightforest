@@ -284,6 +284,7 @@ public class TFCreativeTabs {
 			output.accept(TFBlocks.FIREFLY);
 			output.accept(TFBlocks.CICADA);
 			output.accept(TFBlocks.MOONWORM);
+			output.accept(TFBlocks.WEBWORM);
 			output.accept(TFBlocks.IRONWOOD_BLOCK);
 			output.accept(TFBlocks.STEELEAF_BLOCK);
 			output.accept(TFBlocks.FIERY_BLOCK);

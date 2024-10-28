@@ -1,4 +1,4 @@
-// 1.21.1	2024-10-26T17:56:44.1080274	TwilightForest blockstates and block models
+// 1.21.1	2024-10-28T17:07:10.5031549	TwilightForest blockstates and block models
 cab88029518a1647ec691d136328ed93c18108be assets/twilightforest/blockstates/acacia_banister.json
 9472090eea384d675fee73a90ed033b799c88820 assets/twilightforest/blockstates/alpha_yeti_boss_spawner.json
 94ee00eebd82061338b6db439a84b3fdf98f3942 assets/twilightforest/blockstates/alpha_yeti_trophy.json
@@ -482,6 +482,7 @@ f201be47403de47f7a64166b6ea0e3b06d1e1a76 assets/twilightforest/blockstates/viole
 ec6c3e13a257a3e652bbaae9d74f5fafe1e09fbb assets/twilightforest/blockstates/violet_force_field.json
 52e6872b0c81aa90efe585db9792137b7cbb4695 assets/twilightforest/blockstates/warped_banister.json
 5397588ec04a7fbbd9454b18af884660dd62a917 assets/twilightforest/blockstates/weathered_deadrock.json
+4cf58cc9e64d0cfb9362ee7390679a7cb747e804 assets/twilightforest/blockstates/webworm.json
 95d3a243909ea77ca628f6f4b414a343f2559d13 assets/twilightforest/blockstates/wispy_cloud.json
 94ee00eebd82061338b6db439a84b3fdf98f3942 assets/twilightforest/blockstates/wither_skeleton_skull_candle.json
 94ee00eebd82061338b6db439a84b3fdf98f3942 assets/twilightforest/blockstates/wither_skeleton_wall_skull_candle.json

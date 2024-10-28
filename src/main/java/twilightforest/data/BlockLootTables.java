@@ -69,6 +69,7 @@ public class BlockLootTables extends BlockLootSubProvider {
 		dropSelf(TFBlocks.FIREFLY.get());
 		dropSelf(TFBlocks.CICADA.get());
 		dropSelf(TFBlocks.MOONWORM.get());
+		dropSelf(TFBlocks.WEBWORM.get());
 		dropSelf(TFBlocks.TROPHY_PEDESTAL.get());
 		dropSelf(TFBlocks.AURORA_BLOCK.get());
 		dropSelf(TFBlocks.AURORA_PILLAR.get());

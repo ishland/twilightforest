@@ -15,8 +15,7 @@ import twilightforest.block.entity.MoonwormBlockEntity;
 import twilightforest.init.TFBlockEntities;
 import twilightforest.loot.TFLootTables;
 
-public class MoonwormBlock extends CritterBlock {
-
+public class MoonwormBlock extends CritterBlock.WaterLoggable {
 	public static final MapCodec<MoonwormBlock> CODEC = simpleCodec(MoonwormBlock::new);
 
 	public MoonwormBlock(BlockBehaviour.Properties properties) {

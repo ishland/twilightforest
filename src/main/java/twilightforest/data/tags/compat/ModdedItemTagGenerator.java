@@ -75,6 +75,7 @@ public class ModdedItemTagGenerator extends ItemTagsProvider {
 			TFBlocks.CICADA.get().asItem(),
 			TFBlocks.FIREFLY.get().asItem(),
 			TFBlocks.MOONWORM.get().asItem(),
+			TFBlocks.WEBWORM.get().asItem(),
 			TFItems.CREEPER_SKULL_CANDLE.get(),
 			TFItems.PIGLIN_SKULL_CANDLE.get(),
 			TFItems.PLAYER_SKULL_CANDLE.get(),

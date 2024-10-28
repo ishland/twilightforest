@@ -96,6 +96,7 @@ public class TFLootTables {
 	public static final ResourceKey<LootTable> CICADA_SQUISH_DROPS = register("blocks/cicada_squish");
 	public static final ResourceKey<LootTable> FIREFLY_SQUISH_DROPS = register("blocks/firefly_squish");
 	public static final ResourceKey<LootTable> MOONWORM_SQUISH_DROPS = register("blocks/moonworm_squish");
+	public static final ResourceKey<LootTable> WEBWORM_SQUISH_DROPS = register("blocks/webworm_squish");
 
 	//public static final ResourceLocation ALL_BOSSES = register("entities/all_bosses");
 

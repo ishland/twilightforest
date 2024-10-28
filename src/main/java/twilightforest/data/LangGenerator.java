@@ -167,6 +167,7 @@ public class LangGenerator extends TFLangProvider {
 		this.addBlock(TFBlocks.FIREFLY, "Firefly");
 		this.addBlock(TFBlocks.FIREFLY_JAR, "Firefly Jar");
 		this.addBlock(TFBlocks.MOONWORM, "Moonworm");
+		this.addBlock(TFBlocks.WEBWORM, "Webworm");
 		this.addBlock(TFBlocks.FIREFLY_SPAWNER, "Firefly Particle Spawner");
 
 		this.addBlock(TFBlocks.TWILIGHT_PORTAL, "Twilight Forest Portal");

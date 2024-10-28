@@ -102,6 +102,7 @@ public class TFModelLayers {
 	public static final ModelLayerLocation FIREFLY = register("firefly");
 	public static final ModelLayerLocation KEEPSAKE_CASKET = register("keepsake_casket");
 	public static final ModelLayerLocation MOONWORM = register("moonworm");
+	public static final ModelLayerLocation WEBWORM = register("webworm");
 
 	public static final ModelLayerLocation RED_THREAD = register("red_thread");
 

@@ -61,6 +61,8 @@ public class TFBlockEntities {
 		BlockEntityType.Builder.of(FireflyBlockEntity::new, TFBlocks.FIREFLY.get()).build(null));
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<MoonwormBlockEntity>> MOONWORM = BLOCK_ENTITIES.register("moonworm", () ->
 		BlockEntityType.Builder.of(MoonwormBlockEntity::new, TFBlocks.MOONWORM.get()).build(null));
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<WebwormBlockEntity>> WEBWORM = BLOCK_ENTITIES.register("webworm", () ->
+		BlockEntityType.Builder.of(WebwormBlockEntity::new, TFBlocks.WEBWORM.get()).build(null));
 
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<KeepsakeCasketBlockEntity>> KEEPSAKE_CASKET = BLOCK_ENTITIES.register("keepsake_casket", () ->
 		BlockEntityType.Builder.of(KeepsakeCasketBlockEntity::new, TFBlocks.KEEPSAKE_CASKET.get()).build(null));
