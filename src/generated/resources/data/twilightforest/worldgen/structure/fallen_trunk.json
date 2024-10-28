@@ -1,0 +1,55 @@
+{
+  "type": "twilightforest:fallen_trunk",
+  "biomes": "#twilightforest:valid_hollow_tree_biomes",
+  "chest_loot_table": "twilightforest:tree_cache",
+  "length": {
+    "type": "minecraft:uniform",
+    "max_inclusive": 20,
+    "min_inclusive": 10
+  },
+  "log": {
+    "type": "minecraft:simple_state_provider",
+    "state": {
+      "Name": "twilightforest:twilight_oak_log",
+      "Properties": {
+        "axis": "y"
+      }
+    }
+  },
+  "spawn_overrides": {
+    "ambient": {
+      "bounding_box": "full",
+      "spawns": []
+    },
+    "axolotls": {
+      "bounding_box": "full",
+      "spawns": []
+    },
+    "creature": {
+      "bounding_box": "full",
+      "spawns": []
+    },
+    "misc": {
+      "bounding_box": "full",
+      "spawns": []
+    },
+    "monster": {
+      "bounding_box": "full",
+      "spawns": []
+    },
+    "underground_water_creature": {
+      "bounding_box": "full",
+      "spawns": []
+    },
+    "water_ambient": {
+      "bounding_box": "full",
+      "spawns": []
+    },
+    "water_creature": {
+      "bounding_box": "full",
+      "spawns": []
+    }
+  },
+  "spawner_monster": "twilightforest:swarm_spider",
+  "step": "surface_structures"
+}
