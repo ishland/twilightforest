@@ -118,31 +118,31 @@ public class BlockstateGenerator extends BlockModelBuilders {
 			.end();
 
 		BlockModelBuilder webBuilder = models().getBuilder("hanging_web_flat").renderType(TRANSLUCENT).texture("particle", "#all").texture("all", "block/hanging_web_flat")
-			.element().from(0, 0, 0).to(16, 0.2F, 16)
+			.element().from(0, 0.2F, 0).to(16, 0.2F, 16)
 			.face(Direction.UP).uvs(0, 0, 16, 16).tintindex(0).texture("#all").end()
 			.face(Direction.DOWN).uvs(0, 0, 16, 16).tintindex(0).texture("#all").end()
 			.end();
 
 		BlockModelBuilder hangingWebBuilder = models().getBuilder("hanging_web").renderType(TRANSLUCENT).texture("particle", "#all").texture("all", "block/hanging_web")
-			.element().from(0, 0, 0).to(16, 0.2F, 16)
+			.element().from(0, 0.2F, 0).to(16, 0.2F, 16)
 			.face(Direction.UP).uvs(0, 0, 16, 16).tintindex(0).texture("#all").end()
 			.face(Direction.DOWN).uvs(0, 0, 16, 16).tintindex(0).rotation(ModelBuilder.FaceRotation.UPSIDE_DOWN).texture("#all").end()
 			.end();
 
 		BlockModelBuilder altHangingWebBuilder = models().getBuilder("hanging_web_2").renderType(TRANSLUCENT).texture("particle", "#all").texture("all", "block/hanging_web_2")
-			.element().from(0, 0, 0).to(16, 0.2F, 16)
+			.element().from(0, 0.2F, 0).to(16, 0.2F, 16)
 			.face(Direction.UP).uvs(0, 0, 16, 16).tintindex(0).texture("#all").end()
 			.face(Direction.DOWN).uvs(0, 0, 16, 16).tintindex(0).rotation(ModelBuilder.FaceRotation.UPSIDE_DOWN).texture("#all").end()
 			.end();
 
 		BlockModelBuilder hangingWebBuilderShort = models().getBuilder("hanging_web_short").renderType(TRANSLUCENT).texture("particle", "#all").texture("all", "block/hanging_web_short")
-			.element().from(0, 0, 0).to(16, 0.2F, 16)
+			.element().from(0, 0.2F, 0).to(16, 0.2F, 16)
 			.face(Direction.UP).uvs(0, 0, 16, 16).tintindex(0).texture("#all").end()
 			.face(Direction.DOWN).uvs(0, 0, 16, 16).tintindex(0).rotation(ModelBuilder.FaceRotation.UPSIDE_DOWN).texture("#all").end()
 			.end();
 
 		BlockModelBuilder altHangingWebBuilderShort = models().getBuilder("hanging_web_short_2").renderType(TRANSLUCENT).texture("particle", "#all").texture("all", "block/hanging_web_short_2")
-			.element().from(0, 0, 0).to(16, 0.2F, 16)
+			.element().from(0, 0.2F, 0).to(16, 0.2F, 16)
 			.face(Direction.UP).uvs(0, 0, 16, 16).tintindex(0).texture("#all").end()
 			.face(Direction.DOWN).uvs(0, 0, 16, 16).tintindex(0).rotation(ModelBuilder.FaceRotation.UPSIDE_DOWN).texture("#all").end()
 			.end();

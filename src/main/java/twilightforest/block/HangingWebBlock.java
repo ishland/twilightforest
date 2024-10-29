@@ -8,7 +8,6 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Spider;
-import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -79,7 +78,7 @@ public class HangingWebBlock extends Block implements IShearable {
 		entity.makeStuckInBlock(state, new Vec3(0.95, 0.95, 0.95));
 
 		// dissolve
-		if (!level.isClientSide() && ((entity instanceof LivingEntity living && living.getRandom().nextInt(20) == 1) || entity instanceof Projectile)) {
+		if (!level.isClientSide() && entity instanceof LivingEntity living && living.getRandom().nextInt(20) == 1) {
 			level.destroyBlock(pos, false);
 		}
 	}

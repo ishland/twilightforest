@@ -2,7 +2,6 @@ package twilightforest.block;
 
 import com.google.common.collect.ImmutableMap;
 import com.mojang.serialization.MapCodec;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -135,8 +134,7 @@ public class WebwormBlock extends CritterBlock {
         if (!state.getValue(faceProperty)) {
 			level.setBlockAndUpdate(pos, state.setValue(faceProperty, true));
         } else if (face.getAxis().isHorizontal()) {
-			RandomSource pseudo = RandomSource.create(pos.asLong() + face.ordinal());
-			for (int y = 1; y < pseudo.nextInt(4) + 3; y++) {
+			for (int y = 1; y < getWebLengthForPos(pos, face); y++) {
 				BlockPos down = pos.below(y);
 				if (level.isAreaLoaded(down, 4)) {
 					BlockState downState = level.getBlockState(down);
@@ -157,6 +155,10 @@ public class WebwormBlock extends CritterBlock {
 				} else return;
 			}
 		}
+	}
+
+	public static int getWebLengthForPos(BlockPos pos, Direction face) {
+		return RandomSource.create(pos.asLong() + face.ordinal()).nextInt(4) + 3;
 	}
 
 	@Override
@@ -180,15 +182,17 @@ public class WebwormBlock extends CritterBlock {
 			BlockState web = TFBlocks.HANGING_WEB.get().defaultBlockState();
 			boolean any = false;
 			for (Direction direction : Direction.values()) {
-				BooleanProperty property = PipeBlock.PROPERTY_BY_DIRECTION.get(direction);
-				if (state.getValue(property)) {
-					web.setValue(property, true);
+				if (state.getValue(PipeBlock.PROPERTY_BY_DIRECTION.get(direction))) {
+					if (direction.getAxis().isHorizontal()) {
+						web = web.setValue(HangingWebBlock.getPropertyForFace(direction), HangingWebBlock.getPropertyForPlacement(level, pos, direction));
+					} else {
+						web = web.setValue(PipeBlock.PROPERTY_BY_DIRECTION.get(direction), true);
+					}
 					any = true;
 				}
 			}
 			level.setBlockAndUpdate(pos, any ? web : Blocks.AIR.defaultBlockState());
 
-			if (level.isClientSide()) Minecraft.getInstance().getSoundManager().stop(TFSounds.CICADA.get().getLocation(), SoundSource.NEUTRAL);
 			level.playSound(null, pos, TFSounds.BUG_SQUISH.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
 
 			if (level instanceof ServerLevel serverLevel && this.getSquishLootTable() != null) {
@@ -197,7 +201,7 @@ public class WebwormBlock extends CritterBlock {
 			}
 
 			for (int i = 0; i < 50; i++) {
-				boolean wallBug = state.getValue(FACING) != Direction.UP;
+				boolean wallBug = state.getValue(FACING).getAxis() != Direction.Axis.Y;
 				level.addParticle(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.SLIME_BLOCK.defaultBlockState()), true,
 					pos.getX() + Mth.nextFloat(level.getRandom(), 0.25F, 0.75F),
 					pos.getY() + (wallBug ? 0.5F : 0.0F),
@@ -220,7 +224,7 @@ public class WebwormBlock extends CritterBlock {
 		if (!propertyList.isEmpty()) {
 			entity.makeStuckInBlock(state, new Vec3(0.95, 0.95, 0.95));
 			// dissolve
-			if (!level.isClientSide() && ((entity instanceof LivingEntity living && living.getRandom().nextInt(20) == 1) || entity instanceof Projectile)) {
+			if (!level.isClientSide() && entity instanceof LivingEntity living && living.getRandom().nextInt(20) == 1) {
 				BlockState newState = this.defaultBlockState().setValue(FACING, state.getValue(FACING));
 				level.setBlockAndUpdate(pos, newState);
 

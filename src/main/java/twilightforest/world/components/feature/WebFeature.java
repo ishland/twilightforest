@@ -11,6 +11,7 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import twilightforest.block.HangingWebBlock;
+import twilightforest.block.WebwormBlock;
 import twilightforest.data.tags.BlockTagGenerator;
 import twilightforest.enums.WebShape;
 import twilightforest.init.TFBlocks;
@@ -68,7 +69,8 @@ public class WebFeature extends Feature<NoneFeatureConfiguration> {
 					Direction opposite = direction.getOpposite();
 					if (random.nextInt(4) + 1 > count && HangingWebBlock.isAcceptableNeighbour(level, pos, opposite) && placeAndUpdate(level, relative, web, opposite)) {
 						count++;
-						for (int i = 0; i < 1 + random.nextInt(7); i++) {
+						int length = WebwormBlock.getWebLengthForPos(relative, opposite) - 1;
+						for (int i = 0; i < length; i++) {
 							relative.move(Direction.DOWN);
 							if (!placeAndUpdate(level, relative, web, opposite)) break;
 						}
