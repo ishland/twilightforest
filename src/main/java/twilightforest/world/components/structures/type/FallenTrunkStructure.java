@@ -45,7 +45,7 @@ public class FallenTrunkStructure extends Structure {
 
 	private final IntProvider length;
 	private final BlockStateProvider log;
-	private final List<Integer> radiuses = List.of(2, 3, 7);
+	private final List<Integer> radiuses = List.of(1, 2, 4);
 	private final ResourceKey<LootTable> chestLootTable;
 	private final Holder<EntityType<?>> spawnerMonster;
 
@@ -81,7 +81,7 @@ public class FallenTrunkStructure extends Structure {
 		BoundingBox boundingBox = new BoundingBox(x - (length + 1), worldY, z - (length + 1), x + length + 1, worldY + radius * 2 + 1, z + length + 1);
 
 		return Optional.of(new GenerationStub(new BlockPos(x, worldY, z), structurePiecesBuilder -> {
-			StructurePiece piece = new FallenTrunkPiece(length, radius, log, boundingBox);
+			StructurePiece piece = new FallenTrunkPiece(length, radius, log, chestLootTable, spawnerMonster, boundingBox);
 			structurePiecesBuilder.addPiece(piece);
 		}));
 	}
