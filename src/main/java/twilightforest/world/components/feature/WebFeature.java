@@ -28,28 +28,45 @@ public class WebFeature extends Feature<NoneFeatureConfiguration> {
 		return state.is(BlockTagGenerator.WEBS_GENERATE_HANGING_FROM) && (level.isEmptyBlock(pos.below()) || (level.isEmptyBlock(pos.below(2)) && random.nextFloat() <= 0.25F));
 	}
 
-	private static boolean placeAndUpdate(WorldGenLevel level, BlockPos pos, BlockState web, Direction direction) {
-		boolean flag = placeOrAdd(level, pos, web, direction);
+	private static boolean placeAndUpdate(WorldGenLevel level, BlockPos pos, Direction direction, RandomSource random, boolean canBeWorm) {
+		boolean flag = placeOrAdd(level, pos, direction, random, canBeWorm);
 		if (flag) level.getChunk(pos).markPosForPostprocessing(pos);
 		return flag;
 	}
 
-	private static boolean placeOrAdd(WorldGenLevel level, BlockPos pos, BlockState web, Direction direction) {
+	private static boolean placeOrAdd(WorldGenLevel level, BlockPos pos, Direction direction, RandomSource random, boolean canBeWorm) {
 		if (level.isEmptyBlock(pos)) {
-			if (direction.getAxis().isHorizontal()) {
-                return level.setBlock(pos, web.setValue(HangingWebBlock.getPropertyForFace(direction), WebShape.TALL), HangingWebBlock.UPDATE_CLIENTS);
-            } else {
-				return level.setBlock(pos, web.setValue(PipeBlock.PROPERTY_BY_DIRECTION.get(direction), true), HangingWebBlock.UPDATE_CLIENTS);
+			if (canBeWorm && random.nextFloat() <= 0.25F) {
+				return level.setBlock(pos, TFBlocks.WEBWORM.get().defaultBlockState().setValue(PipeBlock.PROPERTY_BY_DIRECTION.get(direction.getOpposite()), true).setValue(WebwormBlock.FACING, direction), WebwormBlock.UPDATE_CLIENTS);
 			}
-        }
+			if (direction.getAxis().isHorizontal()) {
+				return level.setBlock(pos, TFBlocks.HANGING_WEB.get().defaultBlockState().setValue(HangingWebBlock.getPropertyForFace(direction), WebShape.TALL), HangingWebBlock.UPDATE_CLIENTS);
+			} else {
+				return level.setBlock(pos, TFBlocks.HANGING_WEB.get().defaultBlockState().setValue(PipeBlock.PROPERTY_BY_DIRECTION.get(direction), true), HangingWebBlock.UPDATE_CLIENTS);
+			}
+		}
 		BlockState state = level.getBlockState(pos);
 		if (state.is(TFBlocks.HANGING_WEB)) {
+			if (canBeWorm && random.nextFloat() <= 0.25F) {
+				BlockState defaultState = TFBlocks.WEBWORM.get().defaultBlockState().setValue(WebwormBlock.FACING, direction.getOpposite());
+
+				for (Direction face : Direction.values()) {
+					defaultState = defaultState.setValue(PipeBlock.PROPERTY_BY_DIRECTION.get(face), HangingWebBlock.checkFace(state, face));
+				}
+
+				return level.setBlock(pos, defaultState, HangingWebBlock.UPDATE_CLIENTS);
+			}
+
 			if (direction.getAxis().isHorizontal()) {
 				return level.setBlock(pos, state.setValue(HangingWebBlock.getPropertyForFace(direction), WebShape.TALL), HangingWebBlock.UPDATE_CLIENTS);
 			} else {
 				return level.setBlock(pos, state.setValue(PipeBlock.PROPERTY_BY_DIRECTION.get(direction), true), HangingWebBlock.UPDATE_CLIENTS);
 			}
-        }
+		}
+
+		if (state.is(TFBlocks.WEBWORM)) {
+			return level.setBlock(pos, state.setValue(PipeBlock.PROPERTY_BY_DIRECTION.get(direction), true), HangingWebBlock.UPDATE_CLIENTS);
+		}
 		return false;
 	}
 
@@ -61,23 +78,22 @@ public class WebFeature extends Feature<NoneFeatureConfiguration> {
 		while (pos.getY() > config.origin().getY()) {
 			pos = pos.below();
 			if (isValid(level, pos, random)) {
-				BlockState web = TFBlocks.HANGING_WEB.get().defaultBlockState();
 				int count = 0;
 
 				for (Direction direction : Direction.Plane.HORIZONTAL.shuffledCopy(random)) {
 					BlockPos.MutableBlockPos relative = pos.relative(direction).mutable();
 					Direction opposite = direction.getOpposite();
-					if (random.nextInt(4) + 1 > count && HangingWebBlock.isAcceptableNeighbour(level, pos, opposite) && placeAndUpdate(level, relative, web, opposite)) {
+					if (random.nextInt(4) + 1 > count && HangingWebBlock.isAcceptableNeighbour(level, pos, opposite) && placeAndUpdate(level, relative, opposite, random, true)) {
 						count++;
 						int length = WebwormBlock.getWebLengthForPos(relative, opposite) - 1;
 						for (int i = 0; i < length; i++) {
 							relative.move(Direction.DOWN);
-							if (!placeAndUpdate(level, relative, web, opposite)) break;
+							if (!placeAndUpdate(level, relative, opposite, random, false)) break;
 						}
 					}
 				}
 
-				if (count > 1 && random.nextFloat() <= 0.33F && HangingWebBlock.isAcceptableNeighbour(level, pos, Direction.DOWN)) placeAndUpdate(level, pos.above(), web, Direction.DOWN);
+				if (count > 1 && random.nextFloat() <= 0.33F && HangingWebBlock.isAcceptableNeighbour(level, pos, Direction.DOWN)) placeAndUpdate(level, pos.above(), Direction.DOWN, random, true);
 				return count > 0;
 			}
 		}

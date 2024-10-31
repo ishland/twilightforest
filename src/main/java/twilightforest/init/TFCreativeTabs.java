@@ -280,6 +280,7 @@ public class TFCreativeTabs {
 			output.accept(TFItems.MASON_JAR.get().getDefaultInstance());
 			output.accept(TFItems.FIREFLY_JAR.get().getDefaultInstance());
 			output.accept(TFItems.CICADA_JAR.get().getDefaultInstance());
+			output.accept(TFItems.WEBWORM_JAR.get().getDefaultInstance());
 			output.accept(TFBlocks.FIREFLY_SPAWNER);
 			output.accept(TFBlocks.FIREFLY);
 			output.accept(TFBlocks.CICADA);

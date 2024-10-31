@@ -115,6 +115,7 @@ public class TFItems {
 	public static final DeferredItem<Item> MASON_JAR = ITEMS.register("mason_jar", () -> new JarItem.MasonJarItem(TFBlocks.MASON_JAR.get(), new Item.Properties()));
 	public static final DeferredItem<Item> FIREFLY_JAR = ITEMS.register("firefly_jar", () -> new JarItem(TFBlocks.FIREFLY_JAR.get(), new Item.Properties()));
 	public static final DeferredItem<Item> CICADA_JAR = ITEMS.register("cicada_jar", () -> new JarItem(TFBlocks.CICADA_JAR.get(), new Item.Properties()));
+	public static final DeferredItem<Item> WEBWORM_JAR = ITEMS.register("webworm_jar", () -> new JarItem(TFBlocks.WEBWORM_JAR.get(), new Item.Properties()));
 	public static final DeferredItem<Item> ARMOR_SHARD = ITEMS.register("armor_shard", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> ARMOR_SHARD_CLUSTER = ITEMS.register("armor_shard_cluster", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> KNIGHTMETAL_INGOT = ITEMS.register("knightmetal_ingot", () -> new Item(new Item.Properties()));

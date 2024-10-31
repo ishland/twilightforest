@@ -1,4 +1,4 @@
-// 1.21.1	2024-10-26T13:59:01.0411195	TwilightForest Item and BlockItem models
+// 1.21.1	2024-10-31T06:35:45.816429	TwilightForest Item and BlockItem models
 387b18dfa614fda790f7b8e8324e3b139fa177c2 assets/twilightforest/models/item/acacia_banister.json
 0ca7dc7b4daec376dd0f85d57465830781584c7d assets/twilightforest/models/item/alpha_yeti_banner_pattern.json
 061906a0c9a9a334fbb82acb809c3748e2b1f9cb assets/twilightforest/models/item/alpha_yeti_boss_spawner.json
@@ -864,6 +864,7 @@ b27493eda49748814ba36a9543ccdcd33d7b44e2 assets/twilightforest/models/item/viole
 bafbdd124434e7c4e216b9a36dc79bb302e97ecb assets/twilightforest/models/item/violet_force_field.json
 c142dd7b39e68876cc272ffff0803adecc0b9398 assets/twilightforest/models/item/warped_banister.json
 f9bea0cd2dcd603057e136167935ec827f15f565 assets/twilightforest/models/item/weathered_deadrock.json
+3173f2fc815feaad64c9c93c11d284ae95d01048 assets/twilightforest/models/item/webworm_jar.json
 63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/twilightforest/models/item/winter_wolf_spawn_egg.json
 8cf3760ad280f15b167028c42b9eac047a6767ce assets/twilightforest/models/item/wispy_cloud.json
 bf81b7da7483a7cb79e848de49ff41d1c6c832f9 assets/twilightforest/models/item/wither_skeleton_skull_candle.json

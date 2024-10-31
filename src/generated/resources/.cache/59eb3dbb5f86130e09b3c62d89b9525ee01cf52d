@@ -1,4 +1,4 @@
-// 1.21.1	2024-10-27T13:26:11.6397022	Loot Tables
+// 1.21.1	2024-10-31T06:35:45.8094346	Loot Tables
 483a7e0c99d5cabeab1ba9f04bd8e88d0a8f7386 data/twilightforest/loot_table/aurora_cache.json
 002a6e2eccdc92db019bd775911912877b26771f data/twilightforest/loot_table/aurora_room.json
 6b7c07d237e56f84d11d308552cd943af7a906e5 data/twilightforest/loot_table/basement.json
@@ -458,6 +458,7 @@ b88e29463b962b768a6106f3627bb3738c5bc8d9 data/twilightforest/loot_table/blocks/v
 b7fb33484e86adc8afbc8622f5aca551a60be9f7 data/twilightforest/loot_table/blocks/warped_banister.json
 a495497210599a26ae1408709eb6cb20afe1ea59 data/twilightforest/loot_table/blocks/weathered_deadrock.json
 ab78dcc04d5a780568d00f748fee28720cc61585 data/twilightforest/loot_table/blocks/webworm.json
+f2d3ff254c94c7182f69762fd0c156e564f28c18 data/twilightforest/loot_table/blocks/webworm_jar.json
 b3bc981c9b6e711969e23bd51d124d1e70e74645 data/twilightforest/loot_table/blocks/webworm_squish.json
 fd5605bf10fa2e709dcc9d12dcc077bfb6d2ca06 data/twilightforest/loot_table/blocks/wispy_cloud.json
 55c8cbee4df9178f36912aa55fab214e1e34f4e4 data/twilightforest/loot_table/blocks/wither_skeleton_skull_candle.json

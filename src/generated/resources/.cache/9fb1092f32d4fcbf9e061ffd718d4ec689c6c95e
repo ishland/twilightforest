@@ -1,4 +1,4 @@
-// 1.21.1	2024-10-24T14:46:51.0623656	Recipes
+// 1.21.1	2024-10-31T06:35:45.8363331	Recipes
 c2df534e70a4871d9e50ee3a1c6242e5e0fe6eaa data/twilightforest/advancement/recipes/building_blocks/aurora_pillar.json
 07904494c5d60d52e5f79f8f6487d08016013692 data/twilightforest/advancement/recipes/building_blocks/canopy_bookshelf.json
 195eaa6599cda74857d6163a2d207b797e492275 data/twilightforest/advancement/recipes/building_blocks/castleblock/bold_castle_brick_pillar.json
@@ -243,6 +243,7 @@ a6f25ea28b2d170365878c2f86f0be44968bc626 data/twilightforest/advancement/recipes
 f9ffbb9d117f84c9a10b62e37901a590d3f0a083 data/twilightforest/advancement/recipes/decorations/uncrafting_table.json
 f338e7b3a00d33c70bd170cb510e4590a9010852 data/twilightforest/advancement/recipes/decorations/vanilla_to_tf_lilypad.json
 9e80a53a6f01e11bc276258563eaf3b2e7bcafa7 data/twilightforest/advancement/recipes/decorations/vanilla_to_tf_moss.json
+bc2f5df75ac4adc4430b615f58a2b4dc52587d9d data/twilightforest/advancement/recipes/decorations/webworm_jar.json
 0f4d8e0997803f81f9b117d3f54ca19d2daa3c0a data/twilightforest/advancement/recipes/decorations/wood/acacia_banister.json
 2e331cefb7d39630bcbce64a8fd9f46e1a0426f4 data/twilightforest/advancement/recipes/decorations/wood/bamboo_banister.json
 bfba3cbddd4222311d694b974640c1159d0ebe60 data/twilightforest/advancement/recipes/decorations/wood/birch_banister.json
@@ -715,6 +716,7 @@ e4eb274cfaf367b53e12c3bdc2b26f12e2a5d300 data/twilightforest/recipe/vanishing_bl
 2ddc5e6f624b3d4f4adcded3231313289d56c014 data/twilightforest/recipe/veilwood_boat.json
 11b3e33ce86a6ff17d8e27999aca0a57b94b1851 data/twilightforest/recipe/veilwood_chest_boat.json
 a7c102fbb07aa6516feb7b20deaf6f5e496e12c0 data/twilightforest/recipe/waterlily_to_magenta.json
+d03a265f536376b975b8620623f0f7b7a5474974 data/twilightforest/recipe/webworm_jar.json
 265b505d43f3e39f7a526b0bf84b6a8781bf4f43 data/twilightforest/recipe/wood/acacia_banister.json
 b0633cbe346a5ebbc36f79005dd54ad8a4c13bf0 data/twilightforest/recipe/wood/aurora_slab_slab.json
 2b6b6cd6e067b28ae7226afe3d5a83970d40d3fc data/twilightforest/recipe/wood/bamboo_banister.json

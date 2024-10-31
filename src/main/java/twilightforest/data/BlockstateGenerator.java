@@ -428,6 +428,27 @@ public class BlockstateGenerator extends BlockModelBuilders {
 		simpleBlock(TFBlocks.MASON_JAR.get(), masonJar);
 		simpleBlock(TFBlocks.CICADA_JAR.get(), masonJar);
 		simpleBlock(TFBlocks.FIREFLY_JAR.get(), masonJar);
+		simpleBlock(TFBlocks.WEBWORM_JAR.get(), models()
+			.withExistingParent(TFBlocks.WEBWORM_JAR.getId().getPath(), "minecraft:block/block").renderType(TRANSLUCENT)
+			.texture("particle", "#side")
+			.texture("side", prefix("block/jar_side"))
+			.texture("bottom", prefix("block/jar_bottom"))
+			.texture("top", prefix("block/jar_top"))
+			.texture("web", prefix("block/hanging_web_flat"))
+			.element().from(3.0F, 0.0F, 3.0F).to(13.0F, 14.0F, 13.0F)
+			.face(Direction.UP).texture("#top").end()
+			.face(Direction.DOWN).texture("#bottom").cullface(Direction.DOWN).end()
+			.face(Direction.NORTH).texture("#side").end()
+			.face(Direction.SOUTH).texture("#side").end()
+			.face(Direction.WEST).texture("#side").end()
+			.face(Direction.EAST).texture("#side").end().end()
+			.element().from(4.0F, 1.0F, 4.0F).to(12.0F, 12.0F, 12.0F)
+			.face(Direction.UP).texture("#web").end()
+			.face(Direction.DOWN).texture("#web").end()
+			.face(Direction.NORTH).texture("#web").end()
+			.face(Direction.SOUTH).texture("#web").end()
+			.face(Direction.WEST).texture("#web").end()
+			.face(Direction.EAST).texture("#web").end().end());
 		simpleBlockExisting(TFBlocks.FIREFLY_SPAWNER.get());
 
 		ResourceLocation jarLid = TwilightForestMod.prefix("jar_lid");

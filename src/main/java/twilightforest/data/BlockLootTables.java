@@ -203,6 +203,21 @@ public class BlockLootTables extends BlockLootSubProvider {
 			)
 		));
 
+		this.add(TFBlocks.WEBWORM_JAR.get(), LootTable.lootTable().withPool(
+			this.applyExplosionCondition(
+				TFBlocks.WEBWORM_JAR.get(),
+				LootPool.lootPool()
+					.setRolls(ConstantValue.exactly(1.0F))
+					.add(
+						LootItem.lootTableItem(TFBlocks.WEBWORM_JAR.get())
+							.apply(
+								CopyComponentsFunction.copyComponents(CopyComponentsFunction.Source.BLOCK_ENTITY)
+									.include(TFDataComponents.JAR_LID.get())
+							)
+					)
+			)
+		));
+
 		add(TFBlocks.FIREFLY_SPAWNER.get(), particleSpawner());
 		add(TFBlocks.MOSS_PATCH.get(), createShearsOnlyDrop(TFBlocks.MOSS_PATCH.get()));
 		add(TFBlocks.MAYAPPLE.get(), createShearsOnlyDrop(TFBlocks.MAYAPPLE.get()));

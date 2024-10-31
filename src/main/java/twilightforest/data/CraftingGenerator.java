@@ -161,6 +161,12 @@ public class CraftingGenerator extends CraftingDataHelper {
 			.unlockedBy("has_item", has(TFBlocks.CICADA.get()))
 			.save(output);
 
+		ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, TFBlocks.WEBWORM_JAR.get())
+			.requires(Ingredient.of(TFBlocks.WEBWORM.get()))
+			.requires(Ingredient.of(TFItems.MASON_JAR.get()))
+			.unlockedBy("has_item", has(TFBlocks.WEBWORM.get()))
+			.save(output);
+
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, Items.MAGENTA_DYE)
 			.requires(Ingredient.of(TFBlocks.HUGE_WATER_LILY.get()))
 			.unlockedBy("has_item", has(TFBlocks.HUGE_WATER_LILY.get()))
