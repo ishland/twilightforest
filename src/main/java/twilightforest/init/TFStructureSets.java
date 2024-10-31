@@ -18,6 +18,7 @@ import java.util.Optional;
 
 public class TFStructureSets {
 
+	public static final ResourceKey<StructureSet> FALLEN_TRUNK = registerKey("fallen_trunk");
 	public static final ResourceKey<StructureSet> HOLLOW_TREE = registerKey("hollow_tree");
 	public static final ResourceKey<StructureSet> HEDGE_MAZE = registerKey("hedge_maze");
 	public static final ResourceKey<StructureSet> QUEST_GROVE = registerKey("quest_grove");
@@ -53,6 +54,7 @@ public class TFStructureSets {
 			new StructureSet.StructureSelectionEntry(structures.getOrThrow(TFStructures.HOLLOW_TREE), 1),
 			new StructureSet.StructureSelectionEntry(structures.getOrThrow(TFStructures.SWAMP_HOLLOW_TREE), 1)
 		);
+		context.register(FALLEN_TRUNK, new StructureSet(structures.getOrThrow(TFStructures.FALLEN_TRUNK), new AvoidLandmarkGridPlacement(Vec3i.ZERO, StructurePlacement.FrequencyReductionMethod.DEFAULT, 0.5F, 1275623845, Optional.empty(), 7, 5, RandomSpreadType.TRIANGULAR)));
 		context.register(HOLLOW_TREE, new StructureSet(hollowTrees, new AvoidLandmarkGridPlacement(Vec3i.ZERO, StructurePlacement.FrequencyReductionMethod.DEFAULT, 0.5F, 34481210, Optional.empty(), 7, 5, RandomSpreadType.TRIANGULAR)));
 
 		context.register(HEDGE_MAZE, new StructureSet(structures.getOrThrow(TFStructures.HEDGE_MAZE), new LandmarkGridPlacement(Optional.of(TFStructures.HEDGE_MAZE))));

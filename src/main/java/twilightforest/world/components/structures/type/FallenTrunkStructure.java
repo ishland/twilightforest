@@ -2,31 +2,35 @@ package twilightforest.world.components.structures.type;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
+import net.minecraft.core.SectionPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.RegistryFixedCodec;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.WeightedRandomList;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
-import net.minecraft.world.level.levelgen.structure.Structure;
-import net.minecraft.world.level.levelgen.structure.StructureSpawnOverride;
-import net.minecraft.world.level.levelgen.structure.StructureType;
-import net.minecraft.world.level.levelgen.structure.TerrainAdjustment;
+import net.minecraft.world.level.levelgen.structure.*;
 import net.minecraft.world.level.storage.loot.LootTable;
 import twilightforest.init.TFBlocks;
 import twilightforest.init.TFEntities;
 import twilightforest.init.TFStructureTypes;
 import twilightforest.loot.TFLootTables;
+import twilightforest.util.WorldUtil;
+import twilightforest.world.components.structures.fallentrunk.FallenTrunkPiece;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -41,6 +45,7 @@ public class FallenTrunkStructure extends Structure {
 
 	private final IntProvider length;
 	private final BlockStateProvider log;
+	private final List<Integer> radiuses = List.of(2, 3, 7);
 	private final ResourceKey<LootTable> chestLootTable;
 	private final Holder<EntityType<?>> spawnerMonster;
 
@@ -54,7 +59,31 @@ public class FallenTrunkStructure extends Structure {
 
 	@Override
 	public Optional<GenerationStub> findGenerationPoint(GenerationContext context) {
-		return onTopOfChunkCenter(context, Heightmap.Types.WORLD_SURFACE_WG, p_227598_ -> this.findGenerationPoint(context));
+		ChunkPos chunkPos = context.chunkPos();
+
+		RandomSource random = RandomSource.create(context.seed() + chunkPos.x * 25117L + chunkPos.z * 151121L);
+
+		int x = SectionPos.sectionToBlockCoord(chunkPos.x, random.nextInt(16));
+		int z = SectionPos.sectionToBlockCoord(chunkPos.z, random.nextInt(16));
+		int seaFloorY = context.chunkGenerator().getFirstOccupiedHeight(x, z, Heightmap.Types.OCEAN_FLOOR_WG, context.heightAccessor(), context.randomState());
+		int worldY = context.chunkGenerator().getFirstOccupiedHeight(x, z, Heightmap.Types.WORLD_SURFACE_WG, context.heightAccessor(), context.randomState());
+
+		int length = this.length.sample(random);
+
+		if (length < 16 || (seaFloorY < worldY))
+			return Optional.empty();
+		if (!this.getModifiedStructureSettings().biomes().contains(context.chunkGenerator().getBiomeSource().getNoiseBiome(x >> 2, worldY >> 2, z >> 2, context.randomState().sampler())))
+			return Optional.empty();
+
+
+		int radius = WorldUtil.getRandomElement(radiuses, random);
+
+		BoundingBox boundingBox = new BoundingBox(x - (length + 1), worldY, z - (length + 1), x + length + 1, worldY + radius * 2 + 1, z + length + 1);
+
+		return Optional.of(new GenerationStub(new BlockPos(x, worldY, z), structurePiecesBuilder -> {
+			StructurePiece piece = new FallenTrunkPiece(length, radius, log, boundingBox);
+			structurePiecesBuilder.addPiece(piece);
+		}));
 	}
 
 	@Override
