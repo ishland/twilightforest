@@ -24,7 +24,6 @@ import java.util.*;
 import java.util.function.BiConsumer;
 
 public class VeilwoodTreeFeature extends TFTreeFeature<VeilwoodTreeConfig> {
-	private final static List<Direction> DIRECTIONS = List.of(Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST);
 	private final static Float QUARTER_PI = Mth.HALF_PI * 0.5F;
 	protected Map<Vec3, Vec3> planes = new HashMap<>();
 
@@ -143,20 +142,9 @@ public class VeilwoodTreeFeature extends TFTreeFeature<VeilwoodTreeConfig> {
 		}
 
 		if (trunk.isEmpty()) return;
-
 		for (int i = tallest; i >= 0; i--) {
 			List<BlockPos> possibilities = trunk.get(i);
-			if (possibilities != null && possibilities.size() > 2) {
-				for (Direction direction : DIRECTIONS) {
-					Collections.shuffle(possibilities);
-					for (BlockPos blockPos : possibilities) {
-						if (TreeFeature.validTreePos(world, blockPos.relative(direction))) {
-							starters.put(direction, blockPos.mutable());
-							break;
-						}
-					}
-				}
-
+			if (possibilities != null && (possibilities.size() > 2 || !starters.isEmpty())) {
 				if (tallest - i == 0) {
 					BlockPos blockPos = possibilities.get(random.nextInt(possibilities.size()));
 					FeaturePlacers.placeIfValidTreePos(world, trunkPlacer, random, blockPos.above(1), config.branchProvider);
@@ -166,14 +154,30 @@ public class VeilwoodTreeFeature extends TFTreeFeature<VeilwoodTreeConfig> {
 					FeaturePlacers.placeIfValidTreePos(world, trunkPlacer, random, blockPos.above(), config.branchProvider);
 				}
 
-				break;
+				loop: {
+					for (Direction direction : Direction.Plane.HORIZONTAL.shuffledCopy(random)) {
+						if (!starters.containsKey(direction)) {
+							Collections.shuffle(possibilities);
+							for (BlockPos blockPos : possibilities) {
+								if (TreeFeature.validTreePos(world, blockPos.relative(direction))) {
+									starters.put(direction, blockPos.mutable());
+									break loop;
+								}
+							}
+						}
+					}
+				}
+
+				if (starters.size() >= 4) break;
 			}
 		}
 
+
+
 		if (starters.size() < 4) {
 			List<Direction> viable = new ArrayList<>();
-			for (Direction direction : DIRECTIONS) if (starters.containsKey(direction)) viable.add(direction);
-			for (Direction direction : DIRECTIONS) {
+			for (Direction direction : Direction.Plane.HORIZONTAL.shuffledCopy(random)) if (starters.containsKey(direction)) viable.add(direction);
+			for (Direction direction : Direction.Plane.HORIZONTAL.shuffledCopy(random)) {
 				if (!starters.containsKey(direction)) starters.put(direction, starters.get(viable.get(random.nextInt(viable.size()))));
 			}
 		}
@@ -185,7 +189,7 @@ public class VeilwoodTreeFeature extends TFTreeFeature<VeilwoodTreeConfig> {
 			int i = random.nextBoolean() ? 3 : 4;
 
 			for (BlockPos blockPos : bottoms) {
-				for (Direction direction : DIRECTIONS) {
+				for (Direction direction : Direction.Plane.HORIZONTAL.shuffledCopy(random)) {
 					BlockPos relative = blockPos.relative(direction);
 					if (!rootStarters.contains(relative) && bottoms.stream().noneMatch(trunks -> trunks.equals(relative) || trunks.equals(relative.relative(direction.getClockWise())) || trunks.equals(relative.relative(direction.getCounterClockWise()))) && !isInside(relative.above(), minY, maxY)) {
 						if (rootStarters.contains(relative.north()) || rootStarters.contains(relative.east()) || rootStarters.contains(relative.south()) || rootStarters.contains(relative.west())) continue;

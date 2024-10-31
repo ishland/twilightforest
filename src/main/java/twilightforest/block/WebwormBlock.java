@@ -152,7 +152,7 @@ public class WebwormBlock extends CritterBlock {
 					} else if (downState.isAir()) {
 						level.setBlockAndUpdate(down, TFBlocks.HANGING_WEB.get().defaultBlockState().setValue(HangingWebBlock.getPropertyForFace(face), HangingWebBlock.getPropertyForPlacement(level, down, face)));
 						return;
-					}
+					} else break;
 				} else return;
 			}
 		}
