@@ -219,7 +219,7 @@ public class VeilwoodTreeFeature extends TFTreeFeature<VeilwoodTreeConfig> {
 		// build the crown
 		starters.forEach((direction, start) -> {
 			int length = config.minBranchLength + random.nextInt(config.maxBranchLength - config.minBranchLength + 1);
-			BlockPos end = start.relative(direction, length).relative(Direction.UP, random.nextBoolean() ? 3 : 2);
+			BlockPos end = start.relative(direction, length).relative(Direction.UP, random.nextBoolean() ? 5 : 4);
 			this.createBranch(world, trunkPlacer, length, direction, random, config, random.nextDouble() <= config.branchOffCount, config.branchOffCount - 1, new VoxelBresenhamIterator(start, end));
 		});
 	}
@@ -244,7 +244,7 @@ public class VeilwoodTreeFeature extends TFTreeFeature<VeilwoodTreeConfig> {
 					if (newLength > 0) {
 						Direction clockWise = direction.getClockWise();
 						BlockPos clock = blockPos.relative(clockWise);
-						int up = 1 + random.nextInt(2 + count * 2);
+						int up = 2 + random.nextInt(2 + count * 2);
 						int side = 1 + random.nextInt(2) + count * 3;
 						BlockPos endClock = clock.relative(Direction.UP, up).relative(direction, newLength).relative(clockWise, side);
 						this.createBranch(world, trunkPlacer, newLength, direction, random, config, random.nextDouble() <= branchOffCount, branchOffCount - 1, new VoxelBresenhamIterator(clock, endClock));
@@ -257,7 +257,7 @@ public class VeilwoodTreeFeature extends TFTreeFeature<VeilwoodTreeConfig> {
 					if (newLength > 0) {
 						Direction counterWise = direction.getCounterClockWise();
 						BlockPos counter = blockPos.relative(counterWise);
-						int up = 1 + random.nextInt(2 + count * 2);
+						int up = 2 + random.nextInt(2 + count * 2);
 						int side = 1 + random.nextInt(2) + count * 3;
 						BlockPos endCounter = counter.relative(Direction.UP, up).relative(direction, newLength).relative(counterWise, side);
 						this.createBranch(world, trunkPlacer, newLength, direction, random, config, random.nextDouble() <= branchOffCount, branchOffCount - 1, new VoxelBresenhamIterator(counter, endCounter));
