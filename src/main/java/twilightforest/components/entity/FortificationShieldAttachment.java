@@ -7,6 +7,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.TraceableEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -89,6 +90,7 @@ public class FortificationShieldAttachment {
 
 		Vec3 pos = src.getSourcePosition();
 		if (src.getDirectEntity() instanceof LivingEntity living) pos = living.getEyePosition(); // If entity is not null, transfer the position to the eye level
+		if (src.getEntity() instanceof TraceableEntity traceable && traceable.getOwner() instanceof LivingEntity living) pos = living.getEyePosition(); // If entity is not null, transfer the position to the eye level
 
 		if (pos != null) {
 			Vec3 lichPos = entity.position().add(0.0D, entity.getBbHeight() * 0.65D, 0.0D);
@@ -101,8 +103,8 @@ public class FortificationShieldAttachment {
 				double horizontal = entity.getRandom().nextDouble() - 0.5D;
 				double x = sizeRange * offset.z * horizontal;
 				double y = sizeRange * (entity.getRandom().nextDouble() - 0.5D);
-				double z = sizeRange * offset.x * horizontal;
-				particlePacket.queueParticle(TFParticleType.SHIELD_BREAK.get(), false, pos.x + x, pos.y + y, pos.z - z, 0, 0, 0);
+				double z = sizeRange * offset.x * -horizontal;
+				particlePacket.queueParticle(TFParticleType.SHIELD_BREAK.get(), false, pos.x + x, pos.y + y, pos.z + z, x * 0.5D, y * 0.5D, z * 0.5D);
 			}
 		} else {
 			pos = entity.position().add(0.0D, entity.getBbHeight() * 0.65D, 0.0D);
@@ -110,7 +112,7 @@ public class FortificationShieldAttachment {
 				double x = (entity.getRandom().nextDouble() - 0.5D);
 				double y = (entity.getRandom().nextDouble() - 0.5D) * 0.25D;
 				double z = (entity.getRandom().nextDouble() - 0.5D);
-				particlePacket.queueParticle(TFParticleType.SHIELD_BREAK.get(), false, pos.x + x, pos.y + y, pos.z + z, 0, 0, 0);
+				particlePacket.queueParticle(TFParticleType.SHIELD_BREAK.get(), false, pos.x + x, pos.y + y, pos.z + z, x * 0.33D, y * 0.33D, z * 0.33D);
 			}
 		}
 

@@ -78,8 +78,8 @@ public class CustomTextureParticle extends TextureSheetParticle {
 			CustomTextureParticle particle = new CustomTextureParticle(level, x, y, z, xSpeed, ySpeed, zSpeed, true);
 			particle.pickSprite(this.sprite);
 			particle.scale(0.75F);
-			particle.gravity = 0.25F + (particle.random.nextFloat() * 0.5F);
-			particle.lifetime = (int)(8.0F / (particle.random.nextFloat() * 0.9F + 0.1F));
+			particle.gravity = 0.0F;
+			particle.lifetime = (int)(8.0F / (particle.random.nextFloat() * 0.5F + 0.5F) * 0.5F);
 			if (particle.lifetime <= 1) particle.lifetime = 2;
 			return particle;
 		}
