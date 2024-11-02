@@ -4,8 +4,8 @@
   "chest_loot_table": "twilightforest:tree_cache",
   "length": {
     "type": "minecraft:uniform",
-    "max_inclusive": 20,
-    "min_inclusive": 10
+    "max_inclusive": 24,
+    "min_inclusive": 14
   },
   "log": {
     "type": "minecraft:simple_state_provider",

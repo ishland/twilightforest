@@ -2,10 +2,8 @@ package twilightforest.world.components.structures.type;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
-import net.minecraft.core.HolderSet;
-import net.minecraft.core.SectionPos;
+import net.minecraft.Util;
+import net.minecraft.core.*;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.RegistryFixedCodec;
 import net.minecraft.resources.ResourceKey;
@@ -26,7 +24,6 @@ import twilightforest.init.TFBlocks;
 import twilightforest.init.TFEntities;
 import twilightforest.init.TFStructureTypes;
 import twilightforest.loot.TFLootTables;
-import twilightforest.util.WorldUtil;
 import twilightforest.world.components.structures.fallentrunk.FallenTrunkPiece;
 
 import java.util.Arrays;
@@ -42,10 +39,10 @@ public class FallenTrunkStructure extends Structure {
 		ResourceKey.codec(Registries.LOOT_TABLE).fieldOf("chest_loot_table").forGetter(s -> s.chestLootTable),
 		RegistryFixedCodec.create(Registries.ENTITY_TYPE).fieldOf("spawner_monster").forGetter(s -> s.spawnerMonster)
 	).apply(instance, FallenTrunkStructure::new));
+	public static final List<Integer> radiuses = List.of(1, 2, 4);
 
 	private final IntProvider length;
 	private final BlockStateProvider log;
-	private final List<Integer> radiuses = List.of(1, 2, 4);
 	private final ResourceKey<LootTable> chestLootTable;
 	private final Holder<EntityType<?>> spawnerMonster;
 
@@ -61,7 +58,7 @@ public class FallenTrunkStructure extends Structure {
 	public Optional<GenerationStub> findGenerationPoint(GenerationContext context) {
 		ChunkPos chunkPos = context.chunkPos();
 
-		RandomSource random = RandomSource.create(context.seed() + chunkPos.x * 25117L + chunkPos.z * 151121L);
+		RandomSource random = RandomSource.create(context.seed() + chunkPos.x * 14413411L + chunkPos.z * 43387781L);
 
 		int x = SectionPos.sectionToBlockCoord(chunkPos.x, random.nextInt(16));
 		int z = SectionPos.sectionToBlockCoord(chunkPos.z, random.nextInt(16));
@@ -70,18 +67,18 @@ public class FallenTrunkStructure extends Structure {
 
 		int length = this.length.sample(random);
 
-		if (length < 16 || (seaFloorY < worldY))
-			return Optional.empty();
 		if (!this.getModifiedStructureSettings().biomes().contains(context.chunkGenerator().getBiomeSource().getNoiseBiome(x >> 2, worldY >> 2, z >> 2, context.randomState().sampler())))
 			return Optional.empty();
 
 
-		int radius = WorldUtil.getRandomElement(radiuses, random);
+		int radius = Util.getRandom(radiuses, random);
+//		int radius = 4; FIXME: remove debug determined radius
 
-		BoundingBox boundingBox = new BoundingBox(x - (length + 1), worldY, z - (length + 1), x + length + 1, worldY + radius * 2 + 1, z + length + 1);
+		BoundingBox boundingBox = new BoundingBox(x - (length + 1), worldY - radius / radiuses.get(2), z - (length + 1), x + length + 1, worldY + radius * 2, z + length + 1);
 
 		return Optional.of(new GenerationStub(new BlockPos(x, worldY, z), structurePiecesBuilder -> {
-			StructurePiece piece = new FallenTrunkPiece(length, radius, log, chestLootTable, spawnerMonster, boundingBox);
+			StructurePiece piece = new FallenTrunkPiece(length, radius, log, chestLootTable, spawnerMonster,
+				Direction.Plane.HORIZONTAL.getRandomDirection(random), boundingBox);
 			structurePiecesBuilder.addPiece(piece);
 		}));
 	}
@@ -99,7 +96,7 @@ public class FallenTrunkStructure extends Structure {
 				GenerationStep.Decoration.SURFACE_STRUCTURES,
 				TerrainAdjustment.NONE
 			),
-			UniformInt.of(10, 20), BlockStateProvider.simple(TFBlocks.TWILIGHT_OAK_LOG.get()), TFLootTables.TREE_CACHE, TFEntities.SWARM_SPIDER
+			UniformInt.of(14, 24), BlockStateProvider.simple(TFBlocks.TWILIGHT_OAK_LOG.get()), TFLootTables.TREE_CACHE, TFEntities.SWARM_SPIDER
 		);
 	}
 }

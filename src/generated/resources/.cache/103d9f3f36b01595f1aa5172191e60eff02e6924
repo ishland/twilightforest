@@ -1,4 +1,4 @@
-// 1.21.1	2024-10-31T15:23:17.928367124	Registries
+// 1.21.1	2024-11-02T17:08:00.315981987	Registries
 9089ada9ce06fd30adf8b10e50f02233c7d5a76e data/minecraft/twilight/wood_palettes/acacia.json
 dca1ef01d0df4e956fd414782de57c25dfddd290 data/minecraft/twilight/wood_palettes/birch.json
 01becb45438b7f2bfdc77baba72bc986341510c8 data/minecraft/twilight/wood_palettes/crimson.json
@@ -348,7 +348,7 @@ b8d6df5664ad08851390152c8358c96f8ef204bb data/twilightforest/worldgen/placed_fea
 3e6f51defb23f93f44c60d5ba7ee7595dd0e718c data/twilightforest/worldgen/placed_feature/wood_roots.json
 b636e48abc9d6d886abe2d9fade9b2d1707307e8 data/twilightforest/worldgen/structure/aurora_palace.json
 bbd164031d3a59b7f48e22e9ff5cba77841186e5 data/twilightforest/worldgen/structure/dark_tower.json
-0d13a1664006fb900ef1e49873a71becbb81e803 data/twilightforest/worldgen/structure/fallen_trunk.json
+285f7cec14e668d53688362a6dbe3fbbbaa7b673 data/twilightforest/worldgen/structure/fallen_trunk.json
 cafcec64b5aeca35f5c5aacb98ec4e99c2be25df data/twilightforest/worldgen/structure/final_castle.json
 43d309984ffa36e6e6ba5f42bfa32afc14c12ab9 data/twilightforest/worldgen/structure/giant_house.json
 4e928ca58e8106af2cdc45ead90030050de2e6a0 data/twilightforest/worldgen/structure/hedge_maze.json
@@ -368,7 +368,7 @@ c80eb035dafc0e1686ca2cffc235606e90cc189b data/twilightforest/worldgen/structure/
 46bb4ea0d05e23fa627094fb8f1fbf2763cf27ea data/twilightforest/worldgen/structure/yeti_cave.json
 9b7532428e43ad07cbd01befa87d2e61c1b3665b data/twilightforest/worldgen/structure_set/aurora_palace.json
 85637b23df17209511ee48619f7c2e62ee711e46 data/twilightforest/worldgen/structure_set/dark_tower.json
-de9ddf73577c239eb327242ccd747ff51ddeb7e5 data/twilightforest/worldgen/structure_set/fallen_trunk.json
+a4685e578e5fc87aafa00e0671334d76a1b3460c data/twilightforest/worldgen/structure_set/fallen_trunk.json
 812d3931021ba71e0967f0ca1ed4ed9b8b4084c6 data/twilightforest/worldgen/structure_set/final_castle.json
 9e2378306467bacffd457718c88ea7f0a068e935 data/twilightforest/worldgen/structure_set/giant_house.json
 09dc97d2a9357ba05b229ac193478c5a89596e1f data/twilightforest/worldgen/structure_set/hedge_maze.json
