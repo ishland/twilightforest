@@ -161,6 +161,7 @@ public class Lich extends BaseTFBoss {
 				}
 			}
 		});
+		this.goalSelector.addGoal(1, new RandomLookAroundIfBoredGoal(this));
 		this.goalSelector.addGoal(1, new AlwaysWatchTargetGoal(this));
 		this.goalSelector.addGoal(1, new LichPopMobsGoal(this));
 		this.goalSelector.addGoal(1, new LichAbsorbMinionsGoal(this));
