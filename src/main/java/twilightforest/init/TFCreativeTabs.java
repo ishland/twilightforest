@@ -234,6 +234,7 @@ public class TFCreativeTabs {
 			output.accept(TFItems.HOLLOW_MINING_LOG);
 			output.accept(TFItems.HOLLOW_SORTING_LOG);
 			output.accept(TFItems.HOLLOW_VEILWOOD_LOG);
+			output.accept(TFBlocks.VEILWOOD_SAPLING);
 			output.accept(TFBlocks.OAK_BANISTER);
 			output.accept(TFBlocks.SPRUCE_BANISTER);
 			output.accept(TFBlocks.BIRCH_BANISTER);

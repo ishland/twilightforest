@@ -1,32 +1,49 @@
 package twilightforest.events;
 
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.network.protocol.game.ClientboundAnimatePacket;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.stats.Stats;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.FishingHook;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.EntityHitResult;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.common.damagesource.DamageContainer;
+import net.neoforged.neoforge.common.ItemAbilities;
 import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.common.damagesource.DamageContainer;
 import net.neoforged.neoforge.event.entity.ProjectileImpactEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
+import net.neoforged.neoforge.event.entity.player.ItemFishedEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.TwilightForestMod;
 import twilightforest.data.tags.BlockTagGenerator;
+import twilightforest.init.TFBiomes;
 import twilightforest.init.TFItems;
 import twilightforest.item.EnderBowItem;
 import twilightforest.item.MazebreakerPickItem;
 import twilightforest.item.MinotaurAxeItem;
+import twilightforest.loot.TFLootTables;
+
+import java.util.List;
 
 @EventBusSubscriber(modid = TwilightForestMod.ID)
 public class ToolEvents {
@@ -135,5 +152,47 @@ public class ToolEvents {
 		if (event.getEffectInstance() != null && event.getEffectInstance().is(MobEffects.DIG_SLOWDOWN) && event.getEntity().isHolding(TFItems.POCKET_WATCH.get())) {
 			event.setResult(MobEffectEvent.Applicable.Result.DO_NOT_APPLY);
 		} else event.setResult(MobEffectEvent.Applicable.Result.DEFAULT);
+	}
+
+	@SubscribeEvent
+	public static void onItemFishedEvent(ItemFishedEvent event) {
+		FishingHook hook = event.getHookEntity();
+		if (hook.getPlayerOwner() instanceof ServerPlayer player && player.serverLevel().getBiome(hook.blockPosition()).is(TFBiomes.SPOOKY_FOREST)) {
+			ServerLevel level = player.serverLevel();
+			ItemStack stack = checkHandsForRod(player);
+
+			LootParams.Builder builder = (new LootParams.Builder(level))
+				.withParameter(LootContextParams.ORIGIN, hook.position())
+				.withParameter(LootContextParams.TOOL, stack)
+				.withParameter(LootContextParams.ATTACKING_ENTITY, player)
+				.withParameter(LootContextParams.THIS_ENTITY, hook)
+				.withLuck((float) hook.luck + player.getLuck());
+			LootTable loottable = level.getServer().reloadableRegistries().getLootTable(TFLootTables.SPOOKY_FOREST_FISHING);
+			List<ItemStack> list = loottable.getRandomItems(builder.create(LootContextParamSets.FISHING));
+			CriteriaTriggers.FISHING_ROD_HOOKED.trigger(player, stack, hook, list);
+
+            for (ItemStack itemstack : list) {
+                ItemEntity itementity = new ItemEntity(level, hook.getX(), hook.getY(), hook.getZ(), itemstack);
+                double d0 = player.getX() - hook.getX();
+                double d1 = player.getY() - hook.getY();
+                double d2 = player.getZ() - hook.getZ();
+                itementity.setDeltaMovement(d0 * 0.1, d1 * 0.1 + Math.sqrt(Math.sqrt(d0 * d0 + d1 * d1 + d2 * d2)) * 0.08, d2 * 0.1);
+				level.addFreshEntity(itementity);
+                player.level().addFreshEntity(new ExperienceOrb(player.level(), player.getX(), player.getY() + 0.5, player.getZ() + 0.5, hook.getRandom().nextInt(6) + 1));
+                if (itemstack.is(ItemTags.FISHES)) {
+                    player.awardStat(Stats.FISH_CAUGHT, 1);
+                }
+            }
+			event.setCanceled(true);
+		}
+	}
+
+	private static ItemStack checkHandsForRod(Player player) {
+		if (player.getMainHandItem().canPerformAction(ItemAbilities.FISHING_ROD_CAST)) {
+			return player.getMainHandItem();
+		} else if (player.getOffhandItem().canPerformAction(ItemAbilities.FISHING_ROD_CAST)) {
+			return player.getOffhandItem();
+		}
+		return ItemStack.EMPTY;
 	}
 }

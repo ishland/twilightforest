@@ -98,6 +98,10 @@ public class TFLootTables {
 	public static final ResourceKey<LootTable> MOONWORM_SQUISH_DROPS = register("blocks/moonworm_squish");
 	public static final ResourceKey<LootTable> WEBWORM_SQUISH_DROPS = register("blocks/webworm_squish");
 
+	// Fishing
+	public static final ResourceKey<LootTable> SPOOKY_FOREST_FISHING = register( "gameplay/fishing/spooky_forest");
+	public static final ResourceKey<LootTable> SPOOKY_FOREST_FISHING_TREASURE = register( "gameplay/fishing/spooky_forest_treasure");
+
 	//public static final ResourceLocation ALL_BOSSES = register("entities/all_bosses");
 
 	public static void generateChest(WorldGenLevel world, BlockPos pos, Direction dir, boolean trapped, ResourceKey<LootTable> lootTable) {

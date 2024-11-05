@@ -28,7 +28,7 @@ public class TFChestRenderer<T extends ChestBlockEntity> extends ChestRenderer<T
 		builder.put(TFBlocks.TRANSFORMATION_CHEST.get(), chestMaterial("transformation", false));
 		builder.put(TFBlocks.MINING_CHEST.get(), chestMaterial("mining", false));
 		builder.put(TFBlocks.SORTING_CHEST.get(), chestMaterial("sorting", false));
-		builder.put(TFBlocks.VEILWOOD_CHEST.get(), chestMaterial("dead", false));
+		builder.put(TFBlocks.VEILWOOD_CHEST.get(), chestMaterial("veilwood", false));
 
 		builder.put(TFBlocks.TWILIGHT_OAK_TRAPPED_CHEST.get(), chestMaterial("twilight", true));
 		builder.put(TFBlocks.CANOPY_TRAPPED_CHEST.get(), chestMaterial("canopy", true));
@@ -38,7 +38,7 @@ public class TFChestRenderer<T extends ChestBlockEntity> extends ChestRenderer<T
 		builder.put(TFBlocks.TRANSFORMATION_TRAPPED_CHEST.get(), chestMaterial("transformation", true));
 		builder.put(TFBlocks.MINING_TRAPPED_CHEST.get(), chestMaterial("mining", true));
 		builder.put(TFBlocks.SORTING_TRAPPED_CHEST.get(), chestMaterial("sorting", true));
-		builder.put(TFBlocks.VEILWOOD_TRAPPED_CHEST.get(), chestMaterial("dead", true));
+		builder.put(TFBlocks.VEILWOOD_TRAPPED_CHEST.get(), chestMaterial("veilwood", true));
 
 		MATERIALS = builder.build();
 	}

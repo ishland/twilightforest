@@ -578,6 +578,7 @@ public class BlockstateGenerator extends BlockModelBuilders {
 		simpleBlock(TFBlocks.POTTED_TRANSFORMATION_SAPLING.get(), models().withExistingParent(TFBlocks.POTTED_TRANSFORMATION_SAPLING.getId().getPath(), "block/flower_pot_cross").renderType(CUTOUT).texture("plant", blockTexture(TFBlocks.TRANSFORMATION_SAPLING.get())));
 		simpleBlock(TFBlocks.POTTED_MINING_SAPLING.get(), models().withExistingParent(TFBlocks.POTTED_MINING_SAPLING.getId().getPath(), "block/flower_pot_cross").renderType(CUTOUT).texture("plant", blockTexture(TFBlocks.MINING_SAPLING.get())));
 		simpleBlock(TFBlocks.POTTED_SORTING_SAPLING.get(), models().withExistingParent(TFBlocks.POTTED_SORTING_SAPLING.getId().getPath(), "block/flower_pot_cross").renderType(CUTOUT).texture("plant", blockTexture(TFBlocks.SORTING_SAPLING.get())));
+		simpleBlock(TFBlocks.POTTED_VEILWOOD_SAPLING.get(), models().withExistingParent(TFBlocks.POTTED_VEILWOOD_SAPLING.getId().getPath(), "block/flower_pot_cross").renderType(CUTOUT).texture("plant", blockTexture(TFBlocks.VEILWOOD_SAPLING.get())));
 		simpleBlock(TFBlocks.POTTED_MAYAPPLE.get(), models().getExistingFile(prefix("block/potted_mayapple")));
 		simpleBlock(TFBlocks.POTTED_FIDDLEHEAD.get(), models().withExistingParent(TFBlocks.POTTED_FIDDLEHEAD.getId().getPath(), "block/tinted_flower_pot_cross").renderType(CUTOUT).texture("plant", blockTexture(TFBlocks.POTTED_FIDDLEHEAD.get())));
 		simpleBlock(TFBlocks.POTTED_MUSHGLOOM.get(), models().withExistingParent(TFBlocks.POTTED_MUSHGLOOM.getId().getPath(), "block/flower_pot_cross").renderType(CUTOUT).texture("plant", blockTexture(TFBlocks.POTTED_MUSHGLOOM.get())));
@@ -1059,7 +1060,7 @@ public class BlockstateGenerator extends BlockModelBuilders {
 		buildSortingLeaves();
 		magicLogCore(TFBlocks.SORTING_LOG_CORE.get());
 
-		logWoodNoSapling(TFBlocks.VEILWOOD_LOG.get(), TFBlocks.STRIPPED_VEILWOOD_LOG.get(), TFBlocks.VEILWOOD_WOOD.get(), TFBlocks.STRIPPED_VEILWOOD_WOOD.get());
+		logWoodSapling(TFBlocks.VEILWOOD_LOG.get(), TFBlocks.STRIPPED_VEILWOOD_LOG.get(), TFBlocks.VEILWOOD_WOOD.get(), TFBlocks.STRIPPED_VEILWOOD_WOOD.get(), TFBlocks.VEILWOOD_SAPLING.get());
 		plankBlocks("veilwood", TFBlocks.VEILWOOD_PLANKS.get(), TFBlocks.VEILWOOD_SLAB.get(), TFBlocks.VEILWOOD_STAIRS.get(), TFBlocks.VEILWOOD_BUTTON.get(), TFBlocks.VEILWOOD_FENCE.get(), TFBlocks.VEILWOOD_GATE.get(), TFBlocks.VEILWOOD_PLATE.get(), TFBlocks.VEILWOOD_DOOR.get(), TFBlocks.VEILWOOD_TRAPDOOR.get(), true, true, TFBlocks.VEILWOOD_BANISTER.get());
 
 		banisterVanilla(TFBlocks.OAK_BANISTER.get(), "oak_planks", "oak");

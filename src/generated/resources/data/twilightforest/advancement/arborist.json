@@ -2211,6 +2211,16 @@
       },
       "trigger": "minecraft:inventory_changed"
     },
+    "veilwood_sapling": {
+      "conditions": {
+        "items": [
+          {
+            "items": "twilightforest:veilwood_sapling"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
     "veilwood_sign": {
       "conditions": {
         "items": [
@@ -2867,6 +2877,9 @@
     ],
     [
       "stripped_veilwood_wood"
+    ],
+    [
+      "veilwood_sapling"
     ],
     [
       "hollow_veilwood_log"

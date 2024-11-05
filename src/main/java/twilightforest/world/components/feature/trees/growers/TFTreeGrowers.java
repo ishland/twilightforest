@@ -59,4 +59,9 @@ public class TFTreeGrowers {
 		Optional.of(TFConfiguredFeatures.LARGE_RAINBOW_OAK_TREE),
 		Optional.empty(),
 		Optional.empty());
+
+	public static final TreeGrower VEILWOOD = new TreeGrower("veilwood",
+		Optional.of(TFConfiguredFeatures.BIG_VEILWOOD_TREE),
+		Optional.of(TFConfiguredFeatures.VEILWOOD_TREE),
+		Optional.empty());
 }

@@ -314,6 +314,7 @@ public class BlockLootTables extends BlockLootSubProvider {
 		dropPottedContents(TFBlocks.POTTED_TRANSFORMATION_SAPLING.get());
 		dropPottedContents(TFBlocks.POTTED_MINING_SAPLING.get());
 		dropPottedContents(TFBlocks.POTTED_SORTING_SAPLING.get());
+		dropPottedContents(TFBlocks.POTTED_VEILWOOD_SAPLING.get());
 		dropPottedContents(TFBlocks.POTTED_MAYAPPLE.get());
 		dropPottedContents(TFBlocks.POTTED_FIDDLEHEAD.get());
 		dropPottedContents(TFBlocks.POTTED_MUSHGLOOM.get());
@@ -592,6 +593,7 @@ public class BlockLootTables extends BlockLootSubProvider {
 		dropSelf(TFBlocks.STRIPPED_VEILWOOD_LOG.get());
 		dropSelf(TFBlocks.VEILWOOD_WOOD.get());
 		dropSelf(TFBlocks.STRIPPED_VEILWOOD_WOOD.get());
+		dropSelf(TFBlocks.VEILWOOD_SAPLING.get());
 		dropSelf(TFBlocks.VEILWOOD_PLANKS.get());
 		dropSelf(TFBlocks.VEILWOOD_STAIRS.get());
 		add(TFBlocks.VEILWOOD_SLAB.get(), createSlabItemTable(TFBlocks.VEILWOOD_SLAB.get()));

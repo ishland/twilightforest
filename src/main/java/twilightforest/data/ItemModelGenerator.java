@@ -441,6 +441,7 @@ public class ItemModelGenerator extends ItemModelProvider {
 		toBlock(TFBlocks.STRIPPED_VEILWOOD_LOG.get());
 		toBlock(TFBlocks.VEILWOOD_WOOD.get());
 		toBlock(TFBlocks.STRIPPED_VEILWOOD_WOOD.get());
+		generated(TFBlocks.VEILWOOD_SAPLING.getId().getPath(), prefix("block/" + TFBlocks.VEILWOOD_SAPLING.getId().getPath()));
 		woodBlock(TFBlocks.VEILWOOD_PLANKS.get(), "planks/veilwood");
 		woodBlock(TFBlocks.VEILWOOD_STAIRS.get(), "stairs/veilwood");
 		woodBlock(TFBlocks.VEILWOOD_SLAB.get(), "slab/veilwood");

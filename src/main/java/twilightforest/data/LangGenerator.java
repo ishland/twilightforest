@@ -375,6 +375,7 @@ public class LangGenerator extends TFLangProvider {
 		this.createLogs("sorting", "Sortingwood");
 		this.createWoodSet("sorting", "Sortingwood");
 
+		this.addSapling("veilwood", "Veilwood Sapling");
 		this.createLogs("veilwood", "Veilwood");
 		this.createWoodSet("veilwood", "Veilwood");
 

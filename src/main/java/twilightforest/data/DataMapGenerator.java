@@ -16,7 +16,6 @@ import net.neoforged.neoforge.registries.datamaps.builtin.NeoForgeDataMaps;
 import net.neoforged.neoforge.registries.datamaps.builtin.ParrotImitation;
 import twilightforest.data.tags.ItemTagGenerator;
 import twilightforest.init.*;
-import twilightforest.item.MagicMapItem;
 import twilightforest.util.datamaps.CrumbledBlock;
 import twilightforest.util.datamaps.EntityTransformation;
 import twilightforest.util.datamaps.MagicMapBiomeColor;
@@ -54,6 +53,7 @@ public class DataMapGenerator extends DataMapProvider {
 		compostables.add(TFBlocks.MANGROVE_SAPLING.asItem().builtInRegistryHolder(), new Compostable(0.3F), false);
 		compostables.add(TFBlocks.DARKWOOD_SAPLING.asItem().builtInRegistryHolder(), new Compostable(0.3F), false);
 		compostables.add(TFBlocks.RAINBOW_OAK_SAPLING.asItem().builtInRegistryHolder(), new Compostable(0.3F), false);
+		compostables.add(TFBlocks.VEILWOOD_SAPLING.asItem().builtInRegistryHolder(), new Compostable(0.3F), false);
 		compostables.add(TFItems.TORCHBERRIES, new Compostable(0.3F), false);
 		compostables.add(TFBlocks.BEANSTALK_LEAVES.asItem().builtInRegistryHolder(), new Compostable(0.5F), false);
 		compostables.add(TFBlocks.MOSS_PATCH.asItem().builtInRegistryHolder(), new Compostable(0.5F), false);

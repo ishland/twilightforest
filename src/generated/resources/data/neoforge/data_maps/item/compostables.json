@@ -140,6 +140,9 @@
     },
     "twilightforest:unripe_trollber": {
       "chance": 0.65
+    },
+    "twilightforest:veilwood_sapling": {
+      "chance": 0.3
     }
   }
 }
