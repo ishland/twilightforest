@@ -84,11 +84,33 @@ public class FallenTrunkPiece extends StructurePiece {
 	@Override
 	public void postProcess(@NotNull WorldGenLevel level, @NotNull StructureManager structureManager, @NotNull ChunkGenerator generator, @NotNull RandomSource random,
 							@NotNull BoundingBox box, @NotNull ChunkPos chunkPos, @NotNull BlockPos pos) {
-		// TODO: add trunks with size 1
+		if (radius == FallenTrunkStructure.radiuses.get(0))
+			generateSmallFallenTrunk(level, random, box, pos, true);
 		if (radius == FallenTrunkStructure.radiuses.get(1))
 			generateFallenTrunk(level, random, box, pos, true, false);
 		if (radius == FallenTrunkStructure.radiuses.get(2))
-			generateFallenTrunk(level, RandomSource.create(pos.asLong()), box, pos, true, true);
+			generateFallenTrunk(level, RandomSource.create(pos.asLong()), box, pos, false, true);
+	}
+
+	private void generateSmallFallenTrunk(WorldGenLevel level, RandomSource random, BoundingBox box, BlockPos pos, boolean hasHole) {
+		float hollow = 1;
+		float diameter = 4;
+
+		HoleParameters holeParams = calculateHoleParameters(random, hollow, diameter);
+
+		for (int dx = 0; dx <= 3; dx++) {
+			for (int dy = 0; dy <= 3; dy++) {
+				if (Math.abs(dx - 1.5) + Math.abs(dy - 1.5) != 2)
+					continue;
+
+				for (int dz = 0; dz < length; dz++) {
+						BlockPos offsetPos = pos.offset(dx, dy, dz);
+						if (hasHole && isInHole(holeParams, dx, dy, dz))
+							continue;
+						this.placeLog(level, log.getState(random, offsetPos).trySetValue(RotatedPillarBlock.AXIS, Direction.Axis.Z), dx, dy, dz, box, random);
+				}
+			}
+		}
 	}
 
 	private void generateFallenTrunk(WorldGenLevel level, RandomSource random, BoundingBox box, BlockPos pos, boolean hasHole, boolean hasSpawnerAndChests) {
@@ -101,55 +123,31 @@ public class FallenTrunkPiece extends StructurePiece {
 		int hollow = radius / 2;
 		int diameter = radius * 2;
 
-		double holeBallAngle = random.triangle(Math.PI / 4, Math.PI / 6);
-		double holeBallDistanceFromTrunkAxis = random.triangle(radius, hollow) + radius;
-		Vec3 holeBallCenter = new Vec3(Math.cos(holeBallAngle) * holeBallDistanceFromTrunkAxis + radius, Math.sin(holeBallAngle) * holeBallDistanceFromTrunkAxis + radius, random.nextFloat() * (length - 4 * ERODED_LENGTH) + 2 * ERODED_LENGTH);
-		double holeBallRadius = holeBallDistanceFromTrunkAxis + random.triangle(hollow, hollow) - radius;
-
-// FIXME: Delete debug prints
-		System.out.println(holeBallCenter);
-		System.out.println(holeBallDistanceFromTrunkAxis);
-		System.out.println(holeBallRadius);
-		System.out.println("--------------");
+		HoleParameters holeParams = calculateHoleParameters(random, hollow, diameter);
 
 		for (int dx = 0; dx <= diameter; dx++) {
 			for (int dy = 0; dy <= diameter; dy++) {
 				int dist = getDist(dx, dy);
 				if (dist <= radius && dist > hollow) {
 					for (int dz = ERODED_LENGTH; dz < length; dz++) {
-						if (dz > length - ERODED_LENGTH && random.nextBoolean()) {dz = length + 1; continue;}
-						BlockPos offsetPos = pos.above(dy).east(dx).south(dz);
-						if (hasHole) {
-							Vec3 blockCenter = new BlockPos(dx, dy, dz).getCenter();
-							if (blockCenter.distanceTo(holeBallCenter) <= holeBallRadius)
-								continue;
-						}
-
-						this.placeLog(level, log.getState(random, offsetPos).trySetValue(RotatedPillarBlock.AXIS, Direction.Axis.Z),
-							dx, dy, dz, box, random);
+						if (dz > length - ERODED_LENGTH && random.nextBoolean()) { dz = length + 1; continue; }
+						BlockPos offsetPos = pos.offset(dx, dy, dz);
+						if (hasHole && isInHole(holeParams, dx, dy, dz))
+							continue;
+						this.placeLog(level, log.getState(random, offsetPos).trySetValue(RotatedPillarBlock.AXIS, Direction.Axis.Z), dx, dy, dz, box, random);
 					}
 					for (int dz = ERODED_LENGTH; dz > 0; dz--) {
-						if (random.nextBoolean()) {dz = 0; continue;}
-						if (hasHole) {
-							Vec3 blockCenter = new BlockPos(dx, dy, dz).getCenter();
-							if (blockCenter.distanceTo(holeBallCenter) <= holeBallRadius)
-								continue;
-						}
-						BlockPos offsetPos = pos.above(dy).east(dx).south(dz);
-						this.placeLog(level, log.getState(random, offsetPos).trySetValue(RotatedPillarBlock.AXIS, Direction.Axis.Z),
-							dx, dy, dz, box, random);
+						if (random.nextBoolean()) { dz = 0; continue; }
+						if (hasHole && isInHole(holeParams, dx, dy, dz))
+							continue;
+						BlockPos offsetPos = pos.offset(dx, dy, dz);
+						this.placeLog(level, log.getState(random, offsetPos).trySetValue(RotatedPillarBlock.AXIS, Direction.Axis.Z), dx, dy, dz, box, random);
 					}
 				}
 			}
 		}
-// FIXME: Delete debug blocks
-		placeBlock(level, Blocks.DIAMOND_BLOCK.defaultBlockState(), (int) holeBallCenter.x, (int) holeBallCenter.y, (int) holeBallCenter.z, box);
-		placeBlock(level, Blocks.EMERALD_BLOCK.defaultBlockState(), (int) (holeBallCenter.x), (int) (holeBallCenter.y + holeBallRadius), (int) (holeBallCenter.z), box);
 	}
 
-	private void generateHole(WorldGenLevel level, RandomSource random, BoundingBox box, BlockPos pos) {
-
-	}
 
 	private void generateSpawnerAndChests(WorldGenLevel level, RandomSource random, BoundingBox box, BlockPos pos) {
 		BlockPos spawnerPos = new BlockPos(radius, 2, length / 2);
@@ -195,5 +193,29 @@ public class FallenTrunkPiece extends StructurePiece {
 	@Override
 	public Direction getOrientation() {
 		return MoreObjects.firstNonNull(orientation, Direction.NORTH);  // orientation is always not null, just to remove warnings
+	}
+
+	private HoleParameters calculateHoleParameters(RandomSource random, float hollow, float diameter) {
+		double holeBallAngle = random.triangle(Math.PI / 4, Math.PI / 6);
+		double holeBallDistanceFromTrunkAxis = random.triangle(radius, hollow) + radius;
+		Vec3 holeBallCenter = new Vec3(Math.cos(holeBallAngle) * holeBallDistanceFromTrunkAxis + radius, Math.sin(holeBallAngle) * holeBallDistanceFromTrunkAxis + radius, random.nextFloat() * (length - 4 * ERODED_LENGTH) + 2 * ERODED_LENGTH);
+		double holeBallRadius = holeBallDistanceFromTrunkAxis + random.triangle(hollow, hollow) - radius;
+
+		return new HoleParameters(holeBallCenter, holeBallRadius);
+	}
+
+	private boolean isInHole(HoleParameters holeParams, int dx, int dy, int dz) {
+		Vec3 blockCenter = new BlockPos(dx, dy, dz).getCenter();
+		return blockCenter.distanceTo(holeParams.center) <= holeParams.radius;
+	}
+
+	private static class HoleParameters {
+		final Vec3 center;
+		final double radius;
+
+		HoleParameters(Vec3 center, double radius) {
+			this.center = center;
+			this.radius = radius;
+		}
 	}
 }
