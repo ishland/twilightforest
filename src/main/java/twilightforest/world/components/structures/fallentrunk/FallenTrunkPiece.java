@@ -86,9 +86,9 @@ public class FallenTrunkPiece extends StructurePiece {
 							@NotNull BoundingBox box, @NotNull ChunkPos chunkPos, @NotNull BlockPos pos) {
 		// TODO: add trunks with size 1
 		if (radius == FallenTrunkStructure.radiuses.get(1))
-			generateFallenTrunk(level, random, box, pos, random.nextBoolean(), false);
+			generateFallenTrunk(level, random, box, pos, true, false);
 		if (radius == FallenTrunkStructure.radiuses.get(2))
-			generateFallenTrunk(level, RandomSource.create(pos.asLong()), box, pos, random.nextBoolean(), true);
+			generateFallenTrunk(level, RandomSource.create(pos.asLong()), box, pos, true, true);
 	}
 
 	private void generateFallenTrunk(WorldGenLevel level, RandomSource random, BoundingBox box, BlockPos pos, boolean hasHole, boolean hasSpawnerAndChests) {
@@ -101,15 +101,16 @@ public class FallenTrunkPiece extends StructurePiece {
 		int hollow = radius / 2;
 		int diameter = radius * 2;
 
-		Vec3 holeConeVertex = new Vec3(radius + (random.nextFloat() - 0.5) * hollow, hollow + random.nextFloat() * hollow, random.nextFloat() * (length - 4 * ERODED_LENGTH) + 2 * ERODED_LENGTH);
-		Vec3 holeConeAxis = Vec3.directionFromRotation((float) -random.triangle(50, 40), (float) (random.triangle(135, 30)));
-		double holeConeAngleCos = Math.cos(random.triangle(Math.PI / 7, Math.PI / 50));
+		double holeBallAngle = random.triangle(Math.PI / 4, Math.PI / 6);
+		double holeBallDistanceFromTrunkAxis = random.triangle(radius, hollow) + radius;
+		Vec3 holeBallCenter = new Vec3(Math.cos(holeBallAngle) * holeBallDistanceFromTrunkAxis + radius, Math.sin(holeBallAngle) * holeBallDistanceFromTrunkAxis + radius, random.nextFloat() * (length - 4 * ERODED_LENGTH) + 2 * ERODED_LENGTH);
+		double holeBallRadius = holeBallDistanceFromTrunkAxis + random.triangle(hollow, hollow) - radius;
 
 // FIXME: Delete debug prints
-//		System.out.println(holeConeVertex);
-//		System.out.println(holeConeAxis);
-//		System.out.println(holeConeAngleCos);
-//		System.out.println("--------------");
+		System.out.println(holeBallCenter);
+		System.out.println(holeBallDistanceFromTrunkAxis);
+		System.out.println(holeBallRadius);
+		System.out.println("--------------");
 
 		for (int dx = 0; dx <= diameter; dx++) {
 			for (int dy = 0; dy <= diameter; dy++) {
@@ -120,8 +121,7 @@ public class FallenTrunkPiece extends StructurePiece {
 						BlockPos offsetPos = pos.above(dy).east(dx).south(dz);
 						if (hasHole) {
 							Vec3 blockCenter = new BlockPos(dx, dy, dz).getCenter();
-							Vec3 blockCenterRadiusNormalized = blockCenter.subtract(holeConeVertex).normalize();
-							if (holeConeAxis.dot(blockCenterRadiusNormalized) >= holeConeAngleCos)
+							if (blockCenter.distanceTo(holeBallCenter) <= holeBallRadius)
 								continue;
 						}
 
@@ -130,6 +130,11 @@ public class FallenTrunkPiece extends StructurePiece {
 					}
 					for (int dz = ERODED_LENGTH; dz > 0; dz--) {
 						if (random.nextBoolean()) {dz = 0; continue;}
+						if (hasHole) {
+							Vec3 blockCenter = new BlockPos(dx, dy, dz).getCenter();
+							if (blockCenter.distanceTo(holeBallCenter) <= holeBallRadius)
+								continue;
+						}
 						BlockPos offsetPos = pos.above(dy).east(dx).south(dz);
 						this.placeLog(level, log.getState(random, offsetPos).trySetValue(RotatedPillarBlock.AXIS, Direction.Axis.Z),
 							dx, dy, dz, box, random);
@@ -138,8 +143,8 @@ public class FallenTrunkPiece extends StructurePiece {
 			}
 		}
 // FIXME: Delete debug blocks
-//		placeBlock(level, Blocks.DIAMOND_BLOCK.defaultBlockState(), (int) holeConeVertex.x, (int) holeConeVertex.y, (int) holeConeVertex.z, box);
-//		placeBlock(level, Blocks.EMERALD_BLOCK.defaultBlockState(), (int) (holeConeAxis.x * 5 + holeConeVertex.x), (int) (holeConeAxis.y * 5 + holeConeVertex.y), (int) (holeConeAxis.z * 5 + holeConeVertex.z), box);
+		placeBlock(level, Blocks.DIAMOND_BLOCK.defaultBlockState(), (int) holeBallCenter.x, (int) holeBallCenter.y, (int) holeBallCenter.z, box);
+		placeBlock(level, Blocks.EMERALD_BLOCK.defaultBlockState(), (int) (holeBallCenter.x), (int) (holeBallCenter.y + holeBallRadius), (int) (holeBallCenter.z), box);
 	}
 
 	private void generateHole(WorldGenLevel level, RandomSource random, BoundingBox box, BlockPos pos) {
