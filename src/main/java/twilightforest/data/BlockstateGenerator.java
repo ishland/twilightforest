@@ -1061,7 +1061,7 @@ public class BlockstateGenerator extends BlockModelBuilders {
 		magicLogCore(TFBlocks.SORTING_LOG_CORE.get());
 
 		logWoodSapling(TFBlocks.VEILWOOD_LOG.get(), TFBlocks.STRIPPED_VEILWOOD_LOG.get(), TFBlocks.VEILWOOD_WOOD.get(), TFBlocks.STRIPPED_VEILWOOD_WOOD.get(), TFBlocks.VEILWOOD_SAPLING.get());
-		plankBlocks("veilwood", TFBlocks.VEILWOOD_PLANKS.get(), TFBlocks.VEILWOOD_SLAB.get(), TFBlocks.VEILWOOD_STAIRS.get(), TFBlocks.VEILWOOD_BUTTON.get(), TFBlocks.VEILWOOD_FENCE.get(), TFBlocks.VEILWOOD_GATE.get(), TFBlocks.VEILWOOD_PLATE.get(), TFBlocks.VEILWOOD_DOOR.get(), TFBlocks.VEILWOOD_TRAPDOOR.get(), true, true, TFBlocks.VEILWOOD_BANISTER.get());
+		plankBlocks("veilwood", TFBlocks.VEILWOOD_PLANKS.get(), TFBlocks.VEILWOOD_SLAB.get(), TFBlocks.VEILWOOD_STAIRS.get(), TFBlocks.VEILWOOD_BUTTON.get(), TFBlocks.VEILWOOD_FENCE.get(), TFBlocks.VEILWOOD_GATE.get(), TFBlocks.VEILWOOD_PLATE.get(), TFBlocks.VEILWOOD_DOOR.get(), TFBlocks.VEILWOOD_TRAPDOOR.get(), true, false, TFBlocks.VEILWOOD_BANISTER.get());
 
 		banisterVanilla(TFBlocks.OAK_BANISTER.get(), "oak_planks", "oak");
 		banisterVanilla(TFBlocks.SPRUCE_BANISTER.get(), "spruce_planks", "spruce");
