@@ -54,8 +54,8 @@ public class TFBoatTypeEnumExtension {
 	public final Lazy<Boat.Type> SORTING = Lazy.of(() -> Boat.Type.byName(modidPrefixUtil.stringPrefix("sorting")));
 
 	/**
-	 * {@link TFEnumExtensions#Boat$Type_DEAD(int, Class)}
+	 * {@link TFEnumExtensions#Boat$Type_VEILWOOD(int, Class)}
 	 */
-	public final Lazy<Boat.Type> VEILWOOD = Lazy.of(() -> Boat.Type.byName(modidPrefixUtil.stringPrefix("dead")));
+	public final Lazy<Boat.Type> VEILWOOD = Lazy.of(() -> Boat.Type.byName(modidPrefixUtil.stringPrefix("veilwood")));
 
 }

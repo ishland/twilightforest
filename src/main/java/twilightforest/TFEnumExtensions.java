@@ -278,12 +278,12 @@ public class TFEnumExtensions {
 	 *
 	 * {@link twilightforest.enums.extensions.TFBoatTypeEnumExtension#VEILWOOD}
 	 */
-	public static Object Boat$Type_DEAD(int idx, Class<?> type) {
+	public static Object Boat$Type_VEILWOOD(int idx, Class<?> type) {
 		if (idx == 5) // Lazy away around boxing the boolean
 			return false;
 		return type.cast(switch (idx) {
 			case 0 -> TFBlocks.VEILWOOD_PLANKS;
-			case 1 -> modidPrefixUtil.stringPrefix("dead");
+			case 1 -> modidPrefixUtil.stringPrefix("veilwood");
 			case 2 -> TFItems.VEILWOOD_BOAT;
 			case 3 -> TFItems.VEILWOOD_CHEST_BOAT;
 			case 4 -> (Supplier<Item>) () -> Items.STICK;
