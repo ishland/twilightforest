@@ -72,14 +72,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class ClientEvents {
 	private static final VoxelShape GIANT_BLOCK = Shapes.box(0.0D, 0.0D, 0.0D, 4.0D, 4.0D, 4.0D);
 	private static final MutableComponent WIP_TEXT = Component.translatable("misc.twilightforest.wip").withStyle(ChatFormatting.RED);
 	private static final MutableComponent EMPERORS_CLOTH_TOOLTIP = Component.translatable("item.twilightforest.emperors_cloth.desc").withStyle(ChatFormatting.GRAY);
+	private static final EnumMap<Boat.Type, AbstractTexture> BOAT_CACHE = new EnumMap<>(Boat.Type.class);
+	private static AtomicReference<NativeImage> ref = new AtomicReference<>();
 
 	private static boolean firstTitleScreenShown = false;
 
@@ -389,12 +393,21 @@ public class ClientEvents {
 											}
 										}
 
-										Minecraft.getInstance().getTextureManager().register(location, new AbstractTexture() {
-											@Override
-											public void load(ResourceManager resourceManager) {
-												TextureUtil.prepareImage(this.getId(), 0, newImage.getWidth(), newImage.getHeight()); newImage.upload(0, 0, 0, 0, 0, newImage.getWidth(), newImage.getHeight(), false, false, false, true);
-											}
-										});
+										ref.set(newImage);
+
+										if (BOAT_CACHE.containsKey(type)) {
+											BOAT_CACHE.get(type).load(manager);
+										} else {
+											AbstractTexture texture = new AbstractTexture() {
+												@Override
+												public void load(ResourceManager resourceManager) {
+													TextureUtil.prepareImage(this.getId(), 0, ref.get().getWidth(), ref.get().getHeight());
+													ref.get().upload(0, 0, 0, 0, 0, ref.get().getWidth(), ref.get().getHeight(), false, false, false, true);
+												}
+											};
+											Minecraft.getInstance().getTextureManager().register(location, texture);
+											BOAT_CACHE.put(type, texture);
+										}
 									}
 								} else {
 									for (int x = 0; x < 48 * tfScale; x++) {
@@ -403,12 +416,21 @@ public class ClientEvents {
 										}
 									}
 
-									Minecraft.getInstance().getTextureManager().register(location, new AbstractTexture() {
-										@Override
-										public void load(ResourceManager resourceManager) {
-											TextureUtil.prepareImage(this.getId(), 0, tfImage.getWidth(), tfImage.getHeight()); tfImage.upload(0, 0, 0, 0, 0, tfImage.getWidth(), tfImage.getHeight(), false, false, false, true);
-										}
-									});
+									ref.set(tfImage);
+
+									if (BOAT_CACHE.containsKey(type)) {
+										BOAT_CACHE.get(type).load(manager);
+									} else {
+										AbstractTexture texture = new AbstractTexture() {
+											@Override
+											public void load(ResourceManager resourceManager) {
+												TextureUtil.prepareImage(this.getId(), 0, ref.get().getWidth(), ref.get().getHeight());
+												ref.get().upload(0, 0, 0, 0, 0, ref.get().getWidth(), ref.get().getHeight(), false, false, false, true);
+											}
+										};
+										Minecraft.getInstance().getTextureManager().register(location, texture);
+										BOAT_CACHE.put(type, texture);
+									}
 								}
 							} catch (IOException e) {
 								// Fail silently, no boat texture bullshit here
