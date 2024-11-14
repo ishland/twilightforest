@@ -1,6 +1,8 @@
 package twilightforest.client.event;
 
 import com.ibm.icu.text.RuleBasedNumberFormat;
+import com.mojang.blaze3d.platform.NativeImage;
+import com.mojang.blaze3d.platform.TextureUtil;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.ChatFormatting;
@@ -10,22 +12,25 @@ import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.client.model.HeadedModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.texture.AbstractTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.Style;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ReloadableResourceManager;
+import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.sounds.Music;
 import net.minecraft.sounds.Musics;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -58,13 +63,18 @@ import twilightforest.config.TFConfig;
 import twilightforest.data.tags.ItemTagGenerator;
 import twilightforest.entity.boss.bar.ClientTFBossBar;
 import twilightforest.events.HostileMountEvents;
-import twilightforest.init.*;
+import twilightforest.init.TFDataComponents;
+import twilightforest.init.TFDimension;
 import twilightforest.item.*;
 import twilightforest.util.HolderMatcher;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
 
 public class ClientEvents {
 	private static final VoxelShape GIANT_BLOCK = Shapes.box(0.0D, 0.0D, 0.0D, 4.0D, 4.0D, 4.0D);
@@ -344,5 +354,75 @@ public class ClientEvents {
 			event.setCanceled(true);
 			bossEvent.renderBossBar(event.getGuiGraphics(), event.getX(), event.getY());
 		}
+	}
+
+	public static void generateChestBoatTextures(ResourceManager manager) {
+		// Get a default boat chest texture
+		ResourceLocation oak = getTextureLocation(Boat.Type.OAK);
+
+		manager.getResource(oak).ifPresent(vanillaResource -> {
+			try (InputStream vanillaStream = vanillaResource.open()) {
+				NativeImage vanillaImage = NativeImage.read(vanillaStream);
+				int defaultScale = 128;
+				int vanillaScale = vanillaImage.getWidth() / defaultScale;
+				for (Boat.Type type : Boat.Type.values()) {
+					ResourceLocation location = getTextureLocation(type);
+					if (location.getNamespace().equals(TwilightForestMod.ID)) { // We only want to do this to our boats
+						manager.getResource(location).ifPresent(tfResource -> {
+							try (InputStream tfStream = tfResource.open()) {
+								NativeImage tfImage = NativeImage.read(tfStream);
+								int tfScale = tfImage.getWidth() / defaultScale;
+
+								for (int x = 0; x < 48 * tfScale; x++) {
+									for (int y = 58 * tfScale; y < 96 * tfScale; y++) {
+										// If the loaded tf boat chest texture has non-transparent pixels below the boat section of the texture, return
+										if (tfImage.getPixelRGBA(x, y) != 0x00000000) return;
+									}
+								}
+
+								if (vanillaScale > tfScale) {
+									try (NativeImage newImage = new NativeImage(defaultScale * vanillaScale, defaultScale * vanillaScale, false)) {
+										newImage.copyFrom(vanillaImage);
+										for (int x = 0; x < 102 * vanillaScale; x++) {
+											for (int y = 0; y < 52 * vanillaScale; y++) {
+												newImage.setPixelRGBA(x, y, tfImage.getPixelRGBA(x / (vanillaScale / tfScale), y / (vanillaScale / tfScale)));
+											}
+										}
+
+										Minecraft.getInstance().getTextureManager().register(location, new AbstractTexture() {
+											@Override
+											public void load(ResourceManager resourceManager) {
+												TextureUtil.prepareImage(this.getId(), 0, newImage.getWidth(), newImage.getHeight()); newImage.upload(0, 0, 0, 0, 0, newImage.getWidth(), newImage.getHeight(), false, false, false, true);
+											}
+										});
+									}
+								} else {
+									for (int x = 0; x < 48 * tfScale; x++) {
+										for (int y = 58 * tfScale; y < 96 * tfScale; y++) {
+											tfImage.setPixelRGBA(x, y, vanillaImage.getPixelRGBA(x / (tfScale / vanillaScale), y / (tfScale / vanillaScale)));
+										}
+									}
+
+									Minecraft.getInstance().getTextureManager().register(location, new AbstractTexture() {
+										@Override
+										public void load(ResourceManager resourceManager) {
+											TextureUtil.prepareImage(this.getId(), 0, tfImage.getWidth(), tfImage.getHeight()); tfImage.upload(0, 0, 0, 0, 0, tfImage.getWidth(), tfImage.getHeight(), false, false, false, true);
+										}
+									});
+								}
+							} catch (IOException e) {
+								// Fail silently, no boat texture bullshit here
+							}
+						});
+					}
+				}
+			} catch (IOException e) {
+				// Fail silently, no boat texture bullshit here
+			}
+		});
+	}
+
+	private static ResourceLocation getTextureLocation(Boat.Type type) {
+		return ResourceLocation.parse(type.getName()).withPrefix("textures/entity/chest_boat/").withSuffix(".png");
 	}
 }
