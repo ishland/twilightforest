@@ -309,6 +309,7 @@ public class RegistrationEvents {
 		((ReloadableResourceManager)Minecraft.getInstance().getResourceManager()).listeners.addFirst(JappaPackReloadListener.INSTANCE);
 		MagicPaintingTextureManager.instance = new MagicPaintingTextureManager(Minecraft.getInstance().getTextureManager());
 		event.registerReloadListener(MagicPaintingTextureManager.instance);
+		event.registerReloadListener(TextureGeneratorReloadListener.INSTANCE);
 	}
 
 	private static void registerScreens(RegisterMenuScreensEvent event) {
@@ -664,8 +665,6 @@ public class RegistrationEvents {
 			LivingEntityRenderer<Player, EntityModel<Player>> skin = event.getSkin(renderer);
 			attachRenderLayers(Objects.requireNonNull(skin));
 		});
-
-		ClientEvents.generateChestBoatTextures(Minecraft.getInstance().getResourceManager());
 	}
 
 	private static <T extends LivingEntity, M extends EntityModel<T>> void attachRenderLayers(LivingEntityRenderer<T, M> renderer) {
