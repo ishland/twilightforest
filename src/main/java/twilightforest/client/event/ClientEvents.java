@@ -83,7 +83,7 @@ public class ClientEvents {
 	private static final MutableComponent WIP_TEXT = Component.translatable("misc.twilightforest.wip").withStyle(ChatFormatting.RED);
 	private static final MutableComponent EMPERORS_CLOTH_TOOLTIP = Component.translatable("item.twilightforest.emperors_cloth.desc").withStyle(ChatFormatting.GRAY);
 	private static final EnumMap<Boat.Type, AbstractTexture> BOAT_CACHE = new EnumMap<>(Boat.Type.class);
-	private static AtomicReference<NativeImage> ref = new AtomicReference<>();
+	private static final AtomicReference<NativeImage> ref = new AtomicReference<>();
 
 	private static boolean firstTitleScreenShown = false;
 
@@ -401,6 +401,8 @@ public class ClientEvents {
 											AbstractTexture texture = new AbstractTexture() {
 												@Override
 												public void load(ResourceManager resourceManager) {
+													if (ref.get() == null)
+														return;
 													TextureUtil.prepareImage(this.getId(), 0, ref.get().getWidth(), ref.get().getHeight());
 													ref.get().upload(0, 0, 0, 0, 0, ref.get().getWidth(), ref.get().getHeight(), false, false, false, true);
 												}
@@ -424,6 +426,8 @@ public class ClientEvents {
 										AbstractTexture texture = new AbstractTexture() {
 											@Override
 											public void load(ResourceManager resourceManager) {
+												if (ref.get() == null)
+													return;
 												TextureUtil.prepareImage(this.getId(), 0, ref.get().getWidth(), ref.get().getHeight());
 												ref.get().upload(0, 0, 0, 0, 0, ref.get().getWidth(), ref.get().getHeight(), false, false, false, true);
 											}
@@ -433,15 +437,18 @@ public class ClientEvents {
 									}
 								}
 							} catch (IOException e) {
+								e.printStackTrace();
 								// Fail silently, no boat texture bullshit here
 							}
 						});
 					}
 				}
 			} catch (IOException e) {
+				e.printStackTrace();
 				// Fail silently, no boat texture bullshit here
 			}
 		});
+		ref.set(null);
 	}
 
 	private static ResourceLocation getTextureLocation(Boat.Type type) {
