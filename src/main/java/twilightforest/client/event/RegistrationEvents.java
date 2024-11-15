@@ -59,8 +59,8 @@ import twilightforest.client.model.entity.*;
 import twilightforest.client.model.item.TrollsteinnModel;
 import twilightforest.client.particle.*;
 import twilightforest.client.renderer.TFSkyRenderer;
-import twilightforest.client.renderer.entity.*;
 import twilightforest.client.renderer.block.*;
+import twilightforest.client.renderer.entity.*;
 import twilightforest.client.renderer.entity.layers.IceLayer;
 import twilightforest.client.renderer.entity.layers.ShieldLayer;
 import twilightforest.client.renderer.map.ConqueredMapIconRenderer;
@@ -309,6 +309,7 @@ public class RegistrationEvents {
 		((ReloadableResourceManager)Minecraft.getInstance().getResourceManager()).listeners.addFirst(JappaPackReloadListener.INSTANCE);
 		MagicPaintingTextureManager.instance = new MagicPaintingTextureManager(Minecraft.getInstance().getTextureManager());
 		event.registerReloadListener(MagicPaintingTextureManager.instance);
+		event.registerReloadListener(TextureGeneratorReloadListener.INSTANCE);
 	}
 
 	private static void registerScreens(RegisterMenuScreensEvent event) {

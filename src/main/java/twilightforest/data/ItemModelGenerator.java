@@ -686,14 +686,14 @@ public class ItemModelGenerator extends ItemModelProvider {
 		singleTex(TFItems.MINING_BOAT);
 		singleTex(TFItems.SORTING_BOAT);
 
-		singleTex(TFItems.TWILIGHT_OAK_CHEST_BOAT);
-		singleTex(TFItems.CANOPY_CHEST_BOAT);
-		singleTex(TFItems.MANGROVE_CHEST_BOAT);
-		singleTex(TFItems.DARK_CHEST_BOAT);
-		singleTex(TFItems.TIME_CHEST_BOAT);
-		singleTex(TFItems.TRANSFORMATION_CHEST_BOAT);
-		singleTex(TFItems.MINING_CHEST_BOAT);
-		singleTex(TFItems.SORTING_CHEST_BOAT);
+		chestBoat(TFItems.TWILIGHT_OAK_CHEST_BOAT);
+		chestBoat(TFItems.CANOPY_CHEST_BOAT);
+		chestBoat(TFItems.MANGROVE_CHEST_BOAT);
+		chestBoat(TFItems.DARK_CHEST_BOAT);
+		chestBoat(TFItems.TIME_CHEST_BOAT);
+		chestBoat(TFItems.TRANSFORMATION_CHEST_BOAT);
+		chestBoat(TFItems.MINING_CHEST_BOAT);
+		chestBoat(TFItems.SORTING_CHEST_BOAT);
 
 		generated(TFItems.NAGA_BANNER_PATTERN.getId().getPath(), prefix("item/tf_banner_pattern"));
 		generated(TFItems.LICH_BANNER_PATTERN.getId().getPath(), prefix("item/tf_banner_pattern"));
@@ -763,6 +763,10 @@ public class ItemModelGenerator extends ItemModelProvider {
 
 	private ItemModelBuilder singleTex(DeferredHolder<?, ?> item) {
 		return generated(item.getId().getPath(), prefix("item/" + item.getId().getPath()));
+	}
+
+	private ItemModelBuilder chestBoat(DeferredHolder<?, ?> item) {
+		return this.generated(item.getId().getPath(), ResourceLocation.withDefaultNamespace("item/oak_chest_boat"), prefix("item/" + item.getId().getPath()));
 	}
 
 	private ItemModelBuilder specialTool(DeferredHolder<Item, ? extends Item> item) {
