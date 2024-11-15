@@ -28,7 +28,6 @@ import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import twilightforest.TwilightForestMod;
 import twilightforest.init.TFBlocks;
@@ -85,29 +84,23 @@ public class FallenTrunkPiece extends StructurePiece {
 	public void postProcess(@NotNull WorldGenLevel level, @NotNull StructureManager structureManager, @NotNull ChunkGenerator generator, @NotNull RandomSource random,
 							@NotNull BoundingBox box, @NotNull ChunkPos chunkPos, @NotNull BlockPos pos) {
 		if (radius == FallenTrunkStructure.radiuses.get(0))
-			generateSmallFallenTrunk(level, random, box, pos, true);
+			generateSmallFallenTrunk(level, RandomSource.create(pos.asLong()), box, pos, true);
 		if (radius == FallenTrunkStructure.radiuses.get(1))
-			generateFallenTrunk(level, random, box, pos, true, false);
+			generateFallenTrunk(level, RandomSource.create(pos.asLong()), box, pos, true, false);
 		if (radius == FallenTrunkStructure.radiuses.get(2))
 			generateFallenTrunk(level, RandomSource.create(pos.asLong()), box, pos, false, true);
 	}
 
 	private void generateSmallFallenTrunk(WorldGenLevel level, RandomSource random, BoundingBox box, BlockPos pos, boolean hasHole) {
-		float hollow = 1;
-		float diameter = 4;
-
-		HoleParameters holeParams = calculateHoleParameters(random, hollow, diameter);
-
+		Hole hole = new Hole(this, random);
 		for (int dx = 0; dx <= 3; dx++) {
 			for (int dy = 0; dy <= 3; dy++) {
 				if (Math.abs(dx - 1.5) + Math.abs(dy - 1.5) != 2)
 					continue;
 
 				for (int dz = 0; dz < length; dz++) {
-						BlockPos offsetPos = pos.offset(dx, dy, dz);
-						if (hasHole && isInHole(holeParams, dx, dy, dz))
-							continue;
-						this.placeLog(level, log.getState(random, offsetPos).trySetValue(RotatedPillarBlock.AXIS, Direction.Axis.Z), dx, dy, dz, box, random);
+					BlockPos offsetPos = pos.offset(dx, dy, dz);
+					this.placeLog(level, log.getState(random, offsetPos).trySetValue(RotatedPillarBlock.AXIS, Direction.Axis.Z), dx, dy, dz, box, random, hasHole, hole);
 				}
 			}
 		}
@@ -122,27 +115,31 @@ public class FallenTrunkPiece extends StructurePiece {
 	private void generateTrunk(WorldGenLevel level, RandomSource random, BoundingBox box, BlockPos pos, boolean hasHole) {
 		int hollow = radius / 2;
 		int diameter = radius * 2;
-
-		HoleParameters holeParams = calculateHoleParameters(random, hollow, diameter);
+		Hole hole = new Hole(this, random);
 
 		for (int dx = 0; dx <= diameter; dx++) {
 			for (int dy = 0; dy <= diameter; dy++) {
 				int dist = getDist(dx, dy);
-				if (dist <= radius && dist > hollow) {
-					for (int dz = ERODED_LENGTH; dz < length; dz++) {
-						if (dz > length - ERODED_LENGTH && random.nextBoolean()) { dz = length + 1; continue; }
-						BlockPos offsetPos = pos.offset(dx, dy, dz);
-						if (hasHole && isInHole(holeParams, dx, dy, dz))
-							continue;
-						this.placeLog(level, log.getState(random, offsetPos).trySetValue(RotatedPillarBlock.AXIS, Direction.Axis.Z), dx, dy, dz, box, random);
+				if (dist > radius || dist <= hollow)
+					continue;
+				System.out.println(convertXYtoLength(dx, dy));
+				for (int dz = ERODED_LENGTH; dz < length; dz++) {
+					if (dz > length - ERODED_LENGTH && random.nextBoolean()) {
+						dz = length + 1;
+						continue;
 					}
-					for (int dz = ERODED_LENGTH; dz > 0; dz--) {
-						if (random.nextBoolean()) { dz = 0; continue; }
-						if (hasHole && isInHole(holeParams, dx, dy, dz))
-							continue;
-						BlockPos offsetPos = pos.offset(dx, dy, dz);
-						this.placeLog(level, log.getState(random, offsetPos).trySetValue(RotatedPillarBlock.AXIS, Direction.Axis.Z), dx, dy, dz, box, random);
+
+					BlockPos offsetPos = pos.offset(dx, dy, dz);
+					this.placeLog(level, log.getState(random, offsetPos).trySetValue(RotatedPillarBlock.AXIS, Direction.Axis.Z), dx, dy, dz, box, random, hasHole, hole);
+				}
+				for (int dz = ERODED_LENGTH; dz > 0; dz--) {
+					if (random.nextBoolean()) {
+						dz = 0;
+						continue;
 					}
+
+					BlockPos offsetPos = pos.offset(dx, dy, dz);
+					this.placeLog(level, log.getState(random, offsetPos).trySetValue(RotatedPillarBlock.AXIS, Direction.Axis.Z), dx, dy, dz, box, random, hasHole, hole);
 				}
 			}
 		}
@@ -178,7 +175,11 @@ public class FallenTrunkPiece extends StructurePiece {
 		return (int) (Math.max(ax, az) + (Math.min(ax, az) * 0.5));
 	}
 
-	private void placeLog(WorldGenLevel level, BlockState blockstate, int x, int y, int z, BoundingBox boundingbox, RandomSource random) {
+	private void placeLog(WorldGenLevel level, BlockState blockstate, int x, int y, int z, BoundingBox boundingbox, RandomSource random, boolean hasHole, Hole hole) {
+		int holeCoordinates = convertXYtoLength(x, y);
+		if (hasHole && z > ERODED_LENGTH && z < length - ERODED_LENGTH - 1 && hole.isInHole(holeCoordinates, z - ERODED_LENGTH - 1)) {
+			return;
+		}
 		BlockState blockState = this.getBlock(level, x, y, z, boundingbox);
 		if (blockState.is(BlockTags.REPLACEABLE_BY_TREES) || blockState.isEmpty() || random.nextBoolean()) {
 			placeBlock(level, blockstate, x, y, z, boundingbox);
@@ -195,27 +196,88 @@ public class FallenTrunkPiece extends StructurePiece {
 		return MoreObjects.firstNonNull(orientation, Direction.NORTH);  // orientation is always not null, just to remove warnings
 	}
 
-	private HoleParameters calculateHoleParameters(RandomSource random, float hollow, float diameter) {
-		double holeBallAngle = random.triangle(Math.PI / 4, Math.PI / 6);
-		double holeBallDistanceFromTrunkAxis = random.triangle(radius, hollow) + radius;
-		Vec3 holeBallCenter = new Vec3(Math.cos(holeBallAngle) * holeBallDistanceFromTrunkAxis + radius, Math.sin(holeBallAngle) * holeBallDistanceFromTrunkAxis + radius, random.nextFloat() * (length - 4 * ERODED_LENGTH) + 2 * ERODED_LENGTH);
-		double holeBallRadius = holeBallDistanceFromTrunkAxis + random.triangle(hollow, hollow) - radius;
-
-		return new HoleParameters(holeBallCenter, holeBallRadius);
+	private int getSideLength() {
+		return radius == 1 ? 2 : this.radius * 2 - 1;
 	}
 
-	private boolean isInHole(HoleParameters holeParams, int dx, int dy, int dz) {
-		Vec3 blockCenter = new BlockPos(dx, dy, dz).getCenter();
-		return blockCenter.distanceTo(holeParams.center) <= holeParams.radius;
+	private int convertXYtoLength(int x, int y) {
+		int sideLength = getSideLength();
+		int length = 0;
+
+		if (x == 0) {
+			length = y;
+		} else if (y == sideLength + 1) {
+			length = sideLength + x;
+		} else if (x == sideLength + 1) {
+			length = 3 * sideLength - y + 1;
+		} else if (y == 0) {
+			length = 4 * sideLength - x;
+		}
+
+		return length - 1;
 	}
 
-	private static class HoleParameters {
-		final Vec3 center;
-		final double radius;
+	private class Hole {
+		private final int X_MIN_SIZE;
+		private final int X_MAX_SIZE;
+		private final int Y_MIN_SIZE;
+		private final int Y_MAX_SIZE;
+		private boolean[][] hole;
+		private Hole(FallenTrunkPiece piece, RandomSource random) {
+			this.X_MIN_SIZE = piece.length / 6;
+			this.X_MAX_SIZE = piece.length / 4 + 1;
+			this.Y_MIN_SIZE = piece.getSideLength();
+			this.Y_MAX_SIZE = piece.getSideLength() * 2;
+			this.hole = buildHoleArray(piece.length, piece.getSideLength() * 4, random);
+		}
 
-		HoleParameters(Vec3 center, double radius) {
-			this.center = center;
-			this.radius = radius;
+		private boolean[][] buildHoleArray(int length, int height, RandomSource random) {
+			int arrayLength = length - (ERODED_LENGTH + 1) * 2;
+			boolean[][] arr = new boolean[height][arrayLength];
+
+
+			int xSize;
+			int ySize = random.nextInt(Y_MIN_SIZE, Y_MAX_SIZE);
+
+			int yOffset = random.nextInt(1, Y_MIN_SIZE * 2 - ySize + 1);
+
+			int previousX1 = Integer.MIN_VALUE, previousX2 = Integer.MAX_VALUE;
+			for (int dy = yOffset; dy < yOffset + ySize; dy++) {
+				xSize = random.nextInt(X_MIN_SIZE, X_MAX_SIZE);
+				int x1 = random.nextInt(arrayLength - xSize - 1);
+				int x2 = x1 + xSize - 1;
+
+				while ((x1 == previousX1 || x2 == previousX2 && dy % Y_MIN_SIZE != 0) || x2 < previousX1 || x1 > previousX2
+					|| (float) (Math.min(x2, previousX2) - Math.max(previousX1, x1) + 1) / (Math.max(x2, previousX2) - Math.min(x1, previousX1) + 1) < 1 / 3f) {
+					xSize = random.nextInt(X_MIN_SIZE, X_MAX_SIZE);
+					x1 = random.nextInt(Math.max(0, previousX1 - xSize), Math.min(arrayLength - xSize - 1, previousX2 + xSize));
+					x2 = x1 + xSize;
+				}
+
+				previousX1 = x1;
+				previousX2 = x2;
+
+				for (int x = x1; x <= x2; x++) {
+					arr[dy][x] = true;
+				}
+			}
+
+			printHole(arr);
+			return arr;
+		}
+
+		private boolean isInHole(int x, int y) {
+			return hole[x][y];
+		}
+
+		private static void printHole(boolean[][] hole) {
+			System.out.println("\n\n\n");
+			for (boolean[] row : hole) {
+				for (boolean cell : row) {
+					System.out.print(cell ? "0" : "1");
+				}
+				System.out.println();
+			}
 		}
 	}
 }
