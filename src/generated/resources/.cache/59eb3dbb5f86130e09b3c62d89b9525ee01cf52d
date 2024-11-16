@@ -1,4 +1,4 @@
-// 1.21.1	2024-09-29T13:06:16.2092159	Loot Tables
+// 1.21.1	2024-11-16T02:02:36.5234798	Loot Tables
 483a7e0c99d5cabeab1ba9f04bd8e88d0a8f7386 data/twilightforest/loot_table/aurora_cache.json
 002a6e2eccdc92db019bd775911912877b26771f data/twilightforest/loot_table/aurora_room.json
 6b7c07d237e56f84d11d308552cd943af7a906e5 data/twilightforest/loot_table/basement.json
@@ -546,9 +546,9 @@ ba477308c5a1902d518d2b20e8d62bf054ac7ceb data/twilightforest/loot_table/strongho
 893780457863a589b6498ac58774a597830f18e2 data/twilightforest/loot_table/tower_enchanting.json
 3fb3a0d4437b9101e892a39e46787a2a7743ff65 data/twilightforest/loot_table/tower_grave.json
 98ec6cbb6509984b7d902a54b222b39ed73bc8c9 data/twilightforest/loot_table/tower_jars.json
-2d0686eb5f1808bbc5a8d9b36769996af523099c data/twilightforest/loot_table/tower_library.json
-4e6c296d0cd0cdfb6129ff1fdfbcfee55160131f data/twilightforest/loot_table/tower_potion.json
-e6b15fc872b9bcb93de77164cc45700525c9a779 data/twilightforest/loot_table/tower_room.json
+6985acec4460e97263d2e9290a793cbdbe413a32 data/twilightforest/loot_table/tower_library.json
+630c30905e831320e5d94473a943786945302c29 data/twilightforest/loot_table/tower_potion.json
+64ca3f3e507daa2d7e40a0bb187a4e71baec0f8e data/twilightforest/loot_table/tower_room.json
 2a723496fc14582ae1088ff2070dee5cedea1752 data/twilightforest/loot_table/tree_cache.json
 58691619cf31dd518bf3288cba32943d5672421a data/twilightforest/loot_table/troll_garden.json
 8c4000774a38207549baec1739549405c7371cfe data/twilightforest/loot_table/troll_vault.json
