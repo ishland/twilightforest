@@ -16,9 +16,9 @@ import dev.emi.emi.recipe.special.EmiGrindstoneDisenchantingRecipe;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.block.Block;
-import twilightforest.config.TFConfig;
 import twilightforest.compat.RecipeViewerConstants;
 import twilightforest.compat.emi.recipes.*;
+import twilightforest.config.TFConfig;
 import twilightforest.init.TFBlocks;
 import twilightforest.init.TFItems;
 import twilightforest.item.recipe.NoTemplateSmithingRecipe;
@@ -51,8 +51,10 @@ public class TFEmiCompat implements EmiPlugin {
 		registry.addCategory(TRANSFORMATION);
 		registry.addCategory(MOONWORM_QUEEN);
 
-		registry.addWorkstation(VanillaEmiRecipeCategories.CRAFTING, EmiStack.of(TFBlocks.UNCRAFTING_TABLE));
-		registry.addWorkstation(UNCRAFTING, EmiStack.of(TFBlocks.UNCRAFTING_TABLE));
+		if (!TFConfig.disableEntireTable) {
+			registry.addWorkstation(VanillaEmiRecipeCategories.CRAFTING, EmiStack.of(TFBlocks.UNCRAFTING_TABLE));
+			registry.addWorkstation(UNCRAFTING, EmiStack.of(TFBlocks.UNCRAFTING_TABLE));
+		}
 		registry.addWorkstation(CRUMBLE_HORN, EmiStack.of(TFItems.CRUMBLE_HORN));
 		registry.addWorkstation(TRANSFORMATION, EmiStack.of(TFItems.TRANSFORMATION_POWDER));
 		registry.addWorkstation(MOONWORM_QUEEN, EmiStack.of(TFItems.MOONWORM_QUEEN));

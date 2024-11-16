@@ -143,7 +143,7 @@ public abstract class TFStructureComponent extends StructurePiece {
 				blockstateIn = blockstateIn.rotate(this.rotation);
 			}
 
-			worldIn.setBlock(blockpos, blockstateIn, 2);
+			worldIn.setBlock(blockpos, blockstateIn, Block.UPDATE_CLIENTS);
 			FluidState fluidstate = worldIn.getFluidState(blockpos);
 			if (!fluidstate.isEmpty()) {
 				worldIn.scheduleTick(blockpos, fluidstate.getType(), 0);

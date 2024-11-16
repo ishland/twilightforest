@@ -13,6 +13,7 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CandleBlock;
 import net.minecraft.world.level.block.Rotation;
@@ -69,7 +70,7 @@ public final class LichBossRoom extends TwilightJigsawPiece implements PieceBear
 			BlockPos placeAt = center.offset(x, y, z);
 
 			if (chunkBounds.isInside(placeAt) && level.getBlockState(placeAt).isAir()) {
-				level.setBlock(placeAt, candle, 2);
+				level.setBlock(placeAt, candle, Block.UPDATE_CLIENTS);
 			}
 		}
 	}

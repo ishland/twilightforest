@@ -77,7 +77,7 @@ public class TorchberryPlantBlock extends TFPlantBlock implements BonemealableBl
 
 	@Override
 	public void performBonemeal(ServerLevel level, RandomSource rand, BlockPos pos, BlockState state) {
-		level.setBlock(pos, state.setValue(HAS_BERRIES, true), 2);
+		level.setBlock(pos, state.setValue(HAS_BERRIES, true), Block.UPDATE_CLIENTS);
 	}
 
 	@Override

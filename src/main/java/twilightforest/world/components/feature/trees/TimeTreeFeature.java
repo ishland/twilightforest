@@ -7,6 +7,7 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.TreeFeature;
@@ -58,7 +59,7 @@ public class TimeTreeFeature extends HollowTreeFeature {
 		// add clock block
 		BlockPos corePos = pos.offset(-1, 2, 0);
 		if (world.getBlockState(corePos).canBeReplaced()) {
-			world.setBlock(corePos, TFBlocks.TIME_LOG_CORE.get().defaultBlockState().setValue(RotatedPillarBlock.AXIS, Direction.Axis.Y), 3);
+			world.setBlock(corePos, TFBlocks.TIME_LOG_CORE.get().defaultBlockState().setValue(RotatedPillarBlock.AXIS, Direction.Axis.Y), Block.UPDATE_ALL);
 			world.scheduleTick(corePos, TFBlocks.TIME_LOG_CORE.get(), 20);
 		}
 

@@ -200,7 +200,7 @@ public abstract class HollowTreeFeature extends TFTreeFeature<TFTreeFeatureConfi
 					// how about a ladder?  is that okay?
 					if (dist == hollow && dx == hollow) {
 //						putBlockAndMetadata(dx + x, dy + y, dz + z, Blocks.LADDER,  4, true);
-						world.setBlock(dPos, Blocks.VINE.defaultBlockState().setValue(VineBlock.EAST, true), 3);
+						world.setBlock(dPos, Blocks.VINE.defaultBlockState().setValue(VineBlock.EAST, true), Block.UPDATE_ALL);
 					}
 				}
 			}
@@ -291,8 +291,8 @@ public abstract class HollowTreeFeature extends TFTreeFeature<TFTreeFeatureConfi
 		BlockPos dest = FeatureLogic.translate(src, length, angle, tilt);
 
 		FeaturePlacers.traceExposedRoot(world, new RootPlacer((checkedPos, state) -> {
-			world.setBlock(checkedPos, state, 3);
-			world.setBlock(checkedPos.below(), state, 3);
+			world.setBlock(checkedPos, state, Block.UPDATE_ALL);
+			world.setBlock(checkedPos.below(), state, Block.UPDATE_ALL);
 		}, 2), random, config.branchProvider, config.rootsProvider, new VoxelBresenhamIterator(src, dest));
 	}
 
@@ -360,7 +360,7 @@ public abstract class HollowTreeFeature extends TFTreeFeature<TFTreeFeatureConfi
 		FeatureUtil.drawBlob(world, pos, 2, Blocks.AIR.defaultBlockState());
 
 		// spawner
-		world.setBlock(pos.above(), Blocks.SPAWNER.defaultBlockState(), 16 | 2);
+		world.setBlock(pos.above(), Blocks.SPAWNER.defaultBlockState(), Block.UPDATE_KNOWN_SHAPE | Block.UPDATE_CLIENTS);
 		SpawnerBlockEntity ms = (SpawnerBlockEntity) world.getBlockEntity(pos.above());
 		if (ms != null) {
 			ms.setEntityId(TFEntities.SWARM_SPIDER.get(), random);
@@ -402,7 +402,7 @@ public abstract class HollowTreeFeature extends TFTreeFeature<TFTreeFeatureConfi
 		}
 
 		if (bug.defaultBlockState().setValue(DirectionalBlock.FACING, facing).canSurvive(level, src)) {
-			level.setBlock(src, bug.defaultBlockState().setValue(DirectionalBlock.FACING, facing), 3);
+			level.setBlock(src, bug.defaultBlockState().setValue(DirectionalBlock.FACING, facing), Block.UPDATE_ALL);
 		}
 	}
 }

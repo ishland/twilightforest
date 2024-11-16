@@ -11,7 +11,7 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
-import net.minecraft.world.level.saveddata.maps.MapDecoration;
+import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
 import net.minecraft.world.level.saveddata.maps.MapDecorationType;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.world.components.biomesources.TFBiomeProvider;
@@ -42,10 +42,9 @@ public abstract class LandmarkStructure extends Structure implements DecorationC
 		this.structureIcon = structureIcon;
 	}
 
-	private static Structure.GenerationStub getStructurePieceGenerationStubFunction(StructurePiece startingPiece, GenerationContext context, int x, int y, int z) {
+	protected Structure.GenerationStub getStructurePieceGenerationStubFunction(StructurePiece startingPiece, GenerationContext context, int x, int y, int z) {
 		return new GenerationStub(new BlockPos(x, y, z), structurePiecesBuilder -> {
-			structurePiecesBuilder.addPiece(startingPiece);
-			startingPiece.addChildren(startingPiece, structurePiecesBuilder, context.random());
+			this.generateFromStartingPiece(startingPiece, context, structurePiecesBuilder);
 
 			structurePiecesBuilder.pieces.sort(Comparator.comparing(piece -> piece instanceof SortablePiece sortable ? sortable.getSortKey() : 0));
 
@@ -54,6 +53,11 @@ public abstract class LandmarkStructure extends Structure implements DecorationC
 				.map(TFStructureComponentTemplate.class::cast)
 				.forEach(t -> t.LAZY_TEMPLATE_LOADER.run());
 		});
+	}
+
+	protected void generateFromStartingPiece(StructurePiece startingPiece, GenerationContext context, StructurePiecesBuilder structurePiecesBuilder) {
+		structurePiecesBuilder.addPiece(startingPiece);
+		startingPiece.addChildren(startingPiece, structurePiecesBuilder, context.random());
 	}
 
 	@Override
@@ -65,7 +69,7 @@ public abstract class LandmarkStructure extends Structure implements DecorationC
 
 		return Optional
 			.ofNullable(this.getFirstPiece(context, RandomSource.create(context.seed() + chunkPos.x * 25117L + chunkPos.z * 151121L), chunkPos, x, y, z))
-			.map(piece -> getStructurePieceGenerationStubFunction(piece, context, x, y, z));
+			.map(piece -> this.getStructurePieceGenerationStubFunction(piece, context, x, y, z));
 	}
 
 	public final Optional<Holder<MapDecorationType>> getMapIcon() {

@@ -8,6 +8,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
@@ -62,17 +63,17 @@ public class LichTowerRoomDecor extends TwilightJigsawPiece implements PieceBear
 
 	@Override
 	protected void handleDataMarker(String label, BlockPos pos, WorldGenLevel level, RandomSource random, BoundingBox chunkBounds, ChunkGenerator chunkGen) {
-		level.setBlock(pos, Blocks.AIR.defaultBlockState(), 2);
+		level.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS);
 
 		switch (label) {
 			case "sapling" -> {
-				level.setBlock(pos, TFStructureHelper.randomPlant(random), 2);
+				level.setBlock(pos, TFStructureHelper.randomPlant(random), Block.UPDATE_CLIENTS);
 			}
 			case "tree" -> {
 				ResourceKey<ConfiguredFeature<?, ?>> randomTree = TFStructureHelper.randomTree(random.nextInt(4));
 				Registry<ConfiguredFeature<?, ?>> featureRegistry = level.registryAccess().registryOrThrow(Registries.CONFIGURED_FEATURE);
 				if (!featureRegistry.get(randomTree).place(level, chunkGen, random, pos)) {
-					level.setBlock(pos, TFStructureHelper.randomPlant(random), 2);
+					level.setBlock(pos, TFStructureHelper.randomPlant(random), Block.UPDATE_CLIENTS);
 				}
 			}
 		}

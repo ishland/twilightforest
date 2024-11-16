@@ -82,14 +82,14 @@ public class LichTowerFoyerDecor extends TwilightJigsawPiece implements PieceBea
 				case 4 -> {
 					BlockState chest = Blocks.CHEST.defaultBlockState().rotate(rotation.getRotated(Rotation.CLOCKWISE_180));
 
-					level.setBlock(placePos, chest, 3);
+					level.setBlock(placePos, chest, Block.UPDATE_ALL);
 
 					if (level.getBlockEntity(placePos) instanceof ChestBlockEntity chestBE) {
 						chestBE.setLootTable(TFLootTables.TOWER_LIBRARY, random.nextLong());
 					}
 
 					BlockState chestGap = Blocks.STONE_BRICK_STAIRS.defaultBlockState().setValue(StairBlock.HALF, Half.TOP).rotate(rotation.getRotated(Rotation.CLOCKWISE_180));
-					level.setBlock(placePos.above(), chestGap, 3);
+					level.setBlock(placePos.above(), chestGap, Block.UPDATE_ALL);
 				}
 				case 3 -> {
 					BlockState candelabra = TFBlocks.CANDELABRA.value().defaultBlockState().rotate(rotation).setValue(CandelabraBlock.LIGHTING, LightableBlock.Lighting.DIM);
@@ -98,7 +98,7 @@ public class LichTowerFoyerDecor extends TwilightJigsawPiece implements PieceBea
 						candelabra = candelabra.setValue(prop, true);
 					}
 
-					level.setBlock(placePos, candelabra, 3);
+					level.setBlock(placePos, candelabra, Block.UPDATE_ALL);
 
 					if (level.getBlockEntity(placePos) instanceof CandelabraBlockEntity candelabraBE) {
 						// Manually set candles instead of calling setCandle() so that method's setBlockState calls won't crash the game
@@ -115,7 +115,7 @@ public class LichTowerFoyerDecor extends TwilightJigsawPiece implements PieceBea
 						default -> Blocks.CANDLE.defaultBlockState().setValue(CandleBlock.CANDLES, random.nextIntBetweenInclusive(1, 3)).setValue(CandleBlock.LIT, true);
 					};
 
-					level.setBlock(placePos, decorBlock.rotate(rotation), 3);
+					level.setBlock(placePos, decorBlock.rotate(rotation), Block.UPDATE_ALL);
 				}
 			}
 		}

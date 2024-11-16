@@ -7,6 +7,7 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CandleBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -88,7 +89,7 @@ public final class LichTowerBase extends TwilightJigsawPiece implements PieceBea
 			int candleCount = majorCandle ? 3 : 1 + random.nextInt(2);
 			BlockState candleBlock = Blocks.CANDLE.defaultBlockState().setValue(CandleBlock.LIT, true).setValue(CandleBlock.CANDLES, candleCount);
 
-			level.setBlock(pos, candleBlock, 3);
+			level.setBlock(pos, candleBlock, Block.UPDATE_ALL);
 		}
 	}
 

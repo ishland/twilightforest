@@ -30,7 +30,7 @@ public class CrumbleDispenseBehavior extends DefaultDispenseItemBehavior {
 				if (resultBlock.result() == Blocks.AIR) {
 					level.destroyBlock(pos, true);
 				} else {
-					level.setBlock(pos, resultBlock.result().withPropertiesOf(state), 3);
+					level.setBlock(pos, resultBlock.result().withPropertiesOf(state), Block.UPDATE_ALL);
 					level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(state));
 				}
 

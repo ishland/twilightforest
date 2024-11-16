@@ -197,7 +197,7 @@ public class MoonwormQueenItem extends Item {
 		} else {
 			BlockState blockstate = blockitemstateproperties.apply(state);
 			if (blockstate != state) {
-				level.setBlock(pos, blockstate, 2);
+				level.setBlock(pos, blockstate, Block.UPDATE_CLIENTS);
 			}
 
 			return blockstate;
@@ -205,6 +205,6 @@ public class MoonwormQueenItem extends Item {
 	}
 
 	protected boolean placeBlock(BlockPlaceContext context, BlockState state) {
-		return context.getLevel().setBlock(context.getClickedPos(), state, 11);
+		return context.getLevel().setBlock(context.getClickedPos(), state, Block.UPDATE_ALL_IMMEDIATE);
 	}
 }

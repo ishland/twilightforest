@@ -38,21 +38,6 @@
           "type": "minecraft:item",
           "functions": [
             {
-              "add": false,
-              "count": {
-                "type": "minecraft:uniform",
-                "max": 6.0,
-                "min": 2.0
-              },
-              "function": "minecraft:set_count"
-            }
-          ],
-          "name": "minecraft:ink_sac"
-        },
-        {
-          "type": "minecraft:item",
-          "functions": [
-            {
               "function": "minecraft:enchant_with_levels",
               "levels": {
                 "type": "minecraft:uniform",
@@ -78,21 +63,6 @@
             }
           ],
           "name": "twilightforest:canopy_bookshelf"
-        },
-        {
-          "type": "minecraft:item",
-          "functions": [
-            {
-              "add": false,
-              "count": {
-                "type": "minecraft:uniform",
-                "max": 12.0,
-                "min": 3.0
-              },
-              "function": "minecraft:set_count"
-            }
-          ],
-          "name": "minecraft:bookshelf"
         },
         {
           "type": "minecraft:item",
@@ -132,7 +102,7 @@
       "entries": [
         {
           "type": "minecraft:empty",
-          "weight": 3
+          "weight": 2
         },
         {
           "type": "minecraft:item",
@@ -141,18 +111,13 @@
               "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "max": 6.0,
-                "min": 4.0
+                "max": 2.0,
+                "min": 1.0
               },
               "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:experience_bottle",
-          "weight": 2
-        },
-        {
-          "type": "minecraft:item",
-          "name": "twilightforest:crown_splinter"
+          "name": "minecraft:experience_bottle"
         },
         {
           "type": "minecraft:item",
@@ -160,8 +125,7 @@
         },
         {
           "type": "minecraft:item",
-          "name": "minecraft:writable_book",
-          "weight": 2
+          "name": "minecraft:writable_book"
         },
         {
           "type": "minecraft:item",
@@ -176,8 +140,22 @@
               "options": "#minecraft:on_random_loot"
             }
           ],
-          "name": "minecraft:book",
-          "weight": 2
+          "name": "minecraft:book"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:enchant_with_levels",
+              "levels": {
+                "type": "minecraft:uniform",
+                "max": 30.0,
+                "min": 20.0
+              },
+              "options": "#minecraft:on_random_loot"
+            }
+          ],
+          "name": "minecraft:book"
         }
       ],
       "rolls": 1.0

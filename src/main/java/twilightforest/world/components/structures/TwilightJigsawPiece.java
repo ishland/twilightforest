@@ -27,6 +27,7 @@ import twilightforest.util.jigsaw.JigsawRecord;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Predicate;
 
 public abstract class TwilightJigsawPiece extends TwilightTemplateStructurePiece {
 	@Nullable
@@ -127,5 +128,15 @@ public abstract class TwilightJigsawPiece extends TwilightTemplateStructurePiece
 
 	public List<JigsawRecord> getSpareJigsaws() {
 		return this.spareJigsaws;
+	}
+
+	public List<JigsawRecord> matchSpareJigsaws(Predicate<JigsawRecord> filter) {
+		List<JigsawRecord> jigsaws = new ArrayList<>();
+
+		for (JigsawRecord record : this.spareJigsaws)
+			if (filter.test(record))
+				jigsaws.add(record);
+
+		return jigsaws;
 	}
 }

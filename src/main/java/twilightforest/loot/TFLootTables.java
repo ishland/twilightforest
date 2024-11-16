@@ -11,6 +11,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
@@ -28,7 +29,7 @@ public class TFLootTables {
 	// /give @p chest{BlockEntityTag:{LootTable:"twilightforest:all_bosses",CustomName:'{"text":"Master Loot Crate"}'}} 1
 	private static final Set<ResourceKey<LootTable>> TF_LOOT_TABLES = Sets.newHashSet();
 	private static final Set<ResourceKey<LootTable>> TF_IMMUTABLE_LOCATIONS = Collections.unmodifiableSet(TF_LOOT_TABLES);
-	public static final int DEFAULT_PLACE_FLAG = 2;
+	public static final int DEFAULT_PLACE_FLAG = Block.UPDATE_CLIENTS;
 
 	// Chest loot
 	public static final ResourceKey<LootTable> SMALL_HOLLOW_HILL = register("hill_1");

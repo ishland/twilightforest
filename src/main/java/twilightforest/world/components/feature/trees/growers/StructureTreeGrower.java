@@ -6,6 +6,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.grower.TreeGrower;
 import net.minecraft.world.level.block.state.BlockState;
@@ -43,7 +44,7 @@ public class StructureTreeGrower extends TreeGrower {
 		if (ChunkPos.rangeClosed(start, end).noneMatch(currentChunkPos -> level.isLoaded(currentChunkPos.getWorldPosition())))
 			return false;
 
-		level.setBlock(pos, Blocks.AIR.defaultBlockState(), 0b11);
+		level.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
 
 		ChunkPos.rangeClosed(start, end).forEach(
 			chunkPos -> structurestart.placeInChunk(

@@ -6,6 +6,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.RandomizableContainer;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.chunk.ChunkGenerator;
@@ -95,14 +96,14 @@ public final class LichTowerFoyer extends TwilightJigsawPiece implements PieceBe
 				level.removeBlock(pos, false); // Clears block entity data left by Data Marker
 
 				Rotation stateRotation = this.placeSettings.getRotation().getRotated(dataRotation);
-				level.setBlock(pos, Blocks.CHEST.defaultBlockState().rotate(stateRotation), 2);
+				level.setBlock(pos, Blocks.CHEST.defaultBlockState().rotate(stateRotation), Block.UPDATE_CLIENTS);
 
 				if (level.getBlockEntity(pos) instanceof RandomizableContainer lootBlock) {
 					// FIXME Use actual loot table
 					lootBlock.setLootTable(TFLootTables.USELESS_LOOT, random.nextLong());
 				}
 
-				level.setBlock(pos.below(), TFBlocks.CANOPY_PLANKS.value().defaultBlockState(), 2);
+				level.setBlock(pos.below(), TFBlocks.CANOPY_PLANKS.value().defaultBlockState(), Block.UPDATE_CLIENTS);
 			}
 		}
 	}

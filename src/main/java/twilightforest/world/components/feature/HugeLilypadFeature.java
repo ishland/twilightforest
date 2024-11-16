@@ -6,6 +6,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
@@ -45,10 +46,10 @@ public class HugeLilypadFeature extends Feature<NoneFeatureConfiguration> {
 				final Direction horizontal = Direction.from2DDataValue(random.nextInt(4));
 				final BlockState lilypad = TFBlocks.HUGE_LILY_PAD.get().defaultBlockState().setValue(FACING, horizontal);
 
-				world.setBlock(dPos, lilypad.setValue(PIECE, NW), 16 | 2);
-				world.setBlock(dPos.east(), lilypad.setValue(PIECE, NE), 16 | 2);
-				world.setBlock(dPos.east().south(), lilypad.setValue(PIECE, SE), 16 | 2);
-				world.setBlock(dPos.south(), lilypad.setValue(PIECE, SW), 16 | 2);
+				world.setBlock(dPos, lilypad.setValue(PIECE, NW), Block.UPDATE_KNOWN_SHAPE | Block.UPDATE_CLIENTS);
+				world.setBlock(dPos.east(), lilypad.setValue(PIECE, NE), Block.UPDATE_KNOWN_SHAPE | Block.UPDATE_CLIENTS);
+				world.setBlock(dPos.east().south(), lilypad.setValue(PIECE, SE), Block.UPDATE_KNOWN_SHAPE | Block.UPDATE_CLIENTS);
+				world.setBlock(dPos.south(), lilypad.setValue(PIECE, SW), Block.UPDATE_KNOWN_SHAPE | Block.UPDATE_CLIENTS);
 			}
 		}
 

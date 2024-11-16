@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
@@ -47,7 +48,7 @@ public class CheckAbovePatchFeature extends Feature<DiskConfiguration> {
 			mutablePos.setY(i);
 			if (config.target().test(level, mutablePos) && level.getBlockState(mutablePos.above()).canBeReplaced()) {
 				BlockState blockstate1 = config.stateProvider().getState(level, random, mutablePos);
-				level.setBlock(mutablePos, blockstate1, 2);
+				level.setBlock(mutablePos, blockstate1, Block.UPDATE_CLIENTS);
 				this.markAboveForPostProcessing(level, mutablePos);
 				flag = true;
 			}

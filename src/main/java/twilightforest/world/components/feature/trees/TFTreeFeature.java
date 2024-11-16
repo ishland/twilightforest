@@ -6,6 +6,7 @@ import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
@@ -39,19 +40,19 @@ public abstract class TFTreeFeature<T extends FeatureConfiguration & DecoratedTr
 		Set<BlockPos> set3 = Sets.newHashSet();
 		BiConsumer<BlockPos, BlockState> biconsumer = (pos, state) -> {
 			set.add(pos.immutable());
-			worldgenlevel.setBlock(pos, state, 19);
+			worldgenlevel.setBlock(pos, state, Block.UPDATE_KNOWN_SHAPE | Block.UPDATE_ALL);
 		};
 		BiConsumer<BlockPos, BlockState> biconsumer1 = (pos, state) -> {
 			set1.add(pos.immutable());
-			worldgenlevel.setBlock(pos, state, 19);
+			worldgenlevel.setBlock(pos, state, Block.UPDATE_KNOWN_SHAPE | Block.UPDATE_ALL);
 		};
 		BiConsumer<BlockPos, BlockState> biconsumer2 = (pos, state) -> {
 			set2.add(pos.immutable());
-			worldgenlevel.setBlock(pos, state, 19);
+			worldgenlevel.setBlock(pos, state, Block.UPDATE_KNOWN_SHAPE | Block.UPDATE_ALL);
 		};
 		BiConsumer<BlockPos, BlockState> biconsumer3 = (pos, state) -> {
 			set3.add(pos.immutable());
-			worldgenlevel.setBlock(pos, state, 19);
+			worldgenlevel.setBlock(pos, state, Block.UPDATE_KNOWN_SHAPE | Block.UPDATE_ALL);
 		};
 		boolean flag = this.generate(worldgenlevel, randomsource, blockpos, biconsumer, biconsumer1, new RootPlacer(biconsumer2, 1), treeconfiguration);
 		if (flag && (!set1.isEmpty() || !set2.isEmpty())) {

@@ -6,6 +6,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -80,9 +81,9 @@ public class SmallFallenLogFeature extends Feature<HollowLogConfig> {
 			branchState = logState.setValue(RotatedPillarBlock.AXIS, Direction.Axis.Z);
 
 			for (int lx = 0; lx < length; lx++) {
-				world.setBlock(pos.offset(lx, 0, 1), hollowOrNormal(world, shouldMakeAllHollow, hollowLogState, logState), 3);
+				world.setBlock(pos.offset(lx, 0, 1), hollowOrNormal(world, shouldMakeAllHollow, hollowLogState, logState), Block.UPDATE_ALL);
 				if (rand.nextInt(3) > 0) {
-					world.setBlock(pos.offset(lx, 1, 1), mossOrSeagrass(world, pos.offset(lx, 1, 1)), 3);
+					world.setBlock(pos.offset(lx, 1, 1), mossOrSeagrass(world, pos.offset(lx, 1, 1)), Block.UPDATE_ALL);
 					this.markAboveForPostProcessing(world, pos.offset(lx, 0, 1));
 				}
 			}
@@ -95,9 +96,9 @@ public class SmallFallenLogFeature extends Feature<HollowLogConfig> {
 			branchState = logState.setValue(RotatedPillarBlock.AXIS, Direction.Axis.X);
 
 			for (int lz = 0; lz < length; lz++) {
-				world.setBlock(pos.offset(1, 0, lz), hollowOrNormal(world, shouldMakeAllHollow, hollowLogState, logState), 3);
+				world.setBlock(pos.offset(1, 0, lz), hollowOrNormal(world, shouldMakeAllHollow, hollowLogState, logState), Block.UPDATE_ALL);
 				if (rand.nextInt(3) > 0) {
-					world.setBlock(pos.offset(1, 1, lz), mossOrSeagrass(world, pos.offset(1, 1, lz)), 3);
+					world.setBlock(pos.offset(1, 1, lz), mossOrSeagrass(world, pos.offset(1, 1, lz)), Block.UPDATE_ALL);
 					this.markAboveForPostProcessing(world, pos.offset(1, 0, lz));
 				}
 			}
@@ -115,9 +116,9 @@ public class SmallFallenLogFeature extends Feature<HollowLogConfig> {
 				bz = rand.nextInt(length);
 
 			}
-			world.setBlock(pos.offset(bx, 0, bz), branchState, 3);
+			world.setBlock(pos.offset(bx, 0, bz), branchState, Block.UPDATE_ALL);
 			if (rand.nextBoolean()) {
-				world.setBlock(pos.offset(bx, 1, bz), mossOrSeagrass(world, pos.offset(bx, 1, bz)), 3);
+				world.setBlock(pos.offset(bx, 1, bz), mossOrSeagrass(world, pos.offset(bx, 1, bz)), Block.UPDATE_ALL);
 				this.markAboveForPostProcessing(world, pos.offset(bx, 0, bz));
 			}
 		}

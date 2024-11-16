@@ -12,6 +12,7 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelSimulatedReader;
 import net.minecraft.world.level.LevelWriter;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.levelgen.feature.Feature;
@@ -88,17 +89,17 @@ public class DarkCanopyTreeFeature extends Feature<TreeConfiguration> {
 		Set<BlockPos> set3 = Sets.newHashSet();
 		BiConsumer<BlockPos, BlockState> biconsumer = (p_160555_, p_160556_) -> {
 			set.add(p_160555_.immutable());
-			reader.setBlock(p_160555_, p_160556_, 19);
+			reader.setBlock(p_160555_, p_160556_, Block.UPDATE_KNOWN_SHAPE | Block.UPDATE_ALL);
 		};
 		BiConsumer<BlockPos, BlockState> biconsumer1 = (p_160548_, p_160549_) -> {
 			set1.add(p_160548_.immutable());
-			reader.setBlock(p_160548_, p_160549_, 19);
+			reader.setBlock(p_160548_, p_160549_, Block.UPDATE_KNOWN_SHAPE | Block.UPDATE_ALL);
 		};
 		FoliagePlacer.FoliageSetter setter = new FoliagePlacer.FoliageSetter() {
 			@Override
 			public void set(BlockPos pos, BlockState state) {
 				set2.add(pos.immutable());
-				reader.setBlock(pos, state, 19);
+				reader.setBlock(pos, state, Block.UPDATE_KNOWN_SHAPE | Block.UPDATE_ALL);
 			}
 
 			@Override
@@ -108,7 +109,7 @@ public class DarkCanopyTreeFeature extends Feature<TreeConfiguration> {
 		};
 		BiConsumer<BlockPos, BlockState> biconsumer3 = (p_225290_, p_225291_) -> {
 			set3.add(p_225290_.immutable());
-			reader.setBlock(p_225290_, p_225291_, 19);
+			reader.setBlock(p_225290_, p_225291_, Block.UPDATE_KNOWN_SHAPE | Block.UPDATE_ALL);
 		};
 		boolean flag = this.doPlace(reader, rand, pos, biconsumer, biconsumer1, setter, treeconfiguration);
 		if (flag && (!set1.isEmpty() || !set2.isEmpty())) {
@@ -185,7 +186,7 @@ public class DarkCanopyTreeFeature extends Feature<TreeConfiguration> {
 	}
 
 	public static void setBlockKnownShape(LevelWriter p_236408_0_, BlockPos p_236408_1_, BlockState p_236408_2_) {
-		p_236408_0_.setBlock(p_236408_1_, p_236408_2_, 19);
+		p_236408_0_.setBlock(p_236408_1_, p_236408_2_, Block.UPDATE_KNOWN_SHAPE | Block.UPDATE_ALL);
 	}
 
 	private static DiscreteVoxelShape updateLeaves(LevelAccessor p_67203_, BoundingBox p_67204_, Set<BlockPos> p_67205_, Set<BlockPos> p_67206_) {

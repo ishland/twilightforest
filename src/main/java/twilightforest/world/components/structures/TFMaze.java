@@ -5,6 +5,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkGenerator;
@@ -337,7 +338,7 @@ public class TFMaze {
 	 * Puts a wall block in the world, at the specified world coordinates.
 	 */
 	private void putWallBlock(WorldGenLevel world, int x, int y, int z) {
-		world.setBlock(new BlockPos(x, y, z), wallBlockState, 2);
+		world.setBlock(new BlockPos(x, y, z), wallBlockState, Block.UPDATE_CLIENTS);
 	}
 
 	/**

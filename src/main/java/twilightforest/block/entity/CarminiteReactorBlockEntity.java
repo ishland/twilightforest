@@ -215,13 +215,13 @@ public class CarminiteReactorBlockEntity extends BlockEntity {
 				.getTag(BlockTagGenerator.CARMINITE_REACTOR_ORES)
 				.flatMap(tag -> tag.getRandomElement(this.getLevel().getRandom()))
 				.map(Holder::value);
-			this.getLevel().setBlock(pos, (this.getLevel().getRandom().nextInt(8) == 0 && optional.isPresent() ? optional.get().defaultBlockState() : Blocks.NETHERRACK.defaultBlockState()), 3);
+			this.getLevel().setBlock(pos, (this.getLevel().getRandom().nextInt(8) == 0 && optional.isPresent() ? optional.get().defaultBlockState() : Blocks.NETHERRACK.defaultBlockState()), Block.UPDATE_ALL);
 			// fire on top?
 			if (this.getLevel().isEmptyBlock(pos.above()) && fuzz % 3 == 0) {
-				this.getLevel().setBlock(pos.above(), Blocks.FIRE.defaultBlockState(), 3);
+				this.getLevel().setBlock(pos.above(), Blocks.FIRE.defaultBlockState(), Block.UPDATE_ALL);
 			}
 		} else {
-			this.getLevel().setBlock(pos, state, 3);
+			this.getLevel().setBlock(pos, state, Block.UPDATE_ALL);
 		}
 	}
 
@@ -231,7 +231,7 @@ public class CarminiteReactorBlockEntity extends BlockEntity {
 		// don't destroy unbreakable stuff
 		if (!(stateThere.is(BlockTagGenerator.CARMINITE_REACTOR_IMMUNE) ||
 				(stateThere.getDestroySpeed(this.getLevel(), pos) == -1))) {
-			this.getLevel().setBlock(pos, state, 2);
+			this.getLevel().setBlock(pos, state, Block.UPDATE_CLIENTS);
 		}
 	}
 }
