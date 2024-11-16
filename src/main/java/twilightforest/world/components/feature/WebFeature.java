@@ -5,6 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.PipeBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
@@ -37,12 +38,12 @@ public class WebFeature extends Feature<NoneFeatureConfiguration> {
 	private static boolean placeOrAdd(WorldGenLevel level, BlockPos pos, Direction direction, RandomSource random, boolean canBeWorm) {
 		if (level.isEmptyBlock(pos)) {
 			if (canBeWorm && random.nextFloat() <= 0.25F) {
-				return level.setBlock(pos, TFBlocks.WEBWORM.get().defaultBlockState().setValue(PipeBlock.PROPERTY_BY_DIRECTION.get(direction.getOpposite()), true).setValue(WebwormBlock.FACING, direction), WebwormBlock.UPDATE_CLIENTS);
+				return level.setBlock(pos, TFBlocks.WEBWORM.get().defaultBlockState().setValue(PipeBlock.PROPERTY_BY_DIRECTION.get(direction.getOpposite()), true).setValue(WebwormBlock.FACING, direction), Block.UPDATE_CLIENTS);
 			}
 			if (direction.getAxis().isHorizontal()) {
-				return level.setBlock(pos, TFBlocks.HANGING_WEB.get().defaultBlockState().setValue(HangingWebBlock.getPropertyForFace(direction), WebShape.TALL), HangingWebBlock.UPDATE_CLIENTS);
+				return level.setBlock(pos, TFBlocks.HANGING_WEB.get().defaultBlockState().setValue(HangingWebBlock.getPropertyForFace(direction), WebShape.TALL), Block.UPDATE_CLIENTS);
 			} else {
-				return level.setBlock(pos, TFBlocks.HANGING_WEB.get().defaultBlockState().setValue(PipeBlock.PROPERTY_BY_DIRECTION.get(direction), true), HangingWebBlock.UPDATE_CLIENTS);
+				return level.setBlock(pos, TFBlocks.HANGING_WEB.get().defaultBlockState().setValue(PipeBlock.PROPERTY_BY_DIRECTION.get(direction), true), Block.UPDATE_CLIENTS);
 			}
 		}
 		BlockState state = level.getBlockState(pos);
@@ -58,14 +59,14 @@ public class WebFeature extends Feature<NoneFeatureConfiguration> {
 			}
 
 			if (direction.getAxis().isHorizontal()) {
-				return level.setBlock(pos, state.setValue(HangingWebBlock.getPropertyForFace(direction), WebShape.TALL), HangingWebBlock.UPDATE_CLIENTS);
+				return level.setBlock(pos, state.setValue(HangingWebBlock.getPropertyForFace(direction), WebShape.TALL), Block.UPDATE_CLIENTS);
 			} else {
-				return level.setBlock(pos, state.setValue(PipeBlock.PROPERTY_BY_DIRECTION.get(direction), true), HangingWebBlock.UPDATE_CLIENTS);
+				return level.setBlock(pos, state.setValue(PipeBlock.PROPERTY_BY_DIRECTION.get(direction), true), Block.UPDATE_CLIENTS);
 			}
 		}
 
 		if (state.is(TFBlocks.WEBWORM)) {
-			return level.setBlock(pos, state.setValue(PipeBlock.PROPERTY_BY_DIRECTION.get(direction), true), HangingWebBlock.UPDATE_CLIENTS);
+			return level.setBlock(pos, state.setValue(PipeBlock.PROPERTY_BY_DIRECTION.get(direction), true), Block.UPDATE_CLIENTS);
 		}
 		return false;
 	}

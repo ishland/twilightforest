@@ -718,6 +718,7 @@ public class ItemModelGenerator extends ItemModelProvider {
 		chestBoat(TFItems.TRANSFORMATION_CHEST_BOAT);
 		chestBoat(TFItems.MINING_CHEST_BOAT);
 		chestBoat(TFItems.SORTING_CHEST_BOAT);
+		chestBoat(TFItems.VEILWOOD_CHEST_BOAT);
 
 		generated(TFItems.NAGA_BANNER_PATTERN.getId().getPath(), prefix("item/tf_banner_pattern"));
 		generated(TFItems.LICH_BANNER_PATTERN.getId().getPath(), prefix("item/tf_banner_pattern"));
