@@ -775,7 +775,7 @@ public class BlockTagGenerator extends ModdedBlockTagGenerator {
 			.addTags(BlockTags.LOGS, BlockTags.LEAVES);
 
 		this.tag(WEBS_GENERATE_ON_TOP_OF)
-			.add(TFBlocks.HEDGE.get(), Blocks.JACK_O_LANTERN);
+			.add(TFBlocks.HEDGE.get());
 	}
 
 	public static TagKey<Block> create(String tagName) {
