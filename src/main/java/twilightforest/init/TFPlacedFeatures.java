@@ -162,7 +162,7 @@ public class TFPlacedFeatures {
 		context.register(PLACED_DENSE_LAKE_WATER, new PlacedFeature(features.getOrThrow(TFConfiguredFeatures.LAKE_WATER), tfFeatureCheckArea(AvoidLandmarkModifier.checkBoth(), 4).build()));
 		context.register(PLACED_GRAVEYARD, new PlacedFeature(features.getOrThrow(TFConfiguredFeatures.GRAVEYARD), tfFeatureCheckArea(AvoidLandmarkModifier.checkSurface(), 70).build()));
 		context.register(PLACED_BIG_MUSHGLOOM, new PlacedFeature(features.getOrThrow(TFConfiguredFeatures.BIG_MUSHGLOOM), tfFeatureCheckArea(AvoidLandmarkModifier.checkSurface(), 1).build()));
-		context.register(PLACED_FALLEN_LEAVES, new PlacedFeature(features.getOrThrow(TFConfiguredFeatures.FALLEN_LEAVES), tfFeatureCheckArea(AvoidLandmarkModifier.checkSurface(), 1).build()));
+		context.register(PLACED_FALLEN_LEAVES, new PlacedFeature(features.getOrThrow(TFConfiguredFeatures.FALLEN_LEAVES), tfFeatureCheckArea(AvoidLandmarkModifier.checkSurface(), 1, PlacementUtils.HEIGHTMAP_OCEAN_FLOOR, CountPlacement.of(6)).build()));
 		context.register(PLACED_FIDDLEHEAD, new PlacedFeature(features.getOrThrow(TFConfiguredFeatures.FIDDLEHEAD), ImmutableList.<PlacementModifier>builder().add(PlacementUtils.HEIGHTMAP_WORLD_SURFACE, BiomeFilter.biome()).build()));
 		context.register(PLACED_FIRE_JET, new PlacedFeature(features.getOrThrow(TFConfiguredFeatures.FIRE_JET), ImmutableList.<PlacementModifier>builder().add(PlacementUtils.HEIGHTMAP_WORLD_SURFACE, InSquarePlacement.spread(), BiomeFilter.biome()).build()));
 		context.register(PLACED_FOUNDATION, new PlacedFeature(features.getOrThrow(TFConfiguredFeatures.FOUNDATION), tfFeatureCheckArea(AvoidLandmarkModifier.checkSurface(), 90).build()));

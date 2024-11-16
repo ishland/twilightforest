@@ -1,4 +1,4 @@
-// 1.21.1	2024-10-26T13:59:01.0499075	Registries
+// 1.21.1	2024-11-16T22:29:49.6570817	Registries
 9089ada9ce06fd30adf8b10e50f02233c7d5a76e data/minecraft/twilight/wood_palettes/acacia.json
 dca1ef01d0df4e956fd414782de57c25dfddd290 data/minecraft/twilight/wood_palettes/birch.json
 01becb45438b7f2bfdc77baba72bc986341510c8 data/minecraft/twilight/wood_palettes/crimson.json
@@ -131,7 +131,7 @@ d557eab5f83fc955061de7da3b4a2a0b85bf984c data/twilightforest/worldgen/biome/lake
 583c03d8699b8ed19a3bdf99d63f7c88ef32fe81 data/twilightforest/worldgen/biome/mushroom_forest.json
 85c137d7c84a03a5fa8261c9a036e46f6f7c67a1 data/twilightforest/worldgen/biome/oak_savannah.json
 6569ae132d2ac62df26250925ffdb61c164c505f data/twilightforest/worldgen/biome/snowy_forest.json
-3130e20aeca6d336a8d998bdab33eafbfd0219a5 data/twilightforest/worldgen/biome/spooky_forest.json
+09b114df6006d9ec38f8996bc132b2e6f4794e10 data/twilightforest/worldgen/biome/spooky_forest.json
 073541a909cbf4c0f1a49ae1c1551b30b3b205d8 data/twilightforest/worldgen/biome/stream.json
 c305f1216734d361eeb2985f25bf7b06d67e8a92 data/twilightforest/worldgen/biome/swamp.json
 d301ff8b947d21c124d380886a3dde1e41304ec8 data/twilightforest/worldgen/biome/thornlands.json
@@ -276,7 +276,7 @@ bb9784d9ccca1f1a47065c00c53e64cd92c26d82 data/twilightforest/worldgen/placed_fea
 7cee9c2996dac31b077e6479bef3524817b91011 data/twilightforest/worldgen/placed_feature/dense_water_lake.json
 77bc97d3a7c316f9a7cef0fc3c687b0a5cf0e14a data/twilightforest/worldgen/placed_feature/druid_hut.json
 558fc6fc1afda17c9b52e9864b67dd03a4e6af4c data/twilightforest/worldgen/placed_feature/enchanted_forest_vines.json
-0648665b104dc44bac69861cd8d240c941ebc50d data/twilightforest/worldgen/placed_feature/fallen_leaves.json
+c8544e77f98d60a960b458e653da8a2373b75b49 data/twilightforest/worldgen/placed_feature/fallen_leaves.json
 575df3da21e8b7a4fdbd4a1bc6f89495f8447a45 data/twilightforest/worldgen/placed_feature/fiddlehead.json
 4450866e7c5041ea9e6fceafb690cb5445f5300b data/twilightforest/worldgen/placed_feature/fire_jet.json
 2e8dee94f1abfa5584729a854282ca5df5f2dde3 data/twilightforest/worldgen/placed_feature/flower_placer.json
