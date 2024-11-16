@@ -153,4 +153,10 @@ public class BoundingBoxUtils {
 	public static boolean isPosWithinBox(BlockPos origin, BlockPos.MutableBlockPos offset, int range) {
 		return range >= Mth.absMax(offset.getY() - origin.getY(), Mth.absMax(offset.getX() - origin.getX(), offset.getZ() - origin.getZ()));
 	}
+
+	public static BlockPos bottomCenterOf(BoundingBox box) {
+		return new BlockPos(
+			box.minX() + (box.maxX() - box.minX() + 1) / 2, box.minY(), box.minZ() + (box.maxZ() - box.minZ() + 1) / 2
+		);
+	}
 }
