@@ -159,4 +159,12 @@ public class BoundingBoxUtils {
 			box.minX() + (box.maxX() - box.minX() + 1) / 2, box.minY(), box.minZ() + (box.maxZ() - box.minZ() + 1) / 2
 		);
 	}
+
+	public static BlockPos clampedInside(BoundingBox box, BlockPos toClamp) {
+		return new BlockPos(Mth.clamp(toClamp.getX(), box.minX(), box.maxX()), Mth.clamp(toClamp.getY(), box.minY(), box.maxY()), Mth.clamp(toClamp.getZ(), box.minZ(), box.maxZ()));
+	}
+
+	public static int manhattanDistance(BoundingBox box, BlockPos pos) {
+		return pos.distManhattan(clampedInside(box, pos));
+	}
 }

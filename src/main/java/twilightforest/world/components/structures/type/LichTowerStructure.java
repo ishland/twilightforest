@@ -26,7 +26,7 @@ import twilightforest.init.TFMapDecorations;
 import twilightforest.init.TFStructureTypes;
 import twilightforest.util.jigsaw.JigsawRecord;
 import twilightforest.world.components.structures.lichtower.TowerMainComponent;
-import twilightforest.world.components.structures.lichtowerrevamp.LichFence;
+import twilightforest.world.components.structures.lichtowerrevamp.LichPerimeterFence;
 import twilightforest.world.components.structures.lichtowerrevamp.LichTowerFoyer;
 import twilightforest.world.components.structures.util.ControlledSpawningStructure;
 
@@ -68,10 +68,7 @@ public class LichTowerStructure extends ControlledSpawningStructure {
 		int length = random.nextInt(24, 32);
 		Direction direction = startingPiece.getRotation().rotate(Direction.SOUTH);
 
-		LichFence frontFence = LichFence.startPerimeterFence(startingPiece, context, structurePiecesBuilder, length, structureManager, random, foyerPiece.templatePosition().offset(path.pos()), direction);
-		if (frontFence == null) return;
-
-		LichFence.generatePerimeter(frontFence, structureManager, structurePiecesBuilder, random, context);
+		LichPerimeterFence.generateFence(startingPiece, context, structurePiecesBuilder, foyerPiece, length, structureManager, random, path, direction);
 	}
 
 	@Override

@@ -60,6 +60,7 @@ public abstract class LandmarkStructure extends Structure implements DecorationC
 		startingPiece.addChildren(startingPiece, structurePiecesBuilder, context.random());
 	}
 
+	// TODO Refactor findGenerationPoint to merge usecases for getFirstPiece and getStructurePieceGenerationStubFunction
 	@Override
 	public Optional<GenerationStub> findGenerationPoint(GenerationContext context) {
 		ChunkPos chunkPos = context.chunkPos();
