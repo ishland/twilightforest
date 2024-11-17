@@ -84,7 +84,7 @@ public class LichYardBox extends StructurePiece implements PieceBeardifierModifi
 	public void postProcess(WorldGenLevel level, StructureManager structureManager, ChunkGenerator chunkGen, RandomSource random, BoundingBox chunkBounds, ChunkPos chunkPos, BlockPos structureCenterPos) {
 		BoundingBox boxIntersection = BoundingBoxUtils.getIntersectionOfSBBs(this.boundingBox, chunkBounds);
 
-		if (boxIntersection == null)
+		if (boxIntersection == null || this.edgeFeatheringRange < 0)
 			return;
 
 		for (int z = boxIntersection.minZ(); z <= boxIntersection.maxZ(); z++) {
@@ -172,7 +172,7 @@ public class LichYardBox extends StructurePiece implements PieceBeardifierModifi
 
 		BoundingBox crossPathBox = BoundingBoxUtils.wrappedCoordinates(2, pathLeft, pathRight);
 
-		LichYardBox crossPath = new LichYardBox(crossPathBox, 1.5f, dirFromVestibule.getClockWise().getAxis(), false, 0.35f);
+		LichYardBox crossPath = new LichYardBox(crossPathBox, -1, dirFromVestibule.getClockWise().getAxis(), false, 0.35f);
 		structurePiecesBuilder.addPiece(crossPath);
 		pieces.add(crossPath);
 
@@ -190,7 +190,7 @@ public class LichYardBox extends StructurePiece implements PieceBeardifierModifi
 		BlockPos fromVestibule = nearVestibule.relative(sideDirection, 24);
 
 		BoundingBox pathBox = BoundingBoxUtils.wrappedCoordinates(2, pathEnd, fromVestibule.relative(dirFromVestibule.getOpposite(), spread));
-		LichYardBox path = new LichYardBox(pathBox, 1.5f, dirFromVestibule.getAxis(), false, 0.35f);
+		LichYardBox path = new LichYardBox(pathBox, -1, dirFromVestibule.getAxis(), false, 0.35f);
 		structurePiecesBuilder.addPiece(path);
 		return path;
 	}

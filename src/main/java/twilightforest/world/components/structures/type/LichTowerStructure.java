@@ -54,7 +54,7 @@ public class LichTowerStructure extends ControlledSpawningStructure {
 	@Nullable
 	private static LichTowerFoyer makeFoyer(GenerationContext context, RandomSource random, int x, int y, int z) {
 		Direction direction = Rotation.getRandom(random).rotate(Direction.SOUTH);
-		BlockPos placePos = new BlockPos(x, y, z).relative(direction, -5);
+		BlockPos placePos = new BlockPos(x, y, z).relative(direction, -5); // Shift to re-align yard with grass-clearing zone
 		FrontAndTop oriented = FrontAndTop.fromFrontAndTop(Direction.UP, direction);
 
 		JigsawPlaceContext placeContext = JigsawPlaceContext.pickPlaceableJunction(placePos, BlockPos.ZERO, oriented, context.structureTemplateManager(), TwilightForestMod.prefix("lich_tower/tower_foyer"), "twilightforest:lich_tower/vestibule", random);

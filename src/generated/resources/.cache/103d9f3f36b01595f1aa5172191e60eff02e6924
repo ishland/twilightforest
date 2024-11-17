@@ -1,4 +1,4 @@
-// 1.21.1	2024-11-17T01:02:10.874859	Registries
+// 1.21.1	2024-11-17T11:42:40.150236	Registries
 9089ada9ce06fd30adf8b10e50f02233c7d5a76e data/minecraft/twilight/wood_palettes/acacia.json
 dca1ef01d0df4e956fd414782de57c25dfddd290 data/minecraft/twilight/wood_palettes/birch.json
 01becb45438b7f2bfdc77baba72bc986341510c8 data/minecraft/twilight/wood_palettes/crimson.json
@@ -302,7 +302,7 @@ a9bfac3e1b673eb3b90f81e9074edaee3c84a8f6 data/twilightforest/worldgen/placed_fea
 8ac4f10cbe276bc40e40975a638732c22e39592c data/twilightforest/worldgen/placed_feature/mangrove_fallen_log.json
 eb1935f10dd318820deec5a691cb7f88ca65e5f0 data/twilightforest/worldgen/placed_feature/mayapple.json
 89ad19ac82aaeabf16ac6dd22bd4e59d3a4d75b1 data/twilightforest/worldgen/placed_feature/monolith.json
-67010d1e9b838edbf782052801611d247aea1ada data/twilightforest/worldgen/placed_feature/mushgloom_cluster.json
+95d60182d6e22c582b8fcc7ab69fa11f5658618d data/twilightforest/worldgen/placed_feature/mushgloom_cluster.json
 375e7efa74a48ff7e51e75694842004bc3246879 data/twilightforest/worldgen/placed_feature/mushroom/canopy_mushrooms_dense.json
 a4b650d01918023d259d12c2f01f4ab52ae01e3c data/twilightforest/worldgen/placed_feature/mushroom/canopy_mushrooms_sparse.json
 2d383d6b7130d400ea208a719465d1e9c59f2829 data/twilightforest/worldgen/placed_feature/mycelium_blob.json

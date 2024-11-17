@@ -165,7 +165,13 @@ public class BoundingBoxUtils {
 	}
 
 	public static int manhattanDistance(BoundingBox box, BlockPos pos) {
-		return pos.distManhattan(clampedInside(box, pos));
+		BlockPos clamped = clampedInside(box, pos);
+		return Math.abs(clamped.getX() - pos.getX()) + Math.abs(clamped.getY() - pos.getY()) + Math.abs(clamped.getZ() - pos.getZ());
+	}
+
+	public static int greatestAxalDistance(BoundingBox box, BlockPos pos) {
+		BlockPos clamped = clampedInside(box, pos);
+		return Math.max(Math.max(Math.abs(clamped.getX() - pos.getX()), Math.abs(clamped.getY() - pos.getY())), Math.abs(clamped.getZ() - pos.getZ()));
 	}
 
 	public static BoundingBox wrappedCoordinates(int padding, BlockPos pos1, BlockPos pos2) {

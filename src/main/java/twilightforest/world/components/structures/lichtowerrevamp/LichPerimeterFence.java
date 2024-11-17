@@ -156,7 +156,7 @@ public class LichPerimeterFence extends TwilightJigsawPiece implements PieceBear
 		JigsawRecord first = leftJunctions.getFirst();
 		BlockPos fencePostPos = left.templatePosition.offset(first.pos());
 		// Since the fencepost is directly in front of one of the box's faces; this should the same as a regular distance function. If not, then a deeper issue has happened inside generateUntilNearDest()
-		for (int distance = BoundingBoxUtils.manhattanDistance(leftDest, fencePostPos); distance > 2;) {
+		for (int distance = BoundingBoxUtils.greatestAxalDistance(leftDest, fencePostPos); distance > 2;) {
 			int stepSize = Math.min(distance, 7);
 			distance -= stepSize;
 
@@ -185,6 +185,10 @@ public class LichPerimeterFence extends TwilightJigsawPiece implements PieceBear
 	 */
 	@Nullable
 	private static LichPerimeterFence generateUntilNearDest(StructureTemplateManager structureManager, StructurePiecesBuilder structurePiecesBuilder, WorldgenRandom random, Structure.GenerationContext context, BoundingBox destBox, int turnAtIndex, LichPerimeterFence fence, Rotation turn, Function<LichPerimeterFence, List<JigsawRecord>> junctionGetter, ResourceLocation templateId) {
+		int infoldedPieces = 0;
+		int counterRotatedPieces = 0;
+		boolean foldNext = false;
+		int foldAt = random.nextInt(turnAtIndex);
 		for (int idx = 0; idx < 16; idx++) {
 			boolean makeTurn = idx == turnAtIndex;
 			boolean marchTowardsDest = idx > turnAtIndex;
@@ -210,9 +214,32 @@ public class LichPerimeterFence extends TwilightJigsawPiece implements PieceBear
 				// 0 from (horizontal) dot product means orthogonal, can approach from a right-angle turn now
 				if (directionOffset.getX() * targetDirecton.getX() + directionOffset.getZ() * targetDirecton.getZ() == 0)
 					break; // The spare fence-post has aligned with the grounded sidetower, break loop
+			} else if (foldAt == idx && random.nextFloat() > 0.2f) {
+				infoldedPieces = random.nextIntBetweenInclusive(1, idx + 1);
+				counterRotatedPieces = turnAtIndex - infoldedPieces;
+				turnAtIndex += infoldedPieces;
+				foldNext = true;
 			}
 
-			fence = nextFence(fence, structureManager, structurePiecesBuilder, random, junctions, makeTurn ? turn : Rotation.NONE, context, templateId);
+			if (infoldedPieces > 0) {
+				Rotation nextTurn = foldNext ? turn : Rotation.NONE;
+				foldNext = false;
+				fence = nextFence(fence, structureManager, structurePiecesBuilder, random, junctions, nextTurn, context, templateId);
+
+				infoldedPieces--;
+				if (infoldedPieces == 0) {
+					foldNext = true;
+				}
+			} else if (counterRotatedPieces > 0) {
+				Rotation nextTurn = foldNext ? Rotation.CLOCKWISE_180.getRotated(turn) : (makeTurn ? turn : Rotation.NONE);
+				foldNext = false;
+				fence = nextFence(fence, structureManager, structurePiecesBuilder, random, junctions, nextTurn, context, templateId);
+
+				counterRotatedPieces--;
+			} else {
+				Rotation nextTurn = makeTurn ? turn : Rotation.NONE;
+				fence = nextFence(fence, structureManager, structurePiecesBuilder, random, junctions, nextTurn, context, templateId);
+			}
 		}
 
 		return fence;
