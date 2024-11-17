@@ -24,29 +24,40 @@ public class AvoidLandmarkModifier extends PlacementModifier {
 	public static final MapCodec<AvoidLandmarkModifier> CODEC = RecordCodecBuilder.<AvoidLandmarkModifier>mapCodec(instance -> instance.group(
 		Codec.BOOL.fieldOf("occupies_surface").forGetter(o -> o.occupiesSurface),
 		Codec.BOOL.fieldOf("occupies_underground").forGetter(o -> o.occupiesUnderground),
+		Codec.BOOL.fieldOf("occupies_vegetation").forGetter(o -> o.occupiesVegetation),
 		Codec.INT.fieldOf("additional_clearance").forGetter(o -> o.additionalClearance)
 	).apply(instance, AvoidLandmarkModifier::new)).validate(AvoidLandmarkModifier::validate);
 
 	private final boolean occupiesSurface;
 	private final boolean occupiesUnderground;
+	private final boolean occupiesVegetation;
 	private final int additionalClearance;
 
 	public AvoidLandmarkModifier(boolean occupiesSurface, boolean occupiesUnderground, int additionalClearance) {
+		this(occupiesSurface, occupiesUnderground, false, additionalClearance);
+	}
+
+	public AvoidLandmarkModifier(boolean occupiesSurface, boolean occupiesUnderground, boolean occupiesVegetation, int additionalClearance) {
 		this.occupiesSurface = occupiesSurface;
 		this.occupiesUnderground = occupiesUnderground;
+		this.occupiesVegetation = occupiesVegetation;
 		this.additionalClearance = additionalClearance;
 	}
 
 	public static AvoidLandmarkModifier checkSurface() {
-		return new AvoidLandmarkModifier(true, false, 0);
+		return new AvoidLandmarkModifier(true, false, false, 0);
 	}
 
 	public static AvoidLandmarkModifier checkUnderground() {
-		return new AvoidLandmarkModifier(false, true, 0);
+		return new AvoidLandmarkModifier(false, true, false, 0);
 	}
 
 	public static AvoidLandmarkModifier checkBoth() {
-		return new AvoidLandmarkModifier(true, true, 0);
+		return new AvoidLandmarkModifier(true, true, false, 0);
+	}
+
+	public static AvoidLandmarkModifier checkVegetation() {
+		return new AvoidLandmarkModifier(false, false, true, 0);
 	}
 
 	@Override
@@ -58,12 +69,12 @@ public class AvoidLandmarkModifier extends PlacementModifier {
 		if (possibleStructureStart.isEmpty() || !(possibleStructureStart.get().getStructure() instanceof DecorationClearance decorationClearance))
 			return Stream.of(blockPos);
 
-		if ((!this.occupiesSurface || decorationClearance.isSurfaceDecorationsAllowed()) && (!this.occupiesUnderground || decorationClearance.isUndergroundDecoAllowed()))
+		if ((!this.occupiesSurface || decorationClearance.isSurfaceDecorationsAllowed()) && (!this.occupiesUnderground || decorationClearance.isUndergroundDecoAllowed()) && (!this.occupiesVegetation || decorationClearance.isGrassDecoAllowed()))
 			return Stream.of(blockPos);
 
 		// Turn Feature Center into Feature Offset
 		featurePos.set(Math.abs(featurePos.getX() - blockPos.getX()), 0, Math.abs(featurePos.getZ() - blockPos.getZ()));
-		int size = decorationClearance.chunkClearanceRadius() * 16 + this.additionalClearance;
+		float size = decorationClearance.chunkClearanceRadius() * 16f + this.additionalClearance;
 
 		return featurePos.getX() < size && featurePos.getZ() < size ? Stream.empty() : Stream.of(blockPos);
 	}
@@ -74,6 +85,6 @@ public class AvoidLandmarkModifier extends PlacementModifier {
 	}
 
 	private static DataResult<AvoidLandmarkModifier> validate(AvoidLandmarkModifier config) {
-		return config.occupiesSurface || config.occupiesUnderground ? DataResult.success(config) : DataResult.error(() -> "Feature Decorator cannot occupy neither surface nor underground");
+		return config.occupiesSurface || config.occupiesUnderground || config.occupiesVegetation ? DataResult.success(config) : DataResult.error(() -> "Feature Decorator cannot have no occupancy");
 	}
 }

@@ -97,9 +97,8 @@ public class LichYardBox extends StructurePiece implements PieceBeardifierModifi
 
 				float featherLevel = borderDist > this.edgeFeatheringRange ? 1f : borderDist / this.edgeFeatheringRange;
 
-				// float noise = random.nextFloat();
-				float noise = SimplexNoise.noise(x * this.scale, y * this.scale, z * this.scale) * 0.5f - 0.5f + featherLevel;
-				if (noise < 0) continue;
+				float noise = SimplexNoise.noise(x * this.scale, y * this.scale, z * this.scale) * 0.5f - 0.5f;
+				if (noise + featherLevel < 0) continue;
 
 				BlockState state = this.doDirtMotley ? this.pickDirt(x, y, z, random) : Blocks.DIRT_PATH.defaultBlockState();
 				BlockPos placeAt = new BlockPos(x, y, z);

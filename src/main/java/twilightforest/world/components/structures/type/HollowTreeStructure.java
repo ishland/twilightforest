@@ -206,12 +206,17 @@ public class HollowTreeStructure extends Structure implements DecorationClearanc
 	}
 
 	@Override
+	public boolean isGrassDecoAllowed() {
+		return this.decorationConfig.vegetation();
+	}
+
+	@Override
 	public boolean shouldAdjustToTerrain() {
 		return true;
 	}
 
 	@Override
-	public int chunkClearanceRadius() {
+	public float chunkClearanceRadius() {
 		return this.decorationConfig.chunkClearanceRadius();
 	}
 
