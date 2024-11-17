@@ -175,15 +175,16 @@ public class LichYardBox extends StructurePiece implements PieceBeardifierModifi
 		lichYardDirt.addDecoration(foyerPiece, pieces, random, context);
 	}
 
-	private static void generateYard(LichTowerFoyer foyerPiece, StructurePiecesBuilder structurePiecesBuilder, BlockPos nearVestibule, BlockPos nearFence, WorldgenRandom random, Direction dirFromVestibule, Structure.GenerationContext context) {
-		List<LichYardBox> pieces = new ArrayList<>(); // Add all pieces to a list instead of immediately adding children, so that paths can generate before graves check for overlap
+	private static void generateYard(LichTowerFoyer foyerPiece, StructurePiecesBuilder pieces, BlockPos nearVestibule, BlockPos nearFence, WorldgenRandom random, Direction dirFromVestibule, Structure.GenerationContext context) {
+		List<LichYardBox> paths = new ArrayList<>(); // Add all pieces to a list instead of immediately adding children, so that paths can generate before graves check for overlap
 
 		// First path, from the vestibule
 		BoundingBox firstPathBox = BoundingBoxUtils.wrappedCoordinates(3, nearVestibule, nearFence);
 
-		LichYardBox lichYardBox = new LichYardBox(firstPathBox.inflatedBy(1), 2.5f, dirFromVestibule.getAxis(), false, 0.35f, -1);
-		structurePiecesBuilder.addPiece(lichYardBox);
-		pieces.add(lichYardBox);
+		Direction.Axis axisFromVestibule = dirFromVestibule.getAxis();
+		LichYardBox lichYardBox = new LichYardBox(firstPathBox.inflatedBy(1), 2.5f, axisFromVestibule, false, 0.35f, -1);
+		pieces.addPiece(lichYardBox);
+		paths.add(lichYardBox);
 
 		// Second path, crossing the path from the vestibule
 		BlockPos randomPos = lerpBlockPos(Mth.lerp(random.nextFloat(), 0.2f, 0.8f), nearVestibule, nearFence);
@@ -194,16 +195,22 @@ public class LichYardBox extends StructurePiece implements PieceBeardifierModifi
 		BoundingBox crossPathBox = BoundingBoxUtils.wrappedCoordinates(1, pathLeft, pathRight);
 
 		LichYardBox crossPath = new LichYardBox(crossPathBox, -1, dirFromVestibule.getClockWise().getAxis(), false, 0, 0);
-		structurePiecesBuilder.addPiece(crossPath);
-		pieces.add(crossPath);
+		pieces.addPiece(crossPath);
+		paths.add(crossPath);
 
 		// Last two paths, to the sides of the vestibule
-		pieces.add(putSidePath(structurePiecesBuilder, nearVestibule, dirFromVestibule, dirFromVestibule.getClockWise(), pathLeft, crossPathSpan));
-		pieces.add(putSidePath(structurePiecesBuilder, nearVestibule, dirFromVestibule, dirFromVestibule.getCounterClockWise(), pathRight, crossPathSpan));
+		paths.add(putSidePath(pieces, nearVestibule, dirFromVestibule, dirFromVestibule.getClockWise(), pathLeft, crossPathSpan));
+		paths.add(putSidePath(pieces, nearVestibule, dirFromVestibule, dirFromVestibule.getCounterClockWise(), pathRight, crossPathSpan));
+
+		// Put lights before beginning grave placements
+		BoundingBox boxLightPlace = firstPathBox.inflatedBy(axisFromVestibule == Direction.Axis.Z ? 3 : 0, 0, axisFromVestibule == Direction.Axis.X ? 3 : 0);
+		LichYardLights lichYardLights = new LichYardLights(boxLightPlace, axisFromVestibule);
+		pieces.addPiece(lichYardLights);
+		lichYardLights.addChildren(foyerPiece, pieces, random);
 
 		// Now that all paths are generated, call addChildren on each so graves are placed
-		for (LichYardBox piece : pieces) {
-			piece.addDecoration(foyerPiece, structurePiecesBuilder, random, context);
+		for (LichYardBox piece : paths) {
+			piece.addDecoration(foyerPiece, pieces, random, context);
 		}
 	}
 

@@ -103,6 +103,7 @@ public class TFStructurePieceTypes {
 	public static final DeferredHolder<StructurePieceType, StructurePieceType> LICH_PERIMETER_FENCE = registerPieceType("TFLT" + "Fence", LichPerimeterFence::new);
 	public static final DeferredHolder<StructurePieceType, StructurePieceType> LICH_YARD_PATH = registerPieceType("TFLT" + "Path", LichYardBox::new);
 	public static final DeferredHolder<StructurePieceType, StructurePieceType> LICH_YARD_GRAVE = registerPieceType("TFLT" + "Grave", LichYardGrave::new);
+	public static final DeferredHolder<StructurePieceType, StructurePieceType> LICH_YARD_LIGHTS = registerPieceType("TFLT" + "Light", LichYardLights::new);
 
 	// Labyrinth
 	//public static final DeferredHolder<StructurePieceType, StructurePieceType> TFLr = registerPieceType("TFLr", StructureStartLabyrinth::new);
