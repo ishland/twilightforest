@@ -75,21 +75,15 @@ public class FallenLeavesBlock extends TFPlantBlock {
 
 	@Override
 	public boolean canBeReplaced(BlockState state, BlockPlaceContext context) {
-		int i = state.getValue(LAYERS);
-		boolean waterBelow = context.getLevel().getBlockState(context.getClickedPos().below()).liquid();
-
-		if (!waterBelow) {
-			if (context.getItemInHand().is(this.asItem()) && i < MAX_HEIGHT) {
-				if (context.replacingClickedOnBlock()) {
-					return context.getClickedFace() == Direction.UP;
-				} else {
-					return true;
-				}
+		if (context.getItemInHand().is(this.asItem()) && state.getValue(LAYERS) < MAX_HEIGHT) {
+			if (context.replacingClickedOnBlock()) {
+				return context.getClickedFace() == Direction.UP;
 			} else {
-				return i == 1;
+				return true;
 			}
+		} else {
+			return state.getValue(LAYERS) == 1;
 		}
-		return false;
 	}
 
 	@Override
