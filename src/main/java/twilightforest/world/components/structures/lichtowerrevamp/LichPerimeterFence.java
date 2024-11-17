@@ -1,5 +1,6 @@
 package twilightforest.world.components.structures.lichtowerrevamp;
 
+import com.google.common.collect.Streams;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.FrontAndTop;
@@ -28,6 +29,7 @@ import twilightforest.world.components.structures.util.SortablePiece;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 public class LichPerimeterFence extends TwilightJigsawPiece implements PieceBeardifierModifier, SortablePiece {
 	public LichPerimeterFence(StructurePieceSerializationContext ctx, CompoundTag compoundTag) {
@@ -243,5 +245,9 @@ public class LichPerimeterFence extends TwilightJigsawPiece implements PieceBear
 	public int getSortKey() {
 		// Make higher-ups generate later so the lower fences' slabs don't replace full blocks
 		return this.boundingBox.maxY();
+	}
+
+	public Stream<BlockPos> fencePostPositions() {
+		return Streams.concat(this.getLeftJunctions().stream(), this.getRightJunctions().stream()).map(r -> this.templatePosition.offset(r.pos()));
 	}
 }

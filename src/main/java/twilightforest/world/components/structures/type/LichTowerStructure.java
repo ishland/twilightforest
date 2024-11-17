@@ -23,7 +23,7 @@ import twilightforest.init.TFMapDecorations;
 import twilightforest.init.TFStructureTypes;
 import twilightforest.world.components.structures.lichtower.TowerMainComponent;
 import twilightforest.world.components.structures.lichtowerrevamp.LichTowerFoyer;
-import twilightforest.world.components.structures.lichtowerrevamp.LichYardPath;
+import twilightforest.world.components.structures.lichtowerrevamp.LichYardBox;
 import twilightforest.world.components.structures.util.ControlledSpawningStructure;
 
 import java.util.Arrays;
@@ -51,7 +51,7 @@ public class LichTowerStructure extends ControlledSpawningStructure {
 		super.generateFromStartingPiece(startingPiece, context, structurePiecesBuilder);
 
 		if (startingPiece instanceof LichTowerFoyer foyerPiece) {
-			LichYardPath.beginYard(foyerPiece, context, structurePiecesBuilder);
+			LichYardBox.beginYard(foyerPiece, context, structurePiecesBuilder);
 		}
 	}
 

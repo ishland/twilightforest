@@ -1,5 +1,6 @@
 package twilightforest.world.components.structures.lichtowerrevamp;
 
+import com.google.common.collect.Streams;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.FrontAndTop;
@@ -11,6 +12,7 @@ import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.WorldgenRandom;
@@ -19,36 +21,63 @@ import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSeriali
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 import net.neoforged.neoforge.common.world.PieceBeardifierModifier;
+import org.joml.SimplexNoise;
 import twilightforest.init.TFStructurePieceTypes;
 import twilightforest.util.BoundingBoxUtils;
 import twilightforest.util.jigsaw.JigsawPlaceContext;
 import twilightforest.util.jigsaw.JigsawRecord;
+import twilightforest.world.components.structures.util.SortablePiece;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-public class LichYardPath extends StructurePiece implements PieceBeardifierModifier {
-	private final int edgeFeatheringRange;
+public class LichYardBox extends StructurePiece implements PieceBeardifierModifier, SortablePiece {
+	private final float edgeFeatheringRange;
 	private final Direction.Axis placeGraveAxis;
+	private final boolean doDirtMotley;
+	private final float scale;
 
-	public LichYardPath(BoundingBox boundingBox, int edgeFeatheringRange, Direction.Axis placeGraveAxis) {
+	public LichYardBox(BoundingBox boundingBox, float edgeFeatheringRange, Direction.Axis placeGraveAxis, boolean doDirtMotley, float scale) {
 		super(TFStructurePieceTypes.LICH_YARD_PATH.value(), 0, boundingBox);
 
 		this.edgeFeatheringRange = edgeFeatheringRange;
 		this.placeGraveAxis = placeGraveAxis;
+		this.doDirtMotley = doDirtMotley;
+		this.scale = scale;
 	}
 
-	public LichYardPath(StructurePieceSerializationContext ctx, CompoundTag tag) {
+	public LichYardBox(StructurePieceSerializationContext ctx, CompoundTag tag) {
 		super(TFStructurePieceTypes.LICH_YARD_PATH.value(), tag);
 
-		this.edgeFeatheringRange = tag.getInt("feather");
+		this.edgeFeatheringRange = tag.getFloat("feather");
 		this.placeGraveAxis = tag.contains("axis") ? Direction.Axis.values()[tag.getInt("axis")] : Direction.Axis.Y;
+		this.doDirtMotley = tag.getBoolean("dirt_mix");
+		this.scale = tag.getFloat("dirt_scale");
 	}
 
 	@Override
 	protected void addAdditionalSaveData(StructurePieceSerializationContext context, CompoundTag tag) {
-		tag.putInt("feather", this.edgeFeatheringRange);
+		tag.putFloat("feather", this.edgeFeatheringRange);
 		tag.putInt("axis", this.placeGraveAxis.ordinal());
+		tag.putBoolean("dirt_mix", this.doDirtMotley);
+		tag.putFloat("dirt_scale", this.scale);
+	}
+
+	private BlockState pickDirt(int x, int y, int z, RandomSource random) {
+		float scale = this.scale * 2.5f;
+		float randF = random.nextFloat();
+		float noise = randF < 0.25f ? (randF * 4f) : SimplexNoise.noise(x * scale, y * scale + 1024f, z * scale) * 0.5f + 0.5f;
+
+		if (noise > 0.6f) {
+			return Blocks.COARSE_DIRT.defaultBlockState();
+		} else if (noise > 0.4f) {
+			return Blocks.DIRT.defaultBlockState();
+		} else {
+			return Blocks.ROOTED_DIRT.defaultBlockState();
+		}
 	}
 
 	@Override
@@ -66,13 +95,16 @@ public class LichYardPath extends StructurePiece implements PieceBeardifierModif
 				int zBorderDist = Math.min(z - this.boundingBox.minZ(), this.boundingBox.maxZ() - z);
 				int borderDist = Math.min(xBorderDist, zBorderDist);
 
-				float featherLevel = borderDist > this.edgeFeatheringRange ? 1f : (float) borderDist / this.edgeFeatheringRange;
+				float featherLevel = borderDist > this.edgeFeatheringRange ? 1f : borderDist / this.edgeFeatheringRange;
 
-				float f = random.nextFloat();
-				if (f * f > featherLevel) continue;
+				// float noise = random.nextFloat();
+				float noise = SimplexNoise.noise(x * this.scale, y * this.scale, z * this.scale) * 0.5f - 0.5f + featherLevel;
+				if (noise < 0) continue;
 
+				BlockState state = this.doDirtMotley ? this.pickDirt(x, y, z, random) : Blocks.DIRT_PATH.defaultBlockState();
 				BlockPos placeAt = new BlockPos(x, y, z);
-				level.setBlock(placeAt, Blocks.DIRT_PATH.defaultBlockState(), Block.UPDATE_ALL);
+
+				level.setBlock(placeAt, state, Block.UPDATE_ALL);
 				// Remove the darned plants
 				level.setBlock(placeAt.above(), Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
 				level.setBlock(placeAt.above(2), Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
@@ -95,7 +127,7 @@ public class LichYardPath extends StructurePiece implements PieceBeardifierModif
 		return 0;
 	}
 
-	public static void beginYard(LichTowerFoyer foyerPiece, Structure.GenerationContext context, StructurePiecesBuilder structurePiecesBuilder) {
+	public static void beginYard(LichTowerFoyer foyerPiece, Structure.GenerationContext context, StructurePiecesBuilder pieces) {
 		WorldgenRandom random = context.random();
 		StructureTemplateManager structureManager = context.structureTemplateManager();
 
@@ -107,22 +139,31 @@ public class LichYardPath extends StructurePiece implements PieceBeardifierModif
 
 		BlockPos generatePos = foyerPiece.templatePosition().offset(path.pos());
 		BlockPos fenceCenter = generatePos.relative(direction, pathLength);
-		LichPerimeterFence.generateFence(foyerPiece, context, structurePiecesBuilder, structureManager, random, direction, fenceCenter);
+		LichPerimeterFence.generateFence(foyerPiece, context, pieces, structureManager, random, direction, fenceCenter);
 
 		BlockPos nearVestibule = generatePos.relative(direction, 2).above(4);
 		BlockPos nearFence = fenceCenter.relative(direction.getOpposite(), 4).below(4);
-		generateYard(foyerPiece, structurePiecesBuilder, nearVestibule, nearFence, random, direction, context);
+		generateYard(foyerPiece, pieces, nearVestibule, nearFence, random, direction, context);
+
+		Stream<BlockPos> foyerRootPos = Stream.of(foyerPiece.getBoundingBox().getCenter().above(10), BoundingBoxUtils.bottomCenterOf(foyerPiece.getBoundingBox()).below(10));
+		Stream<BlockPos> fencePostPos = pieces.pieces.stream().filter(p -> p instanceof LichPerimeterFence).flatMap(f -> ((LichPerimeterFence) f).fencePostPositions());
+		Optional<BoundingBox> fullYard = BoundingBox.encapsulatingPositions(Streams.concat(foyerRootPos, fencePostPos).collect(Collectors.toUnmodifiableSet()));
+		if (fullYard.isEmpty()) return;
+
+		LichYardBox lichYardDirt = new LichYardBox(fullYard.get(), 8, Direction.Axis.Y, true, 0.1f);
+		pieces.addPiece(lichYardDirt);
+		lichYardDirt.addDecoration(foyerPiece, pieces, random, context);
 	}
 
 	private static void generateYard(LichTowerFoyer foyerPiece, StructurePiecesBuilder structurePiecesBuilder, BlockPos nearVestibule, BlockPos nearFence, WorldgenRandom random, Direction dirFromVestibule, Structure.GenerationContext context) {
-		List<LichYardPath> pieces = new ArrayList<>(); // Add all pieces to a list instead of immediately adding children, so that paths can generate before graves check for overlap
+		List<LichYardBox> pieces = new ArrayList<>(); // Add all pieces to a list instead of immediately adding children, so that paths can generate before graves check for overlap
 
 		// First path, from the vestibule
 		BoundingBox firstPathBox = BoundingBoxUtils.wrappedCoordinates(3, nearVestibule, nearFence);
 
-		LichYardPath lichYardPath = new LichYardPath(firstPathBox, 3, Direction.Axis.Y);
-		structurePiecesBuilder.addPiece(lichYardPath);
-		pieces.add(lichYardPath);
+		LichYardBox lichYardBox = new LichYardBox(firstPathBox, 2.5f, Direction.Axis.Y, false, 0.35f);
+		structurePiecesBuilder.addPiece(lichYardBox);
+		pieces.add(lichYardBox);
 
 		// Second path, crossing the path from the vestibule
 		BlockPos randomPos = lerpBlockPos(Mth.lerp(random.nextFloat(), 0.2f, 0.8f), nearVestibule, nearFence);
@@ -132,7 +173,7 @@ public class LichYardPath extends StructurePiece implements PieceBeardifierModif
 
 		BoundingBox crossPathBox = BoundingBoxUtils.wrappedCoordinates(2, pathLeft, pathRight);
 
-		LichYardPath crossPath = new LichYardPath(crossPathBox, 2, dirFromVestibule.getClockWise().getAxis());
+		LichYardBox crossPath = new LichYardBox(crossPathBox, 1.5f, dirFromVestibule.getClockWise().getAxis(), false, 0.35f);
 		structurePiecesBuilder.addPiece(crossPath);
 		pieces.add(crossPath);
 
@@ -141,16 +182,16 @@ public class LichYardPath extends StructurePiece implements PieceBeardifierModif
 		pieces.add(putSidePath(structurePiecesBuilder, nearVestibule, dirFromVestibule, dirFromVestibule.getCounterClockWise(), pathRight, crossPathSpan));
 
 		// Now that all paths are generated, call addChildren on each so graves are placed
-		for (LichYardPath piece : pieces) {
+		for (LichYardBox piece : pieces) {
 			piece.addDecoration(foyerPiece, structurePiecesBuilder, random, context);
 		}
 	}
 
-	private static LichYardPath putSidePath(StructurePiecesBuilder structurePiecesBuilder, BlockPos nearVestibule, Direction dirFromVestibule, Direction sideDirection, BlockPos pathEnd, int spread) {
+	private static LichYardBox putSidePath(StructurePiecesBuilder structurePiecesBuilder, BlockPos nearVestibule, Direction dirFromVestibule, Direction sideDirection, BlockPos pathEnd, int spread) {
 		BlockPos fromVestibule = nearVestibule.relative(sideDirection, 24);
 
 		BoundingBox pathBox = BoundingBoxUtils.wrappedCoordinates(2, pathEnd, fromVestibule.relative(dirFromVestibule.getOpposite(), spread));
-		LichYardPath path = new LichYardPath(pathBox, 2, dirFromVestibule.getAxis());
+		LichYardBox path = new LichYardBox(pathBox, 1.5f, dirFromVestibule.getAxis(), false, 0.35f);
 		structurePiecesBuilder.addPiece(path);
 		return path;
 	}
@@ -182,5 +223,10 @@ public class LichYardPath extends StructurePiece implements PieceBeardifierModif
 				grave.addChildren(piece, pieces, random);
 			}
 		}
+	}
+
+	@Override
+	public int getSortKey() {
+		return this.doDirtMotley ? Integer.MIN_VALUE : Integer.MIN_VALUE + 255;
 	}
 }
