@@ -188,7 +188,7 @@ public class LichPerimeterFence extends TwilightJigsawPiece implements PieceBear
 		int infoldedPieces = 0;
 		int counterRotatedPieces = 0;
 		boolean foldNext = false;
-		int foldAt = random.nextInt(turnAtIndex);
+		int foldAt = random.nextInt(turnAtIndex - 1);
 		for (int idx = 0; idx < 16; idx++) {
 			boolean makeTurn = idx == turnAtIndex;
 			boolean marchTowardsDest = idx > turnAtIndex;
@@ -214,7 +214,7 @@ public class LichPerimeterFence extends TwilightJigsawPiece implements PieceBear
 				// 0 from (horizontal) dot product means orthogonal, can approach from a right-angle turn now
 				if (directionOffset.getX() * targetDirecton.getX() + directionOffset.getZ() * targetDirecton.getZ() == 0)
 					break; // The spare fence-post has aligned with the grounded sidetower, break loop
-			} else if (foldAt == idx && random.nextFloat() > 0.2f) {
+			} else if (idx == foldAt) {
 				infoldedPieces = random.nextIntBetweenInclusive(1, idx + 1);
 				counterRotatedPieces = turnAtIndex - infoldedPieces;
 				turnAtIndex += infoldedPieces;
