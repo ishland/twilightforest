@@ -23,7 +23,6 @@ import twilightforest.util.jigsaw.JigsawPlaceContext;
 import twilightforest.util.jigsaw.JigsawRecord;
 import twilightforest.world.components.processors.MetaBlockProcessor;
 import twilightforest.world.components.structures.TwilightJigsawPiece;
-import twilightforest.world.components.structures.type.LichTowerStructure;
 import twilightforest.world.components.structures.util.SortablePiece;
 
 import java.util.List;
@@ -74,8 +73,8 @@ public class LichPerimeterFence extends TwilightJigsawPiece implements PieceBear
 		return this.matchSpareJigsaws(r -> "twilightforest:lich_tower/fence_edge_right".equals(r.name()));
 	}
 
-	public static void generateFence(StructurePiece startingPiece, Structure.GenerationContext context, StructurePiecesBuilder structurePiecesBuilder, LichTowerFoyer foyerPiece, int length, StructureTemplateManager structureManager, WorldgenRandom random, JigsawRecord path, Direction direction) {
-		LichPerimeterFence frontFence = startPerimeterFence(startingPiece, context, structurePiecesBuilder, length, structureManager, random, foyerPiece.templatePosition().offset(path.pos()), direction);
+	public static void generateFence(StructurePiece startingPiece, Structure.GenerationContext context, StructurePiecesBuilder structurePiecesBuilder, StructureTemplateManager structureManager, WorldgenRandom random, Direction direction, BlockPos fenceCenter) {
+		LichPerimeterFence frontFence = startPerimeterFence(startingPiece, context, structurePiecesBuilder, structureManager, random, direction, fenceCenter);
 		if (frontFence == null) return;
 
 		Optional<StructurePiece> towerBase = structurePiecesBuilder.pieces.stream().filter(piece -> piece instanceof LichTowerBase).findFirst();
@@ -120,9 +119,8 @@ public class LichPerimeterFence extends TwilightJigsawPiece implements PieceBear
 
 	// Provides the first fence piece, that can be used for calling generatePerimeter()
 	@Nullable
-	public static LichPerimeterFence startPerimeterFence(StructurePiece vestibule, Structure.GenerationContext context, StructurePiecesBuilder structurePiecesBuilder, int length, StructureTemplateManager structureManager, WorldgenRandom random, BlockPos entrancePos, Direction direction) {
+	public static LichPerimeterFence startPerimeterFence(StructurePiece vestibule, Structure.GenerationContext context, StructurePiecesBuilder structurePiecesBuilder, StructureTemplateManager structureManager, WorldgenRandom random, Direction direction, BlockPos fenceCenter) {
 		FrontAndTop orientation = FrontAndTop.fromFrontAndTop(Direction.UP, direction);
-		BlockPos fenceCenter = entrancePos.relative(orientation.top(), length);
 		int baseY = context.chunkGenerator().getBaseHeight(fenceCenter.getX(), fenceCenter.getZ(), Heightmap.Types.WORLD_SURFACE_WG, context.heightAccessor(), context.randomState());
 
 		JigsawPlaceContext placeableJunction = JigsawPlaceContext.pickPlaceableJunction(fenceCenter.atY(baseY - 2), BlockPos.ZERO, orientation, structureManager, TwilightForestMod.prefix("lich_tower/outer_fence_7"), "twilightforest:lich_tower/fence_source", random);

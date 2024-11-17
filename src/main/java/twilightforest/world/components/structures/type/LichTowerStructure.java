@@ -13,10 +13,8 @@ import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.levelgen.GenerationStep;
-import net.minecraft.world.level.levelgen.WorldgenRandom;
 import net.minecraft.world.level.levelgen.structure.*;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 import net.minecraft.world.level.saveddata.maps.MapDecorationType;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.TwilightForestMod;
@@ -24,10 +22,8 @@ import twilightforest.data.tags.BiomeTagGenerator;
 import twilightforest.init.TFEntities;
 import twilightforest.init.TFMapDecorations;
 import twilightforest.init.TFStructureTypes;
-import twilightforest.util.jigsaw.JigsawRecord;
-import twilightforest.world.components.structures.lichtower.TowerMainComponent;
-import twilightforest.world.components.structures.lichtowerrevamp.LichPerimeterFence;
 import twilightforest.world.components.structures.lichtowerrevamp.LichTowerFoyer;
+import twilightforest.world.components.structures.lichtowerrevamp.LichYardPath;
 import twilightforest.world.components.structures.util.ControlledSpawningStructure;
 
 import java.util.Arrays;
@@ -54,21 +50,9 @@ public class LichTowerStructure extends ControlledSpawningStructure {
 	protected void generateFromStartingPiece(StructurePiece startingPiece, GenerationContext context, StructurePiecesBuilder structurePiecesBuilder) {
 		super.generateFromStartingPiece(startingPiece, context, structurePiecesBuilder);
 
-		putPath(startingPiece, context, structurePiecesBuilder);
-	}
-
-	private static void putPath(StructurePiece startingPiece, GenerationContext context, StructurePiecesBuilder structurePiecesBuilder) {
-		WorldgenRandom random = context.random();
-		StructureTemplateManager structureManager = context.structureTemplateManager();
-		if (!(startingPiece instanceof LichTowerFoyer foyerPiece)) return;
-
-		JigsawRecord path = foyerPiece.matchSpareJigsaws(r -> "twilightforest:lich_tower/path".equals(r.target())).getFirst();
-		if (path == null) return;
-
-		int length = random.nextInt(24, 32);
-		Direction direction = startingPiece.getRotation().rotate(Direction.SOUTH);
-
-		LichPerimeterFence.generateFence(startingPiece, context, structurePiecesBuilder, foyerPiece, length, structureManager, random, path, direction);
+		if (startingPiece instanceof LichTowerFoyer foyerPiece) {
+			LichYardPath.beginYard(foyerPiece, context, structurePiecesBuilder);
+		}
 	}
 
 	@Override

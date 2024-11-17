@@ -101,6 +101,8 @@ public class TFStructurePieceTypes {
 	public static final DeferredHolder<StructurePieceType, StructurePieceType> LICH_BOSS_ROOM = registerPieceType("TFLT" + "TBoss", LichBossRoom::new);
 	public static final DeferredHolder<StructurePieceType, StructurePieceType> LICH_BOSS_ROOF = registerPieceType("TFLT" + "TBossRoof", LichBossRoof::new);
 	public static final DeferredHolder<StructurePieceType, StructurePieceType> LICH_PERIMETER_FENCE = registerPieceType("TFLT" + "Fence", LichPerimeterFence::new);
+	public static final DeferredHolder<StructurePieceType, StructurePieceType> LICH_YARD_PATH = registerPieceType("TFLT" + "Path", LichYardPath::new);
+	public static final DeferredHolder<StructurePieceType, StructurePieceType> LICH_YARD_GRAVE = registerPieceType("TFLT" + "Grave", LichYardGrave::new);
 
 	// Labyrinth
 	//public static final DeferredHolder<StructurePieceType, StructurePieceType> TFLr = registerPieceType("TFLr", StructureStartLabyrinth::new);

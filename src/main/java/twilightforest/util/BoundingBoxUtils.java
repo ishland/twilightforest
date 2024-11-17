@@ -167,4 +167,25 @@ public class BoundingBoxUtils {
 	public static int manhattanDistance(BoundingBox box, BlockPos pos) {
 		return pos.distManhattan(clampedInside(box, pos));
 	}
+
+	public static BoundingBox wrappedCoordinates(int padding, BlockPos pos1, BlockPos pos2) {
+		int minX = Math.min(pos1.getX(), pos2.getX()) - padding;
+		int minY = Math.min(pos1.getY(), pos2.getY()) - padding;
+		int minZ = Math.min(pos1.getZ(), pos2.getZ()) - padding;
+		int maxX = Math.max(pos1.getX(), pos2.getX()) + padding;
+		int maxY = Math.max(pos1.getY(), pos2.getY()) + padding;
+		int maxZ = Math.max(pos1.getZ(), pos2.getZ()) + padding;
+
+		return new BoundingBox(minX, minY, minZ, maxX, maxY, maxZ);
+	}
+
+	public static BlockPos lerpPosInside(BoundingBox box, Direction.Axis axis, float delta) {
+		BlockPos center = box.getCenter();
+
+		return switch (axis) {
+			case X -> new BlockPos(Mth.lerpDiscrete(delta, box.minX(), box.maxX()), center.getY(), center.getZ());
+			case Y -> new BlockPos(center.getX(), Mth.lerpDiscrete(delta, box.minY(), box.maxY()), center.getZ());
+			case Z -> new BlockPos(center.getX(), center.getY(), Mth.lerpDiscrete(delta, box.minZ(), box.maxZ()));
+		};
+	}
 }

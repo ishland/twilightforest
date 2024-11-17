@@ -368,6 +368,8 @@ public final class LichTowerPieces {
 		))
 	);
 
+	public static final ResourceLocation YARD_GRAVE = TwilightForestMod.prefix("lich_tower/grave");
+
 	private LichTowerPieces() {
 		throw new IllegalStateException("How did we get here?");
 	}

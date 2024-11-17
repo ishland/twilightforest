@@ -20,7 +20,7 @@ import java.util.List;
 
 public record JigsawPlaceContext(BlockPos templatePos, StructurePlaceSettings placementSettings, JigsawRecord seedJigsaw, List<JigsawRecord> spareJigsaws) {
 	@Nullable
-	public static JigsawPlaceContext pickPlaceableJunction(BlockPos parentStructureTemplatePos, BlockPos sourceJigsawPos, FrontAndTop sourceOrientation, StructureTemplateManager structureManager, @Nullable ResourceLocation templateLocation, String jigsawLabel, RandomSource random) {
+	public static JigsawPlaceContext pickPlaceableJunction(BlockPos parentStructureTemplatePos, BlockPos sourceJigsawPos, FrontAndTop sourceOrientation, StructureTemplateManager structureManager, @Nullable ResourceLocation templateLocation, String jigsawNameLabel, RandomSource random) {
 		if (templateLocation == null)
 			return null;
 
@@ -31,19 +31,17 @@ public record JigsawPlaceContext(BlockPos templatePos, StructurePlaceSettings pl
 			random
 		);
 
-		return pickPlaceableJunction(
-			connectables, parentStructureTemplatePos.offset(sourceJigsawPos), sourceOrientation, jigsawLabel, random
-		);
+		return pickPlaceableJunction(connectables, parentStructureTemplatePos.offset(sourceJigsawPos), sourceOrientation, jigsawNameLabel, random);
 	}
 
 	@Nullable
-	private static JigsawPlaceContext pickPlaceableJunction(List<StructureTemplate.StructureBlockInfo> connectableJigsaws, BlockPos sourceTemplatePos, FrontAndTop sourceOrientation, String jigsawLabel, RandomSource random) {
+	private static JigsawPlaceContext pickPlaceableJunction(List<StructureTemplate.StructureBlockInfo> connectableJigsaws, BlockPos sourceTemplatePos, FrontAndTop sourceOrientation, String jigsawNameLabel, RandomSource random) {
 		StructureTemplate.StructureBlockInfo connectable = null;
 
 		for (int i = 0; i < connectableJigsaws.size(); i++) {
 			StructureTemplate.StructureBlockInfo info = connectableJigsaws.get(i);
 			CompoundTag nbt = info.nbt();
-			if (nbt != null && jigsawLabel.equals(nbt.getString("name")) && JigsawUtil.canRearrangeForConnection(sourceOrientation, info)) {
+			if (nbt != null && jigsawNameLabel.equals(nbt.getString("name")) && JigsawUtil.canRearrangeForConnection(sourceOrientation, info)) {
 				connectable = info;
 				connectableJigsaws.remove(i);
 				break;
