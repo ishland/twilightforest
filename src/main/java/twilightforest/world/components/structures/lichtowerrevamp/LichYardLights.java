@@ -46,8 +46,6 @@ public class LichYardLights extends StructurePiece implements PieceBeardifierMod
 		if (boxIntersection == null)
 			return;
 
-		ChunkAccess chunk = level.getChunk(chunkPos.getWorldPosition());
-
 		for (int z = boxIntersection.minZ(); z <= boxIntersection.maxZ(); z++) {
 			for (int x = boxIntersection.minX(); x <= boxIntersection.maxX(); x++) {
 				int y = level.getHeight(Heightmap.Types.WORLD_SURFACE_WG, x, z);
@@ -58,7 +56,6 @@ public class LichYardLights extends StructurePiece implements PieceBeardifierMod
 					if (this.placeAxis == Direction.Axis.Z ? (Math.min(x - this.boundingBox.minX(), this.boundingBox.maxX() - x) < 3) : (Math.min(z - this.boundingBox.minZ(), this.boundingBox.maxZ() - z) < 3)) {
 						level.setBlock(placeAt, TFBlocks.WROUGHT_IRON_FENCE.value().defaultBlockState(), Block.UPDATE_ALL);
 						level.setBlock(placeAt.above(), Blocks.CANDLE.defaultBlockState().setValue(CandleBlock.LIT, true), Block.UPDATE_ALL);
-						chunk.markPosForPostprocessing(placeAt);
 					}
 				}
 			}
