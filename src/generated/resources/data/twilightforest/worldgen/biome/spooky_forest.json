@@ -2,6 +2,7 @@
   "carvers": {
     "air": "twilightforest:tf_caves"
   },
+  "creature_spawn_probability": 0.15,
   "downfall": 1.0,
   "effects": {
     "fog_color": 8549265,
@@ -104,7 +105,26 @@
       }
     ],
     "axolotls": [],
-    "creature": [],
+    "creature": [
+      {
+        "type": "twilightforest:deer",
+        "maxCount": 3,
+        "minCount": 2,
+        "weight": 15
+      },
+      {
+        "type": "twilightforest:squirrel",
+        "maxCount": 4,
+        "minCount": 2,
+        "weight": 10
+      },
+      {
+        "type": "twilightforest:raven",
+        "maxCount": 2,
+        "minCount": 1,
+        "weight": 5
+      }
+    ],
     "misc": [],
     "monster": [
       {
