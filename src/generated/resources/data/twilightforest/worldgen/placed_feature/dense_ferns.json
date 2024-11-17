@@ -32,7 +32,8 @@
       "additional_clearance": 0,
       "occupies_surface": false,
       "occupies_underground": false,
-      "occupies_vegetation": true
+      "occupies_vegetation": true,
+      "structures_allowed": []
     }
   ]
 }
