@@ -30,14 +30,12 @@ import java.util.List;
 public class LichYardPath extends StructurePiece implements PieceBeardifierModifier {
 	private final int edgeFeatheringRange;
 	private final Direction.Axis placeGraveAxis;
-	private final StructureTemplateManager structureManager;
 
-	public LichYardPath(BoundingBox boundingBox, int edgeFeatheringRange, Direction.Axis placeGraveAxis, StructureTemplateManager structureManager) {
+	public LichYardPath(BoundingBox boundingBox, int edgeFeatheringRange, Direction.Axis placeGraveAxis) {
 		super(TFStructurePieceTypes.LICH_YARD_PATH.value(), 0, boundingBox);
 
 		this.edgeFeatheringRange = edgeFeatheringRange;
 		this.placeGraveAxis = placeGraveAxis;
-		this.structureManager = structureManager;
 	}
 
 	public LichYardPath(StructurePieceSerializationContext ctx, CompoundTag tag) {
@@ -45,7 +43,6 @@ public class LichYardPath extends StructurePiece implements PieceBeardifierModif
 
 		this.edgeFeatheringRange = tag.getInt("feather");
 		this.placeGraveAxis = tag.contains("axis") ? Direction.Axis.values()[tag.getInt("axis")] : Direction.Axis.Y;
-		this.structureManager = ctx.structureTemplateManager();
 	}
 
 	@Override
@@ -123,7 +120,7 @@ public class LichYardPath extends StructurePiece implements PieceBeardifierModif
 		// First path, from the vestibule
 		BoundingBox firstPathBox = BoundingBoxUtils.wrappedCoordinates(3, nearVestibule, nearFence);
 
-		LichYardPath lichYardPath = new LichYardPath(firstPathBox, 3, Direction.Axis.Y, context.structureTemplateManager());
+		LichYardPath lichYardPath = new LichYardPath(firstPathBox, 3, Direction.Axis.Y);
 		structurePiecesBuilder.addPiece(lichYardPath);
 		pieces.add(lichYardPath);
 
@@ -135,13 +132,13 @@ public class LichYardPath extends StructurePiece implements PieceBeardifierModif
 
 		BoundingBox crossPathBox = BoundingBoxUtils.wrappedCoordinates(2, pathLeft, pathRight);
 
-		LichYardPath crossPath = new LichYardPath(crossPathBox, 2, dirFromVestibule.getClockWise().getAxis(), context.structureTemplateManager());
+		LichYardPath crossPath = new LichYardPath(crossPathBox, 2, dirFromVestibule.getClockWise().getAxis());
 		structurePiecesBuilder.addPiece(crossPath);
 		pieces.add(crossPath);
 
 		// Last two paths, to the sides of the vestibule
-		pieces.add(putSidePath(structurePiecesBuilder, nearVestibule, dirFromVestibule, dirFromVestibule.getClockWise(), pathLeft, crossPathSpan, context.structureTemplateManager()));
-		pieces.add(putSidePath(structurePiecesBuilder, nearVestibule, dirFromVestibule, dirFromVestibule.getCounterClockWise(), pathRight, crossPathSpan, context.structureTemplateManager()));
+		pieces.add(putSidePath(structurePiecesBuilder, nearVestibule, dirFromVestibule, dirFromVestibule.getClockWise(), pathLeft, crossPathSpan));
+		pieces.add(putSidePath(structurePiecesBuilder, nearVestibule, dirFromVestibule, dirFromVestibule.getCounterClockWise(), pathRight, crossPathSpan));
 
 		// Now that all paths are generated, call addChildren on each so graves are placed
 		for (LichYardPath piece : pieces) {
@@ -149,11 +146,11 @@ public class LichYardPath extends StructurePiece implements PieceBeardifierModif
 		}
 	}
 
-	private static LichYardPath putSidePath(StructurePiecesBuilder structurePiecesBuilder, BlockPos nearVestibule, Direction dirFromVestibule, Direction sideDirection, BlockPos pathEnd, int spread, StructureTemplateManager manager) {
+	private static LichYardPath putSidePath(StructurePiecesBuilder structurePiecesBuilder, BlockPos nearVestibule, Direction dirFromVestibule, Direction sideDirection, BlockPos pathEnd, int spread) {
 		BlockPos fromVestibule = nearVestibule.relative(sideDirection, 24);
 
 		BoundingBox pathBox = BoundingBoxUtils.wrappedCoordinates(2, pathEnd, fromVestibule.relative(dirFromVestibule.getOpposite(), spread));
-		LichYardPath path = new LichYardPath(pathBox, 2, dirFromVestibule.getAxis(), manager);
+		LichYardPath path = new LichYardPath(pathBox, 2, dirFromVestibule.getAxis());
 		structurePiecesBuilder.addPiece(path);
 		return path;
 	}
@@ -170,7 +167,7 @@ public class LichYardPath extends StructurePiece implements PieceBeardifierModif
 		for (int i = 0; i < 5; i++) {
 			Direction side = Direction.fromAxisAndDirection(this.placeGraveAxis, random.nextBoolean() ? Direction.AxisDirection.NEGATIVE : Direction.AxisDirection.POSITIVE).getClockWise();
 
-			BlockPos randomPos = BoundingBoxUtils.lerpPosInside(this.boundingBox, this.placeGraveAxis, Mth.lerp(random.nextFloat(), 0.05f, 0.95f)).relative(side, 2);
+			BlockPos randomPos = BoundingBoxUtils.lerpPosInside(this.boundingBox, this.placeGraveAxis, Mth.lerp(random.nextFloat(), 0.05f, 0.95f)).relative(side, random.nextIntBetweenInclusive(2, 4));
 
 			FrontAndTop orientation = FrontAndTop.fromFrontAndTop(side, Direction.UP);
 			int baseY = context.chunkGenerator().getBaseHeight(randomPos.getX(), randomPos.getZ(), Heightmap.Types.WORLD_SURFACE_WG, context.heightAccessor(), context.randomState());

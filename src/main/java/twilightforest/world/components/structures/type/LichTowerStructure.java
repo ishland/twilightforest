@@ -2,7 +2,6 @@ package twilightforest.world.components.structures.type;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
@@ -22,6 +21,7 @@ import twilightforest.data.tags.BiomeTagGenerator;
 import twilightforest.init.TFEntities;
 import twilightforest.init.TFMapDecorations;
 import twilightforest.init.TFStructureTypes;
+import twilightforest.world.components.structures.lichtower.TowerMainComponent;
 import twilightforest.world.components.structures.lichtowerrevamp.LichTowerFoyer;
 import twilightforest.world.components.structures.lichtowerrevamp.LichYardPath;
 import twilightforest.world.components.structures.util.ControlledSpawningStructure;
