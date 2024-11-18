@@ -17,6 +17,7 @@ import net.neoforged.neoforge.client.model.generators.loaders.ItemLayerModelBuil
 import net.neoforged.neoforge.client.model.generators.loaders.SeparateTransformsModelBuilder;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredItem;
 import twilightforest.TwilightForestMod;
 import twilightforest.beans.Autowired;
 import twilightforest.enums.extensions.TFItemDisplayContextEnumExtension;
@@ -490,6 +491,7 @@ public class ItemModelGenerator extends ItemModelProvider {
 		singleTexTool(TFItems.LIFEDRAIN_SCEPTER);
 		singleTexTool(TFItems.ZOMBIE_SCEPTER);
 		singleTexTool(TFItems.FORTIFICATION_SCEPTER);
+		exanimateEssence(TFItems.EXANIMATE_ESSENCE);
 		singleTex(TFItems.MAGIC_PAINTING);
 		ModelFile active = generated("ore_meter_active", prefix("item/ore_meter_active"));
 		singleTex(TFItems.ORE_METER).override().predicate(TwilightForestMod.prefix("active"), 1).model(active).end();
@@ -966,6 +968,14 @@ public class ItemModelGenerator extends ItemModelProvider {
 			.end()
 			.end()
 			.override().predicate(prefix("alt"), 1).model(alt).end();
+	}
+
+	private ItemModelBuilder exanimateEssence(DeferredItem<Item> item) {
+		ItemModelBuilder builder = withExistingParent(item.getId().getPath(), "item/generated");
+		builder = builder.texture("layer0", prefix("item/exanimate_powder"));
+		builder = builder.texture("layer1", prefix("item/exanimate_flames"));
+		builder = builder.customLoader(ItemLayerModelBuilder::begin).emissive(15, 15, 1)/*.renderType("minecraft:translucent", 0)*/.end();
+		return builder;
 	}
 
 	@Override
