@@ -10,6 +10,7 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.enchantment.EnchantedItemInUse;
 import net.minecraft.world.item.enchantment.effects.EnchantmentEntityEffect;
 import net.minecraft.world.phys.Vec3;
+import twilightforest.init.TFItems;
 import twilightforest.item.recipe.ScepterRepairRecipe;
 
 import java.util.ArrayList;
@@ -34,6 +35,11 @@ public record RechargeScepterEffect() implements EnchantmentEntityEffect {
 					for (int i = 0; i < player.getInventory().items.size(); i++) {
 						var stack = player.getInventory().items.get(i);
 						if (stack.isEmpty()) continue;
+						if (stack.is(TFItems.EXANIMATE_ESSENCE)) {
+							stack.shrink(1);
+							item.setDamageValue(0);
+							return;
+						}
 						for (var ingredient : recipe.getIngredients()) {
 							if (ingredient.test(stack)) {
 								slotsToConsume.add(i);
