@@ -1,6 +1,7 @@
 package twilightforest.world.components.structures.icetower;
 
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -326,7 +327,7 @@ public class IceTowerWingComponent extends TowerWingComponent {
 					.map(floorType -> new Pair<>(floorType, floorType.getWeight()))
 					.collect(Collectors.toList()),
 				decoRNG);
-			int chosenRotation = WorldUtil.getRandomElement(possibleFloors.get(chosenType), decoRNG);
+			int chosenRotation = Util.getRandom(possibleFloors.get(chosenType), decoRNG);
 			plan.add(new Pair<>(chosenType, chosenRotation));
 
 			topBlockedParts = chosenType.getFloorWith3x3Map().getBlockedFloorParts()
