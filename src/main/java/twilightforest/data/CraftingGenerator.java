@@ -224,9 +224,10 @@ public class CraftingGenerator extends CraftingDataHelper {
 //		ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, TFBlocks.CANDELABRA.get())
 //			.pattern("III")
 //			.pattern(" W ")
-//			.define('W', TFBlocks.WROUGHT_IRON_FENCE.get())
-//			.define('I', Tags.Items.INGOTS_IRON)
-//			.unlockedBy("has_item", has(TFBlocks.WROUGHT_IRON_FENCE.get()))
+//			.define('W', TFBlocks.WROUGHT_IRON_FENCE)
+//			.define('I', TFItems.WROUGHT_IRON_BAR)
+//			.unlockedBy("has_fence", has(TFBlocks.WROUGHT_IRON_FENCE))
+//			.unlockedBy("has_bar", has(TFItems.WROUGHT_IRON_BAR))
 //			.save(output);
 
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, TFItems.ARMOR_SHARD_CLUSTER.get())

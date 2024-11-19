@@ -81,6 +81,7 @@ public class ItemTagGenerator extends ModdedItemTagGenerator {
 	public static final TagKey<Item> REPAIRS_FIERY_TOOLS = create("repairs_fiery_tools");
 	public static final TagKey<Item> REPAIRS_GIANT_TOOLS = create("repairs_giant_tools");
 	public static final TagKey<Item> REPAIRS_ICE_TOOLS = create("repairs_ice_tools");
+	public static final TagKey<Item> SCEPTERS = create("scepters");
 
 	public ItemTagGenerator(PackOutput output, CompletableFuture<HolderLookup.Provider> future, CompletableFuture<TagLookup<Block>> provider, ExistingFileHelper helper) {
 		super(output, future, provider, helper);
@@ -247,6 +248,8 @@ public class ItemTagGenerator extends ModdedItemTagGenerator {
 		this.tag(UNCRAFTING_IGNORES_COST).addTag(Tags.Items.RODS_WOODEN);
 
 		this.tag(KEPT_ON_DEATH).add(TFItems.TOWER_KEY.get(), TFItems.PHANTOM_HELMET.get(), TFItems.PHANTOM_CHESTPLATE.get());
+
+		this.tag(SCEPTERS).add(TFItems.TWILIGHT_SCEPTER.get(), TFItems.LIFEDRAIN_SCEPTER.get(), TFItems.ZOMBIE_SCEPTER.get(), TFItems.FORTIFICATION_SCEPTER.get());
 
 		this.tag(ItemTags.PIGLIN_LOVED).add(TFItems.GOLDEN_MINOTAUR_AXE.get(), TFItems.CHARM_OF_KEEPING_3.get(), TFItems.CHARM_OF_LIFE_2.get(), TFItems.LAMP_OF_CINDERS.get());
 
