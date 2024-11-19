@@ -91,6 +91,7 @@ public class LangGenerator extends TFLangProvider {
 		this.addEnchantment("chill_aura", "Chill Aura", "Adds a chance for the attacker to gain the frosted effect after hitting the wearer.");
 		this.addEnchantment("fire_react", "Fire React", "Adds a chance for the attacker to be set on fire after hitting the wearer.");
 		this.addEnchantment("destruction", "Destruction", "Allows the Block and Chain to break blocks with a higher mining tier.");
+		this.addEnchantment("renewal", "Renewal", "Automatically recharges scepters when they run out if the holder has the recharge items in their inventory.");
 
 		this.addAdvancement("root", "Twilight Forest", "Enter the mysterious, magical woodlands: the Twilight Forest");
 		this.addAdvancement("kill_cicada", "Shut", "Kill a Cicada");

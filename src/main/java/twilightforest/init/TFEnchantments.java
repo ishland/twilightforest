@@ -32,6 +32,7 @@ public class TFEnchantments {
 	public static final ResourceKey<Enchantment> FIRE_REACT = registerKey("fire_react");
 	public static final ResourceKey<Enchantment> CHILL_AURA = registerKey("chill_aura");
 	public static final ResourceKey<Enchantment> DESTRUCTION = registerKey("destruction");
+	public static final ResourceKey<Enchantment> RENEWAL = registerKey("renewal");
 
 	private static ResourceKey<Enchantment> registerKey(String name) {
 		return ResourceKey.create(Registries.ENCHANTMENT, TwilightForestMod.prefix(name));
@@ -94,6 +95,15 @@ public class TFEnchantments {
 				Optional.of(blocks.get(BlockTagGenerator.BLOCK_AND_CHAIN_NEVER_BREAKS).orElseThrow()),
 				Optional.empty(),
 				Optional.empty())));
+
+		register(context, RENEWAL, new Enchantment.Builder(Enchantment.definition(
+			HolderSet.direct(TFItems.TWILIGHT_SCEPTER, TFItems.LIFEDRAIN_SCEPTER, TFItems.ZOMBIE_SCEPTER, TFItems.FORTIFICATION_SCEPTER),
+			1, 1,
+			Enchantment.dynamicCost(5, 9),
+			Enchantment.dynamicCost(20, 9),
+			8,
+			EquipmentSlotGroup.HAND))
+			.withEffect(EnchantmentEffectComponents.TICK, new RechargeScepterEffect()));
 
 	}
 

@@ -923,6 +923,8 @@
   "enchantment.twilightforest.destruction.desc": "Allows the Block and Chain to break blocks with a higher mining tier.",
   "enchantment.twilightforest.fire_react": "Fire React",
   "enchantment.twilightforest.fire_react.desc": "Adds a chance for the attacker to be set on fire after hitting the wearer.",
+  "enchantment.twilightforest.renewal": "Renewal",
+  "enchantment.twilightforest.renewal.desc": "Automatically recharges scepters when they run out if the holder has the recharge items in their inventory.",
   "entity.twilightforest.adherent": "Adherent",
   "entity.twilightforest.alpha_yeti": "Alpha Yeti",
   "entity.twilightforest.armored_giant": "Armored Giant",
