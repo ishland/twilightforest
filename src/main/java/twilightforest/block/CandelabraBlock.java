@@ -54,6 +54,7 @@ import org.jetbrains.annotations.Nullable;
 import twilightforest.block.entity.CandelabraBlockEntity;
 import twilightforest.components.item.CandelabraData;
 import twilightforest.data.tags.ItemTagGenerator;
+import twilightforest.init.TFItems;
 import twilightforest.init.TFParticleType;
 import twilightforest.init.TFSounds;
 
@@ -163,20 +164,18 @@ public class CandelabraBlock extends BaseEntityBlock implements LightableBlock, 
 			if (level.getBlockEntity(pos) instanceof CandelabraBlockEntity candelabra) {
 				int i = this.getSlot(state.getValue(FACING), result.getLocation().subtract(result.getBlockPos().getX(), result.getBlockPos().getY(), result.getBlockPos().getZ()));
 				if (state.getValue(CANDLES.get(i)) && player.isSecondaryUseActive()) {
-					if (!level.isClientSide()) {
-						ItemStack itemstack = new ItemStack(candelabra.removeCandle(i));
-						level.playSound(null, pos, SoundEvents.CANDLE_PLACE, SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.1F + 0.9F);
-						if (player.hasInfiniteMaterials()) {
-							if (!player.getInventory().contains(itemstack)) {
-								player.getInventory().add(itemstack);
-							}
-						} else {
-							if (!player.getInventory().add(itemstack)) {
-								player.drop(itemstack, false);
-							}
+					ItemStack itemstack = new ItemStack(candelabra.removeCandle(i));
+					level.playSound(null, pos, SoundEvents.CANDLE_PLACE, SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.1F + 0.9F);
+					if (player.hasInfiniteMaterials()) {
+						if (!player.getInventory().contains(itemstack)) {
+							player.getInventory().add(itemstack);
 						}
-						level.gameEvent(player, GameEvent.BLOCK_CHANGE, pos);
+					} else {
+						if (!player.getInventory().add(itemstack)) {
+							player.drop(itemstack, false);
+						}
 					}
+					level.gameEvent(player, GameEvent.BLOCK_CHANGE, pos);
 					return ItemInteractionResult.sidedSuccess(level.isClientSide());
 				} else if (!state.getValue(CANDLES.get(i))) {
 					if (stack.is(ItemTags.CANDLES) && stack.getItem() instanceof BlockItem block) {
@@ -198,7 +197,7 @@ public class CandelabraBlock extends BaseEntityBlock implements LightableBlock, 
 				this.eruptFlameParticles(TFParticleType.DIM_FLAME.get(), level, pos, state);
 			}
 			return ItemInteractionResult.sidedSuccess(level.isClientSide());
-		} else if (stack.is(ItemTagGenerator.SCEPTERS) && state.getValue(LIGHTING) == Lighting.NORMAL) {
+		} else if ((stack.is(ItemTagGenerator.SCEPTERS) || stack.is(TFItems.EXANIMATE_ESSENCE)) && state.getValue(LIGHTING) == Lighting.NORMAL) {
 			level.setBlockAndUpdate(pos, state.setValue(LIGHTING, Lighting.OMINOUS));
 			level.playSound(null, pos, TFSounds.CANDELABRA_OMINOUS.get(), SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.1F + 0.9F);
 			if (level.isClientSide()) {
