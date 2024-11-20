@@ -44,19 +44,16 @@ public class TFDensityFunctions {
 		Holder.Reference<BiomeDensitySource> biomeGrid = context.lookup(TFRegistries.Keys.BIOME_TERRAIN_DATA).getOrThrow(BiomeLayerStack.BIOME_GRID);
 		DensityFunction referencedBiomeDensity = makeBiomeDensityRaw(context, biomeGrid);
 		DensityFunction ambientTerrainNoise = makeAmbientNoise2D(context);
-		DensityFunction referencedStreamDensity = makeStreamDensityRaw(context, biomeGrid);
+		DensityFunction referencedNoiseDensity = makeStreamDensityRaw(context, biomeGrid);
 
-		makeForestedTerrain(context, referencedBiomeDensity, ambientTerrainNoise, referencedStreamDensity);
+		makeForestedTerrain(context, referencedBiomeDensity, ambientTerrainNoise, referencedNoiseDensity);
 		makeSkylightTerrain(context, referencedBiomeDensity, ambientTerrainNoise);
 	}
 
 	@NotNull
 	private static DensityFunction makeBiomeDensityRaw(BootstrapContext<DensityFunction> context, Holder.Reference<BiomeDensitySource> biomeGrid) {
-		Holder.Reference<NormalNoise.NoiseParameters> surfaceParams = context.lookup(Registries.NOISE).getOrThrow(Noises.SURFACE);
-
 		DensityFunction rawBiomeDensityReferenced = new TerrainDensityRouter(
 			biomeGrid,
-			new DensityFunction.NoiseHolder(surfaceParams),
 			-31,
 			64,
 			1,
@@ -91,16 +88,11 @@ public class TFDensityFunctions {
 
 	@NotNull
 	private static DensityFunction makeStreamDensityRaw(BootstrapContext<DensityFunction> context, Holder.Reference<BiomeDensitySource> biomeGrid) {
-		Holder.Reference<NormalNoise.NoiseParameters> surfaceParams = context.lookup(Registries.NOISE).getOrThrow(Noises.SURFACE);
-
 		DensityFunction rawStreamDensityReferenced = new NoiseDensityRouter(
 			biomeGrid,
-			new DensityFunction.NoiseHolder(surfaceParams),
 			-31,
 			64,
-			1,
-			DensityFunctions.constant(8),
-			DensityFunctions.constant(-1.25)
+			1
 		);
 
 		// Debug: For a flat substitute of TerrainDensityRouter
@@ -122,7 +114,7 @@ public class TFDensityFunctions {
 		);
 	}
 
-	private static void makeForestedTerrain(BootstrapContext<DensityFunction> context, DensityFunction rawBiomeDensity, DensityFunction ambientTerrainNoise, DensityFunction rawStreamDensity) {
+	private static void makeForestedTerrain(BootstrapContext<DensityFunction> context, DensityFunction rawBiomeDensity, DensityFunction ambientTerrainNoise, DensityFunction rawNoiseDensity) {
 		DensityFunction biomedLandscape = DensityFunctions.mul(
 			DensityFunctions.constant(1 / 6f),
 			DensityFunctions.add(
@@ -131,31 +123,10 @@ public class TFDensityFunctions {
 			)
 		);
 
-/*
-		DensityFunction biomedLandscape = DensityFunctions.mul(
-			DensityFunctions.constant(0.16666666666666666),
-			DensityFunctions.add(
-				rawBiomeDensity,
-				DensityFunctions.add(
-					rawBiomeDensity,
-					DensityFunctions.yClampedGradient(-31, 256, 31.0D, -256.0D)
-				)
-			)
-		);
-
-
-		DensityFunction finalDensity = DensityFunctions.add(
-			biomedLandscape,
-			DensityFunctions.interpolated(DensityFunctions.max(
-				DensityFunctions.zero(),
-				ambientTerrainNoise
-			))
-		);
-*/
 		DensityFunction finalDensity = DensityFunctions.add(
 			biomedLandscape,
 			DensityFunctions.mul(
-				rawStreamDensity,
+				rawNoiseDensity,
 				DensityFunctions.interpolated(
 					DensityFunctions.max(
 						DensityFunctions.zero(),

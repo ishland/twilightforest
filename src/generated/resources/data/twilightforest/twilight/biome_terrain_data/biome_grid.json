@@ -7,7 +7,7 @@
       },
       "depth": 0.05,
       "key_biome": "twilightforest:clearing",
-      "scale": 1.0,
+      "scale": 1.15,
       "weight": 1.0
     },
     {
@@ -37,7 +37,7 @@
       },
       "depth": -0.8,
       "key_biome": "twilightforest:dense_forest",
-      "scale": 4.0,
+      "scale": 3.9,
       "weight": 1.0
     },
     {
@@ -86,7 +86,7 @@
       },
       "depth": -0.75,
       "key_biome": "twilightforest:firefly_forest",
-      "scale": 4.0,
+      "scale": 4.15,
       "weight": 1.0
     },
     {
@@ -96,7 +96,7 @@
       },
       "depth": -0.75,
       "key_biome": "twilightforest:forest",
-      "scale": 5.0,
+      "scale": 4.75,
       "weight": 1.0
     },
     {
@@ -117,7 +117,7 @@
       "depth": 3.0,
       "key_biome": "twilightforest:highlands",
       "scale": 2.25,
-      "weight": 0.2
+      "weight": 0.135
     },
     {
       "biome_layers": {
@@ -126,7 +126,7 @@
       },
       "depth": -1.9997999668121338,
       "key_biome": "twilightforest:lake",
-      "scale": 0.0010000000474974513,
+      "scale": 1.0,
       "weight": 1.0
     },
     {
@@ -156,37 +156,37 @@
       },
       "depth": 0.0,
       "key_biome": "twilightforest:snowy_forest",
-      "scale": 2.15,
+      "scale": 2.45,
       "weight": 1.0
     },
     {
       "biome_layers": {
-        "-1.55": "twilightforest:spooky_forest",
-        "-3.55": "twilightforest:underground"
+        "-1.0": "twilightforest:spooky_forest",
+        "-3.0": "twilightforest:underground"
       },
-      "depth": -0.55,
+      "depth": 0.0,
       "key_biome": "twilightforest:spooky_forest",
-      "scale": 4.5,
+      "scale": 2.25,
       "weight": 1.0
     },
     {
       "biome_layers": {
-        "-1.125": "twilightforest:stream",
-        "-3.125": "twilightforest:underground"
+        "-1.1": "twilightforest:stream",
+        "-3.1": "twilightforest:underground"
       },
-      "depth": -0.125,
+      "depth": -0.1,
       "key_biome": "twilightforest:stream",
       "scale": 0.001,
-      "weight": 1.5
+      "weight": 1.35
     },
     {
       "biome_layers": {
-        "-1.3": "twilightforest:swamp",
-        "-3.3": "twilightforest:underground"
+        "-1.6": "twilightforest:swamp",
+        "-3.6": "twilightforest:underground"
       },
-      "depth": -0.3,
+      "depth": -0.6,
       "key_biome": "twilightforest:swamp",
-      "scale": 1.0,
+      "scale": 1.7,
       "weight": 1.0
     },
     {

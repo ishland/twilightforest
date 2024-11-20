@@ -19,30 +19,30 @@ import java.util.function.Consumer;
 public final class BiomeMaker extends BiomeHelper {
 	public static @Unmodifiable List<TerrainColumn> makeBiomeList(HolderGetter<Biome> biomeRegistry, Holder<Biome> undergroundBiome) {
 		return List.of(
-			biomeColumnWithUnderground(-0.75D, 5.0D, 1.0D, biomeRegistry, TFBiomes.FOREST, undergroundBiome),
-			biomeColumnWithUnderground(-0.8D, 4.0D, 1.0D, biomeRegistry, TFBiomes.DENSE_FOREST, undergroundBiome),
-			biomeColumnWithUnderground(-0.75D, 4.0D, 1.0D, biomeRegistry, TFBiomes.FIREFLY_FOREST, undergroundBiome),
-			biomeColumnWithUnderground(0.05D, 1.0D, 1.0D, biomeRegistry, TFBiomes.CLEARING, undergroundBiome),
+			biomeColumnWithUnderground(-0.75D, 4.75D, 1.0D, biomeRegistry, TFBiomes.FOREST, undergroundBiome),
+			biomeColumnWithUnderground(-0.8D, 3.9D, 1.0D, biomeRegistry, TFBiomes.DENSE_FOREST, undergroundBiome),
+			biomeColumnWithUnderground(-0.75D, 4.15D, 1.0D, biomeRegistry, TFBiomes.FIREFLY_FOREST, undergroundBiome),
+			biomeColumnWithUnderground(0.05D, 1.15D, 1.0D, biomeRegistry, TFBiomes.CLEARING, undergroundBiome),
 			biomeColumnWithUnderground(-0.05D, 2.0D, 1.0D, biomeRegistry, TFBiomes.OAK_SAVANNAH, undergroundBiome),
-			biomeColumnWithUnderground(-0.125D, 0.001D, 1.5D, biomeRegistry, TFBiomes.STREAM, undergroundBiome),
-			biomeColumnWithUnderground(-1.9998F, 0.001F, 1.0D, biomeRegistry, TFBiomes.LAKE, undergroundBiome),
+			biomeColumnWithUnderground(-0.1D, 0.001D, 1.35D, biomeRegistry, TFBiomes.STREAM, undergroundBiome),
+			biomeColumnWithUnderground(-1.9998F, 1.0D, 1.0D, biomeRegistry, TFBiomes.LAKE, undergroundBiome),
 
 			biomeColumnWithUnderground(0.0D, 2.0D, 1.0D, biomeRegistry, TFBiomes.MUSHROOM_FOREST, undergroundBiome),
 			biomeColumnWithUnderground(0.0D, 1.75D, 1.0D, biomeRegistry, TFBiomes.DENSE_MUSHROOM_FOREST, undergroundBiome),
 
 			biomeColumnWithUnderground(-0.5D, 4.0D, 1.0D, biomeRegistry, TFBiomes.ENCHANTED_FOREST, undergroundBiome),
-			biomeColumnWithUnderground(-0.55D, 4.5D, 1.0D, biomeRegistry, TFBiomes.SPOOKY_FOREST, undergroundBiome),
+			biomeColumnWithUnderground(0.0D, 2.25D, 1.0D, biomeRegistry, TFBiomes.SPOOKY_FOREST, undergroundBiome),
 
-			biomeColumnWithUnderground(-0.3D, 1.0D, 1.0D, biomeRegistry, TFBiomes.SWAMP, undergroundBiome),
+			biomeColumnWithUnderground(-0.6D, 1.7D, 1.0D, biomeRegistry, TFBiomes.SWAMP, undergroundBiome),
 			biomeColumnWithUnderground(0.2D, 1.25D, 1.0D, biomeRegistry, TFBiomes.FIRE_SWAMP, undergroundBiome),
 
 			biomeColumnWithUnderground(0.1D, 1.25D, 0.5D, biomeRegistry, TFBiomes.DARK_FOREST, undergroundBiome),
 			biomeColumnWithUnderground(0.1D, 1.125D, 1.0D, biomeRegistry, TFBiomes.DARK_FOREST_CENTER, undergroundBiome),
 
-			biomeColumnWithUnderground(0.0D, 2.15D, 1.0D, biomeRegistry, TFBiomes.SNOWY_FOREST, undergroundBiome),
+			biomeColumnWithUnderground(0.0D, 2.45D, 1.0D, biomeRegistry, TFBiomes.SNOWY_FOREST, undergroundBiome),
 			biomeColumnWithUnderground(-0.05D, 1.75D, 1.0D, biomeRegistry, TFBiomes.GLACIER, undergroundBiome),
 
-			biomeColumnWithUnderground(3.0D, 2.25D, 0.2D, biomeRegistry, TFBiomes.HIGHLANDS, biomeRegistry.getOrThrow(TFBiomes.HIGHLANDS_UNDERGROUND)),
+			biomeColumnWithUnderground(3.0D, 2.25D, 0.135D, biomeRegistry, TFBiomes.HIGHLANDS, biomeRegistry.getOrThrow(TFBiomes.HIGHLANDS_UNDERGROUND)),
 			biomeColumnToBedrock(5.5D, 1.75D, 1.15D, biomeRegistry, TFBiomes.THORNLANDS),
 			biomeColumnToBedrock(12.0D, 0.75D, 1.0D, biomeRegistry, TFBiomes.FINAL_PLATEAU)
 		);
