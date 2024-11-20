@@ -1,6 +1,5 @@
 package twilightforest.item;
 
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -14,6 +13,7 @@ import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
 import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.level.Level;
@@ -23,6 +23,7 @@ import twilightforest.init.TFDataComponents;
 import twilightforest.init.TFSounds;
 
 import java.util.List;
+import java.util.Optional;
 
 public class BrittleFlaskItem extends Item {
 
@@ -135,14 +136,8 @@ public class BrittleFlaskItem extends Item {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-		PotionFlaskComponent flaskContents = stack.getOrDefault(TFDataComponents.POTION_FLASK_CONTENTS, PotionFlaskComponent.EMPTY);
-		if (flaskContents.potion() != PotionContents.EMPTY) {
-			flaskContents.potion().addPotionTooltip(tooltip::add, 1.0F, context.tickRate());
-		}
-		tooltip.add(Component.translatable("item.twilightforest.flask.doses", flaskContents.doses(), DOSES).withStyle(ChatFormatting.GRAY));
-		if (flaskContents.breakage() > 0)
-			tooltip.add(Component.translatable("item.twilightforest.flask.no_refill").withStyle(ChatFormatting.RED));
+	public Optional<TooltipComponent> getTooltipImage(ItemStack stack) {
+		return Optional.of(new Tooltip(stack.getOrDefault(TFDataComponents.POTION_FLASK_CONTENTS, PotionFlaskComponent.EMPTY), DOSES));
 	}
 
 	//copied from Item.getBarWidth, but reversed the "durability" check so it increments up, not down
@@ -150,4 +145,6 @@ public class BrittleFlaskItem extends Item {
 	public int getBarWidth(ItemStack stack) {
 		return Math.round(13.0F - Math.abs(stack.getOrDefault(TFDataComponents.POTION_FLASK_CONTENTS, PotionFlaskComponent.EMPTY).doses() - DOSES) * 13.0F / DOSES);
 	}
+
+	public record Tooltip(PotionFlaskComponent component, int maxDoses) implements TooltipComponent {}
 }

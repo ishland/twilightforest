@@ -492,7 +492,8 @@ public class LangGenerator extends TFLangProvider {
 		this.addItem(TFItems.WROUGHT_IRON_BAR, "Wrought Iron Bar");
 		this.addItem(TFItems.BRITTLE_FLASK, "Brittle Potion Flask");
 		this.addItem(TFItems.GREATER_FLASK, "Greater Potion Flask");
-		this.add("item.twilightforest.flask.doses", "Doses: %s/%s");
+		this.add("item.twilightforest.flask.empty", "Empty");
+		this.add("item.twilightforest.flask.empty_description", "Can hold multiple doses of one potion");
 		this.add("item.twilightforest.flask.no_refill", "Cannot be refilled");
 
 		this.addItem(TFItems.MAGIC_PAINTING, "Magic Painting");
