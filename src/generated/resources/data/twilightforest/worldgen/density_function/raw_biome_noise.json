@@ -1,5 +1,5 @@
 {
-  "type": "twilightforest:biome_driven_terrain",
+  "type": "twilightforest:biome_driven_noise",
   "base_factor": 8.0,
   "base_offset": -1.25,
   "depth_scalar": 1.0,
