@@ -104,6 +104,6 @@ public class TFBlockEntities {
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<MasonJarBlockEntity>> MASON_JAR = BLOCK_ENTITIES.register("mason_jar", () ->
 		BlockEntityType.Builder.of(MasonJarBlockEntity::new, TFBlocks.MASON_JAR.get()).build(null));
 
-	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<CursedSpawnerBlockEntity>> CURSED_SPAWNER = BLOCK_ENTITIES.register("cursed_spawner", () ->
-		BlockEntityType.Builder.of(CursedSpawnerBlockEntity::new, TFBlocks.CURSED_SPAWNER.value()).build(null));
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<SinisterSpawnerBlockEntity>> SINISTER_SPAWNER = BLOCK_ENTITIES.register("sinister_spawner", () ->
+		BlockEntityType.Builder.of(SinisterSpawnerBlockEntity::new, TFBlocks.SINISTER_SPAWNER.get()).build(null));
 }

@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Optional;
 
 
-public abstract class CursedSpawnerLogic extends BaseSpawner {
+public abstract class SinisterSpawnerLogic extends BaseSpawner {
 	private @Nullable BlockPos.MutableBlockPos checkPos = null;
 	private final List<BlockPos> spawnBuffer = new ArrayList<>();
 	private int countNextToSpawn = 0;
@@ -179,7 +179,7 @@ public abstract class CursedSpawnerLogic extends BaseSpawner {
 		if (blockBelow.isAir()) {
 			this.checkPos.move(Direction.DOWN);
 		} else {
-			if ((blockBelow.isSolid() || blockBelow.is(TFBlocks.ROYAL_RAGS.get())) && random.nextBoolean() && !this.spawnBuffer.contains(this.checkPos) && serverLevel.getBlockState(this.checkPos).isAir()) {
+			if ((blockBelow.isSolid() || blockBelow.is(TFBlocks.CORONATION_CARPET.get())) && random.nextBoolean() && !this.spawnBuffer.contains(this.checkPos) && serverLevel.getBlockState(this.checkPos).isAir()) {
 				// If below is solid, then maybe record this position for being clear to spawn
 				this.spawnBuffer.add(this.checkPos.immutable());
 			}

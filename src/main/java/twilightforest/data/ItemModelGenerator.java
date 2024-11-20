@@ -247,7 +247,7 @@ public class ItemModelGenerator extends ItemModelProvider {
 		toBlockModel(TFBlocks.TERRORCOTTA_ARCS.get(), prefix("block/terrorcotta_arcs"));
 		toBlockModel(TFBlocks.TERRORCOTTA_LINES.get(), prefix("block/terrorcotta_lines_0"));
 		toBlockModel(TFBlocks.TERRORCOTTA_CURVES.get(), prefix("block/terrorcotta_curves_90"));
-		carpet(TFBlocks.ROYAL_RAGS.getRegisteredName(), TFBlocks.ROYAL_RAGS.getId().withPrefix("block/"));
+		carpet(TFBlocks.CORONATION_CARPET.getRegisteredName(), TFBlocks.CORONATION_CARPET.getId().withPrefix("block/"));
 
 		withExistingParent(TFBlocks.OAK_BANISTER.getId().toString(), prefix("item/banister_item")).texture("texture", "minecraft:block/oak_planks");
 		withExistingParent(TFBlocks.SPRUCE_BANISTER.getId().toString(), prefix("item/banister_item")).texture("texture", "minecraft:block/spruce_planks");
@@ -714,7 +714,7 @@ public class ItemModelGenerator extends ItemModelProvider {
 		generated("trophy_quest", prefix("item/trophy_quest"));
 		generated("shield", prefix("item/lich_shield_frame"), prefix("item/lich_shield_fill"));
 
-		this.toBlock(TFBlocks.CURSED_SPAWNER.value());
+		this.toBlock(TFBlocks.SINISTER_SPAWNER.value());
 	}
 
 	private ItemModelBuilder fullbright(String name, ResourceLocation... layers) {
