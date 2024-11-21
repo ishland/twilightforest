@@ -91,12 +91,12 @@
     },
     {
       "biome_layers": {
-        "-1.75": "twilightforest:forest",
-        "-3.75": "twilightforest:underground"
+        "-1.7": "twilightforest:forest",
+        "-3.7": "twilightforest:underground"
       },
-      "depth": -0.75,
+      "depth": -0.7,
       "key_biome": "twilightforest:forest",
-      "scale": 4.75,
+      "scale": 4.2,
       "weight": 1.0
     },
     {

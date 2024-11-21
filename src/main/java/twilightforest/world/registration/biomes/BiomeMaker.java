@@ -19,7 +19,7 @@ import java.util.function.Consumer;
 public final class BiomeMaker extends BiomeHelper {
 	public static @Unmodifiable List<TerrainColumn> makeBiomeList(HolderGetter<Biome> biomeRegistry, Holder<Biome> undergroundBiome) {
 		return List.of(
-			biomeColumnWithUnderground(-0.75D, 4.75D, 1.0D, biomeRegistry, TFBiomes.FOREST, undergroundBiome),
+			biomeColumnWithUnderground(-0.7D, 4.20D, 1.0D, biomeRegistry, TFBiomes.FOREST, undergroundBiome),
 			biomeColumnWithUnderground(-0.8D, 3.9D, 1.0D, biomeRegistry, TFBiomes.DENSE_FOREST, undergroundBiome),
 			biomeColumnWithUnderground(-0.75D, 4.15D, 1.0D, biomeRegistry, TFBiomes.FIREFLY_FOREST, undergroundBiome),
 			biomeColumnWithUnderground(0.05D, 1.15D, 1.0D, biomeRegistry, TFBiomes.CLEARING, undergroundBiome),
