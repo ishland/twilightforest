@@ -307,6 +307,7 @@
   "block.twilightforest.carminite_builder": "Carminite Builder",
   "block.twilightforest.carminite_reactor": "Carminite Reactor",
   "block.twilightforest.casket.broken": "Your Keepsake Casket was too damaged to hold any more items. All items that would be stored in your casket were dropped on the ground.",
+  "block.twilightforest.casket.damage": "Damage: %s",
   "block.twilightforest.casket.locked": "This Casket can only be opened by %s!",
   "block.twilightforest.castle_brick": "Castle Brick",
   "block.twilightforest.castle_brick_stairs": "Castle Brick Stairs",
