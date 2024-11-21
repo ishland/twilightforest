@@ -110,7 +110,7 @@ public class LangGenerator extends TFLangProvider {
 		this.addAdvancement("naga_armors", "Naga Armorer", "Craft both %s chest and leg armor");
 		this.addAdvancement("kill_lich", "Bring Out Your Dead", "Slay the %s at top of his tower and retrieve a scepter to clear poisonous mosquitoes from the Swamp, see through blinding darkness of the Dark Forest's curse, and resist the Snowy Forest's chill");
 		this.addAdvancement("lich_scepters", "By Our Powers Combined!", "Acquire all four scepters of power");
-		this.addAdvancement("full_mettle_alchemist", "Full Mettle Alchemist", "Drink four doses of Harming II from a potion flask in under 8 seconds and survive");
+		this.addAdvancement("full_mettle_alchemist", "Full Mettle Alchemist", "Drink three doses of Harming II from a potion flask in under 6 seconds and survive");
 		this.addAdvancement("progress_labyrinth", "Mighty Stroganoff", "Eat the Meef Stroganoff to acclimatize your body to the dangerous heat of the Fire Swamp");
 		this.addAdvancement("mazebreaker", "Breaking the Maze", "Find the %s pickaxe in the secret labyrinth vault");
 		this.addAdvancement("kill_hydra", "Hydra Slayer", "Defeat the mighty %s and empower yourself");
@@ -493,7 +493,7 @@ public class LangGenerator extends TFLangProvider {
 		this.addItem(TFItems.BRITTLE_FLASK, "Brittle Potion Flask");
 		this.addItem(TFItems.GREATER_FLASK, "Greater Potion Flask");
 		this.add("item.twilightforest.flask.empty", "Empty");
-		this.add("item.twilightforest.flask.empty_description", "Can hold multiple doses of one potion");
+		this.add("item.twilightforest.flask.empty_description", "Can hold multiple potion doses");
 		this.add("item.twilightforest.flask.no_refill", "Cannot be refilled");
 
 		this.addItem(TFItems.MAGIC_PAINTING, "Magic Painting");
