@@ -68,7 +68,7 @@ public class HedgeMazeStructure extends LandmarkStructure implements CustomDensi
 				DensityFunctions.mul(
 					DensityFunctions.constant(-1),
 					DensityFunctions.add(
-						DensityFunctions.yClampedGradient(14, -77, 26, -12),
+						DensityFunctions.yClampedGradient(12 + centerPos.getY(), -77, 26, -12),
 						DensityFunctions.mul(
 							DensityFunctions.constant(-0.75),
 							new AbsoluteDifferenceFunction.Max(32, centerPos.getX() + 0.5F, centerPos.getZ() + 0.5F)
