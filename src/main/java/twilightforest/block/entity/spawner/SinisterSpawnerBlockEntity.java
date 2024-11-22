@@ -3,6 +3,7 @@ package twilightforest.block.entity.spawner;
 import com.mojang.datafixers.util.Either;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
@@ -19,23 +20,10 @@ import twilightforest.init.TFBlockEntities;
 import twilightforest.init.TFBlocks;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 public class SinisterSpawnerBlockEntity extends BlockEntity implements Spawner {
 	private final SinisterSpawnerLogic spawner = new SinisterSpawnerLogic() {
-		@Override
-		public void broadcastEvent(Level level, BlockPos pos, int eventId) {
-			level.blockEvent(pos, TFBlocks.SINISTER_SPAWNER.value(), eventId, 0);
-		}
-
-		@Override
-		public void setNextSpawnData(@Nullable Level level, BlockPos pos, SpawnData nextSpawnData) {
-			super.setNextSpawnData(level, pos, nextSpawnData);
-			if (level != null) {
-				BlockState blockstate = level.getBlockState(pos);
-				level.sendBlockUpdated(pos, blockstate, blockstate, 4);
-			}
-		}
-
 		@Override
 		public Either<BlockEntity, Entity> getOwner() {
 			return Either.left(SinisterSpawnerBlockEntity.this);
@@ -94,7 +82,23 @@ public class SinisterSpawnerBlockEntity extends BlockEntity implements Spawner {
 		this.setChanged();
 	}
 
-	public BaseSpawner getSpawner() {
+	public SinisterSpawnerLogic getSpawner() {
 		return this.spawner;
+	}
+
+	public boolean setParticles(List<ParticleOptions> particles) {
+		return this.getSpawner().setParticles(particles);
+	}
+
+	public boolean addParticle(ParticleOptions particle) {
+		return this.getSpawner().addParticle(particle);
+	}
+
+	public boolean removeParticle(ParticleOptions particle) {
+		return this.getSpawner().removeParticle(particle);
+	}
+
+	public void sendChanges() {
+		this.getLevel().sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 3);
 	}
 }
