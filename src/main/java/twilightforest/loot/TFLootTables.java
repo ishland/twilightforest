@@ -93,6 +93,8 @@ public class TFLootTables {
 	public static final ResourceKey<LootTable> LIFEDRAIN_SCEPTER_KILL_BONUS = register("items/lifedrain_scepter_kill_bonus");
 	public static final ResourceKey<LootTable> KNIGHT_PHANTOM_DEFEATED = register("entities/knight_phantom_defeated");
 
+	public static final ResourceKey<LootTable> OMINOUS_SPAWNER_DROPS = register("blocks/ominous_spawner_drops");
+
 	// Big bug squish loot
 	public static final ResourceKey<LootTable> CICADA_SQUISH_DROPS = register("blocks/cicada_squish");
 	public static final ResourceKey<LootTable> FIREFLY_SQUISH_DROPS = register("blocks/firefly_squish");

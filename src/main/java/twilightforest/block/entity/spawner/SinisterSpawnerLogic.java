@@ -244,7 +244,7 @@ public abstract class SinisterSpawnerLogic extends BaseSpawner {
 		super.load(level, pos, tag);
 
 		this.particleOptions.clear();
-		DataResult<List<ParticleOptions>> particleOptions = PARTICLES_CODEC.parse(NbtOps.INSTANCE, tag.get("particleOptions"));
+		DataResult<List<ParticleOptions>> particleOptions = PARTICLES_CODEC.parse(NbtOps.INSTANCE, tag.get("ParticleOptions"));
 		if (particleOptions.isSuccess()) {
 			this.particleOptions.addAll(particleOptions.getPartialOrThrow());
 		}
@@ -256,7 +256,7 @@ public abstract class SinisterSpawnerLogic extends BaseSpawner {
 
 		DataResult<Tag> encoded = PARTICLES_CODEC.encodeStart(NbtOps.INSTANCE, List.copyOf(this.particleOptions));
 		if (encoded.isSuccess()) {
-			saved.put("particleOptions", encoded.getPartialOrThrow());
+			saved.put("ParticleOptions", encoded.getPartialOrThrow());
 		}
 
 		return saved;
