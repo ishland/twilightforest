@@ -170,7 +170,7 @@ public class LichYardBox extends StructurePiece implements PieceBeardifierModifi
 		Optional<BoundingBox> fullYard = BoundingBox.encapsulatingPositions(Streams.concat(foyerRootPos, fencePostPos).collect(Collectors.toUnmodifiableSet()));
 		if (fullYard.isEmpty()) return;
 
-		LichYardBox lichYardDirt = new LichYardBox(fullYard.get(), 8, Direction.Axis.Y, true, 0.1f, 0);
+		LichYardBox lichYardDirt = new LichYardBox(fullYard.get().inflatedBy(3), 8, Direction.Axis.Y, true, 0.1f, 0);
 		pieces.addPiece(lichYardDirt);
 		lichYardDirt.addDecoration(foyerPiece, pieces, random, context);
 	}
