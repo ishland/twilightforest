@@ -166,20 +166,6 @@ public class LichPerimeterFence extends TwilightJigsawPiece implements PieceBear
 		}
 	}
 
-	@Deprecated(forRemoval = true)
-	public static void generatePerimeter2(LichPerimeterFence frontFence, StructureTemplateManager structureManager, StructurePiecesBuilder structurePiecesBuilder, WorldgenRandom random, Structure.GenerationContext context, BoundingBox leftDest, BoundingBox rightDest) {
-		ResourceLocation fullFenceId = TwilightForestMod.prefix("lich_tower/outer_fence_7");
-
-		generateSidedPerimeter(frontFence, structureManager, structurePiecesBuilder, random, context, fullFenceId, leftDest, LichPerimeterFence::getLeftJunctions, Rotation.CLOCKWISE_90);
-
-		// TODO deduplicate below into above
-
-		Function<LichPerimeterFence, List<JigsawRecord>> rightJunctionGetter = LichPerimeterFence::getRightJunctions;
-		LichPerimeterFence right = nextFence(frontFence, structureManager, structurePiecesBuilder, random, rightJunctionGetter.apply(frontFence), Rotation.NONE, context, fullFenceId);
-		if (right == null) return;
-		right = generateUntilNearDest(structureManager, structurePiecesBuilder, random, context, rightDest, 4, right, Rotation.COUNTERCLOCKWISE_90, LichPerimeterFence::getRightJunctions, fullFenceId);
-	}
-
 	/**
 	 * Generates fences from the starting piece up until the furthest fencepost sits directly in front of the destination sidetower's box
 	 */
@@ -254,8 +240,8 @@ public class LichPerimeterFence extends TwilightJigsawPiece implements PieceBear
 		FrontAndTop connectOrientation = FrontAndTop.fromFrontAndTop(orientation.front().getOpposite(), rotation.rotate(orientation.top()));
 		BlockPos bottomCenter = parentFence.bottomCenter();
 
-		int baseY = context.chunkGenerator().getBaseHeight(bottomCenter.getX(), bottomCenter.getZ(), Heightmap.Types.WORLD_SURFACE_WG, context.heightAccessor(), context.randomState());
-		BlockPos parentPos = parentFence.templatePosition().above(baseY - 2 - parentFence.templatePosition().getY());
+		int dY = -1 - parentFence.templatePosition().getY() + context.chunkGenerator().getBaseHeight(bottomCenter.getX(), bottomCenter.getZ(), Heightmap.Types.WORLD_SURFACE_WG, context.heightAccessor(), context.randomState());
+		BlockPos parentPos = parentFence.templatePosition().above(Mth.sign(dY) - 1);
 
 		JigsawPlaceContext placeContext = JigsawPlaceContext.pickPlaceableJunction(parentPos, junction.pos(), connectOrientation, structureManager, templateId, junction.target(), random);
 
