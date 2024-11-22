@@ -157,7 +157,7 @@ public final class LichTowerSegment extends TwilightJigsawPiece implements Piece
 
 	@Override
 	protected void handleDataMarker(String label, BlockPos pos, WorldGenLevel level, RandomSource random, BoundingBox chunkBounds, ChunkGenerator chunkGen) {
-		LichBossRoom.placePainting(label, pos, level, random, chunkBounds, this.placeSettings.getRotation(), 1, 16, CustomTagGenerator.PaintingVariantTagGenerator.LICH_TOWER_PAINTINGS);
+		LichBossRoom.placePainting(label, pos, level, random, chunkBounds, this.placeSettings.getRotation(), 2, 10, CustomTagGenerator.PaintingVariantTagGenerator.LICH_TOWER_PAINTINGS);
 	}
 
 	@Override
