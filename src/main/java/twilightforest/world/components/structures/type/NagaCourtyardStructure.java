@@ -2,6 +2,7 @@ package twilightforest.world.components.structures.type;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
@@ -9,12 +10,17 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.WeightedRandomList;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.levelgen.DensityFunction;
+import net.minecraft.world.level.levelgen.DensityFunctions;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.structure.*;
 import net.minecraft.world.level.saveddata.maps.MapDecorationType;
+import twilightforest.TwilightForestMod;
 import twilightforest.data.tags.BiomeTagGenerator;
 import twilightforest.init.TFMapDecorations;
 import twilightforest.init.TFStructureTypes;
+import twilightforest.world.components.chunkgenerators.AbsoluteDifferenceFunction;
+import twilightforest.world.components.structures.CustomDensitySource;
 import twilightforest.world.components.structures.courtyard.CourtyardMain;
 import twilightforest.world.components.structures.util.ConquerableStructure;
 
@@ -22,7 +28,7 @@ import java.util.Arrays;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class NagaCourtyardStructure extends ConquerableStructure {
+public class NagaCourtyardStructure extends ConquerableStructure implements CustomDensitySource {
 	public static final MapCodec<NagaCourtyardStructure> CODEC = RecordCodecBuilder.mapCodec(instance -> landmarkCodec(instance).apply(instance, NagaCourtyardStructure::new));
 
 	public NagaCourtyardStructure(DecorationConfig decorationConfig, boolean centerInChunk, Optional<Holder<MapDecorationType>> structureIcon, StructureSettings structureSettings) {
@@ -48,6 +54,29 @@ public class NagaCourtyardStructure extends ConquerableStructure {
 				Arrays.stream(MobCategory.values()).collect(Collectors.toMap(category -> category, category -> new StructureSpawnOverride(StructureSpawnOverride.BoundingBoxType.STRUCTURE, WeightedRandomList.create()))), // Landmarks have Controlled Mob spawning
 				GenerationStep.Decoration.SURFACE_STRUCTURES,
 				TerrainAdjustment.BEARD_THIN
+			)
+		);
+	}
+
+	@Override
+	public DensityFunction getStructureTerraformer(ChunkPos chunkPosAt, StructureStart structurePieceSource) {
+		BlockPos centerPos = structurePieceSource.getBoundingBox().getCenter();
+		TwilightForestMod.LOGGER.error("{}", centerPos.getY());
+		int offset = centerPos.getY() + 24;
+		return DensityFunctions.min(
+			DensityFunctions.zero(),
+			DensityFunctions.max(
+				DensityFunctions.yClampedGradient(centerPos.getY() - 6, centerPos.getY() -2, 0, -100000),
+				DensityFunctions.mul(
+					DensityFunctions.constant(-1),
+					DensityFunctions.add(
+						DensityFunctions.yClampedGradient(offset, -400 + offset, 61, -200),
+						DensityFunctions.mul(
+							DensityFunctions.constant(-0.75),
+							new AbsoluteDifferenceFunction.Max(100, centerPos.getX() + 0.5F, centerPos.getZ() + 0.5F)
+						)
+					)
+				)
 			)
 		);
 	}
