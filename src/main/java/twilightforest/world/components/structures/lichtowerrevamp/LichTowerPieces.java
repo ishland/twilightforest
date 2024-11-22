@@ -12,6 +12,9 @@ import java.util.Set;
 
 // TODO: Move to DataMaps if possible to obtain RegistryAccess
 public final class LichTowerPieces {
+	public static final int YARD_SPAWNS = 0;
+	public static final int INTERIOR_SPAWNS = 1;
+
 	public static final ResourceLocation ENCLOSED_BRIDGE_CENTRAL = TwilightForestMod.prefix("lich_tower/central_bridge");
 	static final ResourceLocation[] CENTER_BRIDGES = new ResourceLocation[] {
 		ENCLOSED_BRIDGE_CENTRAL,

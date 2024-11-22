@@ -27,6 +27,7 @@ import twilightforest.init.TFStructurePieceTypes;
 import twilightforest.util.BoundingBoxUtils;
 import twilightforest.util.jigsaw.JigsawPlaceContext;
 import twilightforest.util.jigsaw.JigsawRecord;
+import twilightforest.world.components.structures.SpawnIndexProvider;
 import twilightforest.world.components.structures.util.SortablePiece;
 
 import java.util.ArrayList;
@@ -35,7 +36,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class LichYardBox extends StructurePiece implements PieceBeardifierModifier, SortablePiece {
+public class LichYardBox extends StructurePiece implements PieceBeardifierModifier, SortablePiece, SpawnIndexProvider {
 	private final float edgeFeatheringRange;
 	private final Direction.Axis placeGraveAxis;
 	private final boolean doDirtMotley;
@@ -255,5 +256,10 @@ public class LichYardBox extends StructurePiece implements PieceBeardifierModifi
 	@Override
 	public int getSortKey() {
 		return this.doDirtMotley ? Integer.MIN_VALUE : Integer.MIN_VALUE + 255;
+	}
+
+	@Override
+	public int getSpawnIndex() {
+		return LichTowerPieces.YARD_SPAWNS;
 	}
 }

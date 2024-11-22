@@ -40,6 +40,7 @@ public class LichTowerStructure extends ControlledSpawningStructure {
 	public static final MapCodec<LichTowerStructure> CODEC = RecordCodecBuilder.mapCodec(instance ->
 		controlledSpawningCodec(instance).apply(instance, LichTowerStructure::new)
 	);
+	public static final boolean REVAMP = false;
 
 	public LichTowerStructure(ControlledSpawningConfig controlledSpawningConfig, AdvancementLockConfig advancementLockConfig, HintConfig hintConfig, DecorationConfig decorationConfig, boolean centerInChunk, Optional<Holder<MapDecorationType>> structureIcon, StructureSettings structureSettings) {
 		super(controlledSpawningConfig, advancementLockConfig, hintConfig, decorationConfig, centerInChunk, structureIcon, structureSettings);
@@ -47,8 +48,7 @@ public class LichTowerStructure extends ControlledSpawningStructure {
 
 	@Override
 	protected StructurePiece getFirstPiece(GenerationContext context, RandomSource random, ChunkPos chunkPos, int x, int y, int z) {
-		return new TowerMainComponent(random, 0, x, y, z);
-		// return makeFoyer(context, random, x, y + 1, z);
+		return REVAMP ? makeFoyer(context, random, x, y, z) : new TowerMainComponent(random, 0, x, y, z);
 	}
 
 	@Nullable
@@ -76,16 +76,37 @@ public class LichTowerStructure extends ControlledSpawningStructure {
 		return TFStructureTypes.LICH_TOWER.get();
 	}
 
+	@SuppressWarnings("unchecked")
 	public static LichTowerStructure buildLichTowerConfig(BootstrapContext<Structure> context) {
-		return new LichTowerStructure(
-			ControlledSpawningConfig.firstIndexMonsters(
+		final ControlledSpawningConfig monsters;
+		if (REVAMP) { // For the new Lich Tower
+			List<MobSpawnSettings.SpawnerData> yardSpawns = List.of(
+				new MobSpawnSettings.SpawnerData(TFEntities.RISING_ZOMBIE.value(), 2, 1, 2)
+			);
+			List<MobSpawnSettings.SpawnerData> interiorSpawns = List.of(
 				new MobSpawnSettings.SpawnerData(EntityType.ZOMBIE, 10, 1, 2),
 				new MobSpawnSettings.SpawnerData(EntityType.SKELETON, 10, 1, 2),
 				new MobSpawnSettings.SpawnerData(EntityType.CREEPER, 1, 1, 1),
 				new MobSpawnSettings.SpawnerData(EntityType.ENDERMAN, 1, 1, 2),
-				new MobSpawnSettings.SpawnerData(TFEntities.DEATH_TOME.get(), 10, 2, 3),
+				new MobSpawnSettings.SpawnerData(TFEntities.DEATH_TOME.value(), 10, 2, 3),
 				new MobSpawnSettings.SpawnerData(EntityType.WITCH, 1, 1, 1)
-			),
+			);
+			monsters = ControlledSpawningConfig.justMonsters(
+				yardSpawns,
+				interiorSpawns
+			);
+		} else { // For the current Lich Tower
+			monsters = ControlledSpawningConfig.firstIndexMonsters(
+				new MobSpawnSettings.SpawnerData(EntityType.ZOMBIE, 10, 1, 2),
+				new MobSpawnSettings.SpawnerData(EntityType.SKELETON, 10, 1, 2),
+				new MobSpawnSettings.SpawnerData(EntityType.CREEPER, 1, 1, 1),
+				new MobSpawnSettings.SpawnerData(EntityType.ENDERMAN, 1, 1, 2),
+				new MobSpawnSettings.SpawnerData(TFEntities.DEATH_TOME.value(), 10, 2, 3),
+				new MobSpawnSettings.SpawnerData(EntityType.WITCH, 1, 1, 1)
+			);
+		}
+		return new LichTowerStructure(
+			monsters,
 			new AdvancementLockConfig(List.of(TwilightForestMod.prefix("progress_naga"))),
 			new HintConfig(HintConfig.book("lichtower", 4), TFEntities.KOBOLD.get()),
 			new DecorationConfig(2.5f, false, true, false, true),

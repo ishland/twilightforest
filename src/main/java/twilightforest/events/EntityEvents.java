@@ -70,7 +70,7 @@ import twilightforest.init.*;
 import twilightforest.item.FieryArmorItem;
 import twilightforest.item.YetiArmorItem;
 import twilightforest.network.WipeOreMeterPacket;
-import twilightforest.world.components.structures.TFStructureComponent;
+import twilightforest.world.components.structures.SpawnIndexProvider;
 import twilightforest.world.components.structures.finalcastle.FinalCastleBossGazeboComponent;
 import twilightforest.world.components.structures.start.TFStructureStart;
 import twilightforest.world.components.structures.type.HollowHillStructure;
@@ -337,12 +337,8 @@ public class EntityEvents {
 	private static int getSpawnListIndexAt(StructureStart start, BlockPos pos) {
 		int highestFoundIndex = -1;
 		for (StructurePiece component : start.getPieces()) {
-			if (component.getBoundingBox().isInside(pos)) {
-				if (component instanceof TFStructureComponent tfComponent) {
-					if (tfComponent.spawnListIndex > highestFoundIndex)
-						highestFoundIndex = tfComponent.spawnListIndex;
-				} else
-					return 0;
+			if (component.getBoundingBox().isInside(pos) && component instanceof SpawnIndexProvider indexProvider && indexProvider.getSpawnIndex() > highestFoundIndex) {
+				highestFoundIndex = indexProvider.getSpawnIndex();
 			}
 		}
 		return highestFoundIndex;

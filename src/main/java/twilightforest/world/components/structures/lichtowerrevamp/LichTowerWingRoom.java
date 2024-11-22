@@ -69,6 +69,7 @@ import twilightforest.util.WorldUtil;
 import twilightforest.util.jigsaw.JigsawPlaceContext;
 import twilightforest.util.jigsaw.JigsawRecord;
 import twilightforest.util.jigsaw.JigsawUtil;
+import twilightforest.world.components.structures.SpawnIndexProvider;
 import twilightforest.world.components.structures.TwilightJigsawPiece;
 import twilightforest.world.components.structures.TwilightTemplateStructurePiece;
 
@@ -78,7 +79,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 
-public final class LichTowerWingRoom extends TwilightJigsawPiece implements PieceBeardifierModifier {
+public final class LichTowerWingRoom extends TwilightJigsawPiece implements PieceBeardifierModifier, SpawnIndexProvider {
 	private final int roomSize;
 	private final boolean generateGround;
 	private final int ladderIndex;
@@ -711,5 +712,10 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 	@Override
 	public int getGroundLevelDelta() {
 		return 0;
+	}
+
+	@Override
+	public int getSpawnIndex() {
+		return LichTowerPieces.INTERIOR_SPAWNS;
 	}
 }

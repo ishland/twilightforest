@@ -27,11 +27,12 @@ import twilightforest.init.TFStructurePieceTypes;
 import twilightforest.init.custom.MagicPaintingVariants;
 import twilightforest.util.jigsaw.JigsawPlaceContext;
 import twilightforest.util.jigsaw.JigsawRecord;
+import twilightforest.world.components.structures.SpawnIndexProvider;
 import twilightforest.world.components.structures.TwilightJigsawPiece;
 
 import java.util.Optional;
 
-public class LichTowerMagicGallery extends TwilightJigsawPiece implements PieceBeardifierModifier {
+public class LichTowerMagicGallery extends TwilightJigsawPiece implements PieceBeardifierModifier, SpawnIndexProvider {
 	public LichTowerMagicGallery(StructurePieceSerializationContext ctx, CompoundTag compoundTag) {
 		super(TFStructurePieceTypes.LICH_MAGIC_GALLERY.value(), compoundTag, ctx, readSettings(compoundTag));
 
@@ -110,5 +111,10 @@ public class LichTowerMagicGallery extends TwilightJigsawPiece implements PieceB
 			pieceAccessor.addPiece(room);
 			room.addChildren(parent, pieceAccessor, random);
 		}
+	}
+
+	@Override
+	public int getSpawnIndex() {
+		return LichTowerPieces.INTERIOR_SPAWNS;
 	}
 }

@@ -25,12 +25,13 @@ import twilightforest.util.DirectionUtil;
 import twilightforest.util.RotationUtil;
 import twilightforest.util.jigsaw.JigsawPlaceContext;
 import twilightforest.util.jigsaw.JigsawRecord;
+import twilightforest.world.components.structures.SpawnIndexProvider;
 import twilightforest.world.components.structures.TwilightJigsawPiece;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public final class LichTowerFoyer extends TwilightJigsawPiece implements PieceBeardifierModifier {
+public final class LichTowerFoyer extends TwilightJigsawPiece implements PieceBeardifierModifier, SpawnIndexProvider {
 	private final boolean putChest;
 	private final boolean chestSide;
 
@@ -137,5 +138,10 @@ public final class LichTowerFoyer extends TwilightJigsawPiece implements PieceBe
 	@Override
 	public int getGroundLevelDelta() {
 		return 1;
+	}
+
+	@Override
+	public int getSpawnIndex() {
+		return LichTowerPieces.INTERIOR_SPAWNS;
 	}
 }
