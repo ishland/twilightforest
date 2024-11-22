@@ -98,10 +98,7 @@ public class FallenTrunkPiece extends StructurePiece {
 				if (Math.abs(dx - 1.5) + Math.abs(dy - 1.5) != 2)
 					continue;
 
-				for (int dz = 0; dz < length; dz++) {
-					BlockPos offsetPos = pos.offset(dx, dy, dz);
-					this.placeLog(level, log.getState(random, offsetPos).trySetValue(RotatedPillarBlock.AXIS, Direction.Axis.Z), dx, dy, dz, box, random, hasHole, hole);
-				}
+				generateTrunkRod(level, random, box, pos, dx, dy, hasHole, hole);
 			}
 		}
 	}
@@ -109,7 +106,7 @@ public class FallenTrunkPiece extends StructurePiece {
 	private void generateFallenTrunk(WorldGenLevel level, RandomSource random, BoundingBox box, BlockPos pos, boolean hasHole, boolean hasSpawnerAndChests) {
 		generateTrunk(level, random, box, pos, hasHole);
 		if (hasSpawnerAndChests)
-			generateSpawnerAndChests(level, random, box, pos);
+			generateSpawnerAndChests(level, random, box);
 	}
 
 	private void generateTrunk(WorldGenLevel level, RandomSource random, BoundingBox box, BlockPos pos, boolean hasHole) {
@@ -122,31 +119,44 @@ public class FallenTrunkPiece extends StructurePiece {
 				int dist = getDist(dx, dy);
 				if (dist > radius || dist <= hollow)
 					continue;
-				System.out.println(convertXYtoLength(dx, dy));
-				for (int dz = ERODED_LENGTH; dz < length; dz++) {
-					if (dz > length - ERODED_LENGTH && random.nextBoolean()) {
-						dz = length + 1;
-						continue;
-					}
 
-					BlockPos offsetPos = pos.offset(dx, dy, dz);
-					this.placeLog(level, log.getState(random, offsetPos).trySetValue(RotatedPillarBlock.AXIS, Direction.Axis.Z), dx, dy, dz, box, random, hasHole, hole);
-				}
-				for (int dz = ERODED_LENGTH; dz > 0; dz--) {
-					if (random.nextBoolean()) {
-						dz = 0;
-						continue;
-					}
-
-					BlockPos offsetPos = pos.offset(dx, dy, dz);
-					this.placeLog(level, log.getState(random, offsetPos).trySetValue(RotatedPillarBlock.AXIS, Direction.Axis.Z), dx, dy, dz, box, random, hasHole, hole);
-				}
+				generateTrunkRod(level, random, box, pos, dx, dy, hasHole, hole);
 			}
 		}
 	}
 
+	private void generateTrunkRod(WorldGenLevel level, RandomSource random, BoundingBox box, BlockPos pos, int dx, int dy, boolean hasHole, Hole hole) {
+		generateTrunkMainRod(level, random, box, pos, dx, dy, hasHole, hole);
+		generateErodedEnds(level, random, box, pos, dx, dy, hasHole, hole);
+	}
 
-	private void generateSpawnerAndChests(WorldGenLevel level, RandomSource random, BoundingBox box, BlockPos pos) {
+	private void generateTrunkMainRod(WorldGenLevel level, RandomSource random, BoundingBox box, BlockPos pos, int dx, int dy, boolean hasHole, Hole hole) {
+		for (int dz = ERODED_LENGTH + 1; dz < length - ERODED_LENGTH; dz++) {
+			BlockPos offsetPos = pos.offset(dx, dy, dz);
+			this.placeLog(level, log.getState(random, offsetPos).trySetValue(RotatedPillarBlock.AXIS, Direction.Axis.Z), dx, dy, dz, box, random, hasHole, hole);
+		}
+	}
+
+	private void generateErodedEnds(WorldGenLevel level, RandomSource random, BoundingBox box, BlockPos pos, int dx, int dy, boolean hasHole, Hole hole) {
+		for (int dz = ERODED_LENGTH; dz > 0; dz--) {
+			if (random.nextBoolean())
+				break;
+
+			BlockPos offsetPos = pos.offset(dx, dy, dz);
+			this.placeLog(level, log.getState(random, offsetPos).trySetValue(RotatedPillarBlock.AXIS, Direction.Axis.Z), dx, dy, dz, box, random, hasHole, hole);
+		}
+
+		for (int dz = length - ERODED_LENGTH; dz < length; dz++) {
+			if (random.nextBoolean())
+				break;
+
+			BlockPos offsetPos = pos.offset(dx, dy, dz);
+			this.placeLog(level, log.getState(random, offsetPos).trySetValue(RotatedPillarBlock.AXIS, Direction.Axis.Z), dx, dy, dz, box, random, hasHole, hole);
+		}
+	}
+
+
+	private void generateSpawnerAndChests(WorldGenLevel level, RandomSource random, BoundingBox box) {
 		BlockPos spawnerPos = new BlockPos(radius, 2, length / 2);
 		this.placeBlock(level, Blocks.SPAWNER.defaultBlockState(), spawnerPos.getX(), spawnerPos.getY(), spawnerPos.getZ(), box);
 		BlockPos worldSpawnerPos = getWorldPos(spawnerPos.getX(), spawnerPos.getY(), spawnerPos.getZ());
@@ -217,12 +227,12 @@ public class FallenTrunkPiece extends StructurePiece {
 		return length - 1;
 	}
 
-	private class Hole {
+	private static class Hole {
 		private final int X_MIN_SIZE;
 		private final int X_MAX_SIZE;
 		private final int Y_MIN_SIZE;
 		private final int Y_MAX_SIZE;
-		private boolean[][] hole;
+		private final boolean[][] hole;
 		private Hole(FallenTrunkPiece piece, RandomSource random) {
 			this.X_MIN_SIZE = piece.length / 6;
 			this.X_MAX_SIZE = piece.length / 4 + 1;
