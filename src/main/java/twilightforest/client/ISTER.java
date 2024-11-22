@@ -46,6 +46,7 @@ import twilightforest.client.model.entity.KnightmetalShieldModel;
 import twilightforest.client.model.entity.LichModel;
 import twilightforest.client.model.entity.TrophyBlockModel;
 import twilightforest.client.renderer.block.JarRenderer;
+import twilightforest.client.renderer.block.KeepsakeCasketRenderer;
 import twilightforest.client.renderer.block.SkullCandleRenderer;
 import twilightforest.client.renderer.block.TrophyRenderer;
 import twilightforest.client.renderer.entity.LichRenderer;
@@ -155,7 +156,8 @@ public class ISTER extends BlockEntityWithoutLevelRenderer {
 				}
 
 			} else if (block instanceof KeepsakeCasketBlock) {
-				minecraft.getBlockEntityRenderDispatcher().renderItem(this.casket, pose, buffers, light, overlay);
+				int damage = stack.getOrDefault(TFDataComponents.CASKET_DAMAGE, 0);
+				((KeepsakeCasketRenderer<KeepsakeCasketBlockEntity>)minecraft.getBlockEntityRenderDispatcher().getRenderer(this.casket)).renderCasket(TFBlocks.KEEPSAKE_CASKET.get().defaultBlockState(), damage, 0.0F, pose, buffers, light, overlay);
 			} else if (block instanceof TFChestBlock) {
 				minecraft.getBlockEntityRenderDispatcher().renderItem(this.chestEntities.get(block), pose, buffers, light, overlay);
 			} else if (block instanceof TFTrappedChestBlock) {

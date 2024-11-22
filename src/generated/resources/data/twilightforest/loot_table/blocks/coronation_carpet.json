@@ -11,11 +11,11 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "twilightforest:royal_rags"
+          "name": "twilightforest:coronation_carpet"
         }
       ],
       "rolls": 1.0
     }
   ],
-  "random_sequence": "twilightforest:blocks/royal_rags"
+  "random_sequence": "twilightforest:blocks/coronation_carpet"
 }

@@ -44,6 +44,8 @@ public final class TFSounds {
 	public static final DeferredHolder<SoundEvent, SoundEvent> BUILDER_OFF = createEvent("block.twilightforest.builder.off");
 	public static final DeferredHolder<SoundEvent, SoundEvent> BUILDER_ON = createEvent("block.twilightforest.builder.on");
 	public static final DeferredHolder<SoundEvent, SoundEvent> BUILDER_REPLACE = createEvent("block.twilightforest.builder.replace");
+	public static final DeferredHolder<SoundEvent, SoundEvent> CANDELABRA_LIGHT = createEvent("block.twilightforest.candelabra.light");
+	public static final DeferredHolder<SoundEvent, SoundEvent> CANDELABRA_OMINOUS = createEvent("block.twilightforest.candelabra.ominous");
 	public static final DeferredHolder<SoundEvent, SoundEvent> CARMINITE_BROODLING_AMBIENT = createEvent("entity.twilightforest.carminite_broodling.ambient");
 	public static final DeferredHolder<SoundEvent, SoundEvent> CARMINITE_BROODLING_DEATH = createEvent("entity.twilightforest.carminite_broodling.death");
 	public static final DeferredHolder<SoundEvent, SoundEvent> CARMINITE_BROODLING_HURT = createEvent("entity.twilightforest.carminite_broodling.hurt");

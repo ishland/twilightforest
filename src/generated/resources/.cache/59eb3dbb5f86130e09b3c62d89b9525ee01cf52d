@@ -1,4 +1,4 @@
-// 1.21.1	2024-11-16T02:02:36.5234798	Loot Tables
+// 1.21.1	2024-11-20T12:52:13.5764742	Loot Tables
 483a7e0c99d5cabeab1ba9f04bd8e88d0a8f7386 data/twilightforest/loot_table/aurora_cache.json
 002a6e2eccdc92db019bd775911912877b26771f data/twilightforest/loot_table/aurora_room.json
 6b7c07d237e56f84d11d308552cd943af7a906e5 data/twilightforest/loot_table/basement.json
@@ -58,6 +58,7 @@ b4c4d5b0a0e5856830258bb102c88764f346bd9d data/twilightforest/loot_table/blocks/c
 9642294508fe8d606c49c8842b8ff793dffd1ac4 data/twilightforest/loot_table/blocks/cinder_log.json
 4ec085fa331e1474e36b937eb194416069584abd data/twilightforest/loot_table/blocks/cinder_wood.json
 279cd241ebe172ea0342d31b004bf7cc4317eff4 data/twilightforest/loot_table/blocks/clover_patch.json
+6fd3fd035e9e836a0df8971254a7f126feaf5b52 data/twilightforest/loot_table/blocks/coronation_carpet.json
 bd732b3cf20551d2f616f6e763af0b27c594c6a2 data/twilightforest/loot_table/blocks/cracked_castle_brick.json
 ac681f37ae9737fb46c45b8fbf628eceee0cf491 data/twilightforest/loot_table/blocks/cracked_castle_brick_stairs.json
 c3e4196fd934fec075c373e4d9d6c9c87dc5c728 data/twilightforest/loot_table/blocks/cracked_deadrock.json
@@ -296,7 +297,6 @@ d4cf2ba1c9d5ad6b35a2ef1b173496f27a7c789f data/twilightforest/loot_table/blocks/r
 fff8c14cea64f079189a2e6eeb2bc54526fe0a3c data/twilightforest/loot_table/blocks/root.json
 ab8d5987d12f7961a1f8bc2669c889ef58eb3aff data/twilightforest/loot_table/blocks/root_strand.json
 fb7868a21fc15bb2227693e0604831ce049a0772 data/twilightforest/loot_table/blocks/rope.json
-848072b43cc9627270fd4259d33a5087da86e931 data/twilightforest/loot_table/blocks/royal_rags.json
 ef904a158987dbd9963909ef8fb80667071025b7 data/twilightforest/loot_table/blocks/skeleton_skull_candle.json
 ae6d7a73102bfb46c3fe678debd0a35187e9125f data/twilightforest/loot_table/blocks/skeleton_wall_skull_candle.json
 b7336d3399cc73483a2b33de9185b17f64d19c1d data/twilightforest/loot_table/blocks/smoker.json

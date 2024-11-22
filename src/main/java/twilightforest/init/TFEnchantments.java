@@ -39,7 +39,6 @@ public class TFEnchantments {
 	}
 
 	public static void bootstrap(BootstrapContext<Enchantment> context) {
-		HolderGetter<DamageType> damageTypes = context.lookup(Registries.DAMAGE_TYPE);
 		HolderGetter<Enchantment> enchantments = context.lookup(Registries.ENCHANTMENT);
 		HolderGetter<Item> items = context.lookup(Registries.ITEM);
 		HolderGetter<Block> blocks = context.lookup(Registries.BLOCK);
@@ -97,7 +96,7 @@ public class TFEnchantments {
 				Optional.empty())));
 
 		register(context, RENEWAL, new Enchantment.Builder(Enchantment.definition(
-			HolderSet.direct(TFItems.TWILIGHT_SCEPTER, TFItems.LIFEDRAIN_SCEPTER, TFItems.ZOMBIE_SCEPTER, TFItems.FORTIFICATION_SCEPTER),
+			items.getOrThrow(ItemTagGenerator.SCEPTERS),
 			1, 1,
 			Enchantment.dynamicCost(5, 9),
 			Enchantment.dynamicCost(20, 9),

@@ -58,6 +58,7 @@ import twilightforest.client.model.block.patch.PatchModelLoader;
 import twilightforest.client.model.entity.*;
 import twilightforest.client.model.item.TrollsteinnModel;
 import twilightforest.client.particle.*;
+import twilightforest.client.renderer.PotionFlaskTooltipComponent;
 import twilightforest.client.renderer.TFSkyRenderer;
 import twilightforest.client.renderer.block.*;
 import twilightforest.client.renderer.entity.*;
@@ -100,6 +101,8 @@ public class RegistrationEvents {
 		bus.addListener(OverlayHandler::registerOverlays);
 
 		bus.addListener(TFShaders::registerShaders);
+
+		bus.addListener(RegisterClientTooltipComponentFactoriesEvent.class, event -> event.register(BrittleFlaskItem.Tooltip.class, PotionFlaskTooltipComponent::new));
 	}
 
 	private static void registerModelLoaders(ModelEvent.RegisterGeometryLoaders event) {
@@ -415,7 +418,7 @@ public class RegistrationEvents {
 		event.registerBlockEntityRenderer(TFBlockEntities.CANDELABRA.get(), CandelabraRenderer::new);
 		event.registerBlockEntityRenderer(TFBlockEntities.JAR.get(), JarRenderer::new);
 		event.registerBlockEntityRenderer(TFBlockEntities.MASON_JAR.get(), JarRenderer.MasonJarRenderer::new);
-		event.registerBlockEntityRenderer(TFBlockEntities.CURSED_SPAWNER.get(), CursedSpawnerRenderer::new);
+		event.registerBlockEntityRenderer(TFBlockEntities.SINISTER_SPAWNER.get(), SinisterSpawnerRenderer::new);
 	}
 
 	private static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {

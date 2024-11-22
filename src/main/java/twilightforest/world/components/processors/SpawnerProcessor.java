@@ -63,7 +63,7 @@ public class SpawnerProcessor extends StructureProcessor {
 	public StructureTemplate.StructureBlockInfo process(LevelReader level, BlockPos offset, BlockPos piecePos, StructureTemplate.StructureBlockInfo originalInfo, StructureTemplate.StructureBlockInfo modifiedInfo, StructurePlaceSettings placeSettings, @Nullable StructureTemplate template) {
 		CompoundTag nbtInfo = modifiedInfo.nbt();
 
-		if (nbtInfo != null && (modifiedInfo.state().is(Blocks.SPAWNER) || modifiedInfo.state().is(TFBlocks.CURSED_SPAWNER))) {
+		if (nbtInfo != null && (modifiedInfo.state().is(Blocks.SPAWNER) || modifiedInfo.state().is(TFBlocks.SINISTER_SPAWNER))) {
 			if (this.range > 0) {
 				nbtInfo.putShort("SpawnRange", this.range);
 			}

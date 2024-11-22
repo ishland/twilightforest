@@ -24,11 +24,6 @@
   "slots": [
     "hand"
   ],
-  "supported_items": [
-    "twilightforest:twilight_scepter",
-    "twilightforest:lifedrain_scepter",
-    "twilightforest:zombie_scepter",
-    "twilightforest:fortification_scepter"
-  ],
+  "supported_items": "#twilightforest:scepters",
   "weight": 1
 }
