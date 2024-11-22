@@ -4,22 +4,24 @@ import com.mojang.datafixers.util.Either;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.level.BaseSpawner;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.SpawnData;
 import net.minecraft.world.level.Spawner;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.loot.LootTable;
+import org.jetbrains.annotations.Nullable;
 import twilightforest.init.TFBlockEntities;
-import twilightforest.init.TFBlocks;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 public class SinisterSpawnerBlockEntity extends BlockEntity implements Spawner {
@@ -29,6 +31,7 @@ public class SinisterSpawnerBlockEntity extends BlockEntity implements Spawner {
 			return Either.left(SinisterSpawnerBlockEntity.this);
 		}
 	};
+	@Nullable private ResourceKey<LootTable> lootTable = null;
 
 	public SinisterSpawnerBlockEntity(BlockPos pos, BlockState blockState) {
 		super(TFBlockEntities.SINISTER_SPAWNER.value(), pos, blockState);
@@ -38,12 +41,22 @@ public class SinisterSpawnerBlockEntity extends BlockEntity implements Spawner {
 	protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
 		super.loadAdditional(tag, registries);
 		this.spawner.load(this.level, this.worldPosition, tag);
+
+		if (tag.contains("LootTable")) {
+			this.lootTable = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.parse(tag.getString("LootTable")));
+		} else {
+			this.lootTable = null;
+		}
 	}
 
 	@Override
 	protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
 		super.saveAdditional(tag, registries);
 		this.spawner.save(tag);
+
+		if (this.lootTable != null) {
+			tag.putString("LootTable", this.lootTable.location().toString());
+		}
 	}
 
 	public static void clientTick(Level level, BlockPos pos, BlockState state, SinisterSpawnerBlockEntity blockEntity) {
@@ -100,5 +113,24 @@ public class SinisterSpawnerBlockEntity extends BlockEntity implements Spawner {
 
 	public void sendChanges() {
 		this.getLevel().sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 3);
+	}
+
+	@Nullable
+	public ResourceKey<LootTable> getLootTableId() {
+		return this.lootTable;
+	}
+
+	@Nullable
+	public LootTable getLootTable() {
+		if (this.level == null || this.lootTable == null) return null;
+		MinecraftServer server = this.level.getServer();
+		if (server == null) return null;
+		return server.reloadableRegistries().getLootTable(this.lootTable);
+	}
+
+	public boolean setLootTable(@Nullable ResourceKey<LootTable> lootTable) {
+		boolean updated = this.lootTable != lootTable;
+		this.lootTable = lootTable;
+		return updated;
 	}
 }

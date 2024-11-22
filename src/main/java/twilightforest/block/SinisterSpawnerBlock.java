@@ -23,10 +23,15 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.neoforged.neoforge.common.util.ConcatenatedListView;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.block.entity.spawner.SinisterSpawnerBlockEntity;
 import twilightforest.block.entity.spawner.SinisterSpawnerLogic;
@@ -34,7 +39,6 @@ import twilightforest.init.TFBlockEntities;
 import twilightforest.init.TFBlocks;
 import twilightforest.init.TFItems;
 import twilightforest.init.TFParticleType;
-import twilightforest.item.TrophyItem;
 
 import java.util.List;
 
@@ -137,5 +141,20 @@ public class SinisterSpawnerBlock extends BaseEntityBlock {
 		}
 
 		return List.of();
+	}
+
+	@Override
+	protected List<ItemStack> getDrops(BlockState state, LootParams.Builder paramBuilder) {
+		List<ItemStack> drops = super.getDrops(state, paramBuilder);
+
+		if (paramBuilder.getOptionalParameter(LootContextParams.BLOCK_ENTITY) instanceof SinisterSpawnerBlockEntity entity) {
+			LootTable lootTable = entity.getLootTable();
+			if (lootTable != null) {
+				LootParams params = paramBuilder.withParameter(LootContextParams.BLOCK_STATE, state).create(LootContextParamSets.BLOCK);
+				return ConcatenatedListView.of(drops, lootTable.getRandomItems(params));
+			}
+		}
+
+		return drops;
 	}
 }
