@@ -7,7 +7,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
@@ -25,11 +24,9 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.init.TFBlocks;
-import twilightforest.init.TFParticleType;
 import twilightforest.util.BoundingBoxUtils;
 
 import java.util.*;
-
 
 public abstract class SinisterSpawnerLogic extends BaseSpawner {
 	private static final Codec<List<ParticleOptions>> PARTICLES_CODEC = ParticleTypes.CODEC.listOf();
@@ -103,7 +100,7 @@ public abstract class SinisterSpawnerLogic extends BaseSpawner {
 				this.countNextToSpawn = serverLevel.getRandom().nextInt(1 + Math.max(0, this.spawnCount));
 			}
 
-			if (this.spawnDelay == -1) {
+			if (this.spawnDelay <= -1) {
 				this.delay(serverLevel, blockEntityPos);
 			}
 
@@ -208,6 +205,9 @@ public abstract class SinisterSpawnerLogic extends BaseSpawner {
 					}
 					this.delay(serverLevel, blockEntityPos);
 				}
+			} else if (this.spawnDelay == 0) {
+				// Spawn buffer is empty, let spawnDelay tick over into resetting delay
+				this.spawnDelay--;
 			}
 		}
 	}
@@ -237,6 +237,13 @@ public abstract class SinisterSpawnerLogic extends BaseSpawner {
 				this.checkPos = null;
 			}
 		}
+
+		// this.debugSeePosition(serverLevel);
+	}
+
+	// Sends particles whenever it checks a particular position
+	private void debugSeePosition(ServerLevel serverLevel) {
+		serverLevel.sendParticles(ParticleTypes.ELECTRIC_SPARK, this.checkPos.getX() + 0.5, this.checkPos.getY() + 0.5, this.checkPos.getZ() + 0.5, 3, 0.1, 0.1, 0.1, 0.05f);
 	}
 
 	@Override
