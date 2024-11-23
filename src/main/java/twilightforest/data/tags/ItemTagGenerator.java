@@ -409,6 +409,12 @@ public class ItemTagGenerator extends ModdedItemTagGenerator {
 		this.tag(Tags.Items.FOODS_SOUP).add(TFItems.MEEF_STROGANOFF.get());
 		this.tag(Tags.Items.FOODS_EDIBLE_WHEN_PLACED).add(TFItems.EXPERIMENT_115.get());
 		this.tag(Tags.Items.ROPES).add(TFItems.ROPE.get());
+		this.tag(Tags.Items.MUSHROOMS).add(TFBlocks.MUSHGLOOM.get().asItem());
+		this.tag(Tags.Items.MUSIC_DISCS).add(
+			TFItems.MUSIC_DISC_RADIANCE.get(), TFItems.MUSIC_DISC_STEPS.get(), TFItems.MUSIC_DISC_SUPERSTITIOUS.get(),
+			TFItems.MUSIC_DISC_HOME.get(), TFItems.MUSIC_DISC_WAYFARER.get(), TFItems.MUSIC_DISC_FINDINGS.get(),
+			TFItems.MUSIC_DISC_MAKER.get(), TFItems.MUSIC_DISC_THREAD.get(), TFItems.MUSIC_DISC_MOTION.get()
+		);
 	}
 
 	public static TagKey<Item> create(String tagName) {
