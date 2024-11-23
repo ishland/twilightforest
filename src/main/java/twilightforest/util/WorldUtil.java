@@ -3,6 +3,7 @@ package twilightforest.util;
 import com.mojang.datafixers.util.Pair;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
+import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
@@ -74,10 +75,6 @@ public final class WorldUtil {
 		return pos.offset(dx, dy, dz);
 	}
 
-	public static <T> T getRandomElement(List<T> list, RandomSource rng) {
-		return list.get(rng.nextInt(list.size()));
-	}
-
 	public static <T> T getRandomElementWithWeights(List<Pair<T, Integer>> list, RandomSource rng) {
 		int totalWeight = list.stream().mapToInt(Pair::getSecond).sum();
 		int randomValue = rng.nextInt(totalWeight);
@@ -88,7 +85,7 @@ public final class WorldUtil {
 				return pair.getFirst();
 			}
 		}
-		return getRandomElement(list, rng).getFirst(); // This line should never be reached if input list is valid
+		return Util.getRandom(list, rng).getFirst(); // This line should never be reached if input list is valid
 	}
 
 	public static int getGeneratorSeaLevel(LevelAccessor level) {

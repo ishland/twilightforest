@@ -1,6 +1,11 @@
 package twilightforest.entity.monster;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -10,6 +15,8 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
@@ -31,12 +38,18 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.init.TFDamageTypes;
+import twilightforest.init.TFEntities;
 import twilightforest.init.TFSounds;
 
 public class LoyalZombie extends TamableAnimal {
 
-	public LoyalZombie(EntityType<? extends LoyalZombie> type, Level world) {
-		super(type, world);
+	private static final EntityDataAccessor<Boolean> DATA_BABY_ID = SynchedEntityData.defineId(LoyalZombie.class, EntityDataSerializers.BOOLEAN);
+	private static final ResourceLocation SPEED_MODIFIER_BABY_ID = ResourceLocation.withDefaultNamespace("baby");
+	private static final AttributeModifier SPEED_MODIFIER_BABY = new AttributeModifier(SPEED_MODIFIER_BABY_ID, 0.5, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
+	private static final EntityDimensions BABY_DIMENSIONS = TFEntities.LOYAL_ZOMBIE.get().getDimensions().scale(0.5F).withEyeHeight(0.93F);
+
+	public LoyalZombie(EntityType<? extends LoyalZombie> type, Level level) {
+		super(type, level);
 	}
 
 	@Override
@@ -51,6 +64,12 @@ public class LoyalZombie extends TamableAnimal {
 		this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
 		this.targetSelector.addGoal(3, new HurtByTargetGoal(this));
 		this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Monster.class, true));
+	}
+
+	@Override
+	protected void defineSynchedData(SynchedEntityData.Builder builder) {
+		super.defineSynchedData(builder);
+		builder.define(DATA_BABY_ID, false);
 	}
 
 	@Override
@@ -125,6 +144,18 @@ public class LoyalZombie extends TamableAnimal {
 	}
 
 	@Override
+	public void addAdditionalSaveData(CompoundTag compound) {
+		super.addAdditionalSaveData(compound);
+		compound.putBoolean("IsBaby", this.isBaby());
+	}
+
+	@Override
+	public void readAdditionalSaveData(CompoundTag compound) {
+		super.readAdditionalSaveData(compound);
+		this.setBaby(compound.getBoolean("IsBaby"));
+	}
+
+	@Override
 	public boolean removeWhenFarAway(double distanceToClosestPlayer) {
 		return !this.isTame();
 	}
@@ -157,5 +188,36 @@ public class LoyalZombie extends TamableAnimal {
 	@Override
 	protected void dropExperience(@Nullable Entity entity) {
 
+	}
+
+	@Override
+	public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
+		if (DATA_BABY_ID.equals(key)) {
+			this.refreshDimensions();
+		}
+
+		super.onSyncedDataUpdated(key);
+	}
+
+	@Override
+	public boolean isBaby() {
+		return this.getEntityData().get(DATA_BABY_ID);
+	}
+
+	@Override
+	public void setBaby(boolean baby) {
+		this.getEntityData().set(DATA_BABY_ID, baby);
+		if (this.level() != null && !this.level().isClientSide()) {
+			AttributeInstance attributeinstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
+			attributeinstance.removeModifier(SPEED_MODIFIER_BABY_ID);
+			if (baby) {
+				attributeinstance.addTransientModifier(SPEED_MODIFIER_BABY);
+			}
+		}
+	}
+
+	@Override
+	public EntityDimensions getDefaultDimensions(Pose pose) {
+		return this.isBaby() ? BABY_DIMENSIONS : super.getDefaultDimensions(pose);
 	}
 }

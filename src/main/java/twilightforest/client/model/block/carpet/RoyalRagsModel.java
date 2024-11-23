@@ -38,7 +38,7 @@ public class RoyalRagsModel implements IDynamicBakedModel {
 	private final List<RenderType> itemRenderTypes;
 	private final List<RenderType> fabulousItemRenderTypes;
 	// FIXME Generalize
-	private final Block[] validConnectors = {TFBlocks.ROYAL_RAGS.value()};
+	private final Block[] validConnectors = {TFBlocks.CORONATION_CARPET.value()};
 	private static final ModelProperty<LoftyCarpetData> DATA = new ModelProperty<>();
 
 	public RoyalRagsModel(@Nullable List<BakedQuad>[] baseQuads, BakedQuad[][][] quads, TextureAtlasSprite particle, ItemOverrides overrides, ItemTransforms transforms, RenderTypeGroup group) {

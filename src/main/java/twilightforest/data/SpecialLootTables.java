@@ -29,5 +29,7 @@ public record SpecialLootTables(HolderLookup.Provider registries) implements Loo
 		));
 
 		consumer.accept(TFLootTables.KNIGHT_PHANTOM_DEFEATED, LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1)).add(LootItem.lootTableItem(TFItems.KNIGHT_PHANTOM_TROPHY))));
+
+		consumer.accept(TFLootTables.OMINOUS_SPAWNER_DROPS, LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1)).add(LootItem.lootTableItem(TFItems.EXANIMATE_ESSENCE))));
 	}
 }

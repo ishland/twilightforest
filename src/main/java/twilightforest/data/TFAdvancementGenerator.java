@@ -447,7 +447,7 @@ public class TFAdvancementGenerator implements AdvancementProvider.AdvancementGe
 				Component.translatable("advancement.twilightforest.full_mettle_alchemist"),
 				Component.translatable("advancement.twilightforest.full_mettle_alchemist.desc"),
 				null, AdvancementType.CHALLENGE, true, true, true)
-			.addCriterion("drink_4_harming", drinkFromFlaskTriggerInstanceFactory.drankPotion(4, MinMaxBounds.Ints.atMost(7), Potions.STRONG_HARMING))
+			.addCriterion("drink_4_harming", drinkFromFlaskTriggerInstanceFactory.drankPotion(3, MinMaxBounds.Ints.atMost(6), Potions.STRONG_HARMING))
 			.rewards(AdvancementRewards.Builder.experience(100))
 			.save(consumer, "twilightforest:full_mettle_alchemist");
 

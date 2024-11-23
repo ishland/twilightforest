@@ -31,10 +31,10 @@ import java.util.function.Consumer;
 @Deprecated
 // We keep rehashing Vanillacopies and they'll keep breaking between ports, we should be adding TwilightFeature to the
 //  StructurePiece classes we actually use. This class will take quite a while to dismantle
-public abstract class TFStructureComponent extends StructurePiece {
+public abstract class TFStructureComponent extends StructurePiece implements SpawnIndexProvider {
 
 	public TFStructureDecorator deco = null;
-	public int spawnListIndex = 0;
+	protected int spawnListIndex = 0;
 	private static final Set<Block> BLOCKS_NEEDING_POSTPROCESSING = ImmutableSet.<Block>builder()
 		.add(Blocks.NETHER_BRICK_FENCE)
 		.add(Blocks.TORCH)
@@ -184,5 +184,10 @@ public abstract class TFStructureComponent extends StructurePiece {
 	 */
 	public boolean isComponentProtected() {
 		return true;
+	}
+
+	@Override
+	public int getSpawnIndex() {
+		return this.spawnListIndex;
 	}
 }

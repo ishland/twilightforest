@@ -438,7 +438,7 @@ public class BlockstateGenerator extends BlockModelBuilders {
 			.part().modelFile(models().getExistingFile(prefix("wrought_iron_fence_middle"))).rotationY(270).addModel().condition(WroughtIronFenceBlock.WEST_FENCE, WroughtIronFenceBlock.FenceSide.MIDDLE).end()
 			.part().modelFile(models().getExistingFile(prefix("wrought_iron_fence_bottom"))).rotationY(270).addModel().condition(WroughtIronFenceBlock.WEST_FENCE, WroughtIronFenceBlock.FenceSide.BOTTOM).end();
 
-		registerLoftyCarpet();
+		registerCoronationCarpet();
 
 		registerWoodBlocks();
 		registerNagastone();
@@ -518,14 +518,14 @@ public class BlockstateGenerator extends BlockModelBuilders {
 
 		this.terrorcotta();
 
-		this.simpleBlock(TFBlocks.CURSED_SPAWNER.value(), this.models().withExistingParent( "cursed_spawner", "block/spawner").texture("all", TwilightForestMod.prefix("block/cursed_spawner")).renderType(CUTOUT));
+		this.simpleBlock(TFBlocks.SINISTER_SPAWNER.value(), this.models().withExistingParent( "sinister_spawner", "block/spawner").texture("all", TwilightForestMod.prefix("block/sinister_spawner")).renderType(CUTOUT));
 	}
 
-	private void registerLoftyCarpet() {
-		ResourceLocation loftyCarpetTexture = TFBlocks.ROYAL_RAGS.getId().withPrefix("block/");
-		ResourceLocation loftyCarpetCTM = loftyCarpetTexture.withSuffix("_ctm");
-		simpleBlock(TFBlocks.ROYAL_RAGS.value(), this.models().carpet(TFBlocks.ROYAL_RAGS.getRegisteredName(), loftyCarpetTexture)
-			.texture("wool_ctm", loftyCarpetCTM)
+	private void registerCoronationCarpet() {
+		ResourceLocation carpetTexture = TFBlocks.CORONATION_CARPET.getId().withPrefix("block/");
+		ResourceLocation carpetCTM = carpetTexture.withSuffix("_ctm");
+		simpleBlock(TFBlocks.CORONATION_CARPET.value(), this.models().carpet(TFBlocks.CORONATION_CARPET.getRegisteredName(), carpetTexture)
+			.texture("wool_ctm", carpetCTM)
 			.customLoader(RoyalRagsBuilder::begin)
 			.end());
 	}

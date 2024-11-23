@@ -26,13 +26,16 @@ import twilightforest.init.TFStructureProcessors;
 import java.util.Map;
 import java.util.Optional;
 
+@SuppressWarnings("OptionalIsPresent")
 public class SpawnerProcessor extends StructureProcessor {
 	public static final MapCodec<SpawnerProcessor> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
 		Codec.SHORT.optionalFieldOf("range").forGetter(SpawnerProcessor::serializeRange),
+		Codec.FLOAT.optionalFieldOf("start_delay_factor").forGetter(SpawnerProcessor::getDelayFactor),
 		SpawnData.LIST_CODEC.fieldOf("entities").forGetter(SpawnerProcessor::getPossibleEntities)
-	).apply(inst, SpawnerProcessor::fromOptional));
+	).apply(inst, SpawnerProcessor::new));
 
-	private final short range;
+	private final Optional<Short> range;
+	private final Optional<Float> startDelayFactor;
 	private final SimpleWeightedRandomList<SpawnData> entities;
 
 	public static SpawnerProcessor compile(int range, Object2IntMap<EntityType<?>> weightMap) {
@@ -46,15 +49,12 @@ public class SpawnerProcessor extends StructureProcessor {
 			entities.add(new SpawnData(entityInfo, Optional.of(new SpawnData.CustomSpawnRules(new InclusiveRange<>(0, 7), new InclusiveRange<>(0, 15))), Optional.empty()), entry.getValue());
 		}
 
-		return new SpawnerProcessor(range, entities.build());
+		return new SpawnerProcessor(range <= 0 ? Optional.empty() : Optional.of((short) range), Optional.of(0.25f), entities.build());
 	}
 
-	public static SpawnerProcessor fromOptional(Optional<Short> range, SimpleWeightedRandomList<SpawnData> entities) {
-		return new SpawnerProcessor(range.orElse((short) 0), entities);
-	}
-
-	public SpawnerProcessor(int range, SimpleWeightedRandomList<SpawnData> entities) {
-		this.range = (short) Math.clamp(range, 0, 16);
+	public SpawnerProcessor(Optional<Short> range, Optional<Float> startDelayFactor, SimpleWeightedRandomList<SpawnData> entities) {
+		this.range = range;
+		this.startDelayFactor = startDelayFactor;
 		this.entities = entities;
 	}
 
@@ -63,9 +63,12 @@ public class SpawnerProcessor extends StructureProcessor {
 	public StructureTemplate.StructureBlockInfo process(LevelReader level, BlockPos offset, BlockPos piecePos, StructureTemplate.StructureBlockInfo originalInfo, StructureTemplate.StructureBlockInfo modifiedInfo, StructurePlaceSettings placeSettings, @Nullable StructureTemplate template) {
 		CompoundTag nbtInfo = modifiedInfo.nbt();
 
-		if (nbtInfo != null && (modifiedInfo.state().is(Blocks.SPAWNER) || modifiedInfo.state().is(TFBlocks.CURSED_SPAWNER))) {
-			if (this.range > 0) {
-				nbtInfo.putShort("SpawnRange", this.range);
+		if (nbtInfo != null && (modifiedInfo.state().is(Blocks.SPAWNER) || modifiedInfo.state().is(TFBlocks.SINISTER_SPAWNER))) {
+			if (this.range.isPresent()) {
+				nbtInfo.putShort("SpawnRange", this.range.get());
+			}
+			if (this.startDelayFactor.isPresent()) {
+				nbtInfo.putShort("Delay", (short) Math.round(nbtInfo.getShort("MinSpawnDelay") * this.startDelayFactor.get()));
 			}
 
 			if (!nbtInfo.contains("SpawnData") || nbtInfo.getList("SpawnData", Tag.TAG_COMPOUND).isEmpty()) {
@@ -88,7 +91,11 @@ public class SpawnerProcessor extends StructureProcessor {
 	}
 
 	private Optional<Short> serializeRange() {
-		return this.range > 0 ? Optional.of(this.range) : Optional.empty();
+		return this.range;
+	}
+
+	private Optional<Float> getDelayFactor() {
+		return this.startDelayFactor;
 	}
 
 	private SimpleWeightedRandomList<SpawnData> getPossibleEntities() {

@@ -91,6 +91,7 @@ public class LangGenerator extends TFLangProvider {
 		this.addEnchantment("chill_aura", "Chill Aura", "Adds a chance for the attacker to gain the frosted effect after hitting the wearer.");
 		this.addEnchantment("fire_react", "Fire React", "Adds a chance for the attacker to be set on fire after hitting the wearer.");
 		this.addEnchantment("destruction", "Destruction", "Allows the Block and Chain to break blocks with a higher mining tier.");
+		this.addEnchantment("renewal", "Renewal", "Automatically recharges scepters when they run out if the holder has the recharge items in their inventory.");
 
 		this.addAdvancement("root", "Twilight Forest", "Enter the mysterious, magical woodlands: the Twilight Forest");
 		this.addAdvancement("kill_cicada", "Shut", "Kill a Cicada");
@@ -109,7 +110,7 @@ public class LangGenerator extends TFLangProvider {
 		this.addAdvancement("naga_armors", "Naga Armorer", "Craft both %s chest and leg armor");
 		this.addAdvancement("kill_lich", "Bring Out Your Dead", "Slay the %s at top of his tower and retrieve a scepter to clear poisonous mosquitoes from the Swamp, see through blinding darkness of the Dark Forest's curse, and resist the Snowy Forest's chill");
 		this.addAdvancement("lich_scepters", "By Our Powers Combined!", "Acquire all four scepters of power");
-		this.addAdvancement("full_mettle_alchemist", "Full Mettle Alchemist", "Drink four doses of Harming II from a potion flask in under 8 seconds and survive");
+		this.addAdvancement("full_mettle_alchemist", "Full Mettle Alchemist", "Drink three doses of Harming II from a potion flask in under 6 seconds and survive");
 		this.addAdvancement("progress_labyrinth", "Mighty Stroganoff", "Eat the Meef Stroganoff to acclimatize your body to the dangerous heat of the Fire Swamp");
 		this.addAdvancement("mazebreaker", "Breaking the Maze", "Find the %s pickaxe in the secret labyrinth vault");
 		this.addAdvancement("kill_hydra", "Hydra Slayer", "Defeat the mighty %s and empower yourself");
@@ -194,9 +195,10 @@ public class LangGenerator extends TFLangProvider {
 		this.addBlock(TFBlocks.TERRORCOTTA_ARCS, "Terrorcotta Arcs");
 		this.addBlock(TFBlocks.TERRORCOTTA_CURVES, "Terrorcotta Curves");
 		this.addBlock(TFBlocks.TERRORCOTTA_LINES, "Terrorcotta Lines");
-		this.addBlock(TFBlocks.ROYAL_RAGS, "Royal Rags");
+		this.addBlock(TFBlocks.CORONATION_CARPET, "Coronation Carpet");
 
 		this.addBlock(TFBlocks.KEEPSAKE_CASKET, "Keepsake Casket");
+		this.add("block.twilightforest.casket.damage", "Damage: %s");
 		this.add("block.twilightforest.casket.broken", "Your Keepsake Casket was too damaged to hold any more items. All items that would be stored in your casket were dropped on the ground.");
 		this.add("block.twilightforest.casket.locked", "This Casket can only be opened by %s!");
 		this.addBlock(TFBlocks.LICH_TOWER_MINIATURE_STRUCTURE, "Miniature Lich Tower");
@@ -476,7 +478,7 @@ public class LangGenerator extends TFLangProvider {
 		this.add("container.twilightforest.uncrafting_table.cycle_next_uncraft", "Next Uncrafting Recipe");
 		this.add("container.twilightforest.uncrafting_table.cycle_back_uncraft", "Previous Uncrafting Recipe");
 
-		this.addBlock(TFBlocks.CURSED_SPAWNER, "Cursed Spawner");
+		this.addBlock(TFBlocks.SINISTER_SPAWNER, "Sinister Spawner");
 
 		this.add("item.twilightforest.boarkchop", "Raw Boarkchop");
 		this.addItem(TFItems.NAGA_SCALE, "Naga Scale");
@@ -488,9 +490,11 @@ public class LangGenerator extends TFLangProvider {
 		this.addItem(TFItems.ZOMBIE_SCEPTER, "Zombie Scepter");
 		this.add("item.twilightforest.scepter.desc", "%s charges left");
 		this.addItem(TFItems.EXANIMATE_ESSENCE, "Exanimate Essence");
+		this.addItem(TFItems.WROUGHT_IRON_BAR, "Wrought Iron Bar");
 		this.addItem(TFItems.BRITTLE_FLASK, "Brittle Potion Flask");
 		this.addItem(TFItems.GREATER_FLASK, "Greater Potion Flask");
-		this.add("item.twilightforest.flask.doses", "Doses: %s/%s");
+		this.add("item.twilightforest.flask.empty", "Empty");
+		this.add("item.twilightforest.flask.empty_description", "Can hold multiple potion doses");
 		this.add("item.twilightforest.flask.no_refill", "Cannot be refilled");
 
 		this.addItem(TFItems.MAGIC_PAINTING, "Magic Painting");

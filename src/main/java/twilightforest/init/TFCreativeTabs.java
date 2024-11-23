@@ -537,6 +537,8 @@ public class TFCreativeTabs {
 			output.accept(TFItems.LIFEDRAIN_SCEPTER);
 			output.accept(TFItems.ZOMBIE_SCEPTER);
 			output.accept(TFItems.FORTIFICATION_SCEPTER);
+			// output.accept(TFItems.EXANIMATE_ESSENCE); TODO
+			// output.accept(TFItems.WROUGHT_IRON_BAR); TODO
 			output.accept(TFItems.LAMP_OF_CINDERS);
 			output.accept(TFItems.EMPERORS_CLOTH);
 			output.accept(TFItems.ORE_MAGNET);

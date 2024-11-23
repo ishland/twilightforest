@@ -6,9 +6,10 @@
   ],
   "allow_biome_surface_decorations": false,
   "allow_biome_underground_decorations": true,
+  "allow_biome_vegetation": true,
   "ambient_spawns": [],
   "biomes": "#twilightforest:valid_aurora_palace_biomes",
-  "chunk_clearance_radius": 2,
+  "chunk_clearance_radius": 2.0,
   "hint_item": {
     "components": {
       "minecraft:written_book_content": {

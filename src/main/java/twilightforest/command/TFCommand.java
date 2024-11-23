@@ -6,6 +6,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.tree.LiteralCommandNode;
+import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
@@ -35,7 +36,10 @@ public class TFCommand {
 	@Autowired
 	private ShieldCommand shieldCommand;
 
-	public void register(CommandDispatcher<CommandSourceStack> dispatcher) {
+	@Autowired
+	private SinisterSpawnerCommand spawnerCommand;
+
+	public void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext buildContext) {
 		LiteralArgumentBuilder<CommandSourceStack> builder = Commands.literal("twilightforest")
 			.executes(this::run)
 			.then(centerCommand.register())
@@ -44,7 +48,8 @@ public class TFCommand {
 			.then(generateBookCommand.register())
 			.then(infoCommand.register())
 			.then(mapBiomesCommand.register())
-			.then(shieldCommand.register());
+			.then(shieldCommand.register())
+			.then(spawnerCommand.register(buildContext));
 		LiteralCommandNode<CommandSourceStack> node = dispatcher.register(builder);
 		dispatcher.register(Commands.literal("tf").executes(this::run).redirect(node));
 		dispatcher.register(Commands.literal("tffeature").executes(this::run).redirect(node));

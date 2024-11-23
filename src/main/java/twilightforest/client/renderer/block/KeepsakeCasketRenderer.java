@@ -79,24 +79,25 @@ public class KeepsakeCasketRenderer<T extends KeepsakeCasketBlockEntity & LidBlo
 		Level world = entity.getLevel();
 		boolean flag = world != null;
 		BlockState blockstate = flag ? entity.getBlockState() : TFBlocks.KEEPSAKE_CASKET.get().defaultBlockState();
-		Block block = blockstate.getBlock();
-		if (block instanceof KeepsakeCasketBlock) {
-			int damage = blockstate.getValue(KeepsakeCasketBlock.BREAKAGE);
-			Direction facing = blockstate.getValue(HorizontalDirectionalBlock.FACING);
+		DoubleBlockCombiner.NeighborCombineResult<? extends KeepsakeCasketBlockEntity> result = DoubleBlockCombiner.Combiner::acceptNone;
+		float f1 = result.apply(KeepsakeCasketBlock.getLidRotationCallback(entity)).get(partialTicks);
+		this.renderCasket(blockstate, blockstate.getValue(KeepsakeCasketBlock.BREAKAGE), f1, stack, buffer, light, overlay);
+	}
+
+	public void renderCasket(BlockState state, int damage, float lidRotation, PoseStack stack, MultiBufferSource buffer, int light, int overlay) {
+		if (state.getBlock() instanceof KeepsakeCasketBlock) {
+			Direction facing = state.getValue(HorizontalDirectionalBlock.FACING);
 
 			stack.pushPose();
-
 			stack.translate(0.5F, 0.0F, 0.5F);
 			stack.mulPose(facing.getRotation());
 			stack.mulPose(Axis.XP.rotationDegrees(90.0F));
 
-			DoubleBlockCombiner.NeighborCombineResult<? extends KeepsakeCasketBlockEntity> result = DoubleBlockCombiner.Combiner::acceptNone;
-			float f1 = result.apply(KeepsakeCasketBlock.getLidRotationCallback(entity)).get(partialTicks);
-			f1 = 1.0F - f1;
-			f1 = 1.0F - f1 * f1 * f1;
+			lidRotation = 1.0F - lidRotation;
+			lidRotation = 1.0F - lidRotation * lidRotation * lidRotation;
 
 			ResourceLocation casket = TwilightForestMod.getModelTexture("casket/keepsake_casket_" + damage + ".png");
-			this.renderModels(stack, buffer.getBuffer(RenderType.entityCutoutNoCull(casket)), this.lid, this.base, f1, light, overlay);
+			this.renderModels(stack, buffer.getBuffer(RenderType.entityCutoutNoCull(casket)), this.lid, this.base, lidRotation, light, overlay);
 			stack.popPose();
 		}
 	}

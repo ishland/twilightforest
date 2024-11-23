@@ -81,6 +81,7 @@ public class ItemTagGenerator extends ModdedItemTagGenerator {
 	public static final TagKey<Item> REPAIRS_FIERY_TOOLS = create("repairs_fiery_tools");
 	public static final TagKey<Item> REPAIRS_GIANT_TOOLS = create("repairs_giant_tools");
 	public static final TagKey<Item> REPAIRS_ICE_TOOLS = create("repairs_ice_tools");
+	public static final TagKey<Item> SCEPTERS = create("scepters");
 
 	public ItemTagGenerator(PackOutput output, CompletableFuture<HolderLookup.Provider> future, CompletableFuture<TagLookup<Block>> provider, ExistingFileHelper helper) {
 		super(output, future, provider, helper);
@@ -212,8 +213,8 @@ public class ItemTagGenerator extends ModdedItemTagGenerator {
 			TFBlocks.TERRORCOTTA_LINES.asItem(),
 			TFBlocks.CHISELED_CANOPY_BOOKSHELF.asItem(),
 			TFBlocks.KEEPSAKE_CASKET.asItem(),
-			TFBlocks.CURSED_SPAWNER.asItem(),
-			TFBlocks.ROYAL_RAGS.asItem(),
+			TFBlocks.SINISTER_SPAWNER.asItem(),
+			TFBlocks.CORONATION_CARPET.asItem(),
 			TFBlocks.WROUGHT_IRON_FENCE.asItem(),
 			TFBlocks.CANOPY_WINDOW.asItem(),
 			TFBlocks.CANOPY_WINDOW_PANE.asItem(),
@@ -247,6 +248,8 @@ public class ItemTagGenerator extends ModdedItemTagGenerator {
 		this.tag(UNCRAFTING_IGNORES_COST).addTag(Tags.Items.RODS_WOODEN);
 
 		this.tag(KEPT_ON_DEATH).add(TFItems.TOWER_KEY.get(), TFItems.PHANTOM_HELMET.get(), TFItems.PHANTOM_CHESTPLATE.get());
+
+		this.tag(SCEPTERS).add(TFItems.TWILIGHT_SCEPTER.get(), TFItems.LIFEDRAIN_SCEPTER.get(), TFItems.ZOMBIE_SCEPTER.get(), TFItems.FORTIFICATION_SCEPTER.get());
 
 		this.tag(ItemTags.PIGLIN_LOVED).add(TFItems.GOLDEN_MINOTAUR_AXE.get(), TFItems.CHARM_OF_KEEPING_3.get(), TFItems.CHARM_OF_LIFE_2.get(), TFItems.LAMP_OF_CINDERS.get());
 
@@ -405,6 +408,13 @@ public class ItemTagGenerator extends ModdedItemTagGenerator {
 		this.tag(Tags.Items.FOODS_COOKED_MEAT).add(TFItems.COOKED_VENISON.get(), TFItems.COOKED_MEEF.get(), TFItems.HYDRA_CHOP.get());
 		this.tag(Tags.Items.FOODS_SOUP).add(TFItems.MEEF_STROGANOFF.get());
 		this.tag(Tags.Items.FOODS_EDIBLE_WHEN_PLACED).add(TFItems.EXPERIMENT_115.get());
+		this.tag(Tags.Items.ROPES).add(TFItems.ROPE.get());
+		this.tag(Tags.Items.MUSHROOMS).add(TFBlocks.MUSHGLOOM.get().asItem());
+		this.tag(Tags.Items.MUSIC_DISCS).add(
+			TFItems.MUSIC_DISC_RADIANCE.get(), TFItems.MUSIC_DISC_STEPS.get(), TFItems.MUSIC_DISC_SUPERSTITIOUS.get(),
+			TFItems.MUSIC_DISC_HOME.get(), TFItems.MUSIC_DISC_WAYFARER.get(), TFItems.MUSIC_DISC_FINDINGS.get(),
+			TFItems.MUSIC_DISC_MAKER.get(), TFItems.MUSIC_DISC_THREAD.get(), TFItems.MUSIC_DISC_MOTION.get()
+		);
 	}
 
 	public static TagKey<Item> create(String tagName) {

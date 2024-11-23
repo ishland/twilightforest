@@ -26,9 +26,10 @@ import twilightforest.init.TFStructurePieceTypes;
 import twilightforest.util.BoundingBoxUtils;
 import twilightforest.util.jigsaw.JigsawPlaceContext;
 import twilightforest.util.jigsaw.JigsawRecord;
+import twilightforest.world.components.structures.SpawnIndexProvider;
 import twilightforest.world.components.structures.TwilightJigsawPiece;
 
-public final class LichTowerBase extends TwilightJigsawPiece implements PieceBeardifierModifier {
+public final class LichTowerBase extends TwilightJigsawPiece implements PieceBeardifierModifier, SpawnIndexProvider {
 	public LichTowerBase(StructurePieceSerializationContext ctx, CompoundTag compoundTag) {
 		super(TFStructurePieceTypes.LICH_TOWER_BASE.get(), compoundTag, ctx, readSettings(compoundTag));
 
@@ -106,6 +107,11 @@ public final class LichTowerBase extends TwilightJigsawPiece implements PieceBea
 	@Override
 	public int getGroundLevelDelta() {
 		return 1;
+	}
+
+	@Override
+	public int getSpawnIndex() {
+		return LichTowerPieces.INTERIOR_SPAWNS;
 	}
 
 	private static class TrimProcessor extends StructureProcessor {

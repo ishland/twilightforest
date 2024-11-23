@@ -71,8 +71,8 @@ public class TFBlockEntities {
 			TFBlocks.DARK_CHEST.get(), TFBlocks.TIME_CHEST.get(), TFBlocks.TRANSFORMATION_CHEST.get(),
 			TFBlocks.MINING_CHEST.get(), TFBlocks.SORTING_CHEST.get()).build(null));
 
-	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<TFChestBlockEntity>> TF_TRAPPED_CHEST = BLOCK_ENTITIES.register("tf_trapped_chest", () ->
-		BlockEntityType.Builder.of(TFChestBlockEntity::new,
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<TFTrappedChestBlockEntity>> TF_TRAPPED_CHEST = BLOCK_ENTITIES.register("tf_trapped_chest", () ->
+		BlockEntityType.Builder.of(TFTrappedChestBlockEntity::new,
 			TFBlocks.TWILIGHT_OAK_TRAPPED_CHEST.get(), TFBlocks.CANOPY_TRAPPED_CHEST.get(), TFBlocks.MANGROVE_TRAPPED_CHEST.get(),
 			TFBlocks.DARK_TRAPPED_CHEST.get(), TFBlocks.TIME_TRAPPED_CHEST.get(), TFBlocks.TRANSFORMATION_TRAPPED_CHEST.get(),
 			TFBlocks.MINING_TRAPPED_CHEST.get(), TFBlocks.SORTING_TRAPPED_CHEST.get()).build(null));
@@ -104,6 +104,6 @@ public class TFBlockEntities {
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<MasonJarBlockEntity>> MASON_JAR = BLOCK_ENTITIES.register("mason_jar", () ->
 		BlockEntityType.Builder.of(MasonJarBlockEntity::new, TFBlocks.MASON_JAR.get()).build(null));
 
-	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<CursedSpawnerBlockEntity>> CURSED_SPAWNER = BLOCK_ENTITIES.register("cursed_spawner", () ->
-		BlockEntityType.Builder.of(CursedSpawnerBlockEntity::new, TFBlocks.CURSED_SPAWNER.value()).build(null));
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<SinisterSpawnerBlockEntity>> SINISTER_SPAWNER = BLOCK_ENTITIES.register("sinister_spawner", () ->
+		BlockEntityType.Builder.of(SinisterSpawnerBlockEntity::new, TFBlocks.SINISTER_SPAWNER.get()).build(null));
 }

@@ -1,9 +1,15 @@
 package twilightforest.block.entity.spawner;
 
+import com.mojang.datafixers.util.Either;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
@@ -11,26 +17,58 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.level.BaseSpawner;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.SpawnData;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.init.TFBlocks;
-import twilightforest.init.TFParticleType;
 import twilightforest.util.BoundingBoxUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
+public abstract class SinisterSpawnerLogic extends BaseSpawner {
+	private static final Codec<List<ParticleOptions>> PARTICLES_CODEC = ParticleTypes.CODEC.listOf();
 
-public abstract class CursedSpawnerLogic extends BaseSpawner {
 	private @Nullable BlockPos.MutableBlockPos checkPos = null;
 	private final List<BlockPos> spawnBuffer = new ArrayList<>();
 	private int countNextToSpawn = 0;
 
-	// [VANILLA COPY] Swapped regular flame particles for ominous
+	private Set<ParticleOptions> particleOptions = new HashSet<>();
+
+	public void setChanged() {
+		Either<BlockEntity, Entity> owner = this.getOwner();
+		if (owner != null) {
+			owner.ifLeft(blockEntity -> {
+				blockEntity.setChanged();
+				if (blockEntity instanceof SinisterSpawnerBlockEntity sinisterSpawnerBlockEntity) {
+					sinisterSpawnerBlockEntity.sendChanges();
+				}
+			});
+		}
+	}
+
+	public boolean setParticles(Collection<ParticleOptions> particleOptions) {
+		this.particleOptions.clear();
+		boolean changed = this.particleOptions.addAll(particleOptions);
+		if (changed) this.setChanged();
+		return changed;
+	}
+
+	public boolean addParticle(ParticleOptions particle) {
+		boolean changed = this.particleOptions.add(particle);
+		if (changed) this.setChanged();
+		return changed;
+	}
+
+	public boolean removeParticle(ParticleOptions particle) {
+		boolean changed = this.particleOptions.remove(particle);
+		if (changed) this.setChanged();
+		return changed;
+	}
+
+	// [VANILLA COPY] Swapped regular flame particles for this spawner's config
 	@Override
 	public void clientTick(Level level, BlockPos pos) {
 		if (!this.isNearPlayer(level, pos)) {
@@ -40,8 +78,9 @@ public abstract class CursedSpawnerLogic extends BaseSpawner {
 			double pX = (double)pos.getX() + randomsource.nextDouble();
 			double pY = (double)pos.getY() + randomsource.nextDouble();
 			double pZ = (double)pos.getZ() + randomsource.nextDouble();
-			level.addParticle(ParticleTypes.SMOKE, pX, pY, pZ, 0.0, 0.0, 0.0);
-			level.addParticle(TFParticleType.OMINOUS_FLAME.value(), pX, pY, pZ, 0.0, 0.0, 0.0);
+			for (ParticleOptions particleOptions : this.particleOptions) {
+				level.addParticle(particleOptions, pX, pY, pZ, 0.0, 0.0, 0.0);
+			}
 			if (this.spawnDelay > 0) {
 				this.spawnDelay--;
 			}
@@ -61,7 +100,7 @@ public abstract class CursedSpawnerLogic extends BaseSpawner {
 				this.countNextToSpawn = serverLevel.getRandom().nextInt(1 + Math.max(0, this.spawnCount));
 			}
 
-			if (this.spawnDelay == -1) {
+			if (this.spawnDelay <= -1) {
 				this.delay(serverLevel, blockEntityPos);
 			}
 
@@ -147,7 +186,9 @@ public abstract class CursedSpawnerLogic extends BaseSpawner {
 							return;
 						}
 
-						serverLevel.sendParticles(TFParticleType.OMINOUS_FLAME.value(), entity.getX(), entity.getY(0.5f), entity.getZ(), 10, entity.getBbWidth() * 0.5f, entity.getBbHeight() * 0.5f, entity.getBbWidth() * 0.5f, 0);
+						for (ParticleOptions particle : this.particleOptions) {
+							serverLevel.sendParticles(particle, entity.getX(), entity.getY(0.5f), entity.getZ(), 10, entity.getBbWidth() * 0.5f, entity.getBbHeight() * 0.5f, entity.getBbWidth() * 0.5f, 0);
+						}
 						serverLevel.gameEvent(entity, GameEvent.ENTITY_PLACE, spawnAt);
 						if (entity instanceof Mob) {
 							((Mob)entity).spawnAnim();
@@ -159,9 +200,14 @@ public abstract class CursedSpawnerLogic extends BaseSpawner {
 				this.spawnBuffer.clear(); // Loop iterated, now reset
 
 				if (spawned) {
-					serverLevel.sendParticles(TFParticleType.OMINOUS_FLAME.value(), blockEntityPos.getX() + 0.5f, blockEntityPos.getY() + 0.5f, blockEntityPos.getZ() + 0.5f, 10, 1, 1, 1, 0);
+					for (ParticleOptions particle : this.particleOptions) {
+						serverLevel.sendParticles(particle, blockEntityPos.getX() + 0.5f, blockEntityPos.getY() + 0.5f, blockEntityPos.getZ() + 0.5f, 10, 1, 1, 1, 0);
+					}
 					this.delay(serverLevel, blockEntityPos);
 				}
+			} else if (this.spawnDelay == 0) {
+				// Spawn buffer is empty, let spawnDelay tick over into resetting delay
+				this.spawnDelay--;
 			}
 		}
 	}
@@ -179,7 +225,7 @@ public abstract class CursedSpawnerLogic extends BaseSpawner {
 		if (blockBelow.isAir()) {
 			this.checkPos.move(Direction.DOWN);
 		} else {
-			if ((blockBelow.isSolid() || blockBelow.is(TFBlocks.ROYAL_RAGS.get())) && random.nextBoolean() && !this.spawnBuffer.contains(this.checkPos) && serverLevel.getBlockState(this.checkPos).isAir()) {
+			if ((blockBelow.isSolid() || blockBelow.is(TFBlocks.CORONATION_CARPET.get())) && random.nextBoolean() && !this.spawnBuffer.contains(this.checkPos) && serverLevel.getBlockState(this.checkPos).isAir()) {
 				// If below is solid, then maybe record this position for being clear to spawn
 				this.spawnBuffer.add(this.checkPos.immutable());
 			}
@@ -190,6 +236,50 @@ public abstract class CursedSpawnerLogic extends BaseSpawner {
 			} else {
 				this.checkPos = null;
 			}
+		}
+
+		// this.debugSeePosition(serverLevel);
+	}
+
+	// Sends particles whenever it checks a particular position
+	private void debugSeePosition(ServerLevel serverLevel) {
+		serverLevel.sendParticles(ParticleTypes.ELECTRIC_SPARK, this.checkPos.getX() + 0.5, this.checkPos.getY() + 0.5, this.checkPos.getZ() + 0.5, 3, 0.1, 0.1, 0.1, 0.05f);
+	}
+
+	@Override
+	public void load(@Nullable Level level, BlockPos pos, CompoundTag tag) {
+		super.load(level, pos, tag);
+
+		this.particleOptions.clear();
+		DataResult<List<ParticleOptions>> particleOptions = PARTICLES_CODEC.parse(NbtOps.INSTANCE, tag.get("ParticleOptions"));
+		if (particleOptions.isSuccess()) {
+			this.particleOptions.addAll(particleOptions.getPartialOrThrow());
+		}
+	}
+
+	@Override
+	public CompoundTag save(CompoundTag tag) {
+		CompoundTag saved = super.save(tag);
+
+		DataResult<Tag> encoded = PARTICLES_CODEC.encodeStart(NbtOps.INSTANCE, List.copyOf(this.particleOptions));
+		if (encoded.isSuccess()) {
+			saved.put("ParticleOptions", encoded.getPartialOrThrow());
+		}
+
+		return saved;
+	}
+
+	@Override
+	public void broadcastEvent(Level level, BlockPos pos, int eventId) {
+		level.blockEvent(pos, TFBlocks.SINISTER_SPAWNER.value(), eventId, 0);
+	}
+
+	@Override
+	public void setNextSpawnData(@Nullable Level level, BlockPos pos, SpawnData nextSpawnData) {
+		super.setNextSpawnData(level, pos, nextSpawnData);
+		if (level != null) {
+			BlockState blockstate = level.getBlockState(pos);
+			level.sendBlockUpdated(pos, blockstate, blockstate, 4);
 		}
 	}
 }
