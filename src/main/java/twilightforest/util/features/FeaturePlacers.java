@@ -309,13 +309,13 @@ public final class FeaturePlacers {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	public static void traceExposedRoot(LevelSimulatedReader worldReader, RootPlacer worldPlacer, RandomSource random, BlockStateProvider exposedRoot, BlockStateProvider dirtRoot, Iterable<BlockPos> posTracer) {
 		// Trace block positions and alternate the root tracing once "underground"
 		for (BlockPos exposedPos : posTracer) {
-			if (FeatureUtil.anyBelowMatch(exposedPos, worldPlacer.getRootPenetrability() - 1, (blockPos -> worldReader.isStateAtPosition(blockPos, (state) -> FeatureLogic.ROOT_SHOULD_SKIP.test(state)
-				&& state != dirtRoot.getState(random, blockPos)
-				&& state != exposedRoot.getState(random, exposedPos)))))
-				return;
+			if (worldReader.isStateAtPosition(exposedPos, FeatureLogic.ROOT_SHOULD_SKIP)) {
+                continue;
+            }
 
 			// Is the position considered not underground?
 			if (FeatureLogic.hasEmptyNeighborExceptBelow(worldReader, exposedPos)) {
