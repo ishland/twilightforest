@@ -1,4 +1,4 @@
-// 1.21.1	2024-11-23T01:20:24.7097185	Registries
+// 1.21.1	2024-11-23T14:13:24.348972	Registries
 9089ada9ce06fd30adf8b10e50f02233c7d5a76e data/minecraft/twilight/wood_palettes/acacia.json
 dca1ef01d0df4e956fd414782de57c25dfddd290 data/minecraft/twilight/wood_palettes/birch.json
 01becb45438b7f2bfdc77baba72bc986341510c8 data/minecraft/twilight/wood_palettes/crimson.json
@@ -322,7 +322,7 @@ b08c73b8946128cd844fad20f3ea36338e134d26 data/twilightforest/worldgen/placed_fea
 73e1d7dbb251d95838cc9bf6dacb815a5265331f data/twilightforest/worldgen/placed_feature/tree/dead_canopy_tree.json
 28b9661b3001da91f47564899cb3fc88476879f7 data/twilightforest/worldgen/placed_feature/tree/forest_mega_oak_tree.json
 bce56d7592384c82f4ef0d56368569b2d20bf607 data/twilightforest/worldgen/placed_feature/tree/large_twilight_oak_tree.json
-7a499df838e59237bec3a0fa030dbed0b2f0f98d data/twilightforest/worldgen/placed_feature/tree/mangrove_tree.json
+0e3098679b6171265101129b5eb367e35e2e6363 data/twilightforest/worldgen/placed_feature/tree/mangrove_tree.json
 9867a104e2df447be2b19bbde44e73da74d935cd data/twilightforest/worldgen/placed_feature/tree/mega_canopy_tree.json
 d67cf6cc420dd200a9fc49d644d6df98936f2f76 data/twilightforest/worldgen/placed_feature/tree/oak_bush.json
 f4a88c870ffd47ecacce93c5f22197f771ed6bd0 data/twilightforest/worldgen/placed_feature/tree/oak_bush_dense.json
