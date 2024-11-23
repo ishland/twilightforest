@@ -15,19 +15,28 @@ import java.util.Set;
 /**
  * {@link twilightforest.ASMHooks#gatherCustomTerrain}
  */
-public class InitializeCustomBeardifierFieldsDuringForStructuresInChunkTransformer implements ITransformer<MethodNode> {
+public class InitializeCustomBeardifierFieldsDuringCreateNoiseChunkTransformer implements ITransformer<MethodNode> {
 
 	@Override
 	public @NotNull MethodNode transform(MethodNode node, ITransformerVotingContext context) {
-		ASMUtil.findInstructions(
+		ASMUtil.findMethodInstructions(
 			node,
-			Opcodes.ARETURN
-		).forEach(target -> node.instructions.insertBefore(
+			Opcodes.INVOKESTATIC,
+			"net/minecraft/world/level/levelgen/Beardifier",
+			"forStructuresInChunk",
+			"(Lnet/minecraft/world/level/StructureManager;Lnet/minecraft/world/level/ChunkPos;)Lnet/minecraft/world/level/levelgen/Beardifier;"
+		).forEach(target -> node.instructions.insert(
 			target,
 			ASMAPI.listOf(
 				new InsnNode(Opcodes.DUP), // Need to duplicate since we are not returning the object after consuming
-				new VarInsnNode(Opcodes.ALOAD, 0), // StructureManager from params
-				new VarInsnNode(Opcodes.ALOAD, 1), // ChunkPos from params
+				new VarInsnNode(Opcodes.ALOAD, 2), // StructureManager from params
+				new VarInsnNode(Opcodes.ALOAD, 1), // Chunk from params
+				new MethodInsnNode(
+					Opcodes.INVOKEVIRTUAL,
+					"net/minecraft/world/level/chunk/ChunkAccess",
+					"getPos",
+					"()Lnet/minecraft/world/level/ChunkPos;"
+				),
 				new MethodInsnNode(
 					Opcodes.INVOKESTATIC,
 					"twilightforest/ASMHooks",
@@ -53,9 +62,9 @@ public class InitializeCustomBeardifierFieldsDuringForStructuresInChunkTransform
 	@Override
 	public @NotNull Set<Target<MethodNode>> targets() {
 		return Set.of(Target.targetMethod(
-			"net.minecraft.world.level.levelgen.Beardifier",
-			"forStructuresInChunk",
-			"(Lnet/minecraft/world/level/StructureManager;Lnet/minecraft/world/level/ChunkPos;)Lnet/minecraft/world/level/levelgen/Beardifier;"
+			"net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator",
+			"createNoiseChunk",
+			"(Lnet/minecraft/world/level/chunk/ChunkAccess;Lnet/minecraft/world/level/StructureManager;Lnet/minecraft/world/level/levelgen/blending/Blender;Lnet/minecraft/world/level/levelgen/RandomState;)Lnet/minecraft/world/level/levelgen/NoiseChunk;"
 		));
 	}
 
