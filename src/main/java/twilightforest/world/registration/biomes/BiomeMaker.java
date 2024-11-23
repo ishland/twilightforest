@@ -39,7 +39,7 @@ public final class BiomeMaker extends BiomeHelper {
 			biomeColumnWithUnderground(0.1D, 1.25D, 0.5D, biomeRegistry, TFBiomes.DARK_FOREST, undergroundBiome),
 			biomeColumnWithUnderground(0.1D, 1.125D, 1.0D, biomeRegistry, TFBiomes.DARK_FOREST_CENTER, undergroundBiome),
 
-			biomeColumnWithUnderground(0.0D, 2.45D, 1.0D, biomeRegistry, TFBiomes.SNOWY_FOREST, undergroundBiome),
+			biomeColumnWithUnderground(0.0D, 2.45D, 0.5D, biomeRegistry, TFBiomes.SNOWY_FOREST, undergroundBiome),
 			biomeColumnWithUnderground(-0.05D, 1.75D, 1.0D, biomeRegistry, TFBiomes.GLACIER, undergroundBiome),
 
 			biomeColumnWithUnderground(3.0D, 2.25D, 0.135D, biomeRegistry, TFBiomes.HIGHLANDS, biomeRegistry.getOrThrow(TFBiomes.HIGHLANDS_UNDERGROUND)),

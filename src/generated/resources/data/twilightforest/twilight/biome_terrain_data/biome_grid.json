@@ -157,7 +157,7 @@
       "depth": 0.0,
       "key_biome": "twilightforest:snowy_forest",
       "scale": 2.45,
-      "weight": 1.0
+      "weight": 0.5
     },
     {
       "biome_layers": {
