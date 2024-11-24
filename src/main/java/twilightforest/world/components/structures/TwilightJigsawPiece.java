@@ -139,4 +139,12 @@ public abstract class TwilightJigsawPiece extends TwilightTemplateStructurePiece
 
 		return jigsaws;
 	}
+
+	public int firstMatchIndex(Predicate<JigsawRecord> filter) {
+		for (int i = 0; i < this.spareJigsaws.size(); i++)
+			if (filter.test(this.spareJigsaws.get(i)))
+				return i;
+
+		return -1;
+	}
 }

@@ -15,6 +15,8 @@ public final class LichTowerPieces {
 	public static final int YARD_SPAWNS = 0;
 	public static final int INTERIOR_SPAWNS = 1;
 
+	public static final ResourceLocation KEEPSAKE_CASKET_ROOM = TwilightForestMod.prefix("lich_tower/9x9/keepsake_casket");
+
 	public static final ResourceLocation ENCLOSED_BRIDGE_CENTRAL = TwilightForestMod.prefix("lich_tower/central_bridge");
 	static final ResourceLocation[] CENTER_BRIDGES = new ResourceLocation[] {
 		ENCLOSED_BRIDGE_CENTRAL,
@@ -327,7 +329,6 @@ public final class LichTowerPieces {
 				TwilightForestMod.prefix("lich_tower/9x9/elbow_junction"),
 				TwilightForestMod.prefix("lich_tower/9x9/t_junction"),
 				TwilightForestMod.prefix("lich_tower/9x9/full_junction"),
-				TwilightForestMod.prefix("lich_tower/9x9/keepsake_casket"),
 				TwilightForestMod.prefix("lich_tower/9x9/archives"),
 				TwilightForestMod.prefix("lich_tower/9x9/enchanting_prison"),
 				TwilightForestMod.prefix("lich_tower/9x9/mossy_junction"),
@@ -341,7 +342,6 @@ public final class LichTowerPieces {
 				TwilightForestMod.prefix("lich_tower/9x9/straight_junction"),
 				TwilightForestMod.prefix("lich_tower/9x9/elbow_junction"),
 				TwilightForestMod.prefix("lich_tower/9x9/t_junction"),
-				TwilightForestMod.prefix("lich_tower/9x9/keepsake_casket"),
 				TwilightForestMod.prefix("lich_tower/9x9/study"),
 				TwilightForestMod.prefix("lich_tower/9x9/library_junction")
 			),
@@ -350,7 +350,6 @@ public final class LichTowerPieces {
 				TwilightForestMod.prefix("lich_tower/9x9/straight_junction"),
 				TwilightForestMod.prefix("lich_tower/9x9/elbow_junction"),
 				TwilightForestMod.prefix("lich_tower/9x9/t_junction"),
-				TwilightForestMod.prefix("lich_tower/9x9/keepsake_casket"),
 				TwilightForestMod.prefix("lich_tower/9x9/study"),
 				TwilightForestMod.prefix("lich_tower/9x9/library_junction")
 			),
@@ -359,7 +358,6 @@ public final class LichTowerPieces {
 				TwilightForestMod.prefix("lich_tower/9x9/elbow_junction"),
 				TwilightForestMod.prefix("lich_tower/9x9/t_junction"),
 				TwilightForestMod.prefix("lich_tower/9x9/full_junction"),
-				TwilightForestMod.prefix("lich_tower/9x9/keepsake_casket"),
 				TwilightForestMod.prefix("lich_tower/9x9/archives"),
 				TwilightForestMod.prefix("lich_tower/9x9/enchanting_prison"),
 				TwilightForestMod.prefix("lich_tower/9x9/mossy_junction"),

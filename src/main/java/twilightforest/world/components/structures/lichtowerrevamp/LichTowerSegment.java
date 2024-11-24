@@ -134,11 +134,11 @@ public final class LichTowerSegment extends TwilightJigsawPiece implements Piece
 				// If this is the top segment, then place only the gallery so that the normal side towers place lower
 				//  and thus generate taller without colliding into the boss room
 				if (this.putGallery) {
-					if (jigsawIndex == 2 /*&& random.nextInt(10) == 0*/) {
-						LichTowerWingBridge.tryRoomAndBridge(this, pieceAccessor, random, connection, this.structureManager, true, 4, false, this.genDepth + 1, true);
+					if (jigsawIndex == 2 && random.nextInt(10) == 0) {
+						LichTowerMagicGallery.tryPlaceGallery(random, pieceAccessor, LichTowerUtil.rollTowerGallery(random), connection, this, this.genDepth + 1, this.structureManager, "twilightforest:lich_tower/bridge_center");
 					}
 				} else {
-					LichTowerWingBridge.tryRoomAndBridge(this, pieceAccessor, random, connection, this.structureManager, true, 4, false, this.genDepth + 1, false);
+					LichTowerWingBridge.tryRoomAndBridge(this, pieceAccessor, random, connection, this.structureManager, true, 4, false, this.genDepth + 1, null);
 				}
 			}
 			case "twilightforest:mob_bridge" -> {

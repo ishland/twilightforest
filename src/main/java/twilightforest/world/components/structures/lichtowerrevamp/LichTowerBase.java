@@ -30,8 +30,12 @@ import twilightforest.world.components.structures.SpawnIndexProvider;
 import twilightforest.world.components.structures.TwilightJigsawPiece;
 
 public final class LichTowerBase extends TwilightJigsawPiece implements PieceBeardifierModifier, SpawnIndexProvider {
+	private final int casketWingIndex;
+
 	public LichTowerBase(StructurePieceSerializationContext ctx, CompoundTag compoundTag) {
 		super(TFStructurePieceTypes.LICH_TOWER_BASE.get(), compoundTag, ctx, readSettings(compoundTag));
+
+		this.casketWingIndex = compoundTag.getInt("CasketWingIdx");
 
 		LichTowerUtil.addDefaultProcessors(this.placeSettings.addProcessor(TrimProcessor.INSTANCE));
 	}
@@ -40,8 +44,16 @@ public final class LichTowerBase extends TwilightJigsawPiece implements PieceBea
 		super(TFStructurePieceTypes.LICH_TOWER_BASE.get(), 1, structureManager, TwilightForestMod.prefix("lich_tower/tower_base"), jigsawContext);
 
 		this.boundingBox = BoundingBoxUtils.cloneWithAdjustments(this.boundingBox, 0, 0, 0, 0, 30,0);
+		this.casketWingIndex = this.firstMatchIndex(r -> "twilightforest:lich_tower/bridge".equals(r.target()));
 
 		LichTowerUtil.addDefaultProcessors(this.placeSettings.addProcessor(TrimProcessor.INSTANCE));
+	}
+
+	@Override
+	protected void addAdditionalSaveData(StructurePieceSerializationContext ctx, CompoundTag structureTag) {
+		super.addAdditionalSaveData(ctx, structureTag);
+
+		structureTag.putInt("CasketWingIdx", this.casketWingIndex);
 	}
 
 	@Override
@@ -49,8 +61,15 @@ public final class LichTowerBase extends TwilightJigsawPiece implements PieceBea
 		switch (connection.target()) {
 			case "twilightforest:lich_tower/tower_below" -> LichTowerSegment.buildTowerBySegments(pieceAccessor, random, connection.pos(), connection.orientation(), this, this.structureManager, random.nextIntBetweenInclusive(12, 15));
 			case "twilightforest:lich_tower/bridge" -> {
-				if (connection.pos().getY() < 6)
-					LichTowerWingBridge.tryRoomAndBridge(this, pieceAccessor, random, connection, this.structureManager, true, 4, true, this.genDepth + 1, false);
+				ResourceLocation room;
+				if (jigsawIndex == this.casketWingIndex) {
+					room = LichTowerPieces.KEEPSAKE_CASKET_ROOM;
+				} else {
+					room = null;
+				}
+				if (room != null || connection.pos().getY() < 6) {
+					LichTowerWingBridge.tryRoomAndBridge(this, pieceAccessor, random, connection, this.structureManager, true, 4, true, this.genDepth + 1, room);
+				}
 			}
 			case "twilightforest:lich_tower/decor" -> {
 				ResourceLocation decorId = LichTowerUtil.rollRandomDecor(random, true);
