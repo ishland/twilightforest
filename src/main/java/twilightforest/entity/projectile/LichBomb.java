@@ -5,9 +5,6 @@ import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.projectile.ItemSupplier;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
@@ -15,7 +12,7 @@ import twilightforest.entity.boss.Lich;
 import twilightforest.init.TFDamageTypes;
 import twilightforest.init.TFEntities;
 
-public class LichBomb extends TFThrowable implements ItemSupplier {
+public class LichBomb extends TFThrowable {
 
 	public LichBomb(EntityType<? extends LichBomb> type, Level world) {
 		super(type, world);
@@ -37,9 +34,9 @@ public class LichBomb extends TFThrowable implements ItemSupplier {
 			double sy = 0.5 * (this.random.nextDouble() - this.random.nextDouble()) + this.getDeltaMovement().y();
 			double sz = 0.5 * (this.random.nextDouble() - this.random.nextDouble()) + this.getDeltaMovement().z();
 
-			double dx = this.getX() + sx;
-			double dy = this.getY() + sy;
-			double dz = this.getZ() + sz;
+			double dx = this.getX() - sx;
+			double dy = this.getY() - sy;
+			double dz = this.getZ() - sz;
 
 			this.level().addParticle(ParticleTypes.FLAME, dx, dy, dz, sx * -0.25, sy * -0.25, sz * -0.25);
 		}
@@ -75,7 +72,7 @@ public class LichBomb extends TFThrowable implements ItemSupplier {
 
 	private void explode() {
 		if (!this.level().isClientSide()) {
-			this.level().explode(this, TFDamageTypes.getDamageSource(this.level(), TFDamageTypes.LICH_BOMB, TFEntities.LICH.get()), null, this.getX(), this.getY(), this.getZ(), 2.0F, false, Level.ExplosionInteraction.NONE);
+			this.level().explode(this, TFDamageTypes.getIndirectEntityDamageSource(this.level(), TFDamageTypes.LICH_BOMB, this, this.getOwner(), TFEntities.LICH.get()), null, this.getX(), this.getY(), this.getZ(), 2.0F, false, Level.ExplosionInteraction.NONE);
 			this.discard();
 		}
 	}
@@ -98,10 +95,5 @@ public class LichBomb extends TFThrowable implements ItemSupplier {
 			return;
 		}
 		this.explode();
-	}
-
-	@Override
-	public ItemStack getItem() {
-		return new ItemStack(Items.MAGMA_CREAM);
 	}
 }

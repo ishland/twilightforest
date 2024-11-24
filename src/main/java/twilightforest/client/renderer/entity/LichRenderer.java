@@ -5,6 +5,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
+import net.minecraft.client.renderer.entity.layers.EyesLayer;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.TwilightForestMod;
@@ -20,6 +21,19 @@ public class LichRenderer<T extends Lich, M extends LichModel<T>> extends Humano
 	public LichRenderer(EntityRendererProvider.Context context, M model, float shadowSize) {
 		super(context, model, shadowSize);
 		this.addLayer(new ShieldLayer<>(this));
+		this.addLayer(new EyesLayer<>(this) {
+			private static final RenderType EYES = RenderType.eyes(TwilightForestMod.getModelTexture("twilightlich64_eyes.png"));
+
+            @Override
+            public void render(PoseStack poseStack, MultiBufferSource buffer, int packedLight, T t, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+                if (t.isShadowClone()) super.render(poseStack, buffer, packedLight, t, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch);
+            }
+
+            @Override
+            public RenderType renderType() {
+                return EYES;
+            }
+        });
 	}
 
 	@Nullable
@@ -40,7 +54,7 @@ public class LichRenderer<T extends Lich, M extends LichModel<T>> extends Humano
 		stack.scale(1.125F, 1.125F, 1.125F);
 		if (entity.deathTime > 0) {
 			if (entity.deathTime > Lich.DEATH_ANIMATION_POINT_A) {
-				stack.translate(0.0D, -1.8D * Math.pow(Math.min(((float) (entity.deathTime - Lich.DEATH_ANIMATION_POINT_A) + partialTicks) * 0.05D, 1.0D), 3.0D), 0.0D);
+				stack.translate(0.0D, -1.8D * Math.pow(Math.min(((float) (entity.deathTime - Lich.DEATH_ANIMATION_POINT_A) + partialTicks) / (float) (Lich.DEATH_ANIMATION_POINT_B - Lich.DEATH_ANIMATION_POINT_A), 1.0D), 3.0D), 0.0D);
 			} else {
 				float time = (float) entity.deathTime + partialTicks;
 				stack.translate(Math.sin(time * time) * 0.01D, 0.0D, Math.cos(time * time) * 0.01D);
@@ -58,5 +72,10 @@ public class LichRenderer<T extends Lich, M extends LichModel<T>> extends Humano
 	@Override
 	public ResourceLocation getTextureLocation(Lich entity) {
 		return TEXTURE;
+	}
+
+	@Override
+	protected float getShadowRadius(T entity) {
+		return entity.isShadowClone() || entity.deathTime > Lich.DEATH_ANIMATION_POINT_A ? 0.0F : super.getShadowRadius(entity);
 	}
 }

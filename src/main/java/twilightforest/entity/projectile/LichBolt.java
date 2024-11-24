@@ -1,14 +1,10 @@
 package twilightforest.entity.projectile;
 
 import net.minecraft.core.particles.ColorParticleOption;
-import net.minecraft.core.particles.ItemParticleOption;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
@@ -76,9 +72,8 @@ public class LichBolt extends TFThrowable {
 	@Override
 	public void handleEntityEvent(byte id) {
 		if (id == 3) {
-			ItemStack itemId = new ItemStack(Items.ENDER_PEARL);
 			for (int i = 0; i < 8; ++i) {
-				this.level().addParticle(new ItemParticleOption(ParticleTypes.ITEM, itemId), this.getX(), this.getY(), this.getZ(), random.nextGaussian() * 0.05D, random.nextDouble() * 0.2D, random.nextGaussian() * 0.05D);
+				this.level().addParticle(TFParticleType.TWILIGHT_ORB.get(), this.getX(), this.getY(), this.getZ(), random.nextGaussian() * 0.05D, random.nextDouble() * 0.2D, random.nextGaussian() * 0.05D);
 			}
 		} else {
 			super.handleEntityEvent(id);

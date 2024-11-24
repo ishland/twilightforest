@@ -31,7 +31,7 @@ public class DamageTypeTagGenerator extends TagsProvider<DamageType> {
 		this.tag(TFDamageTypes.HYDRA_FIRE, DamageTypeTags.IS_FIRE, DamageTypeTags.IGNITES_ARMOR_STANDS, DamageTypeTags.AVOIDS_GUARDIAN_THORNS);
 		this.tag(TFDamageTypes.HYDRA_MORTAR, DamageTypeTags.IS_FIRE, DamageTypeTags.IGNITES_ARMOR_STANDS, DamageTypeTags.AVOIDS_GUARDIAN_THORNS);
 		this.tag(TFDamageTypes.LICH_BOLT, DamageTypeTags.BYPASSES_ARMOR, DamageTypeTags.IS_PROJECTILE, DamageTypeTags.WITCH_RESISTANT_TO, BREAKS_LICH_SHIELDS, Tags.DamageTypes.IS_MAGIC, DamageTypeTags.BYPASSES_WOLF_ARMOR);
-		this.tag(TFDamageTypes.LICH_BOMB, DamageTypeTags.BYPASSES_ARMOR, DamageTypeTags.IS_PROJECTILE, DamageTypeTags.WITCH_RESISTANT_TO, Tags.DamageTypes.IS_MAGIC, DamageTypeTags.BYPASSES_WOLF_ARMOR);
+		this.tag(TFDamageTypes.LICH_BOMB, DamageTypeTags.BYPASSES_ARMOR, DamageTypeTags.IS_PROJECTILE, DamageTypeTags.WITCH_RESISTANT_TO, Tags.DamageTypes.IS_MAGIC, DamageTypeTags.BYPASSES_WOLF_ARMOR, DamageTypeTags.IS_EXPLOSION);
 		this.tag(TFDamageTypes.CHILLING_BREATH, Tags.DamageTypes.IS_MAGIC);
 		this.tag(TFDamageTypes.SQUISH, Tags.DamageTypes.IS_PHYSICAL);
 		this.tag(TFDamageTypes.THROWN_AXE, DamageTypeTags.IS_PROJECTILE, Tags.DamageTypes.IS_PHYSICAL);
