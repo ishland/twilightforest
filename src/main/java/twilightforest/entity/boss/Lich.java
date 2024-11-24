@@ -33,6 +33,7 @@ import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ThrowableProjectile;
@@ -43,6 +44,7 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.AbstractCandleBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.levelgen.structure.Structure;
@@ -652,11 +654,21 @@ public class Lich extends BaseTFBoss {
 		int range = (tick / 2) + 2;
 		int yRange = (tick / 3) + 2;
 		for (BlockPos pos : BlockPos.betweenClosed(this.homeOrElseCurrent().offset(-range, -3, -range), this.homeOrElseCurrent().offset(range, yRange, range))) {
-			if (this.level().getBlockState(pos).getBlock() instanceof AbstractCandleBlock && this.level().getBlockState(pos).getValue(BlockStateProperties.LIT)) {
-				this.level().setBlockAndUpdate(pos, this.level().getBlockState(pos).setValue(BlockStateProperties.LIT, false));
+			BlockState state = this.level().getBlockState(pos);
+			if (state.getBlock() instanceof AbstractCandleBlock) {
+				if (this.level().isEmptyBlock(pos.below())) {
+					// Nothing underneath? Drop the candle
+					FallingBlockEntity fallingBlock = FallingBlockEntity.fall(this.level(), pos, state.setValue(BlockStateProperties.LIT, false));
+					// Apply a little upwards velocity so the candles' falls are staggered
+					fallingBlock.setDeltaMovement(0, this.random.nextFloat() * 0.2f, 0);
+					fallingBlock.hurtMarked = true; // Notify clients of velocity change
+				} else if (state.getValue(BlockStateProperties.LIT)) {
+					// Only extinguish, if candle has support underneath
+					this.level().setBlockAndUpdate(pos, state.setValue(BlockStateProperties.LIT, false));
+				}
 				this.level().playSound(null, pos, SoundEvents.CANDLE_EXTINGUISH, SoundSource.BLOCKS, 2.0F, 1.0F);
-			} else if (this.level().getBlockState(pos).getBlock() instanceof LightableBlock && this.level().getBlockState(pos).getValue(LightableBlock.LIGHTING) == LightableBlock.Lighting.NORMAL) {
-				this.level().setBlockAndUpdate(pos, this.level().getBlockState(pos).setValue(LightableBlock.LIGHTING, LightableBlock.Lighting.OMINOUS));
+			} else if (state.getBlock() instanceof LightableBlock && state.getValue(LightableBlock.LIGHTING) == LightableBlock.Lighting.NORMAL) {
+				this.level().setBlockAndUpdate(pos, state.setValue(LightableBlock.LIGHTING, LightableBlock.Lighting.OMINOUS));
 				this.level().playSound(null, pos, SoundEvents.CANDLE_EXTINGUISH, SoundSource.BLOCKS, 2.0F, 0.75F);
 			}
 		}
@@ -666,11 +678,12 @@ public class Lich extends BaseTFBoss {
 		int range = (int) ((tick * 1.5F) + 2);
 		int yRange = tick + 2;
 		for (BlockPos pos : BlockPos.betweenClosed(this.homeOrElseCurrent().offset(-range, -3, -range), this.homeOrElseCurrent().offset(range, yRange, range))) {
-			if (this.level().getBlockState(pos).getBlock() instanceof AbstractCandleBlock && !this.level().getBlockState(pos).getValue(BlockStateProperties.LIT)) {
-				this.level().setBlockAndUpdate(pos, this.level().getBlockState(pos).setValue(BlockStateProperties.LIT, true));
+			BlockState state = this.level().getBlockState(pos);
+			if (state.getBlock() instanceof AbstractCandleBlock && !state.getValue(BlockStateProperties.LIT)) {
+				this.level().setBlockAndUpdate(pos, state.setValue(BlockStateProperties.LIT, true));
 				this.level().playSound(null, pos, SoundEvents.FIRE_AMBIENT, SoundSource.BLOCKS, 0.25F, 1.5F);
-			} else if (this.level().getBlockState(pos).getBlock() instanceof LightableBlock && this.level().getBlockState(pos).getValue(LightableBlock.LIGHTING) == LightableBlock.Lighting.OMINOUS) {
-				this.level().setBlockAndUpdate(pos, this.level().getBlockState(pos).setValue(LightableBlock.LIGHTING, LightableBlock.Lighting.NORMAL));
+			} else if (state.getBlock() instanceof LightableBlock && state.getValue(LightableBlock.LIGHTING) == LightableBlock.Lighting.OMINOUS) {
+				this.level().setBlockAndUpdate(pos, state.setValue(LightableBlock.LIGHTING, LightableBlock.Lighting.NORMAL));
 				this.level().playSound(null, pos, SoundEvents.FIRE_AMBIENT, SoundSource.BLOCKS, 0.25F, 1.15F);
 			}
 		}
