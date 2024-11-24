@@ -14,6 +14,7 @@ import net.minecraft.world.level.levelgen.structure.StructurePieceAccessor;
 import net.minecraft.world.level.levelgen.structure.TerrainAdjustment;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 import net.neoforged.neoforge.common.world.PieceBeardifierModifier;
 import twilightforest.TwilightForestMod;
@@ -58,8 +59,9 @@ public final class LichTowerSegment extends TwilightJigsawPiece implements Piece
 		int decayLevel = Mth.ceil((depth - 3) * 0.25);
 
 		if (decayLevel >= 0) {
-			decayLevel = Math.min(decayLevel, LichTowerUtil.STAIR_DECAY_PROCESSORS.length);
-			settings.addProcessor(LichTowerUtil.STAIR_DECAY_PROCESSORS[decayLevel]);
+			StructureProcessor[] stairDecayProcessors = LichTowerUtil.getStairDecayProcessors();
+			decayLevel = Math.min(decayLevel, stairDecayProcessors.length);
+			settings.addProcessor(stairDecayProcessors[decayLevel]);
 		}
 	}
 

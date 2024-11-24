@@ -35,7 +35,7 @@ public class LichTowerSpawnerBridge extends TwilightJigsawPiece implements Piece
 	public LichTowerSpawnerBridge(StructurePieceSerializationContext ctx, CompoundTag compoundTag) {
 		super(TFStructurePieceTypes.LICH_SPAWNER_BRIDGE.get(), compoundTag, ctx, readSettings(compoundTag));
 
-		LichTowerUtil.addDefaultProcessors(this.placeSettings.addProcessor(LichTowerUtil.CENTRAL_SPAWNERS));
+		LichTowerUtil.addDefaultProcessors(this.placeSettings.addProcessor(LichTowerUtil.getCentralBridgeSpawnerProcessor()));
 
 		this.invertedPalette = compoundTag.getBoolean("inverted");
 
@@ -62,7 +62,7 @@ public class LichTowerSpawnerBridge extends TwilightJigsawPiece implements Piece
 	public LichTowerSpawnerBridge(int genDepth, StructureTemplateManager structureManager, ResourceLocation templateLocation, JigsawPlaceContext jigsawContext, boolean invertedPalette) {
 		super(TFStructurePieceTypes.LICH_SPAWNER_BRIDGE.get(), genDepth, structureManager, templateLocation, jigsawContext);
 
-		LichTowerUtil.addDefaultProcessors(this.placeSettings.addProcessor(LichTowerUtil.CENTRAL_SPAWNERS));
+		LichTowerUtil.addDefaultProcessors(this.placeSettings.addProcessor(LichTowerUtil.getCentralBridgeSpawnerProcessor()));
 
 		this.invertedPalette = invertedPalette;
 
