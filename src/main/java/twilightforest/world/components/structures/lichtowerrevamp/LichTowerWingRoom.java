@@ -219,9 +219,13 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 			JigsawPlaceContext placeableJunction = JigsawPlaceContext.pickPlaceableJunction(this.templatePosition(), topPos, connection.orientation(), this.structureManager, roomId, connection.target(), random);
 
 			if (placeableJunction != null) {
-				BoundingBox aboveRoomBounds = BoundingBoxUtils.extrusionFrom(placeableJunction.makeBoundingBox(this.structureManager.getOrCreate(roomId)), Direction.UP, 11);
+				//BoundingBox aboveRoomBounds = BoundingBoxUtils.extrusionFrom(placeableJunction.makeBoundingBox(this.structureManager.getOrCreate(roomId)), Direction.UP, 11);
+				//BoundingBox aboveRoomBounds = placeableJunction.makeBoundingBox(this.structureManager.getOrCreate(roomId));
+				//BoundingBox aboveRoomBounds = BoundingBoxUtils.extrusionFrom(this.boundingBox, Direction.UP, Mth.ceil(this.boundingBox.getYSpan() * 1.5f));
 
-				boolean canGenerateLadder = this.getSourceJigsaw().orientation().front().getAxis().isHorizontal() && random.nextBoolean() && pieceAccessor.findCollisionPiece(aboveRoomBounds) == null;
+				// boolean canGenerateLadder = this.getSourceJigsaw().orientation().front().getAxis().isHorizontal() && random.nextBoolean() && pieceAccessor.findCollisionPiece(aboveRoomBounds) == null;
+				boolean canFitRoomAbove = placeableJunction.isWithoutCollision(this.structureManager, pieceAccessor, box -> BoundingBoxUtils.extrusionFrom(box, Direction.UP, Mth.ceil(box.getYSpan() * 1.5f)));
+				boolean canGenerateLadder = canFitRoomAbove && this.getSourceJigsaw().orientation().front().getAxis().isHorizontal() && random.nextBoolean();
 				StructurePiece room = new LichTowerWingRoom(this.structureManager, this.genDepth + 1, placeableJunction, roomId, this.roomSize, false, canGenerateLadder);
 
 				BoundingBox boundingBox = BoundingBoxUtils.cloneWithAdjustments(room.getBoundingBox(), 1, 0, 1, -1, 0, -1);
@@ -235,10 +239,11 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 
 			Direction front = connection.orientation().front();
 			if (front != Direction.UP) {
-				TwilightForestMod.LOGGER.error("Jigsaw was facing {} inside of {}", front, this.templateName);
+				TwilightForestMod.LOGGER.error("Jigsaw {} was facing {} inside of {}", connection.name(), front, this.templateName);
 			}
 
 			if (this.roofFallback >= 0) {
+				if (!FMLLoader.isProduction()) TwilightForestMod.LOGGER.error("Failed to generate room above {}", this.templatePosition.offset(topPos));
 				// If the room above cannot generate, then place the roof instead
 				this.putRoof(pieceAccessor, random, this.getSpareJigsaws().get(this.roofFallback));
 			}
@@ -316,6 +321,7 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 			BlockPos placeAt = this.templatePosition.offset(sourceJigsaw.pos());
 			if (chunkBounds.isInside(placeAt)) {
 				BlockState ladderBlock = Blocks.LADDER.defaultBlockState().setValue(LadderBlock.FACING, sourceJigsaw.orientation().top());
+				level.setBlock(placeAt.below(), ladderBlock, Block.UPDATE_CLIENTS);
 				level.setBlock(placeAt, ladderBlock, Block.UPDATE_CLIENTS);
 				level.setBlock(placeAt.above(), ladderBlock, Block.UPDATE_CLIENTS);
 				BlockState airBlock = Blocks.AIR.defaultBlockState();
@@ -332,9 +338,10 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 			if (chunkBounds.isInside(startPos)) {
 				BlockPos endPos = startPos.above(this.boundingBox.getYSpan() - ladderOffset.getY() - 1);
 				BlockState ladderBlock = Blocks.LADDER.defaultBlockState().setValue(LadderBlock.FACING, ladderJigsaw.orientation().top());
-				for (BlockPos placeAt : BlockPos.betweenClosed(startPos, endPos)) {
+				for (BlockPos placeAt : BlockPos.betweenClosed(startPos, endPos.below())) {
 					level.setBlock(placeAt, ladderBlock, Block.UPDATE_CLIENTS);
 				}
+				level.setBlock(endPos, Blocks.COBBLESTONE.defaultBlockState(), Block.UPDATE_CLIENTS);
 			}
 		}
 
