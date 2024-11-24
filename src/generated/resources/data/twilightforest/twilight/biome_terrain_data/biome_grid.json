@@ -121,12 +121,12 @@
     },
     {
       "biome_layers": {
-        "-2.999799966812134": "twilightforest:lake",
-        "-4.999799966812134": "twilightforest:underground"
+        "-3.2": "twilightforest:lake",
+        "-5.2": "twilightforest:underground"
       },
-      "depth": -1.9997999668121338,
+      "depth": -2.2,
       "key_biome": "twilightforest:lake",
-      "scale": 1.0,
+      "scale": 2.0,
       "weight": 1.0
     },
     {

@@ -25,7 +25,7 @@ public final class BiomeMaker extends BiomeHelper {
 			biomeColumnWithUnderground(0.05D, 1.15D, 1.0D, biomeRegistry, TFBiomes.CLEARING, undergroundBiome),
 			biomeColumnWithUnderground(-0.05D, 2.0D, 1.0D, biomeRegistry, TFBiomes.OAK_SAVANNAH, undergroundBiome),
 			biomeColumnWithUnderground(-0.1D, 0.001D, 1.35D, biomeRegistry, TFBiomes.STREAM, undergroundBiome),
-			biomeColumnWithUnderground(-1.9998F, 1.0D, 1.0D, biomeRegistry, TFBiomes.LAKE, undergroundBiome),
+			biomeColumnWithUnderground(-2.2D, 2.0D, 1.0D, biomeRegistry, TFBiomes.LAKE, undergroundBiome),
 
 			biomeColumnWithUnderground(0.0D, 2.0D, 1.0D, biomeRegistry, TFBiomes.MUSHROOM_FOREST, undergroundBiome),
 			biomeColumnWithUnderground(0.0D, 1.75D, 1.0D, biomeRegistry, TFBiomes.DENSE_MUSHROOM_FOREST, undergroundBiome),

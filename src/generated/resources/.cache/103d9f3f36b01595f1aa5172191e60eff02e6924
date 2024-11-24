@@ -1,4 +1,4 @@
-// 1.21.1	2024-11-23T16:07:04.609294	Registries
+// 1.21.1	2024-11-24T01:15:12.889857	Registries
 9089ada9ce06fd30adf8b10e50f02233c7d5a76e data/minecraft/twilight/wood_palettes/acacia.json
 dca1ef01d0df4e956fd414782de57c25dfddd290 data/minecraft/twilight/wood_palettes/birch.json
 01becb45438b7f2bfdc77baba72bc986341510c8 data/minecraft/twilight/wood_palettes/crimson.json
@@ -75,7 +75,7 @@ b7e49fe11d5d1d3062c413e11b27ff1d9c819d57 data/twilightforest/trim_material/fiery
 de49903e456db111c78f2f0934ac3369f94953f3 data/twilightforest/trim_material/steeleaf.json
 c01efe2b06b832718931f88ed9645b44b58409dd data/twilightforest/twilight/biome_layer_stack/biomes_along_streams.json
 87d0487a38fb84d85efb0cb0044f50fe8053d60e data/twilightforest/twilight/biome_layer_stack/random_forest_biomes.json
-886a61942ea080f5cc94197e98e6c2a67c296bea data/twilightforest/twilight/biome_terrain_data/biome_grid.json
+15751bcd2e2c7eae3120d28c7139392e7fcff64d data/twilightforest/twilight/biome_terrain_data/biome_grid.json
 8ef62883d9ad34d853c496a1f4d57352d595b443 data/twilightforest/twilight/chunk_blanket_processors/dark_forest_canopy.json
 5278e627e84aa360a4e5aa73f7b26add84a4a59e data/twilightforest/twilight/chunk_blanket_processors/snowy_forest_glacier.json
 9372dfa1b9c36d9b3e9dc541edfb7272f376f083 data/twilightforest/twilight/dwarf_rabbit_variant/brown.json
