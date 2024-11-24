@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Set;
 
 public final class LichTowerUtil {
-	public static final StructureProcessor ROOM_SPAWNERS = SpawnerProcessor.compile(2, Object2IntMaps.unmodifiable(Util.make(new Object2IntArrayMap<>(), map -> {
+	public static final StructureProcessor ROOM_SPAWNERS = SpawnerProcessor.compile(2, 0.8f, Object2IntMaps.unmodifiable(Util.make(new Object2IntArrayMap<>(), map -> {
 		// 1/3 chance for any spider variant, 1/3 chance for skeleton, 1/3 chance for zombie
 		map.put(EntityType.SPIDER, 1);
 		map.put(EntityType.CAVE_SPIDER, 1);
