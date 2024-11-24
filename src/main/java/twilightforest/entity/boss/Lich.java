@@ -668,6 +668,8 @@ public class Lich extends BaseTFBoss {
 	}
 
 	protected void extinguishNearbyCandles(int tick) {
+		if (!(this.level() instanceof ServerLevel serverLevel)) return;
+
 		int range = (tick / 2) + 2;
 		int yRange = (tick / 3) + 2;
 		for (BlockPos pos : BlockPos.betweenClosed(this.homeOrElseCurrent().offset(-range, -3, -range), this.homeOrElseCurrent().offset(range, yRange, range))) {
@@ -679,10 +681,13 @@ public class Lich extends BaseTFBoss {
 					// Apply a little upwards velocity so the candles' falls are staggered
 					fallingBlock.setDeltaMovement(0, this.random.nextFloat() * 0.2f, 0);
 					fallingBlock.hurtMarked = true; // Notify clients of velocity change
+					fallingBlock.disableDrop(); // Disallow block placement
+					fallingBlock.dropItem = false; // Disallow item drop
 				} else if (state.getValue(BlockStateProperties.LIT)) {
 					// Only extinguish, if candle has support underneath
 					this.level().setBlockAndUpdate(pos, state.setValue(BlockStateProperties.LIT, false));
 				}
+				serverLevel.sendParticles(ParticleTypes.LARGE_SMOKE, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 1, 0.0, 0.05, 0.0, 0.0);
 				this.level().playSound(null, pos, SoundEvents.CANDLE_EXTINGUISH, SoundSource.BLOCKS, 2.0F, 1.0F);
 			} else if (state.getBlock() instanceof LightableBlock && state.getValue(LightableBlock.LIGHTING) == LightableBlock.Lighting.NORMAL) {
 				this.level().setBlockAndUpdate(pos, state.setValue(LightableBlock.LIGHTING, LightableBlock.Lighting.OMINOUS));
