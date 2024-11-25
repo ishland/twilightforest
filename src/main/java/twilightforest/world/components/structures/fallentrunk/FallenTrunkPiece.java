@@ -226,7 +226,7 @@ public class FallenTrunkPiece extends StructurePiece {
 			return;
 		}
 		BlockState blockState = this.getBlock(level, x, y, z, boundingbox);
-		if (blockState.is(BlockTags.REPLACEABLE_BY_TREES) || blockState.isEmpty() || random.nextBoolean()) {
+		if (blockState.is(BlockTags.REPLACEABLE_BY_TREES) || blockState.is(BlockTags.FLOWERS) || blockState.isEmpty() || random.nextBoolean()) {
 			placeBlock(level, blockstate, x, y, z, boundingbox);
 			if (random.nextFloat() <= MOSS_CHANCE && this.getBlock(level, x, y + 1, z, boundingbox).is(BlockTags.REPLACEABLE)) {
 				placeBlock(level, TFBlocks.MOSS_PATCH.get().defaultBlockState(), x, y + 1, z, boundingbox);
