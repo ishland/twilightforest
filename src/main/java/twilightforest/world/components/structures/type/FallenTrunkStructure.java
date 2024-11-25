@@ -74,11 +74,22 @@ public class FallenTrunkStructure extends Structure {
 		int radius = Util.getRandom(radiuses, random);
 //		int radius = 4; FIXME: remove debug determined radius
 
-		BoundingBox boundingBox = new BoundingBox(x - (length + 1), worldY - radius / radiuses.get(2), z - (length + 1), x + length + 1, worldY + radius * 2, z + length + 1);
+		Direction orientation = Direction.Plane.HORIZONTAL.getRandomDirection(random);
+		int xOff = 0;
+		int yOff = -radius / 2;
+		int zOff = 0;
+		int xSize = radius > 1 ? radius * 2 + 1 : 4;
+		int ySize = xSize;
+		int zSize = length - 1;
+
+		BoundingBox boundingBox = BoundingBox.orientBox(x, worldY, z,
+			xOff, yOff, zOff,
+			xSize, ySize, zSize,
+			orientation);
 
 		return Optional.of(new GenerationStub(new BlockPos(x, worldY, z), structurePiecesBuilder -> {
 			StructurePiece piece = new FallenTrunkPiece(length, radius, log, chestLootTable, spawnerMonster,
-				Direction.Plane.HORIZONTAL.getRandomDirection(random), boundingBox);
+				orientation, boundingBox);
 			structurePiecesBuilder.addPiece(piece);
 		}));
 	}

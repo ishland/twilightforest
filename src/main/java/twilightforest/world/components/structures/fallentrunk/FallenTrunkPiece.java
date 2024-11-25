@@ -83,12 +83,47 @@ public class FallenTrunkPiece extends StructurePiece {
 	@Override
 	public void postProcess(@NotNull WorldGenLevel level, @NotNull StructureManager structureManager, @NotNull ChunkGenerator generator, @NotNull RandomSource random,
 							@NotNull BoundingBox box, @NotNull ChunkPos chunkPos, @NotNull BlockPos pos) {
+//		placeDiamondBlockEdges(level, this.boundingBox);
 		if (radius == FallenTrunkStructure.radiuses.get(0))
 			generateSmallFallenTrunk(level, RandomSource.create(pos.asLong()), box, pos, true);
 		if (radius == FallenTrunkStructure.radiuses.get(1))
 			generateFallenTrunk(level, RandomSource.create(pos.asLong()), box, pos, true, false);
 		if (radius == FallenTrunkStructure.radiuses.get(2))
 			generateFallenTrunk(level, RandomSource.create(pos.asLong()), box, pos, false, true);
+	}
+
+	private void placeDiamondBlockEdges(WorldGenLevel level, BoundingBox box) {
+		BlockState diamondBlock = Blocks.DIAMOND_BLOCK.defaultBlockState();
+
+		// Edges along the X-axis
+		for (int x = box.minX(); x <= box.maxX(); x++) {
+			// Bottom edges (y = minY)
+			level.setBlock(new BlockPos(x, box.minY(), box.minZ()), diamondBlock, 2);
+			level.setBlock(new BlockPos(x, box.minY(), box.maxZ()), diamondBlock, 2);
+			// Top edges (y = maxY)
+			level.setBlock(new BlockPos(x, box.maxY(), box.minZ()), diamondBlock, 2);
+			level.setBlock(new BlockPos(x, box.maxY(), box.maxZ()), diamondBlock, 2);
+		}
+
+		// Edges along the Y-axis
+		for (int y = box.minY(); y <= box.maxY(); y++) {
+			// Vertical edges at minX
+			level.setBlock(new BlockPos(box.minX(), y, box.minZ()), diamondBlock, 2);
+			level.setBlock(new BlockPos(box.minX(), y, box.maxZ()), diamondBlock, 2);
+			// Vertical edges at maxX
+			level.setBlock(new BlockPos(box.maxX(), y, box.minZ()), diamondBlock, 2);
+			level.setBlock(new BlockPos(box.maxX(), y, box.maxZ()), diamondBlock, 2);
+		}
+
+		// Edges along the Z-axis
+		for (int z = box.minZ(); z <= box.maxZ(); z++) {
+			// Bottom edges (y = minY)
+			level.setBlock(new BlockPos(box.minX(), box.minY(), z), diamondBlock, 2);
+			level.setBlock(new BlockPos(box.maxX(), box.minY(), z), diamondBlock, 2);
+			// Top edges (y = maxY)
+			level.setBlock(new BlockPos(box.minX(), box.maxY(), z), diamondBlock, 2);
+			level.setBlock(new BlockPos(box.maxX(), box.maxY(), z), diamondBlock, 2);
+		}
 	}
 
 	private void generateSmallFallenTrunk(WorldGenLevel level, RandomSource random, BoundingBox box, BlockPos pos, boolean hasHole) {
@@ -131,14 +166,14 @@ public class FallenTrunkPiece extends StructurePiece {
 	}
 
 	private void generateTrunkMainRod(WorldGenLevel level, RandomSource random, BoundingBox box, BlockPos pos, int dx, int dy, boolean hasHole, Hole hole) {
-		for (int dz = ERODED_LENGTH + 1; dz < length - ERODED_LENGTH; dz++) {
+		for (int dz = ERODED_LENGTH; dz < length - 1 - ERODED_LENGTH; dz++) {
 			BlockPos offsetPos = pos.offset(dx, dy, dz);
 			this.placeLog(level, log.getState(random, offsetPos).trySetValue(RotatedPillarBlock.AXIS, Direction.Axis.Z), dx, dy, dz, box, random, hasHole, hole);
 		}
 	}
 
 	private void generateErodedEnds(WorldGenLevel level, RandomSource random, BoundingBox box, BlockPos pos, int dx, int dy, boolean hasHole, Hole hole) {
-		for (int dz = ERODED_LENGTH; dz > 0; dz--) {
+		for (int dz = ERODED_LENGTH; dz >= 0; dz--) {
 			if (random.nextBoolean())
 				break;
 
@@ -146,7 +181,7 @@ public class FallenTrunkPiece extends StructurePiece {
 			this.placeLog(level, log.getState(random, offsetPos).trySetValue(RotatedPillarBlock.AXIS, Direction.Axis.Z), dx, dy, dz, box, random, hasHole, hole);
 		}
 
-		for (int dz = length - ERODED_LENGTH; dz < length; dz++) {
+		for (int dz = length - 1 - ERODED_LENGTH; dz < length - 1; dz++) {
 			if (random.nextBoolean())
 				break;
 
@@ -157,7 +192,7 @@ public class FallenTrunkPiece extends StructurePiece {
 
 
 	private void generateSpawnerAndChests(WorldGenLevel level, RandomSource random, BoundingBox box) {
-		BlockPos spawnerPos = new BlockPos(radius, 2, length / 2);
+		BlockPos spawnerPos = new BlockPos(radius, 2, (length - 1) / 2);
 		this.placeBlock(level, Blocks.SPAWNER.defaultBlockState(), spawnerPos.getX(), spawnerPos.getY(), spawnerPos.getZ(), box);
 		BlockPos worldSpawnerPos = getWorldPos(spawnerPos.getX(), spawnerPos.getY(), spawnerPos.getZ());
 		if (box.isInside(worldSpawnerPos.getX(), worldSpawnerPos.getY(), worldSpawnerPos.getZ()) && level.getBlockEntity(worldSpawnerPos) instanceof SpawnerBlockEntity spawner)
@@ -187,7 +222,7 @@ public class FallenTrunkPiece extends StructurePiece {
 
 	private void placeLog(WorldGenLevel level, BlockState blockstate, int x, int y, int z, BoundingBox boundingbox, RandomSource random, boolean hasHole, Hole hole) {
 		int holeCoordinates = convertXYtoLength(x, y);
-		if (hasHole && z > ERODED_LENGTH && z < length - ERODED_LENGTH - 1 && hole.isInHole(holeCoordinates, z - ERODED_LENGTH - 1)) {
+		if (hasHole && z > ERODED_LENGTH && z < length - 1 - ERODED_LENGTH - 1 && hole.isInHole(holeCoordinates, z - ERODED_LENGTH - 1)) {
 			return;
 		}
 		BlockState blockState = this.getBlock(level, x, y, z, boundingbox);
