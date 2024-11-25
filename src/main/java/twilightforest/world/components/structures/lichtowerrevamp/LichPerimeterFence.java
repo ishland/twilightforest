@@ -145,24 +145,25 @@ public class LichPerimeterFence extends TwilightJigsawPiece implements PieceBear
 		generateSidedPerimeter(frontFence, structureManager, structurePiecesBuilder, random, context, fullFenceId, rightDest, LichPerimeterFence::getRightJunctions, Rotation.COUNTERCLOCKWISE_90);
 	}
 
-	private static void generateSidedPerimeter(LichPerimeterFence frontFence, StructureTemplateManager structureManager, StructurePiecesBuilder structurePiecesBuilder, WorldgenRandom random, Structure.GenerationContext context, ResourceLocation fullFenceId, BoundingBox leftDest, Function<LichPerimeterFence, List<JigsawRecord>> leftJunctionGetter, Rotation rotation) {
-		LichPerimeterFence left = nextFence(frontFence, structureManager, structurePiecesBuilder, random, leftJunctionGetter.apply(frontFence), Rotation.NONE, context, fullFenceId);
-		if (left == null) return;
+	private static void generateSidedPerimeter(LichPerimeterFence frontFence, StructureTemplateManager structureManager, StructurePiecesBuilder structurePiecesBuilder, WorldgenRandom random, Structure.GenerationContext context, ResourceLocation fullFenceId, BoundingBox destination, Function<LichPerimeterFence, List<JigsawRecord>> junctionGetter, Rotation rotation) {
+		LichPerimeterFence fence = nextFence(frontFence, structureManager, structurePiecesBuilder, random, junctionGetter.apply(frontFence), Rotation.NONE, context, fullFenceId, destination);
+		if (fence == null) return;
 
-		left = generateUntilNearDest(structureManager, structurePiecesBuilder, random, context, leftDest, 4, left, rotation, leftJunctionGetter, fullFenceId);
-		List<JigsawRecord> leftJunctions = leftJunctionGetter.apply(left);
-		if (left == null || leftJunctions.isEmpty()) return;
+		fence = generateUntilNearDest(structureManager, structurePiecesBuilder, random, context, destination, 4, fence, rotation, junctionGetter, fullFenceId);
+		List<JigsawRecord> fenceJunctions = junctionGetter.apply(fence);
+		if (fence == null || fenceJunctions.isEmpty()) return;
 
 		// Generate until collision
-		JigsawRecord first = leftJunctions.getFirst();
-		BlockPos fencePostPos = left.templatePosition.offset(first.pos());
+		JigsawRecord first = fenceJunctions.getFirst();
+		BlockPos fencePostPos = fence.templatePosition.offset(first.pos());
 		// Since the fencepost is directly in front of one of the box's faces; this should the same as a regular distance function. If not, then a deeper issue has happened inside generateUntilNearDest()
-		for (int distance = BoundingBoxUtils.greatestAxalDistance(leftDest, fencePostPos); distance > 2;) {
+
+		for (int distance = Math.min(BoundingBoxUtils.greatestAxalDistance(destination, fencePostPos), 32); distance > 2;) {
 			int stepSize = Math.min(distance, 7);
 			distance -= stepSize;
 
-			left = nextFence(left, structureManager, structurePiecesBuilder, random, leftJunctionGetter.apply(left), rotation, context, TwilightForestMod.prefix("lich_tower/outer_fence_" + stepSize));
-			if (left == null) return;
+			fence = nextFence(fence, structureManager, structurePiecesBuilder, random, junctionGetter.apply(fence), rotation, context, TwilightForestMod.prefix("lich_tower/outer_fence_" + stepSize), destination);
+			if (fence == null) return;
 			rotation = Rotation.NONE;
 		}
 	}
@@ -176,7 +177,8 @@ public class LichPerimeterFence extends TwilightJigsawPiece implements PieceBear
 		int counterRotatedPieces = 0;
 		boolean foldNext = false;
 		int foldAt = random.nextInt(turnAtIndex - 1);
-		for (int idx = 0; idx < 16; idx++) {
+		int maximumPosts = 16;
+		for (int idx = 0; idx < maximumPosts; idx++) {
 			boolean makeTurn = idx == turnAtIndex;
 			boolean marchTowardsDest = idx > turnAtIndex;
 
@@ -211,7 +213,7 @@ public class LichPerimeterFence extends TwilightJigsawPiece implements PieceBear
 			if (infoldedPieces > 0) {
 				Rotation nextTurn = foldNext ? turn : Rotation.NONE;
 				foldNext = false;
-				fence = nextFence(fence, structureManager, structurePiecesBuilder, random, junctions, nextTurn, context, templateId);
+				fence = nextFence(fence, structureManager, structurePiecesBuilder, random, junctions, nextTurn, context, templateId, destBox);
 
 				infoldedPieces--;
 				if (infoldedPieces == 0) {
@@ -220,12 +222,12 @@ public class LichPerimeterFence extends TwilightJigsawPiece implements PieceBear
 			} else if (counterRotatedPieces > 0) {
 				Rotation nextTurn = foldNext ? Rotation.CLOCKWISE_180.getRotated(turn) : (makeTurn ? turn : Rotation.NONE);
 				foldNext = false;
-				fence = nextFence(fence, structureManager, structurePiecesBuilder, random, junctions, nextTurn, context, templateId);
+				fence = nextFence(fence, structureManager, structurePiecesBuilder, random, junctions, nextTurn, context, templateId, destBox);
 
 				counterRotatedPieces--;
 			} else {
 				Rotation nextTurn = makeTurn ? turn : Rotation.NONE;
-				fence = nextFence(fence, structureManager, structurePiecesBuilder, random, junctions, nextTurn, context, templateId);
+				fence = nextFence(fence, structureManager, structurePiecesBuilder, random, junctions, nextTurn, context, templateId, destBox);
 			}
 		}
 
@@ -233,15 +235,23 @@ public class LichPerimeterFence extends TwilightJigsawPiece implements PieceBear
 	}
 
 	@Nullable
-	public static LichPerimeterFence nextFence(LichPerimeterFence parentFence, StructureTemplateManager structureManager, StructurePiecesBuilder structurePiecesBuilder, WorldgenRandom random, List<JigsawRecord> junctions, Rotation rotation, Structure.GenerationContext context, ResourceLocation templateId) {
+	public static LichPerimeterFence nextFence(LichPerimeterFence parentFence, StructureTemplateManager structureManager, StructurePiecesBuilder structurePiecesBuilder, WorldgenRandom random, List<JigsawRecord> junctions, Rotation rotation, Structure.GenerationContext context, ResourceLocation templateId, BoundingBox destination) {
 		if (junctions.isEmpty()) return null;
 
 		JigsawRecord junction = junctions.getFirst();
 		FrontAndTop orientation = junction.orientation();
 		FrontAndTop connectOrientation = FrontAndTop.fromFrontAndTop(orientation.front().getOpposite(), rotation.rotate(orientation.top()));
-		BlockPos bottomCenter = parentFence.bottomCenter();
+		BlockPos postPos = parentFence.templatePosition.offset(junction.pos());
 
-		int dY = -1 - parentFence.templatePosition().getY() + context.chunkGenerator().getBaseHeight(bottomCenter.getX(), bottomCenter.getZ(), Heightmap.Types.WORLD_SURFACE_WG, context.heightAccessor(), context.randomState());
+		int horizontalAxalDistance = BoundingBoxUtils.horizontalManhattanDistance(destination, postPos);
+
+		int dY;
+		if (horizontalAxalDistance <= 20) {
+			// Begin "homing" onto Fence's vertical height if close enough to the trim
+			dY = Mth.clamp(parentFence.templatePosition().getY() - 1, destination.minY() + 2, destination.maxY() - 2) - 1 - parentFence.templatePosition().getY();
+		} else {
+			dY = -1 - parentFence.templatePosition().getY() + context.chunkGenerator().getBaseHeight(postPos.getX(), postPos.getZ(), Heightmap.Types.WORLD_SURFACE_WG, context.heightAccessor(), context.randomState());
+		}
 		BlockPos parentPos = parentFence.templatePosition().above(Mth.sign(dY) - 1);
 
 		JigsawPlaceContext placeContext = JigsawPlaceContext.pickPlaceableJunction(parentPos, junction.pos(), connectOrientation, structureManager, templateId, junction.target(), random);
