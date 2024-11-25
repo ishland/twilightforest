@@ -11,32 +11,34 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+// TODO Greater configuration flexibility so that Datapacks can rewrite these lists. Use TagsUpdatedEvent to modify this bean?
 @Component
 public final class LichTowerPieces {
 	public static final int YARD_SPAWNS = 0;
 	public static final int INTERIOR_SPAWNS = 1;
 
-	public static final ResourceLocation KEEPSAKE_CASKET_ROOM = TwilightForestMod.prefix("lich_tower/9x9/keepsake_casket");
-	public static final ResourceLocation ENCLOSED_BRIDGE_CENTRAL = TwilightForestMod.prefix("lich_tower/central_bridge");
-	public static final ResourceLocation DIRECT_ATTACHMENT = TwilightForestMod.prefix("lich_tower/no_bridge");
-	static final ResourceLocation COBBLESTONE_WALL = TwilightForestMod.prefix("lich_tower/wall_cobble");
+	final ResourceLocation keepsakeCasketRoom = TwilightForestMod.prefix("lich_tower/9x9/keepsake_casket");
+	final ResourceLocation enclosedBridgeCentral = TwilightForestMod.prefix("lich_tower/central_bridge");
+	final ResourceLocation directAttachment = TwilightForestMod.prefix("lich_tower/no_bridge");
+	final ResourceLocation cobblestoneWall = TwilightForestMod.prefix("lich_tower/wall_cobble");
+	final ResourceLocation yardGrave = TwilightForestMod.prefix("lich_tower/grave");
 
-	final ResourceLocation[] CENTER_BRIDGES = new ResourceLocation[] {
-		ENCLOSED_BRIDGE_CENTRAL,
+	final ResourceLocation[] centerBridges = new ResourceLocation[] {
+		this.enclosedBridgeCentral,
 		TwilightForestMod.prefix("lich_tower/central_bridge_open")
 	};
-	final ResourceLocation[] ROOM_BRIDGES = new ResourceLocation[] {
+	final ResourceLocation[] roomBridges = new ResourceLocation[] {
 		TwilightForestMod.prefix("lich_tower/room_bridge_1"),
 		TwilightForestMod.prefix("lich_tower/room_bridge_2"),
 		TwilightForestMod.prefix("lich_tower/room_bridge_3"),
 		TwilightForestMod.prefix("lich_tower/room_bridge_4"),
 		TwilightForestMod.prefix("lich_tower/room_bridge_5")
 	};
-	final ResourceLocation[] BRIDGE_COVERS = new ResourceLocation[] {
+	final ResourceLocation[] bridgeCovers = new ResourceLocation[] {
 		TwilightForestMod.prefix("lich_tower/wall_bars"),
-		COBBLESTONE_WALL
+		this.cobblestoneWall
 	};
-	final ResourceLocation[] MOB_BRIDGES = new ResourceLocation[] {
+	final ResourceLocation[] mobBridges = new ResourceLocation[] {
 		TwilightForestMod.prefix("lich_tower/bridge_spawner"),
 		TwilightForestMod.prefix("lich_tower/bridge_spawner_bend"),
 		TwilightForestMod.prefix("lich_tower/bridge_spawner_ring"),
@@ -44,13 +46,13 @@ public final class LichTowerPieces {
 		TwilightForestMod.prefix("lich_tower/bridge_spawner_wide"),
 		TwilightForestMod.prefix("lich_tower/bridge_spawner_zag")
 	};
-	final ResourceLocation[] CENTER_DECORS = new ResourceLocation[] {
+	final ResourceLocation[] centerDecors = new ResourceLocation[] {
 		TwilightForestMod.prefix("lich_tower/3x3/tree"),
 		TwilightForestMod.prefix("lich_tower/3x3/water_fountain"),
 		TwilightForestMod.prefix("lich_tower/3x3/water_well"),
 		TwilightForestMod.prefix("lich_tower/3x3/wither_rose")
 	};
-	final ResourceLocation[] ROOM_DECORS = new ResourceLocation[] {
+	final ResourceLocation[] roomDecors = new ResourceLocation[] {
 		TwilightForestMod.prefix("lich_tower/3x3/chest"),
 		TwilightForestMod.prefix("lich_tower/3x3/lava_well"),
 		TwilightForestMod.prefix("lich_tower/3x3/sapling"),
@@ -58,7 +60,7 @@ public final class LichTowerPieces {
 		TwilightForestMod.prefix("lich_tower/3x3/water_well")
 	};
 
-	final ResourceLocation[][] ROOMS = new ResourceLocation[][] {
+	final ResourceLocation[][] rooms = new ResourceLocation[][] {
 		new ResourceLocation[] {
 			TwilightForestMod.prefix("lich_tower/3x3/short_lookout"),
 			TwilightForestMod.prefix("lich_tower/3x3/lookout"),
@@ -124,25 +126,25 @@ public final class LichTowerPieces {
 			TwilightForestMod.prefix("lich_tower/9x9/library_junction")
 		}
 	};
-	final ResourceLocation[] GALLERY_ROOMS = new ResourceLocation[] {
+	final ResourceLocation[] galleryRooms = new ResourceLocation[] {
 		TwilightForestMod.prefix("lich_tower/gallery/castaway_paradise"),
 		TwilightForestMod.prefix("lich_tower/gallery/darkness"),
 		TwilightForestMod.prefix("lich_tower/gallery/lucid_lands"),
 		TwilightForestMod.prefix("lich_tower/gallery/music_in_the_mire"),
 		TwilightForestMod.prefix("lich_tower/gallery/the_hostile_paradise")
 	};
-	final ResourceLocation[] GALLERY_ROOFS_EVEN = new ResourceLocation[] {
+	final ResourceLocation[] galleryRoofsEven = new ResourceLocation[] {
 		TwilightForestMod.prefix("lich_tower/gallery/fence_roof_even"),
 		TwilightForestMod.prefix("lich_tower/gallery/slabs_roof_even"),
 		TwilightForestMod.prefix("lich_tower/gallery/stairs_roof_even")
 	};
-	final ResourceLocation[] GALLERY_ROOFS_ODD = new ResourceLocation[] {
+	final ResourceLocation[] galleryRoofsOdd = new ResourceLocation[] {
 		TwilightForestMod.prefix("lich_tower/gallery/fence_roof_odd"),
 		TwilightForestMod.prefix("lich_tower/gallery/slabs_roof_odd"),
 		TwilightForestMod.prefix("lich_tower/gallery/stairs_roof_odd")
 	};
 
-	final ResourceLocation[][] ROOFS = new ResourceLocation[][] {
+	final ResourceLocation[][] roofs = new ResourceLocation[][] {
 		new ResourceLocation[] {
 			TwilightForestMod.prefix("lich_tower/3x3/pyramid_roof"),
 			TwilightForestMod.prefix("lich_tower/3x3/slabs_roof"),
@@ -173,7 +175,7 @@ public final class LichTowerPieces {
 		}
 	};
 
-	final ResourceLocation[][] SIDE_ROOFS = new ResourceLocation[][] {
+	final ResourceLocation[][] sideRoofs = new ResourceLocation[][] {
 		new ResourceLocation[] {
 			TwilightForestMod.prefix("lich_tower/3x3/pyramid_roof"),
 			TwilightForestMod.prefix("lich_tower/3x3/slabs_side_roof"),
@@ -204,7 +206,7 @@ public final class LichTowerPieces {
 		}
 	};
 
-	final ResourceLocation[][] WING_BEARDS = new ResourceLocation[][] {
+	final ResourceLocation[][] wingBeards = new ResourceLocation[][] {
 		new ResourceLocation[] {
 			TwilightForestMod.prefix("lich_tower/5x5/beard_checkered"),
 			TwilightForestMod.prefix("lich_tower/5x5/beard_chiseled"),
@@ -225,50 +227,51 @@ public final class LichTowerPieces {
 		}
 	};
 
-	final ResourceLocation[] WING_TRIMS = new ResourceLocation[] {
+	// The "beards" that generate at bottoms of sidetowers
+	final ResourceLocation[] wingTrims = new ResourceLocation[] {
 		TwilightForestMod.prefix("lich_tower/5x5/beard_trim"),
 		TwilightForestMod.prefix("lich_tower/7x7/beard_trim"),
 		TwilightForestMod.prefix("lich_tower/9x9/beard_trim")
 	};
 
-	final ResourceLocation[] FLAT_SIDE_ROOFS = new ResourceLocation[] {
+	// Fallback roofs in case of no space to generate anything else
+	final ResourceLocation[] flatSideRoofs = new ResourceLocation[] {
 		TwilightForestMod.prefix("lich_tower/3x3/flat_side_roof"),
 		TwilightForestMod.prefix("lich_tower/5x5/flat_side_roof"),
 		TwilightForestMod.prefix("lich_tower/7x7/flat_side_roof"),
 		TwilightForestMod.prefix("lich_tower/9x9/flat_side_roof")
 	};
-
-	final ResourceLocation[] FLAT_ROOFS = new ResourceLocation[] {
+	final ResourceLocation[] flatRoofs = new ResourceLocation[] {
 		TwilightForestMod.prefix("lich_tower/3x3/flat_roof"),
 		TwilightForestMod.prefix("lich_tower/5x5/flat_roof"),
 		TwilightForestMod.prefix("lich_tower/7x7/flat_roof"),
 		TwilightForestMod.prefix("lich_tower/9x9/flat_roof")
 	};
-
-	final ResourceLocation[] FLAT_BEARDS = new ResourceLocation[] {
+	// Fallback tower beards in case of no space to generate anything else
+	final ResourceLocation[] flatBeards = new ResourceLocation[] {
 		TwilightForestMod.prefix("lich_tower/5x5/beard_flat"),
 		TwilightForestMod.prefix("lich_tower/7x7/beard_flat"),
 		TwilightForestMod.prefix("lich_tower/9x9/beard_flat")
 	};
 
-	final Set<String> LADDER_PLACEMENTS_1 = new HashSet<>(List.of(
+	final Set<String> ladderPlacements1 = new HashSet<>(List.of(
 		"twilightforest:ladder_below/0",
 		"twilightforest:ladder_below/2"
 	));
-	final Set<String> LADDER_PLACEMENTS_2 = new HashSet<>(List.of(
+	final Set<String> ladderPlacements2 = new HashSet<>(List.of(
 		"twilightforest:ladder_below/0",
 		"twilightforest:ladder_below/1",
 		"twilightforest:ladder_below/3",
 		"twilightforest:ladder_below/4"
 	));
-	final Set<String> LADDER_PLACEMENTS_3 = new HashSet<>(List.of(
+	final Set<String> ladderPlacements3 = new HashSet<>(List.of(
 		"twilightforest:ladder_below/1",
 		"twilightforest:ladder_below/2",
 		"twilightforest:ladder_below/4",
 		"twilightforest:ladder_below/5"
 	));
 
-	final List<Int2ObjectMap<List<ResourceLocation>>> LADDER_ROOMS = List.of(
+	final List<Int2ObjectMap<List<ResourceLocation>>> ladderRooms = List.of(
 		new Int2ObjectArrayMap<>(Map.of(
 			0, List.of(
 				TwilightForestMod.prefix("lich_tower/5x5/straight_junction"),
@@ -369,6 +372,4 @@ public final class LichTowerPieces {
 			)
 		))
 	);
-
-	public static final ResourceLocation YARD_GRAVE = TwilightForestMod.prefix("lich_tower/grave");
 }

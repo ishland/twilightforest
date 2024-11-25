@@ -18,6 +18,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProc
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 import net.neoforged.neoforge.common.world.PieceBeardifierModifier;
 import twilightforest.TwilightForestMod;
+import twilightforest.beans.Autowired;
 import twilightforest.data.tags.CustomTagGenerator;
 import twilightforest.init.TFStructurePieceTypes;
 import twilightforest.util.jigsaw.JigsawPlaceContext;
@@ -29,6 +30,9 @@ import twilightforest.world.components.structures.TwilightTemplateStructurePiece
 import java.util.ArrayList;
 
 public final class LichTowerSegment extends TwilightJigsawPiece implements PieceBeardifierModifier, SpawnIndexProvider {
+	@Autowired
+	private static LichTowerUtil lichTowerUtil;
+
 	private final boolean putMobBridge;
 	private final boolean putWings;
 	private final boolean putGallery;
@@ -59,7 +63,7 @@ public final class LichTowerSegment extends TwilightJigsawPiece implements Piece
 		int decayLevel = Mth.ceil((depth - 3) * 0.25);
 
 		if (decayLevel >= 0) {
-			StructureProcessor[] stairDecayProcessors = LichTowerUtil.getStairDecayProcessors();
+			StructureProcessor[] stairDecayProcessors = lichTowerUtil.getStairDecayProcessors();
 			decayLevel = Math.min(decayLevel, stairDecayProcessors.length);
 			settings.addProcessor(stairDecayProcessors[decayLevel]);
 		}
@@ -137,7 +141,7 @@ public final class LichTowerSegment extends TwilightJigsawPiece implements Piece
 				//  and thus generate taller without colliding into the boss room
 				if (this.putGallery) {
 					if (jigsawIndex == 2 && random.nextInt(10) == 0) {
-						LichTowerMagicGallery.tryPlaceGallery(random, pieceAccessor, LichTowerUtil.rollTowerGallery(random), connection, this, this.genDepth + 1, this.structureManager, "twilightforest:lich_tower/bridge_center");
+						LichTowerMagicGallery.tryPlaceGallery(random, pieceAccessor, lichTowerUtil.rollTowerGallery(random), connection, this, this.genDepth + 1, this.structureManager, "twilightforest:lich_tower/bridge_center");
 					}
 				} else {
 					LichTowerWingBridge.tryRoomAndBridge(this, pieceAccessor, random, connection, this.structureManager, true, 4, false, this.genDepth + 1, null);
@@ -145,7 +149,7 @@ public final class LichTowerSegment extends TwilightJigsawPiece implements Piece
 			}
 			case "twilightforest:mob_bridge" -> {
 				if (this.putMobBridge) {
-					ResourceLocation mobBridgeLocation = LichTowerUtil.rollRandomMobBridge(random);
+					ResourceLocation mobBridgeLocation = lichTowerUtil.rollRandomMobBridge(random);
 					JigsawPlaceContext placeableJunction = JigsawPlaceContext.pickPlaceableJunction(this.templatePosition(), connection.pos(), connection.orientation(), this.structureManager, mobBridgeLocation, "twilightforest:mob_bridge", random);
 
 					if (placeableJunction != null) {

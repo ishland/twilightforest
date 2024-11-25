@@ -1,6 +1,7 @@
 package twilightforest.world.components.structures.lichtowerrevamp;
 
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
@@ -22,8 +23,8 @@ public class LichYardGrave extends TwilightJigsawPiece implements PieceBeardifie
 		this.placeSettings().addProcessor(MetaBlockProcessor.INSTANCE);
 	}
 
-	public LichYardGrave(StructureTemplateManager structureManager, JigsawPlaceContext jigsawContext) {
-		super(TFStructurePieceTypes.LICH_YARD_GRAVE.value(), 0, structureManager, LichTowerPieces.YARD_GRAVE, jigsawContext);
+	public LichYardGrave(StructureTemplateManager structureManager, JigsawPlaceContext jigsawContext, ResourceLocation templateId) {
+		super(TFStructurePieceTypes.LICH_YARD_GRAVE.value(), 0, structureManager, templateId, jigsawContext);
 
 		this.placeSettings().addProcessor(MetaBlockProcessor.INSTANCE);
 	}
