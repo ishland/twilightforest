@@ -6,6 +6,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.FrontAndTop;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
@@ -102,8 +103,11 @@ public class LichYardBox extends StructurePiece implements PieceBeardifierModifi
 
 		for (int z = boxIntersection.minZ(); z <= boxIntersection.maxZ(); z++) {
 			for (int x = boxIntersection.minX(); x <= boxIntersection.maxX(); x++) {
-				int y = level.getHeight(Heightmap.Types.WORLD_SURFACE_WG, x, z) - 1;
+				int y = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z) - 1;
 				BlockPos placeAt = new BlockPos(x, y, z);
+
+				if (!level.getBlockState(placeAt).is(BlockTags.DIRT))
+					continue;
 
 				int xBorderDist = Math.min(x - this.boundingBox.minX(), this.boundingBox.maxX() - x);
 				int zBorderDist = Math.min(z - this.boundingBox.minZ(), this.boundingBox.maxZ() - z);
@@ -115,7 +119,7 @@ public class LichYardBox extends StructurePiece implements PieceBeardifierModifi
 				if (featheredNoise < 0) {
 					if (!this.doDirtMotley) {
 						float fenceNoise = SimplexNoise.noise(x * 0.15f, y * 0.15f - 1024f, z * 0.15f) * 0.5f;
-						 if (Math.abs(fenceNoise) > 0.15f) {
+						if (Math.abs(fenceNoise) > 0.15f) {
 							int noiseRounded = Math.round(fenceNoise + 0.5f);
 							if (this.placeGraveAxis == Direction.Axis.Z ? x == this.boundingBox.minX() + noiseRounded || x == this.boundingBox.maxX() - noiseRounded : z == this.boundingBox.minZ() + noiseRounded || z == this.boundingBox.maxZ() - noiseRounded) {
 								BlockPos fenceAt = placeAt.above();
