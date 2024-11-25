@@ -160,7 +160,7 @@ public class FallenTrunkPiece extends StructurePiece {
 		BlockPos spawnerPos = new BlockPos(radius, 2, length / 2);
 		this.placeBlock(level, Blocks.SPAWNER.defaultBlockState(), spawnerPos.getX(), spawnerPos.getY(), spawnerPos.getZ(), box);
 		BlockPos worldSpawnerPos = getWorldPos(spawnerPos.getX(), spawnerPos.getY(), spawnerPos.getZ());
-		if (level.getBlockEntity(worldSpawnerPos) instanceof SpawnerBlockEntity spawner)
+		if (box.isInside(worldSpawnerPos.getX(), worldSpawnerPos.getY(), worldSpawnerPos.getZ()) && level.getBlockEntity(worldSpawnerPos) instanceof SpawnerBlockEntity spawner)
 			spawner.setEntityId(spawnerMonster.value(), random);
 
 		Direction orientation = this.getOrientation().getClockWise();
@@ -249,20 +249,25 @@ public class FallenTrunkPiece extends StructurePiece {
 			int xSize;
 			int ySize = random.nextInt(Y_MIN_SIZE, Y_MAX_SIZE);
 
-			int yOffset = random.nextInt(1, Y_MIN_SIZE * 2 - ySize + 1);
+			int yOffset = random.nextInt(1, Y_MAX_SIZE - ySize + 1);
 
 			int previousX1 = Integer.MIN_VALUE, previousX2 = Integer.MAX_VALUE;
 			for (int dy = yOffset; dy < yOffset + ySize; dy++) {
-				xSize = random.nextInt(X_MIN_SIZE, X_MAX_SIZE);
+				xSize = random.nextInt(X_MIN_SIZE, X_MAX_SIZE + 1);
 				int x1 = random.nextInt(arrayLength - xSize - 1);
 				int x2 = x1 + xSize - 1;
 
-				while ((x1 == previousX1 || x2 == previousX2 && dy % Y_MIN_SIZE != 0) || x2 < previousX1 || x1 > previousX2
+				int tries = 0;
+				while (tries < 10000 && (x1 == previousX1 || x2 == previousX2 && dy % Y_MIN_SIZE != 0) || x2 < previousX1 || x1 > previousX2
 					|| (float) (Math.min(x2, previousX2) - Math.max(previousX1, x1) + 1) / (Math.max(x2, previousX2) - Math.min(x1, previousX1) + 1) < 1 / 3f) {
-					xSize = random.nextInt(X_MIN_SIZE, X_MAX_SIZE);
+					xSize = random.nextInt(X_MIN_SIZE, X_MAX_SIZE + 1);
 					x1 = random.nextInt(Math.max(0, previousX1 - xSize), Math.min(arrayLength - xSize - 1, previousX2 + xSize));
-					x2 = x1 + xSize;
+					x2 = x1 + xSize - 1;
+					tries++;
 				}
+
+				if (tries >= 10000)
+					TwilightForestMod.LOGGER.error("Too many tries during generation! Please contact TF devs with seed and blockPos");
 
 				previousX1 = x1;
 				previousX2 = x2;
