@@ -66,22 +66,24 @@ public class LichShadowsGoal extends Goal {
 			this.checkAndSpawnClones();
 		}
 
-		if (this.lich.getSensing().hasLineOfSight(targetedEntity) && this.lich.getAttackCooldown() == 0 && dist < 20F) {
-			if (this.lich.getNextAttackType() == 0) {
-				this.lich.launchProjectileAt(new LichBolt(this.lich.level(), this.lich));
-			} else {
-				this.lich.launchProjectileAt(new LichBomb(this.lich.level(), this.lich));
-			}
-
-			this.lich.swing(InteractionHand.MAIN_HAND);
-
-			if (this.lich.getRandom().nextInt(3) > 0) {
-				this.lich.setNextAttackType(0);
-			} else {
-				this.lich.setNextAttackType(1);
-			}
-			this.lich.setAttackCooldown(100);
+		if (this.lich.getSensing().hasLineOfSight(targetedEntity) && this.lich.getAttackCooldown() == 0 && dist < 30.0F && !this.lich.isShadowClone()) {
+			this.attack(this.lich);
+			this.getClones().forEach(this::attack);
 		}
+	}
+
+	protected void attack(Lich lich) {
+		if (lich.getNextAttackType() == 0) {
+			lich.launchProjectileAt(new LichBolt(lich.level(), lich));
+		} else {
+			lich.launchProjectileAt(new LichBomb(lich.level(), lich));
+		}
+
+		lich.swing(InteractionHand.MAIN_HAND);
+
+		if (lich.getRandom().nextInt(3) > 0) lich.setNextAttackType(0);
+        else lich.setNextAttackType(1);
+		lich.setAttackCooldown(100);
 	}
 
 	protected List<Lich> getClones() {
