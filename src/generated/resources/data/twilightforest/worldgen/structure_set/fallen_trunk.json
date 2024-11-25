@@ -4,7 +4,8 @@
     "frequency": 0.5,
     "salt": 1275623845,
     "separation": 5,
-    "spacing": 7
+    "spacing": 7,
+    "spread_type": "triangular"
   },
   "structures": [
     {
