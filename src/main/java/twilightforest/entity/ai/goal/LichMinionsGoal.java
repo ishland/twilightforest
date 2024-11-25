@@ -105,7 +105,7 @@ public class LichMinionsGoal extends Goal {
 				this.lich.setAttackCooldown(60);
 			} else {
 				// if not, teleport around
-				this.lich.teleportToSightOfEntity(targetedEntity);
+				this.lich.teleportToNewTarget(targetedEntity, ATTACK_RANGE, null);
 				this.lich.setAttackCooldown(20);
 			}
 		}

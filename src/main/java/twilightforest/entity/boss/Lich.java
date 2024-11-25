@@ -163,7 +163,7 @@ public class Lich extends BaseTFBoss {
 			public void tick() {
 				if (Lich.this.getTeleportInvisibility() > 0) return;
 				if (Lich.this.getNavigation().getPath() == null || Lich.this.getNavigation().isStuck() || !Lich.this.getNavigation().getPath().canReach()) {
-					if (!Lich.this.teleportToSightOfEntity(Lich.this.getTarget())) Lich.this.teleportHome();
+					if (!Lich.this.teleportToNewTarget(Lich.this.getTarget(), 20.0F, null)) Lich.this.teleportHome();
 				}
 			}
 		});
@@ -171,7 +171,7 @@ public class Lich extends BaseTFBoss {
 		this.goalSelector.addGoal(1, new AlwaysWatchTargetGoal(this));
 		this.goalSelector.addGoal(1, new LichPopMobsGoal(this));
 		this.goalSelector.addGoal(1, new LichAbsorbMinionsGoal(this));
-		this.goalSelector.addGoal(2, new LichShadowsGoal(this)); // Phase 1
+		this.goalSelector.addGoal(2, new LichShadowsGoal(this, 30.0F)); // Phase 1
 		this.goalSelector.addGoal(3, new LichMinionsGoal(this)); // Phase 2
 		this.goalSelector.addGoal(4, new MeleeAttackGoal(this, 0.75D, true) { // Phase 3
 			@Override
@@ -349,7 +349,7 @@ public class Lich extends BaseTFBoss {
 
 		// if we're in a wall, teleport for gosh sakes
 		if (src.is(DamageTypes.IN_WALL) && this.getTarget() != null) {
-			this.teleportToSightOfEntity(this.getTarget());
+			this.teleportToNewTarget(this.getTarget(), 20.0F, null);
 		}
 
 		if (this.isShadowClone() && !src.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
@@ -390,7 +390,7 @@ public class Lich extends BaseTFBoss {
 		if (super.hurt(src, damage)) {
 			if (this.getRandom().nextInt(this.getPhase() == 3 ? 6 : 3) <= this.hitsWithoutTeleport++ && !this.isDeadOrDying()) {
 				this.hitsWithoutTeleport = 0;
-				this.teleportToSightOfEntity(this.getTarget());
+				this.teleportToNewTarget(this.getTarget(), 20.0F, null);
 			}
 
 			return true;
@@ -439,6 +439,18 @@ public class Lich extends BaseTFBoss {
 
 	public List<UUID> getClones() {
 		return this.summonedClones;
+	}
+
+	public List<Lich> getAllClones() {
+		if (!this.isShadowClone()) {
+			List<Lich> clones = new ArrayList<>();
+			if (this.level() instanceof ServerLevel server) {
+				for (UUID uuid : this.getClones()) {
+					if (server.getEntity(uuid) instanceof Lich clone && clone.getMaster() == this) clones.add(clone);
+				}
+			}
+			return clones;
+		} else return List.of();
 	}
 
 	public void despawnClones() {
@@ -545,8 +557,26 @@ public class Lich extends BaseTFBoss {
 		}
 	}
 
+	public boolean teleportToNewTarget(@Nullable LivingEntity target, float range, @Nullable LichShadowsGoal lichShadowsGoal) {
+		List<Player> possibleTargets = new ArrayList<>();
+		for (Player player : this.level().players()) {
+			if (player.distanceTo(this) < range && !player.isDeadOrDying()) possibleTargets.add(player);
+		}
+
+		if (!possibleTargets.isEmpty()) target = possibleTargets.get(this.getRandom().nextInt(possibleTargets.size()));
+
+		if (target != null) {
+			if (this.teleportToSightOfEntity(target)) {
+				for (Lich clone : this.getAllClones()) clone.teleportToSightOfEntity(target);
+				if (lichShadowsGoal != null) lichShadowsGoal.checkAndSpawnClones();
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public boolean teleportToSightOfEntity(@Nullable Entity entity) {
-		if (entity == null || !this.getSensing().hasLineOfSight(entity)) return false;
+		if (entity == null) return false;
 		Vec3 dest = this.findVecInLOSOf(entity);
 
 		if (dest != null) {
