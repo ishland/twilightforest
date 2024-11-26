@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.HolderSet;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
@@ -239,7 +240,7 @@ public final class FeaturePlacers {
 	// [VanillaCopy] TrunkPlacer.placeLog - Swapped TreeConfiguration for BlockStateProvider
 	// If possible, use TrunkPlacer.placeLog instead
 	public static boolean placeIfValidTreePos(LevelSimulatedReader world, BiConsumer<BlockPos, BlockState> placer, RandomSource random, BlockPos pos, BlockStateProvider config) {
-		if (TreeFeature.validTreePos(world, pos)) {
+		if (validTreePos(world, pos)) {
 			placer.accept(pos, config.getState(random, pos));
 			return true;
 		} else {
@@ -254,6 +255,10 @@ public final class FeaturePlacers {
 		} else {
 			return false;
 		}
+	}
+
+	public static boolean validTreePos(LevelSimulatedReader world, BlockPos pos) {
+		return TreeFeature.validTreePos(world, pos) || world.isStateAtPosition(pos, (state -> state.is(BlockTags.FLOWERS)));
 	}
 
 	/**
