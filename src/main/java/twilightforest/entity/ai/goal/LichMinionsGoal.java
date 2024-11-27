@@ -1,7 +1,6 @@
 package twilightforest.entity.ai.goal;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.Difficulty;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -15,7 +14,6 @@ import twilightforest.entity.boss.Lich;
 import twilightforest.entity.monster.LichMinion;
 import twilightforest.entity.projectile.LichBolt;
 import twilightforest.entity.projectile.LichBomb;
-import twilightforest.init.TFAttributes;
 import twilightforest.init.TFItems;
 import twilightforest.init.TFSounds;
 
@@ -31,7 +29,6 @@ public class LichMinionsGoal extends Goal {
 	private boolean strafingBackwards;
 	private int strafingTime;
 
-	@SuppressWarnings("this-escape")
 	public LichMinionsGoal(Lich boss) {
 		this.lich = boss;
 		this.strafingTime = -1;
@@ -136,22 +133,6 @@ public class LichMinionsGoal extends Goal {
 			this.lich.level().addFreshEntity(minion);
 
 			minion.setTarget(targetedEntity);
-
-			boolean baby = false;
-
-			if (this.lich.level().getDifficulty() != Difficulty.EASY) {
-				int babiesSummoned = this.lich.getBabyMinionsSummoned();
-				if (this.lich.level().getDifficulty() == Difficulty.NORMAL) {
-					if (babiesSummoned < this.lich.getAttributeValue(TFAttributes.MINION_COUNT) / 4) { // One quarter can be babies on normal, by default: 9 / 4 = 2
-						baby = this.lich.getRandom().nextInt(100) <= 20; // 20%
-					}
-				} else if (babiesSummoned < this.lich.getAttributeValue(TFAttributes.MINION_COUNT) / 3) { // One third can be babies on hard, by default: 9 / 3 = 3
-					baby = this.lich.getRandom().nextInt(100) <= 40; // 40%
-				}
-				if (baby) this.lich.setBabyMinionsSummoned(babiesSummoned + 1);
-			}
-
-			minion.setBaby(baby);
 
 			minion.spawnAnim();
 			minion.playSound(TFSounds.MINION_SUMMON.get(), 1.0F, ((this.lich.getRandom().nextFloat() - this.lich.getRandom().nextFloat()) * 0.7F + 1.0F) * 2.0F);
