@@ -310,6 +310,7 @@ public class Lich extends BaseTFBoss {
 	public boolean isOutsideHomeRange(Vec3 pos) {
 		if (this.getRestrictionPoint() == null) return false;
 		BlockPos point = this.getRestrictionPoint().pos();
+		if (this.getTarget() == null && this.getY() < point.getY() - 2) return true;
 		return point.distToCenterSqr(pos) > (this.getHomeRadius() * this.getHomeRadius()) || (this.getPhase() == 3 && this.getY() < point.getY() - 3);
 	}
 
@@ -557,7 +558,7 @@ public class Lich extends BaseTFBoss {
 			BlockPos pos = this.getRestrictionPoint().pos();
 			if (this.level().getBlockState(pos.below(2)).isAir()) this.level().setBlockAndUpdate(pos.below(2), Blocks.GLASS.defaultBlockState()); // Ensure there's something to stand on, so we don't teleport infinitely
 			if (this.level().getBlockState(pos.below()).isAir()) pos = pos.below();
-			this.teleportToNoChecks(pos.getX(), pos.getY(), pos.getZ());
+			this.teleportToNoChecks(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D);
 		}
 	}
 
