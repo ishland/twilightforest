@@ -28,7 +28,10 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.item.component.ResolvableProfile;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.CandleBlock;
+import net.minecraft.world.level.block.ChestBlock;
+import net.minecraft.world.level.block.SkullBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
@@ -47,8 +50,8 @@ import twilightforest.client.model.entity.KnightmetalShieldModel;
 import twilightforest.client.model.entity.LichModel;
 import twilightforest.client.model.entity.TrophyBlockModel;
 import twilightforest.client.renderer.block.JarRenderer;
-import twilightforest.client.renderer.block.SkullChestRenderer;
 import twilightforest.client.renderer.block.SkullCandleRenderer;
+import twilightforest.client.renderer.block.SkullChestRenderer;
 import twilightforest.client.renderer.block.TrophyRenderer;
 import twilightforest.client.renderer.entity.LichRenderer;
 import twilightforest.components.item.CandelabraData;
@@ -233,6 +236,7 @@ public class ISTER extends BlockEntityWithoutLevelRenderer {
 			this.shield.renderToBuffer(pose, vertexconsumer, light, overlay);
 			pose.popPose();
 		} else if (item instanceof MysticCrownItem && this.trophies.get(BossVariant.LICH) instanceof LichModel<?> lichModel) {
+			lichModel.hat.yRot = 0;
 			pose.pushPose();
 			pose.scale(1.0F, -1.0F, -1.0F);
 			if (camera == ItemDisplayContext.GUI) {
@@ -240,7 +244,8 @@ public class ISTER extends BlockEntityWithoutLevelRenderer {
 				pose.mulPose(Axis.XP.rotationDegrees(30));
 				pose.mulPose(Axis.YP.rotationDegrees(45));
 			} else {
-				pose.translate(0.5F, -0.0625, -0.5F);
+				pose.translate(0.5F, 0.0F, -0.5F);
+				pose.scale(1.05F, 1.05F, 1.05F);
 			}
 			lichModel.hat.render(pose, buffers.getBuffer(RenderType.entityCutoutNoCull(LichRenderer.TEXTURE)), light, overlay);
 			pose.popPose();
