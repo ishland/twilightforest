@@ -101,15 +101,15 @@ public class BrittleFlaskItem extends Item {
 		if (flaskContents.potion() != PotionContents.EMPTY) {
 			if (entity instanceof Player player) {
 				if (!level.isClientSide()) {
-					if (!player.isCreative() && !player.isSpectator() && player instanceof ServerPlayer serverPlayer) {
-						flaskContents.potion().potion().ifPresent(potion -> player.getData(TFDataAttachments.FLASK_DOSES).trackDrink(potion, serverPlayer));
-					}
 					for (MobEffectInstance mobeffectinstance : flaskContents.potion().getAllEffects()) {
 						if (mobeffectinstance.getEffect().value().isInstantenous()) {
 							mobeffectinstance.getEffect().value().applyInstantenousEffect(player, player, player, mobeffectinstance.getAmplifier(), 1.0D);
 						} else {
 							player.addEffect(new MobEffectInstance(mobeffectinstance));
 						}
+					}
+					if (!player.isCreative() && !player.isSpectator() && player instanceof ServerPlayer serverPlayer) {
+						flaskContents.potion().potion().ifPresent(potion -> player.getData(TFDataAttachments.FLASK_DOSES).trackDrink(potion, serverPlayer));
 					}
 				}
 				player.awardStat(Stats.ITEM_USED.get(this));
