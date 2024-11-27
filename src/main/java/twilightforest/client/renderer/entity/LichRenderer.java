@@ -26,7 +26,7 @@ public class LichRenderer<T extends Lich, M extends LichModel<T>> extends Humano
 
             @Override
             public void render(PoseStack poseStack, MultiBufferSource buffer, int packedLight, T t, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-                if (t.isShadowClone()) super.render(poseStack, buffer, packedLight, t, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch);
+                if (t.isShadowClone() && !t.isInvisible()) super.render(poseStack, buffer, packedLight, t, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch);
             }
 
             @Override
