@@ -19,6 +19,7 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.item.BlockItem;
@@ -46,7 +47,7 @@ import twilightforest.client.model.entity.KnightmetalShieldModel;
 import twilightforest.client.model.entity.LichModel;
 import twilightforest.client.model.entity.TrophyBlockModel;
 import twilightforest.client.renderer.block.JarRenderer;
-import twilightforest.client.renderer.block.KeepsakeCasketRenderer;
+import twilightforest.client.renderer.block.SkullChestRenderer;
 import twilightforest.client.renderer.block.SkullCandleRenderer;
 import twilightforest.client.renderer.block.TrophyRenderer;
 import twilightforest.client.renderer.entity.LichRenderer;
@@ -77,7 +78,8 @@ public class ISTER extends BlockEntityWithoutLevelRenderer {
 			return INSTANCE.get();
 		}
 	});
-	private final KeepsakeCasketBlockEntity casket = new KeepsakeCasketBlockEntity(BlockPos.ZERO, TFBlocks.KEEPSAKE_CASKET.get().defaultBlockState());
+	private final KeepsakeCasketBlockEntity skullChest = KeepsakeCasketBlockEntity.createSkullChestBE(BlockPos.ZERO, TFBlocks.SKULL_CHEST.get().defaultBlockState());
+	private final KeepsakeCasketBlockEntity skullCasket = KeepsakeCasketBlockEntity.createKeepsakeCasketBE(BlockPos.ZERO, TFBlocks.KEEPSAKE_CASKET.get().defaultBlockState());
 	private final Map<Block, TFChestBlockEntity> chestEntities = Util.make(new HashMap<>(), map -> {
 		makeInstance(map, TFBlocks.TWILIGHT_OAK_CHEST);
 		makeInstance(map, TFBlocks.CANOPY_CHEST);
@@ -155,9 +157,13 @@ public class ISTER extends BlockEntityWithoutLevelRenderer {
 					TrophyRenderer.render(null, 180.0F, trophy, variant, !minecraft.isPaused() ? ClientEvents.time + minecraft.getTimer().getRealtimeDeltaTicks() : 0, pose, buffers, light, camera);
 				}
 
-			} else if (block instanceof KeepsakeCasketBlock) {
+			} else if (block instanceof SkullChestBlock) {
 				int damage = stack.getOrDefault(TFDataComponents.CASKET_DAMAGE, 0);
-				((KeepsakeCasketRenderer<KeepsakeCasketBlockEntity>)minecraft.getBlockEntityRenderDispatcher().getRenderer(this.casket)).renderCasket(TFBlocks.KEEPSAKE_CASKET.get().defaultBlockState(), damage, 0.0F, pose, buffers, light, overlay);
+
+				BlockEntity chestEntity = block == TFBlocks.KEEPSAKE_CASKET.value() ? this.skullCasket : this.skullChest;
+				if (minecraft.getBlockEntityRenderDispatcher().getRenderer(chestEntity) instanceof SkullChestRenderer<?> renderer) {
+					renderer.renderCasket(0.0F, pose, buffers, light, overlay, renderer.getTextureLocation(damage), Direction.NORTH);
+				}
 			} else if (block instanceof TFChestBlock) {
 				minecraft.getBlockEntityRenderDispatcher().renderItem(this.chestEntities.get(block), pose, buffers, light, overlay);
 			} else if (block instanceof TFTrappedChestBlock) {

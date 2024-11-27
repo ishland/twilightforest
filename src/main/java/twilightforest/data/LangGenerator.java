@@ -197,9 +197,10 @@ public class LangGenerator extends TFLangProvider {
 		this.addBlock(TFBlocks.TERRORCOTTA_LINES, "Terrorcotta Lines");
 		this.addBlock(TFBlocks.CORONATION_CARPET, "Coronation Carpet");
 
+		this.addBlock(TFBlocks.SKULL_CHEST, "Skull Chest");
 		this.addBlock(TFBlocks.KEEPSAKE_CASKET, "Keepsake Casket");
 		this.add("block.twilightforest.casket.damage", "Damage: %s");
-		this.add("block.twilightforest.casket.broken", "Your Keepsake Casket was too damaged to hold any more items. All items that would be stored in your casket were dropped on the ground.");
+		this.add("block.twilightforest.casket.broken", "Your Keepsake Casket was too damaged, it degraded into a Skull Chest while saving your items.");
 		this.add("block.twilightforest.casket.locked", "This Casket can only be opened by %s!");
 		this.addBlock(TFBlocks.LICH_TOWER_MINIATURE_STRUCTURE, "Miniature Lich Tower");
 

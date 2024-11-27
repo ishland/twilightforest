@@ -278,6 +278,7 @@ public class BlockLootTables extends BlockLootSubProvider {
 		dropSelf(TFBlocks.TWISTED_STONE.get());
 		dropSelf(TFBlocks.TWISTED_STONE_PILLAR.get());
 		dropSelf(TFBlocks.BOLD_STONE_PILLAR.get());
+		add(TFBlocks.SKULL_CHEST.get(), skullChest(TFBlocks.SKULL_CHEST.get()));
 		add(TFBlocks.KEEPSAKE_CASKET.get(), casketInfo(TFBlocks.KEEPSAKE_CASKET.get()));
 		dropSelf(TFBlocks.CANDELABRA.get());
 		dropSelf(TFBlocks.WROUGHT_IRON_FENCE.get());
@@ -608,6 +609,10 @@ public class BlockLootTables extends BlockLootSubProvider {
 	private LootTable.Builder silkAndStick(Block block, ItemLike nonSilk, float... nonSilkFortune) {
 		HolderLookup.RegistryLookup<Enchantment> registrylookup = this.registries.lookupOrThrow(Registries.ENCHANTMENT);
 		return createSilkTouchOrShearsDispatchTable(block, this.applyExplosionCondition(block, LootItem.lootTableItem(nonSilk.asItem())).when(BonusLevelTableCondition.bonusLevelFlatChance(registrylookup.getOrThrow(Enchantments.FORTUNE), nonSilkFortune))).withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1)).when((HAS_SHEARS.or(this.hasSilkTouch())).invert()).add(applyExplosionDecay(block, LootItem.lootTableItem(Items.STICK).apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 2.0F)))).when(BonusLevelTableCondition.bonusLevelFlatChance(registrylookup.getOrThrow(Enchantments.FORTUNE), 0.02F, 0.022222223F, 0.025F, 0.033333335F, 0.1F))));
+	}
+
+	private static LootTable.Builder skullChest(Block block) {
+		return LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1)));
 	}
 
 	private static LootTable.Builder casketInfo(Block block) {
