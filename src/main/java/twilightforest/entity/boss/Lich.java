@@ -702,6 +702,12 @@ public class Lich extends BaseTFBoss {
 		}
 	}
 
+	@Override
+	public void placeSpawner(BlockPos pos) {
+		super.placeSpawner(pos);
+		this.lightNearbyCandles(20);
+	}
+
 	protected void extinguishNearbyCandles(int tick) {
 		if (!(this.level() instanceof ServerLevel serverLevel)) return;
 
