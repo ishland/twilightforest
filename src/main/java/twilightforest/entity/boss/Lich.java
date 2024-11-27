@@ -63,7 +63,10 @@ import twilightforest.init.*;
 import twilightforest.network.ParticlePacket;
 import twilightforest.util.entities.EntityUtil;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 public class Lich extends BaseTFBoss {
 	public static final int PARTICLE_BURST_COOLDOWN = 23; //How many ticks between bursts of particles during the start of the death animation
@@ -150,8 +153,7 @@ public class Lich extends BaseTFBoss {
 		this.goalSelector.addGoal(0, new AttemptToGoHomeGoal<>(this, 1.25D) {
 			@Override
 			public boolean canUse() {
-				if (Lich.this.getRestrictionPoint() == null) return false;
-				return Lich.this.getRestrictionPoint().pos().getY() > Lich.this.getY() + 2 || super.canUse();
+				return super.canUse() && Lich.this.isOutsideHomeRange(Lich.this.position());
 			}
 
 			@Override
@@ -308,7 +310,7 @@ public class Lich extends BaseTFBoss {
 	public boolean isOutsideHomeRange(Vec3 pos) {
 		if (this.getRestrictionPoint() == null) return false;
 		BlockPos point = this.getRestrictionPoint().pos();
-		return point.distToCenterSqr(pos) > (this.getHomeRadius() * this.getHomeRadius()) || (this.getPhase() == 3 && this.getY() < point.below(3).getY());
+		return point.distToCenterSqr(pos) > (this.getHomeRadius() * this.getHomeRadius()) || (this.getPhase() == 3 && this.getY() < point.getY() - 3);
 	}
 
 	@Override
@@ -414,12 +416,14 @@ public class Lich extends BaseTFBoss {
 	//-----------------------------------------//
 
 	public void launchProjectileAt(ThrowableProjectile projectile) {
+		if (this.getTarget() == null) return;
+
 		float bodyFacingAngle = ((this.yBodyRot * Mth.PI) / 180F);
 		double sx = this.getX() + (Mth.cos(bodyFacingAngle) * 0.65D);
 		double sy = this.getY() + (this.getBbHeight() * 0.82D);
 		double sz = this.getZ() + (Mth.sin(bodyFacingAngle) * 0.65D);
 
-		double tx = Objects.requireNonNull(this.getTarget()).getX() - sx;
+		double tx = this.getTarget().getX() - sx;
 		double ty = (this.getTarget().getBoundingBox().minY + this.getTarget().getBbHeight() / 2.0F) - (this.getY() + this.getBbHeight() / 2.0F);
 		double tz = this.getTarget().getZ() - sz;
 
@@ -603,10 +607,15 @@ public class Lich extends BaseTFBoss {
 		for (int i = 0; i < tries; i++) {
 			// we abuse LivingEntity.attemptTeleport, which does all the collision/ground checking for us, then teleport back to our original spot
 			double tx = targetEntity.getX() + this.getRandom().nextGaussian() * 16D;
-			double ty = targetEntity.getY();
+			double ty = targetEntity.getY() + 2;
 			double tz = targetEntity.getZ() + this.getRandom().nextGaussian() * 16D;
 
 			boolean destClear = this.randomTeleport(tx, ty, tz, false);
+			if (destClear) {
+				tx = this.getX();
+				ty = this.getY();
+				tz = this.getZ();
+			}
 			boolean canSeeTargetAtDest = this.hasLineOfSight(targetEntity); // Don't use senses cache because we're in a temporary position
 			this.teleportTo(origX, origY, origZ);
 
@@ -622,11 +631,6 @@ public class Lich extends BaseTFBoss {
 	 */
 	private void teleportToNoChecks(double destX, double destY, double destZ) {
 		this.lichTeleportParticles(false);
-
-		// save original position
-		double srcX = this.getX();
-		double srcY = this.getY();
-		double srcZ = this.getZ();
 
 		// change position
 		this.teleportTo(destX, destY, destZ);
@@ -883,7 +887,7 @@ public class Lich extends BaseTFBoss {
 
 	@Override
 	public int getHomeRadius() {
-		return 20;
+		return 30;
 	}
 
 	@Override

@@ -62,8 +62,11 @@ public class LichShadowsGoal extends Goal {
 			} else if (targetedEntity != null && this.lich.getAttackCooldown() == 0) {
 				if (this.lich.distanceTo(targetedEntity) < this.attackRange) {
 					this.attack(this.lich);
-					this.lich.getAllClones().forEach(this::attack);
-				}
+                    for (Lich clone : this.lich.getAllClones()) {
+						clone.setTarget(this.lich.getTarget());
+						this.attack(clone);
+                    }
+                }
 			}
 		} else this.checkForMaster();
 	}
