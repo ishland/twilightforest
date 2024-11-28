@@ -55,8 +55,8 @@ public class BrittleFlaskItem extends Item {
 		PotionFlaskComponent flaskContents = stack.getOrDefault(TFDataComponents.POTION_FLASK_CONTENTS, PotionFlaskComponent.EMPTY);
 		PotionContents potionContents = other.get(DataComponents.POTION_CONTENTS);
 
-		if (action == ClickAction.SECONDARY && potionContents != null && potionContents != PotionContents.EMPTY) {
-			if ((flaskContents.potion() == PotionContents.EMPTY || flaskContents.potion().equals(potionContents)) && flaskContents.breakage() <= 0 && flaskContents.doses() < DOSES) {
+		if (action == ClickAction.SECONDARY && potionContents != null) {
+			if ((flaskContents.potion().potion().isEmpty() || flaskContents.potion().equals(potionContents)) && flaskContents.doses() < DOSES - flaskContents.breakage()) {
 				if (!player.getAbilities().instabuild) {
 					other.shrink(1);
 					player.getInventory().add(new ItemStack(Items.GLASS_BOTTLE));
@@ -117,7 +117,7 @@ public class BrittleFlaskItem extends Item {
 					stack.update(TFDataComponents.POTION_FLASK_CONTENTS, flaskContents, component -> {
 						component = component.removeDose();
 						if (component.breakable() && !player.getAbilities().instabuild) {
-							if (component.doses() <= 0) {
+							if (component.breakage() >= DOSES) {
 								stack.shrink(1);
 								level.playSound(null, player, TFSounds.BRITTLE_FLASK_BREAK.get(), player.getSoundSource(), 1.5F, 0.7F);
 							} else {

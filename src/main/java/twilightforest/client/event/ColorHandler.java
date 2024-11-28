@@ -374,7 +374,12 @@ public class ColorHandler {
 
 		event.register((stack, index) -> index != 1 ? -1 : DyedItemColor.getOrDefault(stack, ArcticArmorItem.DEFAULT_COLOR), TFItems.ARCTIC_HELMET.get(), TFItems.ARCTIC_CHESTPLATE.get(), TFItems.ARCTIC_LEGGINGS.get(), TFItems.ARCTIC_BOOTS.get());
 
-		event.register((stack, index) -> index > 0 ? -1 : stack.getOrDefault(TFDataComponents.POTION_FLASK_CONTENTS, PotionFlaskComponent.EMPTY).potion().getColor(), TFItems.BRITTLE_FLASK.get(), TFItems.GREATER_FLASK.get());
+		event.register((stack, index) -> {
+			if (index > 0) return -1;
+			var contents = stack.getOrDefault(TFDataComponents.POTION_FLASK_CONTENTS, PotionFlaskComponent.EMPTY);
+			if (contents.potion().potion().isEmpty()) return -1;
+			return contents.potion().getColor();
+		}, TFItems.BRITTLE_FLASK.get(), TFItems.GREATER_FLASK.get());
 
 		for (DeferredSpawnEggItem egg : TFEntities.SPAWN_EGGS.getEntries().stream().map(DeferredHolder::get).map(DeferredSpawnEggItem.class::cast).toList()) {
 			event.register((stack, index) -> FastColor.ARGB32.opaque(egg.getColor(index)), egg);
