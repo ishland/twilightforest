@@ -567,6 +567,7 @@ public class BlockLootTables extends BlockLootSubProvider {
 		dropSelf(TFBlocks.SORTING_BANISTER.get());
 		dropSelf(TFBlocks.SORTING_CHEST.get());
 		dropSelf(TFBlocks.SORTING_TRAPPED_CHEST.get());
+		add(TFBlocks.OMINOUS_FIRE.get(), noDrop());
 
 	}
 

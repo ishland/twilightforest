@@ -291,6 +291,7 @@ public final class TFSounds {
 	public static final DeferredHolder<SoundEvent, SoundEvent> YETI_HURT = createEvent("entity.twilightforest.yeti.hurt");
 	public static final DeferredHolder<SoundEvent, SoundEvent> YETI_THROW = createEvent("entity.twilightforest.yeti.throw");
 	public static final DeferredHolder<SoundEvent, SoundEvent> ZOMBIE_SCEPTER_USE = createEvent("item.twilightforest.zombie_scepter.use");
+	public static final DeferredHolder<SoundEvent, SoundEvent> OMINOUS_FIRE = createEvent("block.twilightforest.ominous_fire.light");
 
 	//Parrot sounds
 	public static final DeferredHolder<SoundEvent, SoundEvent> ALPHA_YETI_PARROT = createEvent("entity.twilightforest.parrot.imitate.alpha_yeti");

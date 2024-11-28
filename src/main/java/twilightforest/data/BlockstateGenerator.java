@@ -520,6 +520,37 @@ public class BlockstateGenerator extends BlockModelBuilders {
 		this.terrorcotta();
 
 		this.simpleBlock(TFBlocks.SINISTER_SPAWNER.value(), this.models().withExistingParent( "sinister_spawner", "block/spawner").texture("all", TwilightForestMod.prefix("block/sinister_spawner")).renderType(CUTOUT));
+
+		ModelFile floor0 = this.models().withExistingParent(TFBlocks.OMINOUS_FIRE.getId().getPath() + "_floor0", ResourceLocation.withDefaultNamespace("block/template_fire_floor")).renderType(CUTOUT).texture("fire", blockTexture(TFBlocks.OMINOUS_FIRE.get()) + "_0");
+		ModelFile floor1 = this.models().withExistingParent(TFBlocks.OMINOUS_FIRE.getId().getPath() + "_floor1", ResourceLocation.withDefaultNamespace("block/template_fire_floor")).renderType(CUTOUT).texture("fire", blockTexture(TFBlocks.OMINOUS_FIRE.get()) + "_1");
+		ModelFile side0 = this.models().withExistingParent(TFBlocks.OMINOUS_FIRE.getId().getPath() + "_side0", ResourceLocation.withDefaultNamespace("block/template_fire_side")).renderType(CUTOUT).texture("fire", blockTexture(TFBlocks.OMINOUS_FIRE.get()) + "_0");
+		ModelFile side1 = this.models().withExistingParent(TFBlocks.OMINOUS_FIRE.getId().getPath() + "_side1", ResourceLocation.withDefaultNamespace("block/template_fire_side")).renderType(CUTOUT).texture("fire", blockTexture(TFBlocks.OMINOUS_FIRE.get()) + "_1");
+		ModelFile side_alt0 = this.models().withExistingParent(TFBlocks.OMINOUS_FIRE.getId().getPath() + "_side_alt0", ResourceLocation.withDefaultNamespace("block/template_fire_side_alt")).renderType(CUTOUT).texture("fire", blockTexture(TFBlocks.OMINOUS_FIRE.get()) + "_0");
+		ModelFile side_alt1 = this.models().withExistingParent(TFBlocks.OMINOUS_FIRE.getId().getPath() + "_side_alt1", ResourceLocation.withDefaultNamespace("block/template_fire_side_alt")).renderType(CUTOUT).texture("fire", blockTexture(TFBlocks.OMINOUS_FIRE.get()) + "_1");
+
+		getMultipartBuilder(TFBlocks.OMINOUS_FIRE.get())
+			.part().modelFile(floor0).nextModel()
+			.modelFile(floor1).addModel().end()
+
+			.part().modelFile(side0).nextModel()
+			.modelFile(side1).nextModel()
+			.modelFile(side_alt0).nextModel()
+			.modelFile(side_alt1).addModel().end()
+
+			.part().modelFile(side0).rotationY(90).nextModel()
+			.modelFile(side1).rotationY(90).nextModel()
+			.modelFile(side_alt0).rotationY(90).nextModel()
+			.modelFile(side_alt1).rotationY(90).addModel().end()
+
+			.part().modelFile(side0).rotationY(180).nextModel()
+			.modelFile(side1).rotationY(180).nextModel()
+			.modelFile(side_alt0).rotationY(180).nextModel()
+			.modelFile(side_alt1).rotationY(180).addModel().end()
+
+			.part().modelFile(side0).rotationY(270).nextModel()
+			.modelFile(side1).rotationY(270).nextModel()
+			.modelFile(side_alt0).rotationY(270).nextModel()
+			.modelFile(side_alt1).rotationY(270).addModel().end();
 	}
 
 	private void registerCoronationCarpet() {
