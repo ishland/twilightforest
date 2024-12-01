@@ -85,7 +85,7 @@ public class ChainBlockItem extends Item {
 		MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
 		if (server != null) {
 			int destruction = stack.getEnchantmentLevel(server.registryAccess().holderOrThrow(TFEnchantments.DESTRUCTION));
-			if (destruction > 0) return this.getHarvestLevel(destruction).createToolProperties(BlockTagGenerator.MINEABLE_WITH_BLOCK_AND_CHAIN).isCorrectForDrops(state);
+			if (destruction > 0) return !state.is(this.getHarvestLevel(destruction).incorrectBlocksForDrops()); //FIXME 1.21.3
 		}
 		return false;
 	}
