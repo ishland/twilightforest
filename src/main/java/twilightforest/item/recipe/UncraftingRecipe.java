@@ -12,8 +12,6 @@ import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import twilightforest.init.TFRecipes;
 
-import java.util.Arrays;
-
 public class UncraftingRecipe extends ShapedRecipe {
 
 	private final int cost;
@@ -41,7 +39,7 @@ public class UncraftingRecipe extends ShapedRecipe {
 
 	//Checks if the itemStack is a part of the ingredient when UncraftingMenu's getRecipesFor() method iterates through all recipes.
 	public boolean isItemStackAnIngredient(ItemStack stack) {
-		return Arrays.stream(this.input.getItems()).anyMatch(i -> (stack.getItem() == i.getItem() && stack.getCount() >= this.count));
+		return this.input.items().stream().anyMatch(i -> (stack.is(i.value()) && stack.getCount() >= this.count));
 	}
 
 	@Override
