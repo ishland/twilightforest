@@ -8,7 +8,9 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
@@ -21,11 +23,13 @@ import net.neoforged.neoforge.common.world.PieceBeardifierModifier;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.TFRegistries;
 import twilightforest.beans.Autowired;
+import twilightforest.data.tags.BlockTagGenerator;
 import twilightforest.entity.MagicPainting;
 import twilightforest.entity.MagicPaintingVariant;
 import twilightforest.init.TFEntities;
 import twilightforest.init.TFStructurePieceTypes;
 import twilightforest.init.custom.MagicPaintingVariants;
+import twilightforest.util.BoundingBoxUtils;
 import twilightforest.util.jigsaw.JigsawPlaceContext;
 import twilightforest.util.jigsaw.JigsawRecord;
 import twilightforest.world.components.structures.SpawnIndexProvider;
@@ -62,6 +66,35 @@ public class LichTowerMagicGallery extends TwilightJigsawPiece implements PieceB
 	@Override
 	public int getGroundLevelDelta() {
 		return 0;
+	}
+
+	@Override
+	public void postProcess(WorldGenLevel level, StructureManager structureManager, ChunkGenerator chunkGen, RandomSource random, BoundingBox chunkBounds, ChunkPos chunkPos, BlockPos structureCenterPos) {
+		{
+			JigsawRecord sourceJigsaw = this.getSourceJigsaw();
+			BlockPos sourcePos = this.templatePosition.offset(sourceJigsaw.pos());
+			BlockPos leftPos = sourcePos.relative(sourceJigsaw.orientation().front().getClockWise(Direction.Axis.Y));
+
+			Direction counterClockWise = sourceJigsaw.orientation().front().getCounterClockWise(Direction.Axis.Y);
+			// Special shifting for if this gallery has an entrance that is 2 blocks wide
+			int span = BoundingBoxUtils.getSpan(this.boundingBox, counterClockWise.getAxis());
+			BlockPos rightPos = sourcePos.relative(counterClockWise, 1 + ((span + 1) % 2));
+
+			removeIfBanister(level, leftPos, chunkBounds);
+			removeIfBanister(level, leftPos.above(), chunkBounds);
+			removeIfBanister(level, rightPos, chunkBounds);
+			removeIfBanister(level, rightPos.below(), chunkBounds);
+		}
+
+		super.postProcess(level, structureManager, chunkGen, random, chunkBounds, chunkPos, structureCenterPos);
+	}
+
+	private static void removeIfBanister(WorldGenLevel level, BlockPos pos, BoundingBox chunkBounds) {
+		if (chunkBounds.isInside(pos)) {
+			if (level.getBlockState(pos).is(BlockTagGenerator.BANISTERS)) {
+				level.removeBlock(pos, false);
+			}
+		}
 	}
 
 	@Override
