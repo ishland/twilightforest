@@ -594,10 +594,11 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 
 		if (parameters.length == 2 && level.getBlockEntity(pos) instanceof RandomizableContainer lootBlock) {
 			ResourceLocation lootTableId = switch (parameters[1]) {
-				case "hall" -> TFLootTables.USELESS_LOOT.location(); // FIXME
+				case "room" -> TFLootTables.TOWER_ROOM.location();
 				case "library" -> TFLootTables.TOWER_LIBRARY.location();
 				case "potion" -> TFLootTables.TOWER_POTION.location();
-				case "room" -> TFLootTables.TOWER_ROOM.location();
+				case "grave" -> TFLootTables.TOWER_GRAVE.location();
+				case "enchanting" -> TFLootTables.TOWER_ENCHANTING.location();
 				default -> ResourceLocation.parse(parameters[1]);
 			};
 			lootBlock.setLootTable(ResourceKey.create(Registries.LOOT_TABLE, lootTableId), random.nextLong());
@@ -624,8 +625,8 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 		level.setBlock(pos, shelf, Block.UPDATE_CLIENTS);
 		if (level.getBlockEntity(pos) instanceof ChiseledCanopyShelfBlockEntity shelfBlockEntity) {
 			for (int index : filledSlots) {
-				// Spawner shelves never contain enchanted books; Otherwise Chiseled Shelves have a 1/5 chance of generating an enchanted book instead of only a book
-				ItemStack book = isHostile || random.nextInt(5) != 0 ? new ItemStack(Items.BOOK) : EnchantmentHelper.enchantItem(random, new ItemStack(Items.BOOK), random.nextIntBetweenInclusive(1, 40), registryAccess, Optional.empty());
+				// Spawner shelves never contain enchanted books; Otherwise Chiseled Shelves have a 1/10 chance of generating an enchanted book instead of only a book
+				ItemStack book = isHostile || random.nextInt(16) != 0 ? new ItemStack(Items.BOOK) : EnchantmentHelper.enchantItem(random, new ItemStack(Items.BOOK), random.nextIntBetweenInclusive(1, 40), registryAccess, Optional.empty());
 				shelfBlockEntity.items.set(index, book);
 			}
 
