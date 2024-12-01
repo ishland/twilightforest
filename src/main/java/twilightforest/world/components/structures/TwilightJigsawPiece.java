@@ -41,19 +41,11 @@ public abstract class TwilightJigsawPiece extends TwilightTemplateStructurePiece
 		this.spareJigsaws = readConnectionsFromNBT(compoundTag);
 	}
 
-	public TwilightJigsawPiece(StructurePieceType type, int genDepth, StructureTemplateManager structureManager, ResourceLocation templateLocation, StructurePlaceSettings placeSettings, BlockPos startPosition) {
-		this(type, genDepth, structureManager, templateLocation, placeSettings, startPosition, null, JigsawRecord.allFromTemplate(structureManager, templateLocation, placeSettings));
-	}
-
 	public TwilightJigsawPiece(StructurePieceType type, int genDepth, StructureTemplateManager structureManager, ResourceLocation templateLocation, JigsawPlaceContext jigsawContext) {
-		this(type, genDepth, structureManager, templateLocation, jigsawContext.placementSettings(), jigsawContext.templatePos(), jigsawContext.seedJigsaw(), jigsawContext.spareJigsaws());
-	}
+		super(type, genDepth, structureManager, templateLocation, jigsawContext.placementSettings(), jigsawContext.templatePos());
 
-	private TwilightJigsawPiece(StructurePieceType type, int genDepth, StructureTemplateManager structureManager, ResourceLocation templateLocation, StructurePlaceSettings placeSettings, BlockPos startPosition, @Nullable JigsawRecord sourceJigsaw, List<JigsawRecord> spareJigsaws) {
-		super(type, genDepth, structureManager, templateLocation, placeSettings, startPosition);
-
-		this.sourceJigsaw = sourceJigsaw;
-		this.spareJigsaws = Collections.unmodifiableList(spareJigsaws);
+		this.sourceJigsaw = jigsawContext.seedJigsaw();
+		this.spareJigsaws = Collections.unmodifiableList(jigsawContext.spareJigsaws());
 	}
 
 	@Nullable
