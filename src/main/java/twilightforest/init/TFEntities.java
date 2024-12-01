@@ -10,7 +10,7 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.entity.vehicle.ChestBoat;
 import net.minecraft.world.item.Item;
-import net.neoforged.neoforge.common.DeferredSpawnEggItem;
+import net.minecraft.world.item.SpawnEggItem;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import org.jetbrains.annotations.Nullable;
@@ -152,7 +152,7 @@ public class TFEntities {
 
 	public static <E extends Mob> DeferredHolder<EntityType<?>, EntityType<E>> registerWithEgg(String name, EntityType.Builder<E> builder, int primaryColor, int secondaryColor, Supplier<AttributeSupplier.Builder> attributes, @Nullable SpawnPlacements.SpawnPredicate<E> predicate) {
 		DeferredHolder<EntityType<?>, EntityType<E>> ret = ENTITY_TYPES.register(name, () -> builder.build(createIDFor(name)));
-		SPAWN_EGGS.register(name + "_spawn_egg", () -> new DeferredSpawnEggItem(ret, primaryColor, secondaryColor, new Item.Properties()));
+		SPAWN_EGGS.register(name + "_spawn_egg", () -> new SpawnEggItem(ret.get(), primaryColor, secondaryColor, new Item.Properties()));
 		ATTRIBUTES.put(ret, attributes);
 		if (predicate != null) {
 			SPAWN_PREDICATES.put(ret, predicate);
