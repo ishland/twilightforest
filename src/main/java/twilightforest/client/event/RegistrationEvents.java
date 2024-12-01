@@ -3,7 +3,6 @@ package twilightforest.client.event;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.*;
 import net.minecraft.client.model.geom.LayerDefinitions;
-import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -61,9 +60,8 @@ import twilightforest.client.model.block.patch.PatchModelLoader;
 import twilightforest.client.model.entity.*;
 import twilightforest.client.model.item.TrollsteinnModel;
 import twilightforest.client.particle.*;
-import twilightforest.client.renderer.TFSkyRenderer;
-import twilightforest.client.renderer.entity.*;
 import twilightforest.client.renderer.block.*;
+import twilightforest.client.renderer.entity.*;
 import twilightforest.client.renderer.entity.layers.IceLayer;
 import twilightforest.client.renderer.entity.layers.ShieldLayer;
 import twilightforest.client.renderer.map.ConqueredMapIconRenderer;
@@ -653,12 +651,13 @@ public class RegistrationEvents {
 		event.register(TFMapDecorations.FINAL_CASTLE.get(), new ConqueredMapIconRenderer());
 	}
 
-	private static void attachRenderLayers(EntityRenderersEvent.AddLayers event) {
+	@SuppressWarnings("unchecked")//Should be fine…?
+	private static <T extends LivingEntity, S extends LivingEntityRenderState, M extends EntityModel<S>> void attachRenderLayers(EntityRenderersEvent.AddLayers event) {
 		BakedMultiPartRenderers.bakeMultiPartRenderers(event.getContext());
 		for (EntityType<?> type : event.getEntityTypes()) {
 			var renderer = event.getRenderer(type);
 			if (renderer instanceof LivingEntityRenderer<?, ?, ?> living) {
-				attachRenderLayers(living);
+				attachRenderLayers((LivingEntityRenderer<T, S, M>) living);
 			}
 		}
 

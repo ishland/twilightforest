@@ -1,11 +1,13 @@
 package twilightforest.client.renderer.entity.layers;
 
+import com.google.common.reflect.TypeToken;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.Sheets;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
@@ -14,6 +16,8 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
+import net.minecraft.util.context.ContextKey;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import org.apache.commons.lang3.ArrayUtils;
@@ -26,31 +30,33 @@ public class ShieldLayer<S extends LivingEntityRenderState, M extends EntityMode
 	public static final ModelResourceLocation LOC = ModelResourceLocation.standalone(TwilightForestMod.prefix("item/shield"));
 	private static final Direction[] DIRS = ArrayUtils.add(Direction.values(), null);
 
+	public static TypeToken<LivingEntityRenderer<LivingEntity, LivingEntityRenderState, EntityModel<LivingEntityRenderState>>> SHIELD_TYPE_TOKEN = new TypeToken<>() {};
+	public static ContextKey<Integer> SHIELD_COUNT_KEY = new ContextKey<>(TwilightForestMod.prefix("shield_count"));
+
 	public ShieldLayer(RenderLayerParent<S, M> renderer) {
 		super(renderer);
 	}
 
 	@Override
 	public void render(PoseStack stack, MultiBufferSource source, int light, S state, float netHeadYaw, float headPitch) {
-		if (this.getShieldCount(entity) > 0) {
-			this.renderShields(stack, source, state);
+		Integer count = state.getRenderData(SHIELD_COUNT_KEY);
+		if (count != null && count > 0) {
+			this.renderShields(stack, source, state, count);
 		}
 	}
 
-	//TODO oh no...
-	private int getShieldCount(T entity) {
+	public static int getShieldCount(LivingEntity entity) {
 		return entity instanceof Lich lich
 			? lich.getShieldStrength()
 			: entity.getData(TFDataAttachments.FORTIFICATION_SHIELDS).shieldsLeft();
 	}
 
-	private void renderShields(PoseStack stack, MultiBufferSource buffer, S state) {
+	private void renderShields(PoseStack stack, MultiBufferSource buffer, S state, int count) {
 		float age = state.ageInTicks;
 		float rotateAngleY = age / -5.0F;
 		float rotateAngleX = Mth.sin(age / 5.0F) / 4.0F;
 		float rotateAngleZ = Mth.cos(age / 5.0F) / 4.0F;
 
-		int count = getShieldCount(entity);
 		for (int c = 0; c < count; c++) {
 			stack.pushPose();
 
@@ -68,8 +74,8 @@ public class ShieldLayer<S extends LivingEntityRenderState, M extends EntityMode
 			for (Direction dir : DIRS) {
 				Minecraft.getInstance().getItemRenderer().renderQuadList(
 					stack,
-					buffer.getBuffer(Sheets.translucentCullBlockSheet()),
-					model.getQuads(null, dir, entity.getRandom(), ModelData.EMPTY, Sheets.translucentCullBlockSheet()),
+					buffer.getBuffer(Sheets.translucentItemSheet()),
+					model.getQuads(null, dir, Minecraft.getInstance().font.random, ModelData.EMPTY, Sheets.translucentItemSheet()),
 					ItemStack.EMPTY,
 					0xF000F0,
 					OverlayTexture.NO_OVERLAY
