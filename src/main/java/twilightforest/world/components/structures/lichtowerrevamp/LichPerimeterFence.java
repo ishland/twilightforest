@@ -57,7 +57,7 @@ public class LichPerimeterFence extends TwilightJigsawPiece implements PieceBear
 
 	@Override
 	public int getGroundLevelDelta() {
-		return 1;
+		return 2;
 	}
 
 	public BlockPos bottomCenter() {
