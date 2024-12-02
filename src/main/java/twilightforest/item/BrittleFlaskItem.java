@@ -59,7 +59,9 @@ public class BrittleFlaskItem extends Item {
 			if ((flaskContents.potion().potion().isEmpty() || flaskContents.potion().equals(potionContents)) && flaskContents.doses() < DOSES - flaskContents.breakage()) {
 				if (!player.getAbilities().instabuild) {
 					other.shrink(1);
-					player.getInventory().add(new ItemStack(Items.GLASS_BOTTLE));
+					if (!player.getInventory().add(new ItemStack(Items.GLASS_BOTTLE))) {
+						player.drop(new ItemStack(Items.GLASS_BOTTLE), false);
+					}
 				}
 				stack.update(TFDataComponents.POTION_FLASK_CONTENTS, flaskContents, component -> component.tryAddDose(potionContents));
 				player.playSound(TFSounds.FLASK_FILL.get(), (flaskContents.doses() + 1) * 0.25F, player.level().getRandom().nextFloat() * 0.1F + 0.9F);
