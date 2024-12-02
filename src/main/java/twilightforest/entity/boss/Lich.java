@@ -105,7 +105,6 @@ public class Lich extends BaseTFBoss {
 		this.setMinionsToSummon((int) this.getAttributeValue(TFAttributes.MINION_COUNT));
 	}
 
-	@SuppressWarnings("this-escape")
 	public Lich(Level level, Lich otherLich) {
 		this(TFEntities.LICH.get(), level);
 		this.setMasterUUID(otherLich.getUUID());
@@ -643,6 +642,8 @@ public class Lich extends BaseTFBoss {
 
 		// sometimes we need to do this
 		this.jumping = false;
+		//extinguish when teleporting
+		this.clearFire();
 	}
 
 	//-----------------------------------------//
