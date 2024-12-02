@@ -31,6 +31,20 @@ public record ChestLootTables(HolderLookup.Provider registries) implements LootT
 	@Override
 	public void generate(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> register) {
 		HolderLookup.RegistryLookup<Enchantment> lookup = this.registries.lookupOrThrow(Registries.ENCHANTMENT);
+
+		register.accept(TFLootTables.SUSPICIOUS_STEW,
+			LootTable.lootTable()
+				.withPool(LootPool.lootPool()
+					.setRolls(ConstantValue.exactly(1))
+					.add(LootItem.lootTableItem(Items.SUSPICIOUS_STEW).apply(SetStewEffectFunction.stewEffect()
+						.withEffect(MobEffects.JUMP, UniformGenerator.between(7, 10))
+						.withEffect(MobEffects.WEAKNESS, UniformGenerator.between(6, 8))
+						.withEffect(MobEffects.BLINDNESS, UniformGenerator.between(5, 7))
+						.withEffect(MobEffects.POISON, UniformGenerator.between(10, 20))
+						.withEffect(MobEffects.SATURATION, UniformGenerator.between(7, 10))
+						.withEffect(MobEffects.WITHER, UniformGenerator.between(6, 10))
+					))));
+
 		register.accept(TFLootTables.USELESS_LOOT,
 			LootTable.lootTable()
 				.withPool(LootPool.lootPool()
@@ -64,14 +78,7 @@ public record ChestLootTables(HolderLookup.Provider registries) implements LootT
 					.add(LootItem.lootTableItem(Items.STICK).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 8))).setWeight(3))
 				).withPool(LootPool.lootPool()
 					.setRolls(ConstantValue.exactly(1))
-					.add(LootItem.lootTableItem(Items.SUSPICIOUS_STEW).setWeight(8).apply(SetStewEffectFunction.stewEffect()
-						.withEffect(MobEffects.JUMP, UniformGenerator.between(7, 10))
-						.withEffect(MobEffects.WEAKNESS, UniformGenerator.between(6, 8))
-						.withEffect(MobEffects.BLINDNESS, UniformGenerator.between(5, 7))
-						.withEffect(MobEffects.POISON, UniformGenerator.between(10, 20))
-						.withEffect(MobEffects.SATURATION, UniformGenerator.between(7, 10))
-						.withEffect(MobEffects.WITHER, UniformGenerator.between(6, 10))
-					))
+					.add(NestedLootTable.lootTableReference(TFLootTables.SUSPICIOUS_STEW).setWeight(8))
 					.add(LootItem.lootTableItem(Items.SUSPICIOUS_STEW).setWeight(2))
 					.add(LootItem.lootTableItem(Items.MUSHROOM_STEW).setWeight(4))
 					.add(LootItem.lootTableItem(Items.BELL))
@@ -490,14 +497,7 @@ public record ChestLootTables(HolderLookup.Provider registries) implements LootT
 					.add(LootItem.lootTableItem(Items.STRING).apply(SetItemCountFunction.setCount(UniformGenerator.between(3, 8))).setWeight(75))
 					.add(LootItem.lootTableItem(Items.TORCH).apply(SetItemCountFunction.setCount(UniformGenerator.between(9, 24))).setWeight(75))
 					.add(LootItem.lootTableItem(Items.CANDLE).apply(SetItemCountFunction.setCount(UniformGenerator.between(4, 14))).setWeight(75))
-					.add(LootItem.lootTableItem(Items.SUSPICIOUS_STEW).apply(
-						SetStewEffectFunction.stewEffect()
-							.withEffect(MobEffects.NIGHT_VISION, UniformGenerator.between(7.0F, 10.0F))
-							.withEffect(MobEffects.JUMP, UniformGenerator.between(7.0F, 10.0F))
-							.withEffect(MobEffects.WEAKNESS, UniformGenerator.between(6.0F, 8.0F))
-							.withEffect(MobEffects.BLINDNESS, UniformGenerator.between(5.0F, 7.0F))
-							.withEffect(MobEffects.POISON, UniformGenerator.between(10.0F, 20.0F))
-							.withEffect(MobEffects.SATURATION, UniformGenerator.between(7.0F, 10.0F))).setWeight(75))
+					.add(NestedLootTable.lootTableReference(TFLootTables.SUSPICIOUS_STEW).setWeight(75))
 					.add(LootItem.lootTableItem(Items.GOLD_NUGGET).apply(SetItemCountFunction.setCount(UniformGenerator.between(3, 9))).setWeight(75))
 					.add(LootItem.lootTableItem(Items.IRON_NUGGET).apply(SetItemCountFunction.setCount(UniformGenerator.between(6, 20))).setWeight(75))
 					.add(LootItem.lootTableItem(Items.BREAD).apply(SetItemCountFunction.setCount(UniformGenerator.between(5, 15))).setWeight(75)))
@@ -608,6 +608,22 @@ public record ChestLootTables(HolderLookup.Provider registries) implements LootT
 				.add(LootItem.lootTableItem(Items.ZOMBIE_HEAD))
 				.add(LootItem.lootTableItem(Items.SKELETON_SKULL))
 				.add(EmptyLootItem.emptyItem().setWeight(8))));
+
+		register.accept(TFLootTables.TOWER_FOYER, LootTable.lootTable()
+			.withPool(LootPool.lootPool().setRolls(UniformGenerator.between(3, 4))
+				.add(LootItem.lootTableItem(Items.ROTTEN_FLESH).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2))).setWeight(4))
+				.add(LootItem.lootTableItem(Items.BONE).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))).setWeight(4))
+				.add(LootItem.lootTableItem(Items.CHARCOAL).apply(SetItemCountFunction.setCount(UniformGenerator.between(3, 5))).setWeight(4))
+				.add(LootItem.lootTableItem(Items.STICK).apply(SetItemCountFunction.setCount(UniformGenerator.between(3, 5))).setWeight(4))
+				.add(LootItem.lootTableItem(Items.BREAD).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 3))).setWeight(2))
+				.add(LootItem.lootTableItem(Items.POTATO).apply(SetItemCountFunction.setCount(UniformGenerator.between(3, 5))).setWeight(2))
+				.add(NestedLootTable.lootTableReference(TFLootTables.SUSPICIOUS_STEW).setWeight(2))
+				.add(LootItem.lootTableItem(TFItems.CHARM_OF_KEEPING_1))));
+
+		register.accept(TFLootTables.CASKET_LOOT, LootTable.lootTable()
+			.withPool(LootPool.lootPool().setRolls(UniformGenerator.between(8, 16))
+				.add(LootItem.lootTableItem(Items.ROTTEN_FLESH))
+				.add(LootItem.lootTableItem(Items.BONE).setWeight(3))));
 
 		//all values in this loot table have been halved so I can fill both chests that appear in the dead ends
 		register.accept(TFLootTables.LABYRINTH_DEAD_END,

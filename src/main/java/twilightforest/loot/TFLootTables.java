@@ -32,6 +32,7 @@ public class TFLootTables {
 	public static final int DEFAULT_PLACE_FLAG = Block.UPDATE_CLIENTS;
 
 	// Chest loot
+	public static final ResourceKey<LootTable> SUSPICIOUS_STEW = register("suspicious_stew");
 	public static final ResourceKey<LootTable> SMALL_HOLLOW_HILL = register("hill_1");
 	public static final ResourceKey<LootTable> MEDIUM_HOLLOW_HILL = register("hill_2");
 	public static final ResourceKey<LootTable> LARGE_HOLLOW_HILL = register("hill_3");
@@ -47,6 +48,8 @@ public class TFLootTables {
 	public static final ResourceKey<LootTable> TOWER_GRAVE = register("tower_grave");
 	public static final ResourceKey<LootTable> TOWER_ENCHANTING = register("tower_enchanting");
 	public static final ResourceKey<LootTable> TOWER_JARS = register("tower_jars");
+	public static final ResourceKey<LootTable> TOWER_FOYER = register("tower_foyer");
+	public static final ResourceKey<LootTable> CASKET_LOOT = register("casket_loot");
 	public static final ResourceKey<LootTable> BASEMENT = register("basement");
 	public static final ResourceKey<LootTable> HUT_JUNK = register("hut_junk");
 	public static final ResourceKey<LootTable> FOUNDATION_BASEMENT = register("foundation_basement");
