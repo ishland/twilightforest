@@ -102,7 +102,7 @@
         },
         {
           "type": "minecraft:loot_table",
-          "value": "twilightforest:suspicious_stew",
+          "value": "twilightforest:chests/suspicious_stew",
           "weight": 2
         },
         {
@@ -117,5 +117,5 @@
       }
     }
   ],
-  "random_sequence": "twilightforest:tower_foyer"
+  "random_sequence": "twilightforest:chests/tower_foyer"
 }

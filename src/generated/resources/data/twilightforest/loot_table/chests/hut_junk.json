@@ -167,7 +167,7 @@
       "entries": [
         {
           "type": "minecraft:loot_table",
-          "value": "twilightforest:suspicious_stew",
+          "value": "twilightforest:chests/suspicious_stew",
           "weight": 8
         },
         {
@@ -218,5 +218,5 @@
       "rolls": 1.0
     }
   ],
-  "random_sequence": "twilightforest:hut_junk"
+  "random_sequence": "twilightforest:chests/hut_junk"
 }
