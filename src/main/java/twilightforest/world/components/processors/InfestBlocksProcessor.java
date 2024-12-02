@@ -47,7 +47,7 @@ public final class InfestBlocksProcessor extends StructureProcessor {
 		var replacement = CONVERSIONS.get().get(modifiedBlockInfo.state().getBlock());
 
 		if (replacement == null || random.nextFloat() > 1/12f)
-			return null;
+			return modifiedBlockInfo;
 
 		return new StructureTemplate.StructureBlockInfo(modifiedBlockInfo.pos(), replacement, null);
 	}
