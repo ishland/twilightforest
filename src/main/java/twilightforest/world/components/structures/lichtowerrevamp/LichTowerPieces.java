@@ -16,6 +16,7 @@ import java.util.Set;
 public final class LichTowerPieces {
 	public static final int YARD_SPAWNS = 0;
 	public static final int INTERIOR_SPAWNS = 1;
+	public static final int EMPTY = 2;
 
 	final ResourceLocation keepsakeCasketRoom = TwilightForestMod.prefix("lich_tower/9x9/keepsake_casket");
 	final ResourceLocation enclosedBridgeCentral = TwilightForestMod.prefix("lich_tower/central_bridge");
