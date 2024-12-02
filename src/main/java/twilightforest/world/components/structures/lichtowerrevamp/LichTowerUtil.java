@@ -160,6 +160,7 @@ public class LichTowerUtil {
 		settings.addProcessor(MetaBlockProcessor.INSTANCE)
 			.addProcessor(StoneBricksVariants.INSTANCE)
 			.addProcessor(CobbleVariants.INSTANCE)
+			.addProcessor(InfestBlocksProcessor.INSTANCE)
 			.addProcessor(UPDATE_MARKER.get());
 	}
 
