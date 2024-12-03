@@ -35,7 +35,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.TwilightForestMod;
 import twilightforest.init.custom.Enforcements;
-import twilightforest.util.landmarks.LandmarkUtil;
+import twilightforest.network.EnforceProgressionStatusPacket;
 import twilightforest.util.Restriction;
 
 import java.util.Optional;
@@ -75,7 +75,7 @@ public class TFWeatherRenderer {
 
 	public static boolean renderSnowAndRain(ClientLevel level, int ticks, float partialTicks, LightTexture lightmap, Vec3 camera) {
 		Minecraft mc = Minecraft.getInstance();
-		if (LandmarkUtil.isProgressionEnforced(level) && mc.player != null && !mc.player.isCreative() && !mc.player.isSpectator()) {
+		if (EnforceProgressionStatusPacket.enforcedProgression && mc.player != null && !mc.player.isCreative() && !mc.player.isSpectator()) {
 			// locked biome weather effects
 			renderLockedBiome(ticks, partialTicks, level, lightmap, mc.player, camera);
 
