@@ -1,5 +1,6 @@
 package twilightforest.client.event;
 
+import com.google.common.reflect.TypeToken;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.*;
 import net.minecraft.client.model.geom.LayerDefinitions;
@@ -99,7 +100,7 @@ public class RegistrationEvents {
 		bus.addListener(RegistrationEvents::registerClientExtensions);
 		bus.addListener(RegistrationEvents::registerMapDecorators);
 		bus.addListener(RegistrationEvents::registerParticleFactories);
-		bus.addListener(RegistrationEvents::registerCustomRenderData);
+		bus.addListener((RegisterRenderStateModifiersEvent event) ->  registerCustomRenderData(event));
 
 		bus.addListener(ColorHandler::registerBlockColors);
 		bus.addListener(ColorHandler::registerItemColors);
@@ -682,9 +683,9 @@ public class RegistrationEvents {
 		return optifinePresent;
 	}
 
-	public static void registerCustomRenderData(RegisterRenderStateModifiersEvent event) {
-		event.registerEntityModifier(ShieldLayer.SHIELD_TYPE_TOKEN, (living, state) -> state.setRenderData(ShieldLayer.SHIELD_COUNT_KEY, ShieldLayer.getShieldCount(living)));
-		event.registerEntityModifier(IceLayer.FROST_TYPE_TOKEN, (living, state) -> {
+	public static<S extends LivingEntityRenderState, M extends EntityModel<S>> void registerCustomRenderData(RegisterRenderStateModifiersEvent event) {
+		event.registerEntityModifier(new TypeToken<LivingEntityRenderer<?, ?, ?>>() {}, (living, state) -> state.setRenderData(ShieldLayer.SHIELD_COUNT_KEY, ShieldLayer.getShieldCount(living)));
+		event.registerEntityModifier(new TypeToken<LivingEntityRenderer<?, ?, ?>>() {}, (living, state) -> {
 			AttributeInstance speed = living.getAttribute(Attributes.MOVEMENT_SPEED);
 			if (speed == null) return;
 

@@ -1,20 +1,17 @@
 package twilightforest.client.renderer.entity.layers;
 
-import com.google.common.reflect.TypeToken;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.context.ContextKey;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import twilightforest.TwilightForestMod;
@@ -24,7 +21,6 @@ import twilightforest.potions.FrostedEffect;
 public class IceLayer<S extends LivingEntityRenderState, M extends EntityModel<S>> extends RenderLayer<S, M> {
 	private final RandomSource random = RandomSource.create();
 
-	public static TypeToken<LivingEntityRenderer<LivingEntity, LivingEntityRenderState, EntityModel<LivingEntityRenderState>>> FROST_TYPE_TOKEN = new TypeToken<>() {};
 	public static ContextKey<Double> FROST_COUNT_KEY = new ContextKey<>(TwilightForestMod.prefix("frost_count"));
 	public static ContextKey<Integer> FROST_ID_KEY = new ContextKey<>(TwilightForestMod.prefix("frost_id"));
 

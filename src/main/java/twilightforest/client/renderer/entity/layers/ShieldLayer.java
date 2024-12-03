@@ -1,13 +1,11 @@
 package twilightforest.client.renderer.entity.layers;
 
-import com.google.common.reflect.TypeToken;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.Sheets;
-import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
@@ -30,7 +28,6 @@ public class ShieldLayer<S extends LivingEntityRenderState, M extends EntityMode
 	public static final ModelResourceLocation LOC = ModelResourceLocation.standalone(TwilightForestMod.prefix("item/shield"));
 	private static final Direction[] DIRS = ArrayUtils.add(Direction.values(), null);
 
-	public static TypeToken<LivingEntityRenderer<LivingEntity, LivingEntityRenderState, EntityModel<LivingEntityRenderState>>> SHIELD_TYPE_TOKEN = new TypeToken<>() {};
 	public static ContextKey<Integer> SHIELD_COUNT_KEY = new ContextKey<>(TwilightForestMod.prefix("shield_count"));
 
 	public ShieldLayer(RenderLayerParent<S, M> renderer) {
