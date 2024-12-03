@@ -25,9 +25,6 @@ import net.minecraft.server.packs.resources.ReloadableResourceManager;
 import net.minecraft.sounds.Music;
 import net.minecraft.sounds.Musics;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -44,7 +41,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
-import net.neoforged.neoforge.client.renderstate.RegisterRenderStateModifiersEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 import twilightforest.TwilightForestMod;
@@ -56,8 +52,6 @@ import twilightforest.client.BugModelAnimationHelper;
 import twilightforest.client.ISTER;
 import twilightforest.client.OptifineWarningScreen;
 import twilightforest.client.TFShaders;
-import twilightforest.client.renderer.entity.layers.IceLayer;
-import twilightforest.client.renderer.entity.layers.ShieldLayer;
 import twilightforest.config.TFConfig;
 import twilightforest.data.tags.ItemTagGenerator;
 import twilightforest.entity.boss.bar.ClientTFBossBar;
@@ -65,7 +59,6 @@ import twilightforest.events.HostileMountEvents;
 import twilightforest.init.TFDataComponents;
 import twilightforest.init.TFDimension;
 import twilightforest.item.*;
-import twilightforest.potions.FrostedEffect;
 import twilightforest.util.HolderMatcher;
 
 import java.time.LocalDate;
@@ -99,7 +92,6 @@ public class ClientEvents {
 		NeoForge.EVENT_BUS.addListener(ClientEvents::removeHostileMountHealth);
 		NeoForge.EVENT_BUS.addListener(ClientEvents::renderAurora);
 		NeoForge.EVENT_BUS.addListener(ClientEvents::renderCustomBossbars);
-		NeoForge.EVENT_BUS.addListener(ClientEvents::registerCustomRenderData);
 		NeoForge.EVENT_BUS.addListener(ClientEvents::renderGiantBlockOutlines);
 		NeoForge.EVENT_BUS.addListener(ClientEvents::setMusicInDimension);
 		NeoForge.EVENT_BUS.addListener(ClientEvents::shakeCamera);
@@ -393,19 +385,5 @@ public class ClientEvents {
 			event.setCanceled(true);
 			bossEvent.renderBossBar(event.getGuiGraphics(), event.getX(), event.getY());
 		}
-	}
-
-	private static void registerCustomRenderData(RegisterRenderStateModifiersEvent event) {
-		event.registerEntityModifier(ShieldLayer.SHIELD_TYPE_TOKEN, (living, state) -> state.setRenderData(ShieldLayer.SHIELD_COUNT_KEY, ShieldLayer.getShieldCount(living)));
-		event.registerEntityModifier(IceLayer.FROST_TYPE_TOKEN, (living, state) -> {
-			AttributeInstance speed = living.getAttribute(Attributes.MOVEMENT_SPEED);
-			if (speed == null) return;
-
-			AttributeModifier frost = speed.getModifier(FrostedEffect.MOVEMENT_SPEED_MODIFIER);
-			if (frost == null) return;
-
-            state.setRenderData(IceLayer.FROST_COUNT_KEY, frost.amount());
-			state.setRenderData(IceLayer.FROST_ID_KEY, living.getId());
-        });
 	}
 }

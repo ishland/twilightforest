@@ -29,6 +29,9 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -44,6 +47,7 @@ import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.client.extensions.common.IClientBlockExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.client.gui.map.RegisterMapDecorationRenderersEvent;
+import net.neoforged.neoforge.client.renderstate.RegisterRenderStateModifiersEvent;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.TwilightForestMod;
 import twilightforest.client.*;
@@ -69,6 +73,7 @@ import twilightforest.client.renderer.map.MagicMapPlayerIconRenderer;
 import twilightforest.components.item.PotionFlaskComponent;
 import twilightforest.init.*;
 import twilightforest.item.*;
+import twilightforest.potions.FrostedEffect;
 import twilightforest.util.woods.TFWoodTypes;
 
 import java.util.List;
@@ -94,6 +99,7 @@ public class RegistrationEvents {
 		bus.addListener(RegistrationEvents::registerClientExtensions);
 		bus.addListener(RegistrationEvents::registerMapDecorators);
 		bus.addListener(RegistrationEvents::registerParticleFactories);
+		bus.addListener(RegistrationEvents::registerCustomRenderData);
 
 		bus.addListener(ColorHandler::registerBlockColors);
 		bus.addListener(ColorHandler::registerItemColors);
@@ -674,5 +680,19 @@ public class RegistrationEvents {
 
 	public static boolean isOptifinePresent() {
 		return optifinePresent;
+	}
+
+	public static void registerCustomRenderData(RegisterRenderStateModifiersEvent event) {
+		event.registerEntityModifier(ShieldLayer.SHIELD_TYPE_TOKEN, (living, state) -> state.setRenderData(ShieldLayer.SHIELD_COUNT_KEY, ShieldLayer.getShieldCount(living)));
+		event.registerEntityModifier(IceLayer.FROST_TYPE_TOKEN, (living, state) -> {
+			AttributeInstance speed = living.getAttribute(Attributes.MOVEMENT_SPEED);
+			if (speed == null) return;
+
+			AttributeModifier frost = speed.getModifier(FrostedEffect.MOVEMENT_SPEED_MODIFIER);
+			if (frost == null) return;
+
+            state.setRenderData(IceLayer.FROST_COUNT_KEY, frost.amount());
+			state.setRenderData(IceLayer.FROST_ID_KEY, living.getId());
+        });
 	}
 }
