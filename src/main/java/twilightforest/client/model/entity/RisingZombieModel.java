@@ -11,9 +11,18 @@ import net.minecraft.client.renderer.entity.state.ZombieRenderState;
 public class RisingZombieModel extends ZombieModel<ZombieRenderState> {
 
 	private float tick;
+	private boolean young;
+	private boolean crouching;
 
 	public RisingZombieModel(ModelPart part) {
 		super(part);
+	}
+
+	@Override
+	public void setupAnim(ZombieRenderState state) {
+		super.setupAnim(state);
+		this.young = state.isBaby;
+		this.crouching = state.isCrouching;
 	}
 
 	@Override
@@ -33,7 +42,7 @@ public class RisingZombieModel extends ZombieModel<ZombieRenderState> {
 			stack.mulPose(Axis.XP.rotationDegrees(-120.0F * (80.0F - Math.min(80.0F, this.tick)) / 80.0F));
 			stack.mulPose(Axis.XP.rotationDegrees(30.0F * (40.0F - Math.min(40.0F, Math.max(0.0F, this.tick - 80.0F))) / 40.0F));
 			stack.translate(0.0F, -yOff, 0.0F);
-			this.headParts().forEach(renderer -> renderer.render(stack, consumer, light, overlay, color));
+			this.head.render(stack, consumer, light, overlay, color);
 			this.body.render(stack, consumer, light, overlay, color);
 			this.rightArm.render(stack, consumer, light, overlay, color);
 			this.leftArm.render(stack, consumer, light, overlay, color);
