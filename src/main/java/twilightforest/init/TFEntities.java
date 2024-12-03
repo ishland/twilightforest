@@ -152,7 +152,7 @@ public class TFEntities {
 
 	public static <E extends Mob> DeferredHolder<EntityType<?>, EntityType<E>> registerWithEgg(String name, EntityType.Builder<E> builder, int primaryColor, int secondaryColor, Supplier<AttributeSupplier.Builder> attributes, @Nullable SpawnPlacements.SpawnPredicate<E> predicate) {
 		DeferredHolder<EntityType<?>, EntityType<E>> ret = ENTITY_TYPES.register(name, () -> builder.build(createIDFor(name)));
-		SPAWN_EGGS.register(name + "_spawn_egg", () -> new SpawnEggItem(ret.get(), primaryColor, secondaryColor, new Item.Properties()));
+		SPAWN_EGGS.register(name + "_spawn_egg", () -> new SpawnEggItem(ret.get(), primaryColor, secondaryColor, new Item.Properties().setId(ResourceKey.create(Registries.ITEM, TwilightForestMod.prefix(name + "_spawn_egg")))));
 		ATTRIBUTES.put(ret, attributes);
 		if (predicate != null) {
 			SPAWN_PREDICATES.put(ret, predicate);
