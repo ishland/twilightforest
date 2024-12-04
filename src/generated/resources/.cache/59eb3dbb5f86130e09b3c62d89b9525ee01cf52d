@@ -1,4 +1,4 @@
-// 1.21.1	2024-12-01T23:56:23.5801391	Loot Tables
+// 1.21.1	2024-12-03T23:39:24.4975452	Loot Tables
 483a7e0c99d5cabeab1ba9f04bd8e88d0a8f7386 data/twilightforest/loot_table/aurora_cache.json
 002a6e2eccdc92db019bd775911912877b26771f data/twilightforest/loot_table/aurora_room.json
 afe7197a19b997d2f5c5980d9805b6093191b44f data/twilightforest/loot_table/blocks/acacia_banister.json
@@ -18,6 +18,7 @@ dfddb4458556d1889abf4d224fab6faa51157c96 data/twilightforest/loot_table/blocks/b
 228b9eb0353cca3e9c46696eec5290b5dd30c694 data/twilightforest/loot_table/blocks/bold_castle_brick_stairs.json
 34c46ae65c651f056f92ba346fe43965decc7ea5 data/twilightforest/loot_table/blocks/bold_castle_brick_tile.json
 cf3361acc0440a61e2977de7dea4d2085a2de792 data/twilightforest/loot_table/blocks/bold_stone_pillar.json
+7efe7e3b1133cbd96eda3d8ee21745190def3dcc data/twilightforest/loot_table/blocks/brazier.json
 4e4c3641a9ec10f49136d921c958f835cc25382b data/twilightforest/loot_table/blocks/candelabra.json
 28233a6460cbb04eae39a0bce85bb2870f43307f data/twilightforest/loot_table/blocks/canopy_banister.json
 00feb01290fae9e981f4d0d345a9edf819b94a72 data/twilightforest/loot_table/blocks/canopy_bookshelf.json

@@ -327,6 +327,7 @@ public class LangGenerator extends TFLangProvider {
 		this.addBlock(TFBlocks.CANOPY_WINDOW, "Canopy Window");
 		this.addBlock(TFBlocks.CANOPY_WINDOW_PANE, "Canopy Window Pane");
 		this.addBlock(TFBlocks.SLIDER, "Slide Trap");
+		this.addBlock(TFBlocks.BRAZIER, "Brazier");
 
 		this.addBlock(TFBlocks.TWILIGHT_OAK_LEAVES, "Twilight Oak Leaves");
 		this.addSapling("twilight_oak", "Sickly Twilight Oak Sapling");

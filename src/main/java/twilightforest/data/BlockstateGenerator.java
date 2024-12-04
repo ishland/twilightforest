@@ -64,6 +64,7 @@ public class BlockstateGenerator extends BlockModelBuilders {
 		builtinEntity(TFBlocks.REACTOR_DEBRIS.get(), "block/blank");
 
 		builtinEntity(TFBlocks.RED_THREAD.get(), "block/blank");
+		builtinEntity(TFBlocks.BRAZIER.get(), "block/wood/planks_canopy_0");
 
 		ModelFile portalModel = models().getExistingFile(prefix("block/twilight_portal"));
 		ModelFile portalOverlayModel = models().getExistingFile(prefix("block/twilight_portal_barrier"));

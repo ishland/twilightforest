@@ -40,10 +40,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import twilightforest.TwilightForestMod;
 import twilightforest.beans.Autowired;
 import twilightforest.block.*;
-import twilightforest.block.entity.CandelabraBlockEntity;
-import twilightforest.block.entity.KeepsakeCasketBlockEntity;
-import twilightforest.block.entity.TFChestBlockEntity;
-import twilightforest.block.entity.TFTrappedChestBlockEntity;
+import twilightforest.block.entity.*;
 import twilightforest.client.event.ClientEvents;
 import twilightforest.client.model.TFModelLayers;
 import twilightforest.client.model.entity.KnightmetalShieldModel;
@@ -107,6 +104,7 @@ public class ISTER extends BlockEntityWithoutLevelRenderer {
 	private Map<BossVariant, TrophyBlockModel> trophies = TrophyRenderer.createTrophyRenderers(Minecraft.getInstance().getEntityModels());
 	private Map<SkullBlock.Type, SkullModelBase> skulls = SkullBlockRenderer.createSkullRenderers(Minecraft.getInstance().getEntityModels());
 	private final CandelabraBlockEntity candelabra = new CandelabraBlockEntity(BlockPos.ZERO, TFBlocks.CANDELABRA.get().defaultBlockState());
+	private final BrazierBlockEntity brazier = new BrazierBlockEntity(BlockPos.ZERO, TFBlocks.BRAZIER.get().defaultBlockState());
 
 	// Use the cached INSTANCE.get instead
 	private ISTER() {
@@ -226,6 +224,11 @@ public class ISTER extends BlockEntityWithoutLevelRenderer {
 						pose.popPose();
 						bufferSource.endBatch();
 					}
+				}
+			} else if (block instanceof BrazierBlock brazierBlock) {
+				BlockEntity blockEntity = brazierBlock.newBlockEntity(BlockPos.ZERO, block.defaultBlockState());
+				if (blockEntity != null) {
+					minecraft.getBlockEntityRenderDispatcher().getRenderer(blockEntity).render(blockEntity, 0, pose, buffers, light, overlay);
 				}
 			}
 		} else if (item instanceof KnightmetalShieldItem) {

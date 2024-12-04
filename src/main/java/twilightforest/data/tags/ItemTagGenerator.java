@@ -226,7 +226,8 @@ public class ItemTagGenerator extends ModdedItemTagGenerator {
 			TFItems.MYSTIC_CROWN.get(),
 			TFItems.CROWN_SPLINTER.get(),
 			TFItems.EXANIMATE_ESSENCE.get(),
-			TFItems.WROUGHT_IRON_BAR.get()
+			TFItems.WROUGHT_IRON_BAR.get(),
+			TFBlocks.BRAZIER.asItem()
 		);
 
 		this.tag(KOBOLD_PACIFICATION_BREADS).add(Items.BREAD);
