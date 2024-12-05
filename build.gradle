@@ -45,6 +45,7 @@ java {
 
 tasks.withType(JavaCompile).configureEach {
 	options.compilerArgs << "-Xlint:all,-classfile,-processing,-deprecation,-this-escape" << "-Werror"
+	options.encoding = 'UTF-8'
 }
 
 base {
@@ -243,8 +244,4 @@ tasks.register('sourceJar', Jar) {
 	dependsOn 'classes'
 	from sourceSets.main.allSource
 	archiveClassifier = 'sources'
-}
-
-tasks.withType(JavaCompile).configureEach {
-	options.encoding = 'UTF-8'
 }
