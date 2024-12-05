@@ -43,7 +43,9 @@ java {
 	}
 }
 
-compileJava.options.compilerArgs << "-Xlint:all,-classfile,-processing,-deprecation,-this-escape" << "-Werror"
+tasks.withType(JavaCompile).configureEach {
+	options.compilerArgs << "-Xlint:all,-classfile,-processing,-deprecation,-this-escape" << "-Werror"
+}
 
 base {
 	archivesName = "${project.mod_id}-${project.minecraft_version}"
