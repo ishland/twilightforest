@@ -741,6 +741,7 @@
   "config.twilightforest.aurora_biomes": "极光着色生物群系",
   "config.twilightforest.aurora_biomes.tooltip": "定义哪些生物群系会出现极光的着色效果。留空此列表来禁用此效果。",
   "config.twilightforest.boss_drop_chests": "Boss战利品箱子",
+  "config.twilightforest.boss_drop_chests.tooltip": "如果启用，暮色森林的Boss将会把它们的掉落物存入箱子中，箱子位于它们的生成地，而非直接把物品掉落出来。注意幻影骑士并不受此影响，因其掉落时的运作机制不同。",
   "config.twilightforest.casket_uuid_locking": "遗物匣UUID锁定",
   "config.twilightforest.cloud_precipitation": "云降水距离",
   "config.twilightforest.default_item_enchantments": "默认物品附魔",
