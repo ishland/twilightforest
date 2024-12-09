@@ -838,7 +838,7 @@
   "config.twilightforest.uncrafting_mod_ids": "無効化するMod ID",
   "config.twilightforest.uncrafting_mod_ids.tooltip": "特定のModのすべてのアイテムの解体クラフトを無効化することができます。\nModのすべてのアイテムの解体クラフトレシピを無効化するには、有効なModアイテムを入力してください。\n例：「twilightforest」と記述すると、このModのすべての解体クラフトレシピが無効化されます。",
   "config.twilightforest.uncrafting_recipes": "無効化するレシピ",
-  "config.twilightforest.uncrafting_recipes.tooltip": "解体クラフトを完全に無効化せずに、特定のレシピのみを無効化したい場合は、こちらの方法が適しています。レシピを追加するには、MOD IDの後にレシピ名を記述します。これはJEIなどで確認できます。例：「twilightforest:firefly_particle_spawner」と記述すると、パーティクルスポナーを瓶詰めのホタル、ホタル、ポピーに解体するレシピが無効化されます。\nアイテムに複数のクラフトレシピがあり、それらすべてを無効化したい場合は、そのアイテムをアイテムタグ「twilightforest:banned_uncraftables」に追加してください。\nタワーウッドの虫食い板材のような問題のある材料がある場合、そのアイテムをアイテムタグ「twilightforest:banned_uncrafting_ingredients」に追加してください。",
+  "config.twilightforest.uncrafting_recipes.tooltip": "解体クラフトを完全に無効化せずに、特定のレシピのみを無効化したい場合は、こちらの方法が適しています。レシピを追加するには、MOD IDの後にレシピ名を記述します。これはJEIなどで確認できます。\n例：「twilightforest:firefly_particle_spawner」と記述すると、パーティクルスポナーをホタル入りの瓶、ホタル、ポピーに解体するレシピが無効化されます。\nアイテムに複数のクラフトレシピがあり、それらすべてを無効化したい場合は、そのアイテムをアイテムタグ「twilightforest:banned_uncraftables」に追加してください。\nタワーウッドの虫食い板材のような問題のある材料がある場合、そのアイテムをアイテムタグ「twilightforest:banned_uncrafting_ingredients」に追加してください。",
   "config.twilightforest.uncrafting_recipes_flip": "レシピのブラックリスト",
   "config.twilightforest.uncrafting_recipes_flip.tooltip": "trueにすると、上記の解体クラフトレシピの一覧がブラックリストからホワイトリストに反転します。",
   "config.twilightforest.uncrafting_xp_cost": "解体クラフトのコストの倍率",
