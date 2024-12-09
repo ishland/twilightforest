@@ -1,7 +1,10 @@
 package twilightforest.world.components.structures.type;
 
+import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import it.unimi.dsi.fastutil.objects.ObjectList;
 import net.minecraft.Util;
 import net.minecraft.core.*;
 import net.minecraft.core.registries.Registries;
@@ -15,8 +18,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.levelgen.GenerationStep;
-import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.*;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.levelgen.structure.*;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -24,14 +26,16 @@ import twilightforest.init.TFBlocks;
 import twilightforest.init.TFEntities;
 import twilightforest.init.TFStructureTypes;
 import twilightforest.loot.TFLootTables;
+import twilightforest.world.components.structures.CustomDensitySource;
 import twilightforest.world.components.structures.fallentrunk.FallenTrunkPiece;
+import twilightforest.world.components.structures.fallentrunk.TrunkUnderDensityFunction;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class FallenTrunkStructure extends Structure {
+public class FallenTrunkStructure extends Structure implements CustomDensitySource {
 	public static final MapCodec<FallenTrunkStructure> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 		Structure.settingsCodec(instance),
 		IntProvider.codec(8, 32).fieldOf("length").forGetter(s -> s.length),
@@ -62,7 +66,6 @@ public class FallenTrunkStructure extends Structure {
 
 		int x = SectionPos.sectionToBlockCoord(chunkPos.x, random.nextInt(16));
 		int z = SectionPos.sectionToBlockCoord(chunkPos.z, random.nextInt(16));
-		int seaFloorY = context.chunkGenerator().getFirstOccupiedHeight(x, z, Heightmap.Types.OCEAN_FLOOR_WG, context.heightAccessor(), context.randomState());
 		int worldY = context.chunkGenerator().getFirstOccupiedHeight(x, z, Heightmap.Types.WORLD_SURFACE_WG, context.heightAccessor(), context.randomState());
 
 		int length = this.length.sample(random);
@@ -70,13 +73,20 @@ public class FallenTrunkStructure extends Structure {
 		if (!this.getModifiedStructureSettings().biomes().contains(context.chunkGenerator().getBiomeSource().getNoiseBiome(x >> 2, worldY >> 2, z >> 2, context.randomState().sampler())))
 			return Optional.empty();
 
+		Pair<BlockPos, Holder<Biome>> invalidBiome = context.biomeSource().findBiomeHorizontal(x, worldY, z, this.length.getMaxValue(), 1, biomeHolder -> !context.validBiome().test(biomeHolder), random, false, context.randomState().sampler());
+
+		if (invalidBiome != null) {  // we don't want to see it in the rivers
+			return Optional.empty();
+		}
+
+
 
 		int radius = Util.getRandom(radiuses, random);
 //		int radius = 4; FIXME: remove debug determined radius
 
 		Direction orientation = Direction.Plane.HORIZONTAL.getRandomDirection(random);
 		int xOff = 0;
-		int yOff = -radius / 2;
+		int yOff = 0;
 		int zOff = 0;
 		int xSize = radius > 1 ? radius * 2 + 1 : 4;
 		int ySize = xSize;
@@ -91,6 +101,7 @@ public class FallenTrunkStructure extends Structure {
 			StructurePiece piece = new FallenTrunkPiece(length, radius, log, chestLootTable, spawnerMonster,
 				orientation, boundingBox);
 			structurePiecesBuilder.addPiece(piece);
+			piece.addChildren(piece, structurePiecesBuilder, random);
 		}));
 	}
 
@@ -107,7 +118,13 @@ public class FallenTrunkStructure extends Structure {
 				GenerationStep.Decoration.SURFACE_STRUCTURES,
 				TerrainAdjustment.NONE
 			),
-			UniformInt.of(14, 24), BlockStateProvider.simple(TFBlocks.TWILIGHT_OAK_LOG.get()), TFLootTables.TREE_CACHE, TFEntities.SWARM_SPIDER
+			UniformInt.of(17, 24), BlockStateProvider.simple(TFBlocks.TWILIGHT_OAK_LOG.get()), TFLootTables.TREE_CACHE, TFEntities.SWARM_SPIDER
 		);
+	}
+	@Override
+	public DensityFunction getStructureTerraformer(ChunkPos chunkPosAt, StructureStart structurePieceSource) {
+		FallenTrunkPiece piece = ((FallenTrunkPiece) structurePieceSource.getPieces().getFirst());
+		ObjectList<Beardifier.Rigid> objectlist = ObjectArrayList.of(new Beardifier.Rigid(piece.getBoundingBox(), TerrainAdjustment.NONE, 0));
+		return new TrunkUnderDensityFunction(objectlist.iterator(), piece.radius == radiuses.get(2));  // big trees are a special case
 	}
 }

@@ -1,5 +1,6 @@
 package twilightforest.init;
 
+import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.Vec3i;
 import net.minecraft.core.registries.Registries;
@@ -49,12 +50,13 @@ public class TFStructureSets {
 
 	public static void bootstrap(BootstrapContext<StructureSet> context) {
 		HolderGetter<Structure> structures = context.lookup(Registries.STRUCTURE);
+		HolderGetter<StructureSet> structureSets = context.lookup(Registries.STRUCTURE_SET);
 
 		List<StructureSet.StructureSelectionEntry> hollowTrees = List.of(
 			new StructureSet.StructureSelectionEntry(structures.getOrThrow(TFStructures.HOLLOW_TREE), 1),
 			new StructureSet.StructureSelectionEntry(structures.getOrThrow(TFStructures.SWAMP_HOLLOW_TREE), 1)
 		);
-		context.register(FALLEN_TRUNK, new StructureSet(structures.getOrThrow(TFStructures.FALLEN_TRUNK), new AvoidLandmarkGridPlacement(Vec3i.ZERO, StructurePlacement.FrequencyReductionMethod.DEFAULT, 0.5F, 1275623845, Optional.empty(), 7, 5, RandomSpreadType.TRIANGULAR)));
+		context.register(FALLEN_TRUNK, new StructureSet(structures.getOrThrow(TFStructures.FALLEN_TRUNK), new AvoidLandmarkGridPlacement(Vec3i.ZERO, StructurePlacement.FrequencyReductionMethod.DEFAULT, 0.5F, 1275623845, Optional.of(new StructurePlacement.ExclusionZone(structureSets.getOrThrow(HOLLOW_TREE), 1)), 7, 5, RandomSpreadType.TRIANGULAR)));
 		context.register(HOLLOW_TREE, new StructureSet(hollowTrees, new AvoidLandmarkGridPlacement(Vec3i.ZERO, StructurePlacement.FrequencyReductionMethod.DEFAULT, 0.5F, 34481210, Optional.empty(), 7, 5, RandomSpreadType.TRIANGULAR)));
 
 		context.register(HEDGE_MAZE, new StructureSet(structures.getOrThrow(TFStructures.HEDGE_MAZE), new LandmarkGridPlacement(Optional.of(TFStructures.HEDGE_MAZE))));

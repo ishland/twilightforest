@@ -26,6 +26,7 @@ import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
+import net.minecraft.world.level.levelgen.structure.StructurePieceAccessor;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 import net.minecraft.world.level.storage.loot.LootTable;
 import org.jetbrains.annotations.NotNull;
@@ -33,17 +34,18 @@ import twilightforest.TwilightForestMod;
 import twilightforest.init.TFBlocks;
 import twilightforest.init.TFEntities;
 import twilightforest.init.TFStructurePieceTypes;
+import twilightforest.world.components.structures.TerraformingPiece;
 import twilightforest.world.components.structures.type.FallenTrunkStructure;
 
 public class FallenTrunkPiece extends StructurePiece {
 	public static final BlockStateProvider DEFAULT_LOG = BlockStateProvider.simple(TFBlocks.TWILIGHT_OAK_LOG.get());
 	public static final Holder<EntityType<?>> DEFAULT_DUNGEON_MONSTER = TFEntities.SWARM_SPIDER;
 
-	private static final int ERODED_LENGTH = 3;
+	public static final int ERODED_LENGTH = 3;
 	private static final float MOSS_CHANCE = 0.44F;
 	private final BlockStateProvider log;
-	private final int length;
-	private final int radius;
+	final int length;
+	public final int radius;
 	private final ResourceKey<LootTable> chestLootTable;
 	private final Holder<EntityType<?>> spawnerMonster;
 
@@ -81,8 +83,15 @@ public class FallenTrunkPiece extends StructurePiece {
 	}
 
 	@Override
+	public void addChildren(StructurePiece parent, StructurePieceAccessor list, RandomSource rand) {
+		StructurePiece terraformingPiece = new TerraformingPiece(TFStructurePieceTypes.TFFallenTrunk.value(), 0, boundingBox.inflatedBy(16));
+		list.addPiece(terraformingPiece);
+	}
+
+	@Override
 	public void postProcess(@NotNull WorldGenLevel level, @NotNull StructureManager structureManager, @NotNull ChunkGenerator generator, @NotNull RandomSource random,
 							@NotNull BoundingBox box, @NotNull ChunkPos chunkPos, @NotNull BlockPos pos) {
+		placeBlockEdges(level, box, Blocks.GOLD_BLOCK.defaultBlockState());
 //		placeDiamondBlockEdges(level, this.boundingBox);
 		if (radius == FallenTrunkStructure.radiuses.get(0))
 			generateSmallFallenTrunk(level, RandomSource.create(pos.asLong()), box, pos, true);
@@ -92,37 +101,35 @@ public class FallenTrunkPiece extends StructurePiece {
 			generateFallenTrunk(level, RandomSource.create(pos.asLong()), box, pos, false, true);
 	}
 
-	private void placeDiamondBlockEdges(WorldGenLevel level, BoundingBox box) {
-		BlockState diamondBlock = Blocks.DIAMOND_BLOCK.defaultBlockState();
-
+	public static void placeBlockEdges(WorldGenLevel level, BoundingBox box, BlockState state) {
 		// Edges along the X-axis
 		for (int x = box.minX(); x <= box.maxX(); x++) {
 			// Bottom edges (y = minY)
-			level.setBlock(new BlockPos(x, box.minY(), box.minZ()), diamondBlock, 2);
-			level.setBlock(new BlockPos(x, box.minY(), box.maxZ()), diamondBlock, 2);
+			level.setBlock(new BlockPos(x, box.minY(), box.minZ()), state, 2);
+			level.setBlock(new BlockPos(x, box.minY(), box.maxZ()), state, 2);
 			// Top edges (y = maxY)
-			level.setBlock(new BlockPos(x, box.maxY(), box.minZ()), diamondBlock, 2);
-			level.setBlock(new BlockPos(x, box.maxY(), box.maxZ()), diamondBlock, 2);
+			level.setBlock(new BlockPos(x, box.maxY(), box.minZ()), state, 2);
+			level.setBlock(new BlockPos(x, box.maxY(), box.maxZ()), state, 2);
 		}
 
 		// Edges along the Y-axis
 		for (int y = box.minY(); y <= box.maxY(); y++) {
 			// Vertical edges at minX
-			level.setBlock(new BlockPos(box.minX(), y, box.minZ()), diamondBlock, 2);
-			level.setBlock(new BlockPos(box.minX(), y, box.maxZ()), diamondBlock, 2);
+			level.setBlock(new BlockPos(box.minX(), y, box.minZ()), state, 2);
+			level.setBlock(new BlockPos(box.minX(), y, box.maxZ()), state, 2);
 			// Vertical edges at maxX
-			level.setBlock(new BlockPos(box.maxX(), y, box.minZ()), diamondBlock, 2);
-			level.setBlock(new BlockPos(box.maxX(), y, box.maxZ()), diamondBlock, 2);
+			level.setBlock(new BlockPos(box.maxX(), y, box.minZ()), state, 2);
+			level.setBlock(new BlockPos(box.maxX(), y, box.maxZ()), state, 2);
 		}
 
 		// Edges along the Z-axis
 		for (int z = box.minZ(); z <= box.maxZ(); z++) {
 			// Bottom edges (y = minY)
-			level.setBlock(new BlockPos(box.minX(), box.minY(), z), diamondBlock, 2);
-			level.setBlock(new BlockPos(box.maxX(), box.minY(), z), diamondBlock, 2);
+			level.setBlock(new BlockPos(box.minX(), box.minY(), z), state, 2);
+			level.setBlock(new BlockPos(box.maxX(), box.minY(), z), state, 2);
 			// Top edges (y = maxY)
-			level.setBlock(new BlockPos(box.minX(), box.maxY(), z), diamondBlock, 2);
-			level.setBlock(new BlockPos(box.maxX(), box.maxY(), z), diamondBlock, 2);
+			level.setBlock(new BlockPos(box.minX(), box.maxY(), z), state, 2);
+			level.setBlock(new BlockPos(box.maxX(), box.maxY(), z), state, 2);
 		}
 	}
 
