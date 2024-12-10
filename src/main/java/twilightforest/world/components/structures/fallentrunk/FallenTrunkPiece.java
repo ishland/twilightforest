@@ -83,7 +83,7 @@ public class FallenTrunkPiece extends StructurePiece {
 	}
 
 	@Override
-	public void addChildren(StructurePiece parent, StructurePieceAccessor list, RandomSource rand) {
+	public void addChildren(@NotNull StructurePiece parent, StructurePieceAccessor list, @NotNull RandomSource rand) {
 		StructurePiece terraformingPiece = new TerraformingPiece(TFStructurePieceTypes.TFFallenTrunk.value(), 0, boundingBox.inflatedBy(16));
 		list.addPiece(terraformingPiece);
 	}
@@ -180,7 +180,7 @@ public class FallenTrunkPiece extends StructurePiece {
 	}
 
 	private void generateErodedEnds(WorldGenLevel level, RandomSource random, BoundingBox box, BlockPos pos, int dx, int dy, boolean hasHole, Hole hole) {
-		for (int dz = ERODED_LENGTH; dz >= 0; dz--) {
+		for (int dz = ERODED_LENGTH - 1; dz >= 0; dz--) {
 			if (random.nextBoolean())
 				break;
 
