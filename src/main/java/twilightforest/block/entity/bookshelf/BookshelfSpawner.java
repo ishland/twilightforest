@@ -226,9 +226,11 @@ public abstract class BookshelfSpawner implements IOwnedSpawner {
 
 		//apply spawning logic like vanilla spawners do
 		if (level.noCollision(optional.get().getSpawnAABB(x, y, z))) {
+			boolean difficultyPreventsSpawn = !optional.get().getCategory().isFriendly() && level.getDifficulty() == Difficulty.PEACEFUL;
+
 			BlockPos blockpos = BlockPos.containing(x, y, z);
 			if (data.getCustomSpawnRules().isPresent()) {
-				if (!optional.get().getCategory().isFriendly() && level.getDifficulty() == Difficulty.PEACEFUL) {
+				if (difficultyPreventsSpawn) {
 					return false;
 				}
 
@@ -236,6 +238,9 @@ public abstract class BookshelfSpawner implements IOwnedSpawner {
 				if (!rules.isValidPosition(blockpos, level) && !fire) {
 					return false;
 				}
+			} else if (difficultyPreventsSpawn) {
+				this.delay(level, pos);
+				return false;
 			}
 
 			Entity entity = EntityType.loadEntityRecursive(tag, level, processed -> {
