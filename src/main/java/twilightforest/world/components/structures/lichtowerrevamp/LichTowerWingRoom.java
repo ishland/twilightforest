@@ -247,7 +247,7 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 			}
 
 			if (this.roofFallback >= 0) {
-				if (!FMLLoader.isProduction()) TwilightForestMod.LOGGER.error("Failed to generate room above {}", this.templatePosition.offset(topPos));
+				// if (!FMLLoader.isProduction()) TwilightForestMod.LOGGER.error("Failed to generate room above {}", this.templatePosition.offset(topPos));
 				// If the room above cannot generate, then place the roof instead
 				this.putRoof(pieceAccessor, random, this.getSpareJigsaws().get(this.roofFallback));
 			}
