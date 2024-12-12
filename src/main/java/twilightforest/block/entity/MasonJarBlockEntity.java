@@ -6,6 +6,7 @@ import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
@@ -22,6 +23,7 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.world.AuxiliaryLightManager;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import twilightforest.init.TFBlockEntities;
 import twilightforest.network.SetMasonJarItemPacket;
 
@@ -61,23 +63,26 @@ public class MasonJarBlockEntity extends JarBlockEntity {
 	}
 
 	public void fillFromLootTable(ResourceKey<LootTable> lootTableKey, long seed) {
-		if (this.level instanceof ServerLevel serverLevel) {
-			LootTable lootTable = serverLevel.getServer().reloadableRegistries().getLootTable(lootTableKey);
-			LootParams params = new LootParams.Builder(serverLevel).withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(this.getBlockPos())).create(LootContextParamSets.CHEST);
+		MinecraftServer currentServer = ServerLifecycleHooks.getCurrentServer();
+		fillFromLootTable(lootTableKey, seed, currentServer, currentServer.overworld());
+	}
 
-			lootTable.getRandomItemsRaw(new LootContext.Builder(params).withOptionalRandomSeed(seed).create(Optional.of(lootTableKey.location())), stack -> {
-				MasonJarItemStackHandler jarInv = this.getItemHandler();
-				if (jarInv.isEmpty()) {
-					jarInv.setItem(stack);
-				} else {
-					ItemStack contained = jarInv.peekItem();
-					// Merge stack in if there's already an item inside
-					if (ItemStack.isSameItemSameComponents(contained, stack)) {
-						contained.setCount(Math.min(contained.getCount() + stack.getCount(), contained.getMaxStackSize()));
-					}
+	public void fillFromLootTable(ResourceKey<LootTable> lootTableKey, long seed, MinecraftServer currentServer, ServerLevel serverLevel) {
+		LootTable lootTable = currentServer.reloadableRegistries().getLootTable(lootTableKey);
+		LootParams params = new LootParams.Builder(serverLevel).withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(this.getBlockPos())).create(LootContextParamSets.CHEST);
+
+		lootTable.getRandomItemsRaw(new LootContext.Builder(params).withOptionalRandomSeed(seed).create(Optional.of(lootTableKey.location())), stack -> {
+			MasonJarItemStackHandler jarInv = this.getItemHandler();
+			if (jarInv.isEmpty()) {
+				jarInv.setItem(stack);
+			} else {
+				ItemStack contained = jarInv.peekItem();
+				// Merge stack in if there's already an item inside
+				if (ItemStack.isSameItemSameComponents(contained, stack)) {
+					contained.setCount(Math.min(contained.getCount() + stack.getCount(), contained.getMaxStackSize()));
 				}
-			});
-		}
+			}
+		});
 	}
 
 	public void setFromItem(ItemStack stack) {

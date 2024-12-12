@@ -497,8 +497,7 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 		level.setBlock(pos, jar, Block.UPDATE_CLIENTS);
 
 		if (level.getBlockEntity(pos) instanceof MasonJarBlockEntity jarEntity) {
-			ResourceLocation lootTableId = TFLootTables.TOWER_JARS.location();
-			jarEntity.fillFromLootTable(ResourceKey.create(Registries.LOOT_TABLE, lootTableId), random.nextLong());
+			jarEntity.fillFromLootTable(TFLootTables.TOWER_JARS, random.nextLong());
 		}
 
 		if (level.getBlockState(pos.above()).is(TFBlocks.CANOPY_BOOKSHELF)) {
