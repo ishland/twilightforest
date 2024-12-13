@@ -17,6 +17,8 @@ public class TrunkUnderDensityFunction extends Beardifier {
 	private final RandomSource random;  // used to create dirt mounds
 	private final BoundingBox boundingBox;
 	private final BoundingBox moundApex;
+	private final HollowHillFunction hollowHillFunction;
+	private final HollowHillFunction hollowHillFunction1;
 	private int d;
 	public TrunkUnderDensityFunction(ObjectListIterator<Rigid> pieceIterator, boolean isBigTree) {
 		super(pieceIterator, (ObjectListIterator<JigsawJunction>) ObjectIterators.<JigsawJunction>emptyIterator());
@@ -32,6 +34,10 @@ public class TrunkUnderDensityFunction extends Beardifier {
 		moundApex = BoundingBox.fromCorners(moundApexCorner, moundApexCorner.offset(moundApexSizes));
 		int length = isXOriented ? boundingBox.getXSpan() : boundingBox.getZSpan();
 		d = random.nextInt(-length / 3, length / 3);
+		BoundingBox absouluteMoundApex = moundApex.moved(boundingBox.minX(), boundingBox.minY(), boundingBox.minZ());
+		int radius = getRadius(boundingBox);
+		hollowHillFunction = new HollowHillFunction(absouluteMoundApex.getCenter().getX() + (isXOriented ? d : radius), absouluteMoundApex.getCenter().getY() + 1, absouluteMoundApex.getCenter().getZ() + (isXOriented ? radius : d), 4, 1);
+		hollowHillFunction1 = new HollowHillFunction(absouluteMoundApex.getCenter().getX() + (isXOriented ? d : radius), absouluteMoundApex.getCenter().getY() + 2, absouluteMoundApex.getCenter().getZ() + (isXOriented ? radius : d), 4, 1);
 	}
 
 	@Override
@@ -54,7 +60,7 @@ public class TrunkUnderDensityFunction extends Beardifier {
 		int x = context.blockX() - boundingBox.minX();
 		int y = context.blockY() - boundingBox.minY();
 		int z = context.blockZ() - boundingBox.minZ();
-		int radius = (int) Math.ceil(boundingBox.getYSpan() / 2D);
+		int radius = getRadius(boundingBox);
 		double ax = Math.abs((isXOriented ? z : x) - radius + 1);
 		double az = Math.abs(y - radius + 1);
 		if (radius == 2D) {  // This case is generated differently
@@ -71,9 +77,6 @@ public class TrunkUnderDensityFunction extends Beardifier {
 		int adjustedGroundLevel = moundApex.minY() + groundLevelDelta + (isBigTree ? 2 : 1);
 		int verticalDistance = y - adjustedGroundLevel;
 
-		BoundingBox absouluteMoundApex = moundApex.moved(boundingBox.minX(), boundingBox.minY(), boundingBox.minZ());
-		HollowHillFunction hollowHillFunction = new HollowHillFunction(absouluteMoundApex.getCenter().getX() + (isXOriented ? d : radius), absouluteMoundApex.getCenter().getY() + 1, absouluteMoundApex.getCenter().getZ() + (isXOriented ? radius : d), 4, 1);
-		HollowHillFunction hollowHillFunction1 = new HollowHillFunction(absouluteMoundApex.getCenter().getX() + (isXOriented ? d : radius), absouluteMoundApex.getCenter().getY() + 20, absouluteMoundApex.getCenter().getZ() + (isXOriented ? radius : d), 10, 2);
 		return Math.max(hollowHillFunction.compute(context), hollowHillFunction1.compute(context));
 //		return getBeardContribution(horizontalDistanceX, verticalDistance, horizontalDistanceZ, verticalDistance) * 2.5;
 	}
@@ -82,5 +85,13 @@ public class TrunkUnderDensityFunction extends Beardifier {
 		Beardifier.Rigid piece = pieceIterator.next();
 		this.pieceIterator.back(Integer.MAX_VALUE);
 		return piece;
+	}
+
+	private static int getRadius(BoundingBox box) {
+		return getRadius(box.getYSpan());
+	}
+
+	private static int getRadius(int diameter) {
+		return (int) Math.ceil(diameter / 2D);
 	}
 }
