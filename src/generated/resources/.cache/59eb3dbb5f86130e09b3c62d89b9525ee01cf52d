@@ -1,4 +1,4 @@
-// 1.21.1	2024-12-03T23:39:24.4975452	Loot Tables
+// 1.21.1	2024-12-12T23:02:04.4998402	Loot Tables
 483a7e0c99d5cabeab1ba9f04bd8e88d0a8f7386 data/twilightforest/loot_table/aurora_cache.json
 002a6e2eccdc92db019bd775911912877b26771f data/twilightforest/loot_table/aurora_room.json
 afe7197a19b997d2f5c5980d9805b6093191b44f data/twilightforest/loot_table/blocks/acacia_banister.json
@@ -265,6 +265,7 @@ eac2254ff1c9b3be29d9f4ae192f8d97c5d3729b data/twilightforest/loot_table/blocks/m
 8362b90696511f90e4b7127ea00e33a259b75e6f data/twilightforest/loot_table/blocks/naga_trophy.json
 7e07479ec8e56d4890b58292026eb94ae71ff0cb data/twilightforest/loot_table/blocks/naga_wall_trophy.json
 f03df1f2f8dde9a71d77995e80a79b35d9b0ff8f data/twilightforest/loot_table/blocks/oak_banister.json
+48986238956a25eaadc2b97c9e429067bff21ca9 data/twilightforest/loot_table/blocks/ominous_fire.json
 4d6ec75ad56ebca430fe66c0769b30dce798ce5d data/twilightforest/loot_table/blocks/ominous_spawner_drops.json
 e7c5f522400048e5ef3e08884e818fbfd041fd8d data/twilightforest/loot_table/blocks/piglin_skull_candle.json
 0c424a5c5b78d7c00155f6ab58bfa561cb1312e5 data/twilightforest/loot_table/blocks/piglin_wall_skull_candle.json
