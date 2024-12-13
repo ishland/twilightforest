@@ -43,6 +43,14 @@
   "labelled_monster_spawns": {
     "0": [
       {
+        "type": "twilightforest:rising_zombie",
+        "maxCount": 2,
+        "minCount": 1,
+        "weight": 2
+      }
+    ],
+    "1": [
+      {
         "type": "minecraft:zombie",
         "maxCount": 2,
         "minCount": 1,
