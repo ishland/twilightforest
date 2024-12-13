@@ -669,7 +669,7 @@ public class LangGenerator extends TFLangProvider {
 		this.addEntityAndEgg(TFEntities.KNIGHT_PHANTOM, "Knight Phantom");
 		this.add("entity.twilightforest.knight_phantom.plural", "Knight Phantoms");
 		this.addEntityAndEgg(TFEntities.KOBOLD, "Kobold");
-		this.addEntityAndEgg(TFEntities.LICH, "Lich");
+		this.addEntityAndEgg(TFEntities.LICH, "Twilight Lich");
 		this.addEntityAndEgg(TFEntities.MAZE_SLIME, "Maze Slime");
 		this.addEntityAndEgg(TFEntities.MINOSHROOM, "Minoshroom");
 		this.addEntityAndEgg(TFEntities.MINOTAUR, "Minotaur");

@@ -18,6 +18,7 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ProjectileDeflection;
@@ -54,6 +55,7 @@ import net.neoforged.neoforge.event.entity.player.AttackEntityEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
+import net.neoforged.neoforge.event.level.ExplosionEvent;
 import net.neoforged.neoforge.event.level.LevelEvent;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -66,6 +68,7 @@ import twilightforest.config.TFConfig;
 import twilightforest.data.tags.EntityTagGenerator;
 import twilightforest.enchantment.ApplyFrostedEffect;
 import twilightforest.entity.projectile.ITFProjectile;
+import twilightforest.entity.projectile.LichBomb;
 import twilightforest.init.*;
 import twilightforest.item.FieryArmorItem;
 import twilightforest.item.YetiArmorItem;
@@ -436,6 +439,13 @@ public class EntityEvents {
 	public static void grantAdvancementIfNeeded(LivingDeathEvent event) {
 		if (!event.isCanceled() && event.getEntity().hasData(TFDataAttachments.MULTIPLAYER_FIGHT)) {
 			event.getEntity().getData(TFDataAttachments.MULTIPLAYER_FIGHT).grantGroupAdvancement(event.getEntity());
+		}
+	}
+
+	@SubscribeEvent
+	public static void onExplosionDetonationEvent(ExplosionEvent.Detonate event) {
+		if (event.getExplosion().getDirectSourceEntity() instanceof LichBomb) {
+			event.getAffectedEntities().removeIf(entity -> entity instanceof ItemEntity || entity instanceof LichBomb);
 		}
 	}
 }

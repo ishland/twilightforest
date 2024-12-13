@@ -138,7 +138,7 @@ public class SoundGenerator extends TFSoundProvider {
 		this.generateExistingSoundWithSubtitle(TFSounds.LICH_DEATH, SoundEvents.BLAZE_DEATH, "Lich dies");
 		this.generateExistingSoundWithSubtitle(TFSounds.LICH_HURT, SoundEvents.BLAZE_HURT, "Lich hurts");
 		this.generateExistingSoundWithSubtitle(TFSounds.LICH_POP_MOB, SoundEvents.CHICKEN_EGG, "Lich absorbs mob");
-		this.generateExistingSoundWithSubtitle(TFSounds.LICH_SHOOT, SoundEvents.GHAST_SHOOT, "Lich shoots");
+		this.generateNewSoundWithSubtitle(TFSounds.LICH_SHOOT, "random/scepter/twilight_use", 3, "Lich shoots");
 		this.generateExistingSoundWithSubtitle(TFSounds.LICH_TELEPORT, SoundEvents.CHORUS_FRUIT_TELEPORT, "Lich teleports");
 
 		this.generateExistingSoundWithSubtitle(TFSounds.LOYAL_ZOMBIE_AMBIENT, SoundEvents.ZOMBIE_AMBIENT, "Loyal Zombie groans");

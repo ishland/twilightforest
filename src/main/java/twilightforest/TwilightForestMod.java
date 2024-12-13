@@ -127,6 +127,7 @@ public final class TwilightForestMod {
 		TFEntities.SPAWN_EGGS.register(bus);
 		TFMenuTypes.CONTAINERS.register(bus);
 		TFRecipes.RECIPE_TYPES.register(bus);
+		TFAttributes.ATTRIBUTES.register(bus);
 		TFAdvancements.TRIGGERS.register(bus);
 		TFMobEffects.MOB_EFFECTS.register(bus);
 		Enforcements.ENFORCEMENTS.register(bus);

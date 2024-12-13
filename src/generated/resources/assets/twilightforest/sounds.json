@@ -1249,10 +1249,9 @@
   },
   "entity.twilightforest.lich.shoot": {
     "sounds": [
-      {
-        "type": "event",
-        "name": "entity.ghast.shoot"
-      }
+      "twilightforest:random/scepter/twilight_use1",
+      "twilightforest:random/scepter/twilight_use2",
+      "twilightforest:random/scepter/twilight_use3"
     ],
     "subtitle": "subtitles.twilightforest.entity.lich.shoot"
   },
