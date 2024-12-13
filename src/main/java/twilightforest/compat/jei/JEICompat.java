@@ -12,14 +12,12 @@ import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
+import twilightforest.compat.jei.categories.*;
+import twilightforest.compat.jei.util.OminousFireRecipe;
 import twilightforest.config.TFConfig;
 import twilightforest.TwilightForestMod;
 import twilightforest.client.UncraftingScreen;
 import twilightforest.compat.RecipeViewerConstants;
-import twilightforest.compat.jei.categories.CrumbleHornCategory;
-import twilightforest.compat.jei.categories.JEIUncraftingCategory;
-import twilightforest.compat.jei.categories.MoonwormQueenCategory;
-import twilightforest.compat.jei.categories.TransformationPowderCategory;
 import twilightforest.compat.jei.renderers.EntityHelper;
 import twilightforest.compat.jei.renderers.EntityRenderer;
 import twilightforest.compat.jei.renderers.FakeItemEntityHelper;
@@ -50,6 +48,7 @@ public class JEICompat implements IModPlugin {
 			registration.addRecipeCatalyst(new ItemStack(TFBlocks.UNCRAFTING_TABLE.get()), JEIUncraftingCategory.UNCRAFTING);
 		}
 		registration.addRecipeCatalyst(new ItemStack(TFItems.TRANSFORMATION_POWDER.get()), TransformationPowderCategory.TRANSFORMATION);
+		registration.addRecipeCatalyst(new ItemStack(TFItems.EXANIMATE_ESSENCE.get()), OminousFireCategory.OMINOUS_FIRE);
 		registration.addRecipeCatalyst(new ItemStack(TFItems.CRUMBLE_HORN.get()), CrumbleHornCategory.CRUMBLE_HORN);
 		registration.addRecipeCatalyst(new ItemStack(TFItems.MOONWORM_QUEEN.get()), MoonwormQueenCategory.MOONWORM_QUEEN);
 	}
@@ -74,6 +73,7 @@ public class JEICompat implements IModPlugin {
 	public void registerCategories(IRecipeCategoryRegistration registration) {
 		registration.addRecipeCategories(new JEIUncraftingCategory(registration.getJeiHelpers().getGuiHelper()));
 		registration.addRecipeCategories(new TransformationPowderCategory(registration.getJeiHelpers().getGuiHelper()));
+		registration.addRecipeCategories(new OminousFireCategory(registration.getJeiHelpers().getGuiHelper()));
 		registration.addRecipeCategories(new CrumbleHornCategory(registration.getJeiHelpers().getGuiHelper()));
 		registration.addRecipeCategories(new MoonwormQueenCategory(registration.getJeiHelpers().getGuiHelper()));
 	}
@@ -87,6 +87,7 @@ public class JEICompat implements IModPlugin {
 			registration.addRecipes(JEIUncraftingCategory.UNCRAFTING, (List<CraftingRecipe>) recipes.stream().map(RecipeHolder::value).toList());
 		}
 		registration.addRecipes(TransformationPowderCategory.TRANSFORMATION, RecipeViewerConstants.getTransformationPowderRecipes().stream().map(info -> new TransformationRecipe(new FakeEntityType(info.input()), new FakeEntityType(info.output()), info.reversible())).toList());
+		registration.addRecipes(OminousFireCategory.OMINOUS_FIRE, RecipeViewerConstants.getOminousFireRecipes().stream().map(info -> new OminousFireRecipe(new FakeEntityType(info.input()), new FakeEntityType(info.output()))).toList());
 		registration.addRecipes(CrumbleHornCategory.CRUMBLE_HORN, RecipeViewerConstants.getCrumbleHornRecipes().stream().map(info -> new CrumbleRecipe(info.getFirst(), info.getSecond())).toList());
 		registration.addRecipes(MoonwormQueenCategory.MOONWORM_QUEEN, List.of(new MoonwormQueenRepairRecipe(CraftingBookCategory.MISC)));
 	}

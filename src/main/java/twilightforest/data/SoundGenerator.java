@@ -364,6 +364,7 @@ public class SoundGenerator extends TFSoundProvider {
 		this.generateNewSoundWithSubtitle(TFSounds.TWILIGHT_SCEPTER_USE, "random/scepter/twilight_use", 3, "Twilight Scepter throws pearl");
 		this.generateExistingSoundWithSubtitle(TFSounds.WOOD_SHIELD_SHATTERS, SoundEvents.ZOMBIE_BREAK_WOODEN_DOOR, "Wooden Shield shatters");
 		this.generateNewSoundWithSubtitle(TFSounds.ZOMBIE_SCEPTER_USE, "random/scepter/zombie", 1, "Loyal Zombie summoned");
+		this.generateNewSoundWithSubtitle(TFSounds.OMINOUS_FIRE, "random/candelabra/ominous", 1, "Flame Whooshes Ominously");
 
 		this.makeMusicDisc(TFSounds.MUSIC_DISC_RADIANCE, "radiance");
 		this.makeMusicDisc(TFSounds.MUSIC_DISC_STEPS, "steps");
