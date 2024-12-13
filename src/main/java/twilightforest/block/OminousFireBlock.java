@@ -7,6 +7,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -16,10 +18,12 @@ import net.minecraft.world.level.block.BaseFireBlock;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.HitResult;
 import net.neoforged.neoforge.event.EventHooks;
 import twilightforest.TwilightForestMod;
 import twilightforest.init.TFDamageTypes;
 import twilightforest.init.TFDataMaps;
+import twilightforest.init.TFItems;
 import twilightforest.util.datamaps.EntityTransformation;
 
 import java.util.UUID;
@@ -49,6 +53,11 @@ public class OminousFireBlock extends BaseFireBlock {
 	@Override
 	protected boolean canBurn(BlockState state) {
 		return true;
+	}
+
+	@Override
+	public ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader level, BlockPos pos, Player player) {
+		return new ItemStack(TFItems.EXANIMATE_ESSENCE.value());
 	}
 
 	@Override
