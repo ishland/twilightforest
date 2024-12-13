@@ -491,6 +491,7 @@ public class LangGenerator extends TFLangProvider {
 		this.addItem(TFItems.ZOMBIE_SCEPTER, "Zombie Scepter");
 		this.add("item.twilightforest.scepter.desc", "%s charges left");
 		this.addItem(TFItems.EXANIMATE_ESSENCE, "Exanimate Essence");
+		this.addBlock(TFBlocks.OMINOUS_FIRE, "Ominous Fire");
 		this.addItem(TFItems.WROUGHT_IRON_BAR, "Wrought Iron Bar");
 		this.addItem(TFItems.BRITTLE_FLASK, "Brittle Potion Flask");
 		this.addItem(TFItems.GREATER_FLASK, "Greater Potion Flask");
