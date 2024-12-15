@@ -63,7 +63,13 @@ public class LichTowerUtil {
 			new VerticalDecayProcessor(filter, 0.35f)
 		};
 	});
-	private static final Supplier<StructureProcessor> UPDATE_MARKER = Suppliers.memoize(() -> UpdateMarkingProcessor.forBlocks(Blocks.STONE_BRICK_WALL, Blocks.MOSSY_STONE_BRICK_WALL, TFBlocks.WROUGHT_IRON_FENCE.value(), TFBlocks.CANOPY_FENCE.value()));
+	private static final Supplier<StructureProcessor> UPDATE_MARKER = Suppliers.memoize(() -> UpdateMarkingProcessor.forBlocks(
+		Blocks.STONE_BRICK_WALL,
+		Blocks.MOSSY_STONE_BRICK_WALL,
+		Blocks.POLISHED_ANDESITE_STAIRS,
+		TFBlocks.WROUGHT_IRON_FENCE.value(),
+		TFBlocks.CANOPY_FENCE.value()
+	));
 
 	public StructureProcessor getRoomSpawnerProcessor() {
 		return this.roomSpawners.get();

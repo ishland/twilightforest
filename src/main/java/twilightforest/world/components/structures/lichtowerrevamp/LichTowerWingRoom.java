@@ -1,7 +1,10 @@
 package twilightforest.world.components.structures.lichtowerrevamp;
 
 import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.ints.IntArraySet;
 import it.unimi.dsi.fastutil.ints.IntList;
+import it.unimi.dsi.fastutil.ints.IntSet;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -45,6 +48,8 @@ import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.StructurePieceAccessor;
 import net.minecraft.world.level.levelgen.structure.TerrainAdjustment;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 import net.neoforged.fml.loading.FMLLoader;
 import net.neoforged.neoforge.common.world.PieceBeardifierModifier;
@@ -74,10 +79,7 @@ import twilightforest.world.components.structures.SpawnIndexProvider;
 import twilightforest.world.components.structures.TwilightJigsawPiece;
 import twilightforest.world.components.structures.TwilightTemplateStructurePiece;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Predicate;
 
 public final class LichTowerWingRoom extends TwilightJigsawPiece implements PieceBeardifierModifier, SpawnIndexProvider {
@@ -104,7 +106,7 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 		this.allowedCeilingPlacements = compoundTag.getIntArray("allowed_ceiling_placements");
 	}
 
-	public LichTowerWingRoom(StructureTemplateManager structureManager, int genDepth, JigsawPlaceContext jigsawContext, ResourceLocation roomId, int roomSize, boolean generateGround, boolean canGenerateLadder) {
+	public LichTowerWingRoom(StructureTemplateManager structureManager, int genDepth, JigsawPlaceContext jigsawContext, ResourceLocation roomId, int roomSize, boolean generateGround, boolean canGenerateLadder, RandomSource random) {
 		super(TFStructurePieceTypes.LICH_WING_ROOM.get(), genDepth, structureManager, roomId, jigsawContext);
 
 		LichTowerUtil.addDefaultProcessors(this.placeSettings.addProcessor(lichTowerUtil.getRoomSpawnerProcessor()));
@@ -118,26 +120,49 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 		this.jigsawLadderTarget = this.shouldLadderUpwards() ? this.getSpareJigsaws().get(this.ladderIndex).target() : "";
 		this.roofFallback = canGenerateLadder ? this.pickFirstIndex(this.getSpareJigsaws(), "twilightforest:lich_tower/roof"::equals) : -1;
 
-		this.allowedCeilingPlacements = generateCeilingPlacements(new XoroshiroRandomSource(this.templatePosition.asLong(), roomId.hashCode()), roomSize * 2 - 1);
+		this.allowedCeilingPlacements = generateCeilingPlacements(random, this.template, this.boundingBox, this.placeSettings);
 	}
 
-	// Generate coord list with elements that are orthogonally not adjacent to any other element
-	private static int[] generateCeilingPlacements(RandomSource random, int width) {
+	// Generate coord list with elements not orthogonally adjacent to any other element. Assumes room to be square
+	private static int[] generateCeilingPlacements(RandomSource random, StructureTemplate template, BoundingBox box, StructurePlaceSettings placeSettings) {
+		int width = Math.max(box.getXSpan(), box.getZSpan());
+
 		if (width <= 0) return new int[0];
 
-		int[] xIndexedZOffsets = new int[width];
-		for (int i = 0; i < xIndexedZOffsets.length; i++)
-			xIndexedZOffsets[i] = i + 1;
+		ObjectArrayList<StructureTemplate.StructureBlockInfo> blockInfos = template.filterBlocks(BlockPos.ZERO, placeSettings, Blocks.STRUCTURE_BLOCK, false);
+		blockInfos.removeIf(info -> !info.nbt().getString("metadata").startsWith("rope"));
 
-		// Shuffle it all!
-		for (int i = 0; i < xIndexedZOffsets.length; i++) {
-			int swapTarget = random.nextInt(width);
-			int elementAtI = xIndexedZOffsets[i];
-			xIndexedZOffsets[i] = xIndexedZOffsets[swapTarget];
-			xIndexedZOffsets[swapTarget] = elementAtI;
+		if (blockInfos.isEmpty()) return new int[0];
+
+		filterAlignedPieces(random, blockInfos);
+
+		int[] xIndexedZOffsets = new int[width];
+		Arrays.fill(xIndexedZOffsets, -1);
+
+		for (int i = 0; i < blockInfos.size(); i++) {
+			BlockPos pos = blockInfos.get(i).pos();
+			xIndexedZOffsets[pos.getX()] = pos.getZ();
 		}
 
 		return xIndexedZOffsets;
+	}
+
+	// Removes random elements from the list until all positions have unique X and Z coordinate values
+	private static void filterAlignedPieces(RandomSource random, ObjectArrayList<StructureTemplate.StructureBlockInfo> blockInfos) {
+		Util.shuffle(blockInfos, random);
+		IntSet xDistinct = new IntArraySet();
+		IntSet zDistinct = new IntArraySet();
+
+		for (int i = 0; i < blockInfos.size(); i++) {
+			var pos = blockInfos.get(i).pos();
+			if (xDistinct.contains(pos.getX()) || zDistinct.contains(pos.getZ())) {
+				blockInfos.remove(i);
+				i--;
+			} else {
+				xDistinct.add(pos.getX());
+				zDistinct.add(pos.getZ());
+			}
+		}
 	}
 
 	private int pickFirstIndex(List<JigsawRecord> spareJigsaws, Predicate<String> filter) {
@@ -230,7 +255,7 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 				// boolean canGenerateLadder = this.getSourceJigsaw().orientation().front().getAxis().isHorizontal() && random.nextBoolean() && pieceAccessor.findCollisionPiece(aboveRoomBounds) == null;
 				boolean canFitRoomAbove = placeableJunction.isWithoutCollision(this.structureManager, pieceAccessor, box -> BoundingBoxUtils.extrusionFrom(box, Direction.UP, Mth.ceil(box.getYSpan() * 1.5f)));
 				boolean canGenerateLadder = canFitRoomAbove && this.getSourceJigsaw().orientation().front().getAxis().isHorizontal() && random.nextBoolean();
-				StructurePiece room = new LichTowerWingRoom(this.structureManager, this.genDepth + 1, placeableJunction, roomId, this.roomSize, false, canGenerateLadder);
+				StructurePiece room = new LichTowerWingRoom(this.structureManager, this.genDepth + 1, placeableJunction, roomId, this.roomSize, false, canGenerateLadder, random);
 
 				BoundingBox boundingBox = BoundingBoxUtils.cloneWithAdjustments(room.getBoundingBox(), 1, 0, 1, -1, 0, -1);
 				if (pieceAccessor.findCollisionPiece(boundingBox) == null) {
@@ -389,8 +414,8 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 	}
 
 	private boolean canHangBlock(BlockPos pos) {
-		int dX = Mth.abs(pos.getX() - this.templatePosition.getX()) - 2;
-		int dZ = Mth.abs(pos.getZ() - this.templatePosition.getZ()) - 1;
+		int dX = pos.getX() - this.boundingBox.minX();
+		int dZ = pos.getZ() - this.boundingBox.minZ();
 
 		return dX >= 0 && dX < this.allowedCeilingPlacements.length && this.allowedCeilingPlacements[dX] == dZ;
 	}
@@ -401,22 +426,32 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 		String[] modifiedLabel = label.split(">");
 
 		String variety = modifiedLabel.length == 2 ? modifiedLabel[1] : label;
-		if (modifiedLabel.length == 2 && modifiedLabel[0].startsWith("rope")) {
-			String[] ropeChance = modifiedLabel[0].substring(ROPE_SUBSTRING_START).split("%");
+		if (modifiedLabel.length == 2) {
+			if (modifiedLabel[0].startsWith("rope")) {
+				String[] ropeChance = modifiedLabel[0].substring(ROPE_SUBSTRING_START).split("%");
 
-			if (ropeChance.length == 0 || !this.canHangBlock(pos) || (ropeChance.length == 2 && StringUtils.isNumeric(ropeChance[0]) && random.nextFloat() > Integer.parseInt(ropeChance[0]) * 0.01f))
-				return;
+				if (ropeChance.length == 0 || !this.canHangBlock(pos) || (ropeChance.length == 2 && StringUtils.isNumeric(ropeChance[0]) && random.nextFloat() > Integer.parseInt(ropeChance[0]) * 0.01f))
+					return;
 
-			String ropeParams = ropeChance[ropeChance.length - 1];
+				String ropeParams = ropeChance[ropeChance.length - 1];
 
-			int ropeLength = this.parseRange(ropeParams, random, 1, 2);
+				int ropeLength = this.parseRange(ropeParams, random, 1, 2);
 
-			if (ropeLength > 0) {
-				for (BlockPos hangSupportAt : BlockPos.betweenClosed(pos, pos.below(ropeLength - 1))) {
-					level.setBlock(hangSupportAt, TFBlocks.ROPE.value().defaultBlockState(), Block.UPDATE_CLIENTS);
+				if (ropeLength > 0) {
+					for (BlockPos hangSupportAt : BlockPos.betweenClosed(pos, pos.below(ropeLength - 1))) {
+						level.setBlock(hangSupportAt, TFBlocks.ROPE.value().defaultBlockState(), Block.UPDATE_CLIENTS);
+					}
+
+					pos = pos.below(ropeLength);
 				}
+			} else if (modifiedLabel[0].equals("pedestal")) {
 
-				pos = pos.below(ropeLength);
+				level.setBlock(pos, TFBlocks.TWISTED_STONE_PILLAR.value().defaultBlockState(), Block.UPDATE_CLIENTS);
+
+				pos = pos.above();
+			} else if (modifiedLabel[0].equals("below")) {
+				// Used for the 9x9 winding_ways room
+				pos = pos.below();
 			}
 		}
 
@@ -448,6 +483,8 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 			case "bookshelf" -> level.setBlock(pos, Blocks.BOOKSHELF.defaultBlockState(), Block.UPDATE_CLIENTS);
 			case "canopy_shelf", "canopy_bookshelf" -> level.setBlock(pos, TFBlocks.CANOPY_BOOKSHELF.value().defaultBlockState(), Block.UPDATE_CLIENTS);
 			case "stone_brick_slab" -> level.setBlock(pos, Blocks.STONE_BRICK_SLAB.defaultBlockState(), Block.UPDATE_CLIENTS);
+			case "lava" -> level.setBlock(pos, Blocks.LAVA.defaultBlockState(), Block.UPDATE_CLIENTS);
+			case "water" -> level.setBlock(pos, Blocks.WATER.defaultBlockState(), Block.UPDATE_CLIENTS);
 			case "firefly_jar" -> level.setBlock(pos, TFBlocks.FIREFLY_JAR.value().defaultBlockState(), Block.UPDATE_CLIENTS);
 			case "mason_jar" -> this.putMasonJar(pos, level, random, parameters);
 			case "canopy_slab" -> level.setBlock(pos, TFBlocks.CANOPY_SLAB.value().defaultBlockState(), Block.UPDATE_CLIENTS);
@@ -545,14 +582,7 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 				case 4 -> TFEntities.HEDGE_SPIDER.value();
 				case 3 -> TFEntities.SWARM_SPIDER.value();
 				default -> EntityType.ZOMBIE;
-			} : switch (Util.getRandom(monsters, random)) {
-				case "skeleton" -> EntityType.SKELETON;
-				case "spider" -> EntityType.SPIDER;
-				case "cave_spider" -> EntityType.CAVE_SPIDER;
-				case "hedge_spider" -> TFEntities.HEDGE_SPIDER.value();
-				case "swarm_spider" -> TFEntities.SWARM_SPIDER.value();
-				default -> EntityType.ZOMBIE;
-			};
+			} : randEntity(random, monsters);
 
 			CompoundTag entityToSpawn = new CompoundTag();
 			entityToSpawn.putString("id", BuiltInRegistries.ENTITY_TYPE.getKey(monster).toString());
@@ -563,6 +593,15 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 				spawner.getSpawner().spawnRange = Mth.clamp(Integer.parseInt(parameters[2]), 1, 16);
 			}
 		}
+	}
+
+	private static EntityType<?> randEntity(RandomSource random, String[] monsters) {
+		String label = Util.getRandom(monsters, random);
+		return switch (label) {
+			case "hedge_spider" -> TFEntities.HEDGE_SPIDER.value();
+			case "swarm_spider" -> TFEntities.SWARM_SPIDER.value();
+			default -> EntityType.byString(label).orElse(EntityType.ZOMBIE);
+		};
 	}
 
 	private void putCandles(String[] parameters, RandomSource random, WorldGenLevel level, BlockPos pos) {
