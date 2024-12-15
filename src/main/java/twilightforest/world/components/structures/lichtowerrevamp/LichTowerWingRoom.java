@@ -14,6 +14,7 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -42,7 +43,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.SlabType;
 import net.minecraft.world.level.chunk.ChunkGenerator;
-import net.minecraft.world.level.levelgen.XoroshiroRandomSource;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.StructurePieceAccessor;
@@ -130,7 +130,12 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 		if (width <= 0) return new int[0];
 
 		ObjectArrayList<StructureTemplate.StructureBlockInfo> blockInfos = template.filterBlocks(BlockPos.ZERO, placeSettings, Blocks.STRUCTURE_BLOCK, false);
-		blockInfos.removeIf(info -> !info.nbt().getString("metadata").startsWith("rope"));
+		blockInfos.removeIf(info -> {
+			CompoundTag nbt = info.nbt();
+			if (nbt == null || nbt.isEmpty()) return false;
+			String metadata = nbt.getString("metadata");
+			return !(metadata.startsWith("rope") || metadata.startsWith("chain"));
+		});
 
 		if (blockInfos.isEmpty()) return new int[0];
 
@@ -154,7 +159,10 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 		IntSet zDistinct = new IntArraySet();
 
 		for (int i = 0; i < blockInfos.size(); i++) {
-			var pos = blockInfos.get(i).pos();
+			StructureTemplate.StructureBlockInfo blockInfo = blockInfos.get(i);
+			if (blockInfo.nbt() == null || filterMetadata(random, blockInfo.nbt())) continue;
+
+			BlockPos pos = blockInfo.pos();
 			if (xDistinct.contains(pos.getX()) || zDistinct.contains(pos.getZ())) {
 				blockInfos.remove(i);
 				i--;
@@ -163,6 +171,16 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 				zDistinct.add(pos.getZ());
 			}
 		}
+	}
+
+	private static boolean filterMetadata(RandomSource random, CompoundTag nbt) {
+		if (nbt.isEmpty() || !nbt.contains("metadata", Tag.TAG_STRING))
+			return true;
+
+		String metadata = nbt.getString("metadata").split("%", 1)[0];
+		String chance = metadata.startsWith("rope") ? metadata.substring("rope".length()) : metadata.substring("chain".length());
+
+		return chance.isBlank() || StringUtils.isNumeric(chance) && random.nextFloat() > Integer.parseInt(chance) * 0.01f;
 	}
 
 	private int pickFirstIndex(List<JigsawRecord> spareJigsaws, Predicate<String> filter) {
@@ -192,12 +210,15 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 			case "twilightforest:lich_tower/bridge" -> {
 				if (this.roomSize < 1) {
 					return;
-				} else if (this.genDepth > 30 || random.nextInt(this.towerStackIndex() * 2 + 1) == 0) {
-					LichTowerWingBridge.putCover(this, pieceAccessor, random, connection.pos(), connection.orientation(), this.structureManager, this.generateGround, this.genDepth + 1);
-				} else if (!this.generateGround) {
-					LichTowerWingBridge.tryRoomAndBridge(this, pieceAccessor, random, connection, this.structureManager, false, this.roomSize - random.nextInt(2), false, this.genDepth + 1, null);
-				} else {
+				}
+
+				boolean terminate = (this.genDepth > 30 || random.nextInt(this.towerStackIndex() * 2 + 1) == 0);
+				boolean tooCloseToGround = this.generateGround || connection.pos().getY() < 7;
+
+				if (terminate || tooCloseToGround) {
 					LichTowerWingBridge.putCover(this, pieceAccessor, random, connection.pos(), connection.orientation(), this.structureManager, true, this.genDepth + 1);
+				} else {
+					LichTowerWingBridge.tryRoomAndBridge(this, pieceAccessor, random, connection, this.structureManager, false, this.roomSize - random.nextInt(2), false, this.genDepth + 1, null);
 				}
 
 				return;
@@ -420,7 +441,6 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 		return dX >= 0 && dX < this.allowedCeilingPlacements.length && this.allowedCeilingPlacements[dX] == dZ;
 	}
 
-	private static final int ROPE_SUBSTRING_START = "rope".length();
 	@Override
 	protected void handleDataMarker(String label, BlockPos pos, WorldGenLevel level, RandomSource random, BoundingBox chunkBounds, ChunkGenerator chunkGen) {
 		String[] modifiedLabel = label.split(">");
@@ -428,22 +448,11 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 		String variety = modifiedLabel.length == 2 ? modifiedLabel[1] : label;
 		if (modifiedLabel.length == 2) {
 			if (modifiedLabel[0].startsWith("rope")) {
-				String[] ropeChance = modifiedLabel[0].substring(ROPE_SUBSTRING_START).split("%");
-
-				if (ropeChance.length == 0 || !this.canHangBlock(pos) || (ropeChance.length == 2 && StringUtils.isNumeric(ropeChance[0]) && random.nextFloat() > Integer.parseInt(ropeChance[0]) * 0.01f))
-					return;
-
-				String ropeParams = ropeChance[ropeChance.length - 1];
-
-				int ropeLength = this.parseRange(ropeParams, random, 1, 2);
-
-				if (ropeLength > 0) {
-					for (BlockPos hangSupportAt : BlockPos.betweenClosed(pos, pos.below(ropeLength - 1))) {
-						level.setBlock(hangSupportAt, TFBlocks.ROPE.value().defaultBlockState(), Block.UPDATE_CLIENTS);
-					}
-
-					pos = pos.below(ropeLength);
-				}
+				pos = this.danglingBlock(pos, level, random, TFBlocks.ROPE.value().defaultBlockState(), modifiedLabel[0].substring("rope".length()));
+				if (pos == null) return;
+			} if (modifiedLabel[0].startsWith("chain")) {
+				pos = this.danglingBlock(pos, level, random, Blocks.CHAIN.defaultBlockState(), modifiedLabel[0].substring("chain".length()));
+				if (pos == null) return;
 			} else if (modifiedLabel[0].equals("pedestal")) {
 
 				level.setBlock(pos, TFBlocks.TWISTED_STONE_PILLAR.value().defaultBlockState(), Block.UPDATE_CLIENTS);
@@ -475,6 +484,26 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 		level.removeBlock(pos, false); // Clears block entity data left by Data Marker
 
 		this.handleDataParams(pos, level, WorldUtil.getRegistryAccess(), random, parameters, dataRotation);
+	}
+
+	private @Nullable BlockPos danglingBlock(BlockPos pos, WorldGenLevel level, RandomSource random, BlockState binding, String parameters) {
+		String[] ropeChance = parameters.split("%");
+
+		if (ropeChance.length == 0 || !this.canHangBlock(pos))
+			return null;
+
+		String ropeParams = ropeChance[ropeChance.length - 1];
+
+		int ropeLength = this.parseRange(ropeParams, random, 1, 2);
+
+		if (ropeLength > 0) {
+			for (BlockPos hangSupportAt : BlockPos.betweenClosed(pos, pos.below(ropeLength - 1))) {
+				level.setBlock(hangSupportAt, binding, Block.UPDATE_CLIENTS);
+			}
+
+			pos = pos.below(ropeLength);
+		}
+		return pos;
 	}
 
 	private void handleDataParams(BlockPos pos, WorldGenLevel level, RegistryAccess registryAccess, RandomSource random, String[] parameters, Rotation dataRotation) {
