@@ -28,6 +28,13 @@ public final class LichTowerPieces {
 		this.enclosedBridgeCentral,
 		TwilightForestMod.prefix("lich_tower/central_bridge_open")
 	};
+	final ResourceLocation[] endBridges = new ResourceLocation[] {
+		TwilightForestMod.prefix("lich_tower/end_bridge_1"),
+		TwilightForestMod.prefix("lich_tower/end_bridge_2"),
+		TwilightForestMod.prefix("lich_tower/end_bridge_3"),
+		TwilightForestMod.prefix("lich_tower/end_bridge_4"),
+		TwilightForestMod.prefix("lich_tower/end_bridge_5")
+	};
 	final ResourceLocation[] roomBridges = new ResourceLocation[] {
 		TwilightForestMod.prefix("lich_tower/room_bridge_1"),
 		TwilightForestMod.prefix("lich_tower/room_bridge_2"),

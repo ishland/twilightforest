@@ -96,10 +96,20 @@ public final class LichTowerWingBridge extends TwilightJigsawPiece implements Pi
 
 	public static void tryRoomAndBridge(TwilightJigsawPiece parent, StructurePieceAccessor pieceAccessor, RandomSource random, JigsawRecord connection, StructureTemplateManager structureManager, boolean fromCentralTower, int roomMaxSize, boolean generateGround, int newDepth, @Nullable ResourceLocation override) {
 		if (!generateGround) {
-			if (fromCentralTower || random.nextBoolean()) {
-				Iterable<ResourceLocation> bridges = fromCentralTower ? lichTowerUtil.shuffledCenterBridges(random) : lichTowerUtil.shuffledRoomBridges(random);
-				for (ResourceLocation bridgeId : bridges) {
-					if (tryBridge(parent, pieceAccessor, random, connection.pos(), connection.orientation(), structureManager, fromCentralTower, roomMaxSize, false, newDepth, bridgeId, fromCentralTower, override)) {
+			if (fromCentralTower) {
+				for (ResourceLocation bridgeId : lichTowerUtil.shuffledCenterBridges(random)) {
+					if (tryBridge(parent, pieceAccessor, random, connection.pos(), connection.orientation(), structureManager, true, roomMaxSize, false, newDepth, bridgeId, true, override, false)) {
+						return;
+					}
+				}
+			} else {
+				for (ResourceLocation bridgeId : lichTowerUtil.shuffledRoomBridges(random)) {
+					if (tryBridge(parent, pieceAccessor, random, connection.pos(), connection.orientation(), structureManager, false, roomMaxSize, false, newDepth, bridgeId, false, override, false)) {
+						return;
+					}
+				}
+				for (ResourceLocation bridgeId : lichTowerUtil.shuffledEndBridges(random)) {
+					if (tryBridge(parent, pieceAccessor, random, connection.pos(), connection.orientation(), structureManager, false, 0, false, newDepth, bridgeId, false, override, true)) {
 						return;
 					}
 				}
@@ -107,20 +117,20 @@ public final class LichTowerWingBridge extends TwilightJigsawPiece implements Pi
 		}
 
 		if (fromCentralTower) {
-			tryBridge(parent, pieceAccessor, random, connection.pos(), connection.orientation(), structureManager, true, roomMaxSize, generateGround, newDepth, lichTowerUtil.getEnclosedCentralBridge(), true, override);
-		} else if (!tryBridge(parent, pieceAccessor, random, connection.pos(), connection.orientation(), structureManager, false, roomMaxSize, generateGround, newDepth, lichTowerUtil.getDirectRoomAttachment(), true, override)) {
+			tryBridge(parent, pieceAccessor, random, connection.pos(), connection.orientation(), structureManager, true, roomMaxSize, generateGround, newDepth, lichTowerUtil.getEnclosedCentralBridge(), true, override, false);
+		} else if (!tryBridge(parent, pieceAccessor, random, connection.pos(), connection.orientation(), structureManager, false, roomMaxSize, generateGround, newDepth, lichTowerUtil.getDirectRoomAttachment(), true, override, true)) {
 			// This here is reached only if a room was not successfully generated - now a wall must be placed to cover where the bridge would have been
 			putCover(parent, pieceAccessor, random, connection.pos(), connection.orientation(), structureManager, generateGround, newDepth);
 		}
 	}
 
-	private static boolean tryBridge(TwilightJigsawPiece parent, StructurePieceAccessor pieceAccessor, RandomSource random, BlockPos sourceJigsawPos, FrontAndTop sourceOrientation, StructureTemplateManager structureManager, boolean fromCentralTower, int roomMaxSize, boolean generateGround, int newDepth, ResourceLocation bridgeId, boolean allowClipping, @Nullable ResourceLocation override) {
+	private static boolean tryBridge(TwilightJigsawPiece parent, StructurePieceAccessor pieceAccessor, RandomSource random, BlockPos sourceJigsawPos, FrontAndTop sourceOrientation, StructureTemplateManager structureManager, boolean fromCentralTower, int roomMaxSize, boolean generateGround, int newDepth, ResourceLocation bridgeId, boolean allowClipping, @Nullable ResourceLocation override, boolean tiny) {
 		JigsawPlaceContext placeableJunction = JigsawPlaceContext.pickPlaceableJunction(parent.templatePosition(), sourceJigsawPos, sourceOrientation, structureManager, bridgeId, fromCentralTower ? "twilightforest:lich_tower/bridge_center" : "twilightforest:lich_tower/bridge", random);
 
 		if (placeableJunction != null) {
 			LichTowerWingBridge bridge = new LichTowerWingBridge(structureManager, newDepth, placeableJunction, bridgeId, fromCentralTower);
 
-			if ((allowClipping || pieceAccessor.findCollisionPiece(bridge.boundingBox) == null) && bridge.tryGenerateRoom(random, pieceAccessor, roomMaxSize, generateGround, fromCentralTower, override)) {
+			if ((allowClipping || pieceAccessor.findCollisionPiece(bridge.boundingBox) == null) && bridge.tryGenerateRoom(random, pieceAccessor, roomMaxSize, generateGround, override, tiny)) {
 				// If the bridge & room can be fitted, then also add bridge to list then exit this function
 				pieceAccessor.addPiece(bridge);
 				bridge.addChildren(parent, pieceAccessor, random);
@@ -142,7 +152,7 @@ public final class LichTowerWingBridge extends TwilightJigsawPiece implements Pi
 		}
 	}
 
-	public boolean tryGenerateRoom(final RandomSource random, final StructurePieceAccessor structureStart, final int roomMaxSize, boolean generateGround, boolean fromCentralTower, @Nullable ResourceLocation override) {
+	public boolean tryGenerateRoom(final RandomSource random, final StructurePieceAccessor structureStart, final int roomMaxSize, boolean generateGround, @Nullable ResourceLocation override, boolean tiny) {
 		List<JigsawRecord> spareJigsaws = this.getSpareJigsaws();
 		if (this.getSpareJigsaws().isEmpty())
 			return false;
@@ -151,7 +161,7 @@ public final class LichTowerWingBridge extends TwilightJigsawPiece implements Pi
 			return tryPlaceRoom(random, structureStart, override, spareJigsaws.getFirst(), 3, generateGround, false, this, this.genDepth + 1, this.structureManager, "twilightforest:lich_tower/room");
 		}
 
-		int minSize = (fromCentralTower || generateGround) ? 1 : 0;
+		int minSize = tiny ? 0 : 1;
 		for (JigsawRecord generatingPoint : spareJigsaws) {
 			for (int roomSize = Math.max(0, roomMaxSize - 1); roomSize >= minSize; roomSize--) {
 				boolean roomSuccess = tryPlaceRoom(random, structureStart, lichTowerUtil.rollRandomRoom(random, roomSize), generatingPoint, roomSize, generateGround, false, this, this.genDepth + 1, this.structureManager, "twilightforest:lich_tower/room");
@@ -174,7 +184,7 @@ public final class LichTowerWingBridge extends TwilightJigsawPiece implements Pi
 
 		boolean generateGround = canPutGround && connection.pos().getY() < 4;
 
-		boolean doLadder = (generateGround || random.nextBoolean()) && placeableJunction.isWithoutCollision(structureManager, pieceAccessor, box -> BoundingBoxUtils.extrusionFrom(box, Direction.UP, Mth.ceil(box.getYSpan() * 1.5f)));
+		boolean doLadder = placeableJunction.isWithoutCollision(structureManager, pieceAccessor, box -> BoundingBoxUtils.extrusionFrom(box, Direction.UP, Mth.ceil(box.getYSpan() * 1.5f)));
 		StructurePiece room = new LichTowerWingRoom(structureManager, newDepth, placeableJunction, roomId, roomSize, generateGround, doLadder, random);
 
 		if (allowClipping || pieceAccessor.findCollisionPiece(room.getBoundingBox()) == null) {
