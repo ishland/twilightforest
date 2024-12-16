@@ -213,7 +213,7 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 				}
 
 				boolean terminate = (this.genDepth > 30 || random.nextInt(this.towerStackIndex() * 2 + 1) == 0);
-				boolean tooCloseToGround = this.generateGround || (this.boundingBox.getYSpan() < 10 && connection.pos().getY() < 7);
+				boolean tooCloseToGround = this.generateGround || (this.boundingBox.getYSpan() > 11 && connection.pos().getY() < 7);
 
 				if (terminate || tooCloseToGround) {
 					LichTowerWingBridge.putCover(this, pieceAccessor, random, connection.pos(), connection.orientation(), this.structureManager, true, this.genDepth + 1);
