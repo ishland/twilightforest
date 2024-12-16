@@ -1,23 +1,35 @@
 package twilightforest.world.components.structures.lichtowerrevamp;
 
 import com.google.common.collect.Streams;
+import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.FrontAndTop;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.StructureManager;
+import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.WorldgenRandom;
 import net.minecraft.world.level.levelgen.structure.*;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 import net.neoforged.neoforge.common.world.PieceBeardifierModifier;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.TwilightForestMod;
+import twilightforest.block.WroughtIronFenceBlock;
+import twilightforest.init.TFBlocks;
 import twilightforest.init.TFStructurePieceTypes;
 import twilightforest.util.BoundingBoxUtils;
 import twilightforest.util.jigsaw.JigsawPlaceContext;
@@ -33,16 +45,35 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 public class LichPerimeterFence extends TwilightJigsawPiece implements PieceBeardifierModifier, SortablePiece, SpawnIndexProvider.Deny {
+	private final @Nullable BlockPos leashPos;
+
 	public LichPerimeterFence(StructurePieceSerializationContext ctx, CompoundTag compoundTag) {
 		super(TFStructurePieceTypes.LICH_PERIMETER_FENCE.value(), compoundTag, ctx, readSettings(compoundTag));
 
 		this.placeSettings.addProcessor(MetaBlockProcessor.INSTANCE);
+		this.leashPos = NbtUtils.readBlockPos(compoundTag, "leash_pos").orElse(null);
 	}
 
-	public LichPerimeterFence(StructureTemplateManager structureManager, JigsawPlaceContext jigsawContext, ResourceLocation templateId) {
+	public LichPerimeterFence(StructureTemplateManager structureManager, JigsawPlaceContext jigsawContext, ResourceLocation templateId, RandomSource random) {
 		super(TFStructurePieceTypes.LICH_PERIMETER_FENCE.value(), 0, structureManager, templateId, jigsawContext);
 
 		this.placeSettings.addProcessor(MetaBlockProcessor.INSTANCE);
+
+		List<StructureTemplate.StructureBlockInfo> fenceBlocks = random.nextFloat() > 0.25 ? List.of() : this.template.filterBlocks(BlockPos.ZERO, this.placeSettings, TFBlocks.WROUGHT_IRON_FENCE.value(), true);
+		if (!fenceBlocks.isEmpty()) {
+			fenceBlocks.removeIf(info -> info.state().getValue(WroughtIronFenceBlock.POST) != WroughtIronFenceBlock.PostState.POST);
+			Util.shuffle(fenceBlocks, random);
+		}
+		this.leashPos = fenceBlocks.isEmpty() ? null : this.templatePosition.offset(fenceBlocks.getFirst().pos());
+	}
+
+	@Override
+	protected void addAdditionalSaveData(StructurePieceSerializationContext ctx, CompoundTag structureTag) {
+		super.addAdditionalSaveData(ctx, structureTag);
+
+		if (this.leashPos != null) {
+			structureTag.put("leash_pos", NbtUtils.writeBlockPos(this.leashPos));
+		}
 	}
 
 	@Override
@@ -130,7 +161,7 @@ public class LichPerimeterFence extends TwilightJigsawPiece implements PieceBear
 
 		if (placeableJunction == null) return null;
 
-		LichPerimeterFence fenceStarter = new LichPerimeterFence(structureManager, placeableJunction, TwilightForestMod.prefix("lich_tower/outer_fence_7"));
+		LichPerimeterFence fenceStarter = new LichPerimeterFence(structureManager, placeableJunction, TwilightForestMod.prefix("lich_tower/outer_fence_7"), random);
 		structurePiecesBuilder.addPiece(fenceStarter);
 		fenceStarter.addChildren(vestibule, structurePiecesBuilder, random);
 
@@ -258,7 +289,7 @@ public class LichPerimeterFence extends TwilightJigsawPiece implements PieceBear
 
 		if (placeContext == null) return null;
 
-		LichPerimeterFence nextFence = new LichPerimeterFence(structureManager, placeContext, templateId);
+		LichPerimeterFence nextFence = new LichPerimeterFence(structureManager, placeContext, templateId, random);
 		structurePiecesBuilder.addPiece(nextFence);
 		nextFence.addChildren(parentFence, structurePiecesBuilder, random);
 
@@ -273,5 +304,40 @@ public class LichPerimeterFence extends TwilightJigsawPiece implements PieceBear
 
 	public Stream<BlockPos> fencePostPositions() {
 		return Streams.concat(this.getLeftJunctions().stream(), this.getRightJunctions().stream()).map(r -> this.templatePosition.offset(r.pos()));
+	}
+
+	@Override
+	public void postProcess(WorldGenLevel level, StructureManager structureManager, ChunkGenerator chunkGen, RandomSource random, BoundingBox chunkBounds, ChunkPos chunkPos, BlockPos structureCenterPos) {
+		super.postProcess(level, structureManager, chunkGen, random, chunkBounds, chunkPos, structureCenterPos);
+
+		Direction fenceFacing = this.getSourceJigsaw().orientation().top();
+		if (this.leashPos == null || !chunkBounds.isInside(this.leashPos))
+			return;
+
+		BlockPos zombiePos = this.leashPos.relative(fenceFacing, 1);
+		if (!chunkBounds.isInside(zombiePos))
+			return;
+
+		var knot = createEntityIgnoreException(level, EntityType.LEASH_KNOT);
+		var boundedEntity = createEntityIgnoreException(level, EntityType.ZOMBIE);
+		if (knot == null || boundedEntity == null)
+			return;
+
+		knot.setPos(this.leashPos.getX() + 0.5, this.leashPos.getY(), this.leashPos.getZ() + 0.5);
+		level.addFreshEntity(knot);
+
+		boundedEntity.setPersistenceRequired();
+		boundedEntity.setLeashedTo(knot, false);
+		boundedEntity.setPos(zombiePos.getX() + 0.5, zombiePos.getY() - 1, zombiePos.getZ() + 0.5);
+		level.addFreshEntityWithPassengers(boundedEntity);
+	}
+
+	@Nullable
+	private static <T extends Entity> T createEntityIgnoreException(ServerLevelAccessor level, EntityType<T> type) {
+		try {
+			return type.create(level.getLevel());
+		} catch (Exception exception) {
+			return null;
+		}
 	}
 }
