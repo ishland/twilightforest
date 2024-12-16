@@ -30,7 +30,6 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public abstract class TwilightJigsawPiece extends TwilightTemplateStructurePiece {
-	@Nullable
 	private final JigsawRecord sourceJigsaw;
 	private final List<JigsawRecord> spareJigsaws;
 
@@ -48,12 +47,7 @@ public abstract class TwilightJigsawPiece extends TwilightTemplateStructurePiece
 		this.spareJigsaws = Collections.unmodifiableList(jigsawContext.spareJigsaws());
 	}
 
-	@Nullable
 	protected static JigsawRecord readSourceFromNBT(CompoundTag structureTag) {
-		if (!structureTag.contains("source", Tag.TAG_COMPOUND)) {
-			return null;
-		}
-
 		return JigsawRecord.fromTag(structureTag.getCompound("source"));
 	}
 
@@ -75,9 +69,7 @@ public abstract class TwilightJigsawPiece extends TwilightTemplateStructurePiece
 	protected void addAdditionalSaveData(StructurePieceSerializationContext ctx, CompoundTag structureTag) {
 		super.addAdditionalSaveData(ctx, structureTag);
 
-		if (this.sourceJigsaw != null) {
-			structureTag.put("source", this.sourceJigsaw.toTag());
-		}
+		structureTag.put("source", this.sourceJigsaw.toTag());
 
 		ListTag tags = new ListTag();
 
@@ -113,7 +105,6 @@ public abstract class TwilightJigsawPiece extends TwilightTemplateStructurePiece
 		}
 	}
 
-	@Nullable
 	public JigsawRecord getSourceJigsaw() {
 		return this.sourceJigsaw;
 	}
