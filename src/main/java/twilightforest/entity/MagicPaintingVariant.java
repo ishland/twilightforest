@@ -9,7 +9,6 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.StringRepresentable;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.item.ItemStack;
 import twilightforest.TFRegistries;
@@ -47,17 +46,18 @@ public record MagicPaintingVariant(int width, int height, List<Layer> layers) {
 		return regAccess.registry(TFRegistries.Keys.MAGIC_PAINTINGS).map(reg -> reg.getKey(variant)).orElse(MagicPaintingVariants.DEFAULT.location());
 	}
 
-	public record Layer(String path, @Nullable Parallax parallax, @Nullable OpacityModifier opacityModifier, boolean fullbright) {
+	public record Layer(String path, @Nullable Parallax parallax, @Nullable OpacityModifier opacityModifier, boolean fullbright, boolean localLighting) {
 		public static final Codec<Layer> CODEC = RecordCodecBuilder.create((recordCodecBuilder) -> recordCodecBuilder.group(
 			ExtraCodecs.NON_EMPTY_STRING.fieldOf("path").forGetter(Layer::path),
 			Parallax.CODEC.optionalFieldOf("parallax").forGetter((layer) -> Optional.ofNullable(layer.parallax())),
 			OpacityModifier.CODEC.optionalFieldOf("opacity_modifier").forGetter((layer) -> Optional.ofNullable(layer.opacityModifier())),
-			Codec.BOOL.fieldOf("fullbright").forGetter(Layer::fullbright)
+			Codec.BOOL.fieldOf("fullbright").orElse(false).forGetter(Layer::fullbright),
+			Codec.BOOL.fieldOf("local_lighting").orElse(false).forGetter(Layer::localLighting)
 		).apply(recordCodecBuilder, Layer::create));
 
 		@SuppressWarnings("OptionalUsedAsFieldOrParameterType") // Vanilla does this too
-		private static Layer create(String path, Optional<Parallax> parallax, Optional<OpacityModifier> opacityModifier, boolean fullbright) {
-			return new Layer(path, parallax.orElse(null), opacityModifier.orElse(null), fullbright);
+		private static Layer create(String path, Optional<Parallax> parallax, Optional<OpacityModifier> opacityModifier, boolean fullbright, boolean localLighting) {
+			return new Layer(path, parallax.orElse(null), opacityModifier.orElse(null), fullbright, localLighting);
 		}
 
 		public record Parallax(Type type, float multiplier, int width, int height) {

@@ -85,6 +85,8 @@ public class MagicPaintingRenderer extends EntityRenderer<MagicPainting> {
 
 			Parallax parallax = layer.parallax();
 
+			boolean localLighting = layer.localLighting();
+
 			int layerWidth = parallax != null ? parallax.width() : width;
 			int layerHeight = parallax != null ? parallax.height() : height;
 
@@ -119,10 +121,10 @@ public class MagicPaintingRenderer extends EntityRenderer<MagicPainting> {
 					float xStart = layerTexture.getU((float) (layerWidthFactor * (double) (widthAsBlock - (k + 1)) + widthOffset));
 					float yEnd = layerTexture.getV((float) (layerHeightFactor * (double) (heightAsBlock - l) + heightOffset));
 					float yStart = layerTexture.getV((float) (layerHeightFactor * (double) (heightAsBlock - (l + 1)) + heightOffset));
-					this.vertex(pose, vertex, xMax, yMin, -z, xStart, yEnd, 0, 0, -1, light, alpha);
-					this.vertex(pose, vertex, xMin, yMin, -z, xEnd, yEnd, 0, 0, -1, light, alpha);
-					this.vertex(pose, vertex, xMin, yMax, -z, xEnd, yStart, 0, 0, -1, light, alpha);
-					this.vertex(pose, vertex, xMax, yMax, -z, xStart, yStart, 0, 0, -1, light, alpha);
+					this.vertex(pose, vertex, xMax, yMin, -z, xStart, yEnd, 0, 0, -1, light, alpha, localLighting);
+					this.vertex(pose, vertex, xMin, yMin, -z, xEnd, yEnd, 0, 0, -1, light, alpha, localLighting);
+					this.vertex(pose, vertex, xMin, yMax, -z, xEnd, yStart, 0, 0, -1, light, alpha, localLighting);
+					this.vertex(pose, vertex, xMax, yMax, -z, xStart, yStart, 0, 0, -1, light, alpha, localLighting);
 				}
 			}
 		}
@@ -163,44 +165,49 @@ public class MagicPaintingRenderer extends EntityRenderer<MagicPainting> {
 				int light = LevelRenderer.getLightColor(painting.level(), new BlockPos(posX, Mth.floor(painting.getY() + (double) ((yMax + yMin) / 2.0F / 16.0F)), posZ));
 
 				// Back
-				this.vertex(pose, vertex, xMax, yMax, z, u1, v0, 0, 0, 1, light);
-				this.vertex(pose, vertex, xMin, yMax, z, u0, v0, 0, 0, 1, light);
-				this.vertex(pose, vertex, xMin, yMin, z, u0, v1, 0, 0, 1, light);
-				this.vertex(pose, vertex, xMax, yMin, z, u1, v1, 0, 0, 1, light);
+				this.vertex(pose, vertex, xMax, yMax, z, u1, v0, 0, 0, 1, light, false);
+				this.vertex(pose, vertex, xMin, yMax, z, u0, v0, 0, 0, 1, light, false);
+				this.vertex(pose, vertex, xMin, yMin, z, u0, v1, 0, 0, 1, light, false);
+				this.vertex(pose, vertex, xMax, yMin, z, u1, v1, 0, 0, 1, light, false);
 
 				// Top
-				this.vertex(pose, vertex, xMax, yMax, -z, u1, v0, 0, 1, 0, light);
-				this.vertex(pose, vertex, xMin, yMax, -z, u0, v0, 0, 1, 0, light);
-				this.vertex(pose, vertex, xMin, yMax, z, u0, v, 0, 1, 0, light);
-				this.vertex(pose, vertex, xMax, yMax, z, u1, v, 0, 1, 0, light);
+				this.vertex(pose, vertex, xMax, yMax, -z, u1, v0, 0, 1, 0, light, false);
+				this.vertex(pose, vertex, xMin, yMax, -z, u0, v0, 0, 1, 0, light, false);
+				this.vertex(pose, vertex, xMin, yMax, z, u0, v, 0, 1, 0, light, false);
+				this.vertex(pose, vertex, xMax, yMax, z, u1, v, 0, 1, 0, light, false);
 
 				// Bottom
-				this.vertex(pose, vertex, xMax, yMin, z, u1, vI, 0, -1, 0, light);
-				this.vertex(pose, vertex, xMin, yMin, z, u0, vI, 0, -1, 0, light);
-				this.vertex(pose, vertex, xMin, yMin, -z, u0, v1, 0, -1, 0, light);
-				this.vertex(pose, vertex, xMax, yMin, -z, u1, v1, 0, -1, 0, light);
+				this.vertex(pose, vertex, xMax, yMin, z, u1, vI, 0, -1, 0, light, false);
+				this.vertex(pose, vertex, xMin, yMin, z, u0, vI, 0, -1, 0, light, false);
+				this.vertex(pose, vertex, xMin, yMin, -z, u0, v1, 0, -1, 0, light, false);
+				this.vertex(pose, vertex, xMax, yMin, -z, u1, v1, 0, -1, 0, light, false);
 
 				// Left
-				this.vertex(pose, vertex, xMax, yMax, z, uI, v0, -1, 0, 0, light);
-				this.vertex(pose, vertex, xMax, yMin, z, uI, v1, -1, 0, 0, light);
-				this.vertex(pose, vertex, xMax, yMin, -z, u1, v1, -1, 0, 0, light);
-				this.vertex(pose, vertex, xMax, yMax, -z, u1, v0, -1, 0, 0, light);
+				this.vertex(pose, vertex, xMax, yMax, z, uI, v0, -1, 0, 0, light, false);
+				this.vertex(pose, vertex, xMax, yMin, z, uI, v1, -1, 0, 0, light, false);
+				this.vertex(pose, vertex, xMax, yMin, -z, u1, v1, -1, 0, 0, light, false);
+				this.vertex(pose, vertex, xMax, yMax, -z, u1, v0, -1, 0, 0, light, false);
 
 				// Right
-				this.vertex(pose, vertex, xMin, yMax, -z, u0, v0, 1, 0, 0, light);
-				this.vertex(pose, vertex, xMin, yMin, -z, u0, v1, 1, 0, 0, light);
-				this.vertex(pose, vertex, xMin, yMin, z, u, v1, 1, 0, 0, light);
-				this.vertex(pose, vertex, xMin, yMax, z, u, v0, 1, 0, 0, light);
+				this.vertex(pose, vertex, xMin, yMax, -z, u0, v0, 1, 0, 0, light, false);
+				this.vertex(pose, vertex, xMin, yMin, -z, u0, v1, 1, 0, 0, light, false);
+				this.vertex(pose, vertex, xMin, yMin, z, u, v1, 1, 0, 0, light, false);
+				this.vertex(pose, vertex, xMin, yMax, z, u, v0, 1, 0, 0, light, false);
 			}
 		}
 	}
 
-	protected void vertex(PoseStack.Pose pose, VertexConsumer vertex, float x, float y, float z, float u, float v, int normX, int normY, int normZ, int light) {
-		this.vertex(pose, vertex, x, y, z, u, v, normX, normY, normZ, light, 1.0F);
+	protected void vertex(PoseStack.Pose pose, VertexConsumer vertex, float x, float y, float z, float u, float v, int normX, int normY, int normZ, int light, boolean localLighting) {
+		this.vertex(pose, vertex, x, y, z, u, v, normX, normY, normZ, light, 1.0F, localLighting);
 	}
 
-	protected void vertex(PoseStack.Pose pose, VertexConsumer vertex, float x, float y, float z, float u, float v, int normX, int normY, int normZ, int light, float a) {
-		vertex.addVertex(pose, x, y, z).setColor(255, 255, 255, (int) (255.0F * a)).setUv(u, v).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light).setNormal(pose, normX, normY, normZ);
+	protected void vertex(PoseStack.Pose pose, VertexConsumer vertex, float x, float y, float z, float u, float v, int normX, int normY, int normZ, int light, float a, boolean localLighting) {
+		vertex.addVertex(pose, x, y, z).setColor(255, 255, 255, (int) (255.0F * a)).setUv(u, v).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light);
+
+		if (localLighting)
+			vertex.setNormal(normX, normY, normZ);
+		else
+			vertex.setNormal(pose, normX, normY, normZ);
 	}
 
 	protected double getWidthOffset(@Nullable Parallax parallax, MagicPainting painting, double widthDiff, float partialTicks) {
