@@ -6,10 +6,7 @@ import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.ints.IntSet;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.Util;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.core.FrontAndTop;
-import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.*;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -26,6 +23,7 @@ import net.minecraft.world.RandomizableContainer;
 import net.minecraft.world.entity.Display;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionContents;
@@ -51,6 +49,7 @@ import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSeriali
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.neoforged.fml.loading.FMLLoader;
 import net.neoforged.neoforge.common.world.PieceBeardifierModifier;
 import org.apache.commons.lang3.StringUtils;
@@ -80,6 +79,7 @@ import twilightforest.world.components.structures.TwilightJigsawPiece;
 import twilightforest.world.components.structures.TwilightTemplateStructurePiece;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 public final class LichTowerWingRoom extends TwilightJigsawPiece implements PieceBeardifierModifier, SpawnIndexProvider {
@@ -517,6 +517,7 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 			case "firefly_jar" -> level.setBlock(pos, TFBlocks.FIREFLY_JAR.value().defaultBlockState(), Block.UPDATE_CLIENTS);
 			case "mason_jar" -> this.putMasonJar(pos, level, random, parameters);
 			case "canopy_slab" -> level.setBlock(pos, TFBlocks.CANOPY_SLAB.value().defaultBlockState(), Block.UPDATE_CLIENTS);
+			case "canopy_stairs" -> level.setBlock(pos, TFBlocks.CANOPY_STAIRS.value().defaultBlockState(), Block.UPDATE_CLIENTS);
 			case "creeper_head" -> this.putHead(pos, level, random, parameters, Blocks.CREEPER_HEAD, dataRotation);
 			case "skeleton_skull" -> this.putHead(pos, level, random, parameters, Blocks.SKELETON_SKULL, dataRotation);
 			case "wither_skull" -> this.putHead(pos, level, random, parameters, Blocks.WITHER_SKELETON_SKULL, dataRotation);
@@ -562,8 +563,25 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 		BlockState jar = TFBlocks.MASON_JAR.value().defaultBlockState();
 		level.setBlock(pos, jar, Block.UPDATE_CLIENTS);
 
-		if (level.getBlockEntity(pos) instanceof MasonJarBlockEntity jarEntity) {
-			jarEntity.fillFromLootTable(TFLootTables.TOWER_JARS, random.nextLong());
+		if (parameters.length >= 2) {
+			if (level.getBlockEntity(pos) instanceof MasonJarBlockEntity jarEntity) {
+				String label = parameters[1];
+				ResourceKey<LootTable> lootTableId = switch (label) {
+					case "jar" -> TFLootTables.TOWER_JARS;
+					case "room" -> TFLootTables.TOWER_ROOM;
+					case "library" -> TFLootTables.TOWER_LIBRARY;
+					case "potion" -> TFLootTables.TOWER_POTION;
+					case "grave" -> TFLootTables.TOWER_GRAVE;
+					case "enchanting" -> TFLootTables.TOWER_ENCHANTING;
+					default -> ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.bySeparator(label, '.'));
+				};
+				if (!jarEntity.fillFromLootTable(lootTableId, random.nextLong(), level.getLevel())) {
+					ResourceLocation itemId = ResourceLocation.bySeparator(label, '.');
+					jarEntity.getItemHandler().setItem(new ItemStack(level.registryAccess().registry(Registries.ITEM).<Function<ResourceLocation, Item>>map(reg -> reg::get).orElse($ -> Items.AIR).apply(itemId)));
+				}
+				int itemRotation = this.placeSettings.getRotation().ordinal() * 4 + (parameters.length == 3 ? this.getHeadRotation(parameters[2], random) : 0);
+				jarEntity.setItemRotation(Math.floorMod(itemRotation, 16));
+			}
 		}
 
 		if (level.getBlockState(pos.above()).is(TFBlocks.CANOPY_BOOKSHELF)) {
@@ -654,15 +672,15 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 		level.setBlock(pos, chest, Block.UPDATE_CLIENTS);
 
 		if (parameters.length == 2 && level.getBlockEntity(pos) instanceof RandomizableContainer lootBlock) {
-			ResourceLocation lootTableId = switch (parameters[1]) {
-				case "room" -> TFLootTables.TOWER_ROOM.location();
-				case "library" -> TFLootTables.TOWER_LIBRARY.location();
-				case "potion" -> TFLootTables.TOWER_POTION.location();
-				case "grave" -> TFLootTables.TOWER_GRAVE.location();
-				case "enchanting" -> TFLootTables.TOWER_ENCHANTING.location();
-				default -> ResourceLocation.parse(parameters[1]);
+			ResourceKey<LootTable> lootTableId = switch (parameters[1]) {
+				case "room" -> TFLootTables.TOWER_ROOM;
+				case "library" -> TFLootTables.TOWER_LIBRARY;
+				case "potion" -> TFLootTables.TOWER_POTION;
+				case "grave" -> TFLootTables.TOWER_GRAVE;
+				case "enchanting" -> TFLootTables.TOWER_ENCHANTING;
+				default -> ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.bySeparator(parameters[1], '.'));
 			};
-			lootBlock.setLootTable(ResourceKey.create(Registries.LOOT_TABLE, lootTableId), random.nextLong());
+			lootBlock.setLootTable(lootTableId, random.nextLong());
 		}
 
 		if (level.getBlockState(pos.above()).is(TFBlocks.CANOPY_BOOKSHELF)) {
