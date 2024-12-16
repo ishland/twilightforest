@@ -253,7 +253,7 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 				}
 			}
 			case "twilightforest:lich_tower/decor" -> {
-				LichTowerRoomDecor.addDecor(this, pieceAccessor, random, connection, this.genDepth + 1, this.structureManager, false);
+				LichTowerRoomDecor.addDecor(this, pieceAccessor, random, connection, this.genDepth + 1, this.structureManager);
 			}
 		}
 

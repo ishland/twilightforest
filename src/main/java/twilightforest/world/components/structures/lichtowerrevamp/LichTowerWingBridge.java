@@ -189,6 +189,6 @@ public final class LichTowerWingBridge extends TwilightJigsawPiece implements Pi
 
 	@Override
 	public int getSortKey() {
-		return 1;
+		return 2;
 	}
 }
