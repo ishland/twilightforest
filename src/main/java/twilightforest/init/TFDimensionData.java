@@ -49,7 +49,7 @@ public class TFDimensionData {
 			32 + 256, // Logical Height
 			BlockTags.INFINIBURN_OVERWORLD, //infiburn
 			TFDimension.DIMENSION_RENDERER, // DimensionRenderInfo
-			0.05f,
+			0.01f,
 			new DimensionType.MonsterSettings(false, false, UniformInt.of(0, 7), 7)
 		);
 	}
