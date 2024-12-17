@@ -28,6 +28,13 @@ public final class LichTowerPieces {
 		this.enclosedBridgeCentral,
 		TwilightForestMod.prefix("lich_tower/central_bridge_open")
 	};
+	final ResourceLocation[] endBridges = new ResourceLocation[] {
+		TwilightForestMod.prefix("lich_tower/end_bridge_1"),
+		TwilightForestMod.prefix("lich_tower/end_bridge_2"),
+		TwilightForestMod.prefix("lich_tower/end_bridge_3"),
+		TwilightForestMod.prefix("lich_tower/end_bridge_4"),
+		TwilightForestMod.prefix("lich_tower/end_bridge_5")
+	};
 	final ResourceLocation[] roomBridges = new ResourceLocation[] {
 		TwilightForestMod.prefix("lich_tower/room_bridge_1"),
 		TwilightForestMod.prefix("lich_tower/room_bridge_2"),
@@ -107,10 +114,10 @@ public final class LichTowerPieces {
 			TwilightForestMod.prefix("lich_tower/7x7/ritual"),
 			TwilightForestMod.prefix("lich_tower/7x7/tiered_library"),
 			TwilightForestMod.prefix("lich_tower/7x7/tiered_study"),
-			TwilightForestMod.prefix("lich_tower/7x7/tiered_spawner"),
-			TwilightForestMod.prefix("lich_tower/7x7/center_decor"),
 			TwilightForestMod.prefix("lich_tower/7x7/pedestal_junction"),
-			TwilightForestMod.prefix("lich_tower/7x7/shelved_jars")
+			TwilightForestMod.prefix("lich_tower/7x7/shelved_jars"),
+			TwilightForestMod.prefix("lich_tower/7x7/walled_library"),
+			TwilightForestMod.prefix("lich_tower/7x7/pedestal_library")
 		},
 		new ResourceLocation[] {
 			TwilightForestMod.prefix("lich_tower/9x9/elbow_junction"),
@@ -125,7 +132,9 @@ public final class LichTowerPieces {
 			TwilightForestMod.prefix("lich_tower/9x9/lectern_hall"),
 			TwilightForestMod.prefix("lich_tower/9x9/tiered_study"),
 			TwilightForestMod.prefix("lich_tower/9x9/center_decor"),
-			TwilightForestMod.prefix("lich_tower/9x9/library_junction")
+			TwilightForestMod.prefix("lich_tower/9x9/library_junction"),
+			TwilightForestMod.prefix("lich_tower/9x9/winding_ways"),
+			TwilightForestMod.prefix("lich_tower/9x9/tiered_spawner")
 		}
 	};
 	final ResourceLocation[] galleryRooms = new ResourceLocation[] {

@@ -29,8 +29,9 @@ import twilightforest.util.jigsaw.JigsawPlaceContext;
 import twilightforest.util.jigsaw.JigsawRecord;
 import twilightforest.world.components.structures.SpawnIndexProvider;
 import twilightforest.world.components.structures.TwilightJigsawPiece;
+import twilightforest.world.components.structures.util.SortablePiece;
 
-public final class LichTowerBase extends TwilightJigsawPiece implements PieceBeardifierModifier, SpawnIndexProvider {
+public final class LichTowerBase extends TwilightJigsawPiece implements PieceBeardifierModifier, SpawnIndexProvider, SortablePiece {
 	@Autowired
 	private static LichTowerUtil lichTowerUtil;
 
@@ -80,7 +81,7 @@ public final class LichTowerBase extends TwilightJigsawPiece implements PieceBea
 				JigsawPlaceContext placeableJunction = JigsawPlaceContext.pickPlaceableJunction(this.templatePosition(), connection.pos(), connection.orientation(), this.structureManager, decorId, "twilightforest:lich_tower/decor", random);
 
 				if (placeableJunction != null) {
-					StructurePiece decor = new LichTowerRoomDecor(this.genDepth + 1, this.structureManager, decorId, placeableJunction, false);
+					StructurePiece decor = new LichTowerRoomDecor(this.genDepth + 1, this.structureManager, decorId, placeableJunction);
 					pieceAccessor.addPiece(decor);
 					decor.addChildren(this, pieceAccessor, random);
 				}
@@ -135,6 +136,11 @@ public final class LichTowerBase extends TwilightJigsawPiece implements PieceBea
 	@Override
 	public int getSpawnIndex() {
 		return LichTowerPieces.INTERIOR_SPAWNS;
+	}
+
+	@Override
+	public int getSortKey() {
+		return 1;
 	}
 
 	private static class TrimProcessor extends StructureProcessor {

@@ -31,28 +31,24 @@ public class LichTowerRoomDecor extends TwilightJigsawPiece implements PieceBear
 	@Autowired
 	private static LichTowerUtil lichTowerUtil;
 
-	private final boolean isInCenterTower;
-
 	public LichTowerRoomDecor(StructurePieceSerializationContext ctx, CompoundTag compoundTag) {
 		super(TFStructurePieceTypes.LICH_TOWER_DECOR.value(), compoundTag, ctx, readSettings(compoundTag));
 
 		LichTowerUtil.addDefaultProcessors(this.placeSettings.addProcessor(lichTowerUtil.getRoomSpawnerProcessor()));
-		this.isInCenterTower = compoundTag.getBoolean("is_in_central");
 	}
 
-	public LichTowerRoomDecor(int genDepth, StructureTemplateManager structureManager, ResourceLocation templateLocation, JigsawPlaceContext jigsawContext, boolean isInCenterTower) {
+	public LichTowerRoomDecor(int genDepth, StructureTemplateManager structureManager, ResourceLocation templateLocation, JigsawPlaceContext jigsawContext) {
 		super(TFStructurePieceTypes.LICH_TOWER_DECOR.value(), genDepth, structureManager, templateLocation, jigsawContext);
 
 		LichTowerUtil.addDefaultProcessors(this.placeSettings.addProcessor(lichTowerUtil.getRoomSpawnerProcessor()));
-		this.isInCenterTower = isInCenterTower;
 	}
 
-	public static void addDecor(TwilightTemplateStructurePiece parent, StructurePieceAccessor pieceAccessor, RandomSource random, JigsawRecord connection, int newDepth, StructureTemplateManager structureManager, boolean isInCenterTower) {
+	public static void addDecor(TwilightTemplateStructurePiece parent, StructurePieceAccessor pieceAccessor, RandomSource random, JigsawRecord connection, int newDepth, StructureTemplateManager structureManager) {
 		ResourceLocation decorId = lichTowerUtil.rollRandomDecor(random, false);
 		JigsawPlaceContext placeableJunction = JigsawPlaceContext.pickPlaceableJunction(parent.templatePosition(), connection.pos(), connection.orientation(), structureManager, decorId, "twilightforest:lich_tower/decor", random);
 
 		if (placeableJunction != null) {
-			StructurePiece decor = new LichTowerRoomDecor(newDepth, structureManager, decorId, placeableJunction, isInCenterTower);
+			StructurePiece decor = new LichTowerRoomDecor(newDepth, structureManager, decorId, placeableJunction);
 			pieceAccessor.addPiece(decor);
 			decor.addChildren(parent, pieceAccessor, random);
 		}
@@ -61,8 +57,6 @@ public class LichTowerRoomDecor extends TwilightJigsawPiece implements PieceBear
 	@Override
 	protected void addAdditionalSaveData(StructurePieceSerializationContext ctx, CompoundTag structureTag) {
 		super.addAdditionalSaveData(ctx, structureTag);
-
-		structureTag.putBoolean("is_in_central", this.isInCenterTower);
 	}
 
 	@Override
