@@ -129,7 +129,7 @@ public class MagicPaintingRenderer extends EntityRenderer<MagicPainting> {
 			}
 		}
 
-		TextureAtlasSprite backSprite = MagicPaintingTextureManager.instance.getBackSprite();
+		TextureAtlasSprite backSprite = MagicPaintingTextureManager.instance.getBackSprite(variant);
 
 		for (int w = 0; w < widthAsBlock; ++w) {
 			boolean leftBorder = w == 0;

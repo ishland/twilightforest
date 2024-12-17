@@ -1,4 +1,8 @@
 {
+  "author": {
+    "translate": "magic_painting.twilightforest.lucid_lands.author"
+  },
+  "back_texture": "twilightforest:magic_paintings/back",
   "height": 48,
   "layers": [
     {

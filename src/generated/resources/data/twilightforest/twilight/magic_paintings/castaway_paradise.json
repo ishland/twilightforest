@@ -1,4 +1,8 @@
 {
+  "author": {
+    "translate": "magic_painting.twilightforest.castaway_paradise.author"
+  },
+  "back_texture": "twilightforest:magic_paintings/back",
   "height": 64,
   "layers": [
     {

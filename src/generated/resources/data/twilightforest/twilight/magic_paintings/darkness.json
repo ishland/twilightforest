@@ -1,4 +1,8 @@
 {
+  "author": {
+    "translate": "magic_painting.twilightforest.darkness.author"
+  },
+  "back_texture": "twilightforest:magic_paintings/back",
   "height": 32,
   "layers": [
     {

@@ -5,6 +5,8 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ExtraCodecs;
@@ -19,11 +21,13 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-public record MagicPaintingVariant(int width, int height, List<Layer> layers) {
+public record MagicPaintingVariant(int width, int height, List<Layer> layers, Component author, ResourceLocation backTexture) {
 	public static final Codec<MagicPaintingVariant> CODEC = RecordCodecBuilder.create((recordCodecBuilder) -> recordCodecBuilder.group(
 		ExtraCodecs.POSITIVE_INT.fieldOf("width").forGetter(MagicPaintingVariant::width),
 		ExtraCodecs.POSITIVE_INT.fieldOf("height").forGetter(MagicPaintingVariant::height),
-		ExtraCodecs.nonEmptyList(Layer.CODEC.listOf()).fieldOf("layers").forGetter(MagicPaintingVariant::layers)
+		ExtraCodecs.nonEmptyList(Layer.CODEC.listOf()).fieldOf("layers").forGetter(MagicPaintingVariant::layers),
+		ComponentSerialization.CODEC.fieldOf("author").forGetter(MagicPaintingVariant::author),
+		ResourceLocation.CODEC.fieldOf("back_texture").forGetter(MagicPaintingVariant::backTexture)
 	).apply(recordCodecBuilder, MagicPaintingVariant::new));
 
 	public static Optional<MagicPaintingVariant> getVariant(@Nullable HolderLookup.Provider regAccess, String id) {
