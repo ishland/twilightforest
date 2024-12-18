@@ -18,6 +18,7 @@ public class TrunkUnderDensityFunction extends Beardifier {
 	private final HollowHillFunction hollowHillFunction;
 	private final HollowHillFunction hollowHillFunction1;
 	private int d;
+	private int coordinateOffset;
 	public TrunkUnderDensityFunction(ObjectListIterator<Rigid> pieceIterator, boolean isBigTree) {
 		super(pieceIterator, (ObjectListIterator<JigsawJunction>) ObjectIterators.<JigsawJunction>emptyIterator());
 		this.isBigTree = isBigTree;
@@ -31,11 +32,11 @@ public class TrunkUnderDensityFunction extends Beardifier {
 			!isXOriented ? random.nextInt(FallenTrunkPiece.ERODED_LENGTH, boundingBox.getZSpan() - moundApexSizes.getZ() - FallenTrunkPiece.ERODED_LENGTH) : 0);
 		moundApex = BoundingBox.fromCorners(moundApexCorner, moundApexCorner.offset(moundApexSizes));
 		int length = isXOriented ? boundingBox.getXSpan() : boundingBox.getZSpan();
-		d = random.nextInt(-length / 3, length / 3);
+		coordinateOffset = random.nextInt(-length / 3, length / 3);
 		BoundingBox absouluteMoundApex = moundApex.moved(boundingBox.minX(), boundingBox.minY(), boundingBox.minZ());
 		int radius = getRadius(boundingBox);
-		hollowHillFunction = new HollowHillFunction(absouluteMoundApex.getCenter().getX() + (isXOriented ? d : radius * 1.5f), absouluteMoundApex.getCenter().getY() + radius / 3f - 1, absouluteMoundApex.getCenter().getZ() + (isXOriented ? radius * 1.5f : d), 4, 1);
-		hollowHillFunction1 = new HollowHillFunction(absouluteMoundApex.getCenter().getX() + (isXOriented ? d : radius * 1.5f), absouluteMoundApex.getCenter().getY() + radius / 3f, absouluteMoundApex.getCenter().getZ() + (isXOriented ? radius * 1.5f : d), 4, 1);
+		hollowHillFunction = new HollowHillFunction(absouluteMoundApex.getCenter().getX() + (isXOriented ? coordinateOffset : radius * 1.5f), absouluteMoundApex.getCenter().getY() + radius / 3f - 1, absouluteMoundApex.getCenter().getZ() + (isXOriented ? radius * 1.5f : coordinateOffset), 4, 1);
+		hollowHillFunction1 = new HollowHillFunction(absouluteMoundApex.getCenter().getX() + (isXOriented ? coordinateOffset : radius * 1.5f), absouluteMoundApex.getCenter().getY() + radius / 3f, absouluteMoundApex.getCenter().getZ() + (isXOriented ? radius * 1.5f : coordinateOffset), 4, 1);
 	}
 
 	@Override
