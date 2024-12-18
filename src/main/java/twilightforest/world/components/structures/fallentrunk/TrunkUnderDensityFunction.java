@@ -34,8 +34,8 @@ public class TrunkUnderDensityFunction extends Beardifier {
 		d = random.nextInt(-length / 3, length / 3);
 		BoundingBox absouluteMoundApex = moundApex.moved(boundingBox.minX(), boundingBox.minY(), boundingBox.minZ());
 		int radius = getRadius(boundingBox);
-		hollowHillFunction = new HollowHillFunction(absouluteMoundApex.getCenter().getX() + (isXOriented ? d : radius * 1.5f), absouluteMoundApex.getCenter().getY() + radius / 2.5f - 1, absouluteMoundApex.getCenter().getZ() + (isXOriented ? radius * 1.5f : d), 4, 1);
-		hollowHillFunction1 = new HollowHillFunction(absouluteMoundApex.getCenter().getX() + (isXOriented ? d : radius * 1.5f), absouluteMoundApex.getCenter().getY() + radius / 2.5f, absouluteMoundApex.getCenter().getZ() + (isXOriented ? radius * 1.5f : d), 4, 1);
+		hollowHillFunction = new HollowHillFunction(absouluteMoundApex.getCenter().getX() + (isXOriented ? d : radius * 1.5f), absouluteMoundApex.getCenter().getY() + radius / 3f - 1, absouluteMoundApex.getCenter().getZ() + (isXOriented ? radius * 1.5f : d), 4, 1);
+		hollowHillFunction1 = new HollowHillFunction(absouluteMoundApex.getCenter().getX() + (isXOriented ? d : radius * 1.5f), absouluteMoundApex.getCenter().getY() + radius / 3f, absouluteMoundApex.getCenter().getZ() + (isXOriented ? radius * 1.5f : d), 4, 1);
 	}
 
 	@Override
