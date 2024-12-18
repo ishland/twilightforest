@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
 public class FallenTrunkStructure extends Structure implements CustomDensitySource {
 	public static final MapCodec<FallenTrunkStructure> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 		Structure.settingsCodec(instance),
-		IntProvider.codec(8, 32).fieldOf("length").forGetter(s -> s.length),
+		IntProvider.codec(16, 32).fieldOf("length").forGetter(s -> s.length),
 		BlockStateProvider.CODEC.fieldOf("log").forGetter(s -> s.log),
 		ResourceKey.codec(Registries.LOOT_TABLE).fieldOf("chest_loot_table").forGetter(s -> s.chestLootTable),
 		RegistryFixedCodec.create(Registries.ENTITY_TYPE).fieldOf("spawner_monster").forGetter(s -> s.spawnerMonster)

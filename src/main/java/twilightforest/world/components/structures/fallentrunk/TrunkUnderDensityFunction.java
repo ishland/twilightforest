@@ -25,12 +25,11 @@ public class TrunkUnderDensityFunction extends Beardifier {
 		boundingBox = getFallenTrunkPiece().box();
 		random = RandomSource.create(boundingBox.minX() * 14413411L + boundingBox.minZ() * 43387781L);
 		isXOriented = boundingBox.maxX() - boundingBox.minX() > boundingBox.maxZ() - boundingBox.minZ();
-		Vec3i moundApexSizes = new Vec3i(isXOriented ? random.nextInt(2) : 0, 0, isXOriented ? 0 : random.nextInt(2));
 		Vec3i moundApexCorner = new Vec3i(
-			isXOriented ? random.nextInt(FallenTrunkPiece.ERODED_LENGTH, boundingBox.getXSpan() - moundApexSizes.getX() - FallenTrunkPiece.ERODED_LENGTH) : 0,
+			isXOriented ? random.nextInt(FallenTrunkPiece.ERODED_LENGTH + moundRadius, boundingBox.getXSpan() - FallenTrunkPiece.ERODED_LENGTH - moundRadius) : 0,
 			1,
-			!isXOriented ? random.nextInt(FallenTrunkPiece.ERODED_LENGTH, boundingBox.getZSpan() - moundApexSizes.getZ() - FallenTrunkPiece.ERODED_LENGTH) : 0);
-		moundApex = BoundingBox.fromCorners(moundApexCorner, moundApexCorner.offset(moundApexSizes));
+			!isXOriented ? random.nextInt(FallenTrunkPiece.ERODED_LENGTH + moundRadius, boundingBox.getZSpan() - FallenTrunkPiece.ERODED_LENGTH - moundRadius) : 0);
+		moundApex = BoundingBox.fromCorners(moundApexCorner, moundApexCorner);
 		int length = isXOriented ? boundingBox.getXSpan() : boundingBox.getZSpan();
 		coordinateOffset = random.nextInt(-length / 3, length / 3);
 		BoundingBox absouluteMoundApex = moundApex.moved(boundingBox.minX(), boundingBox.minY(), boundingBox.minZ());
