@@ -17,7 +17,7 @@ public class TrunkUnderDensityFunction extends Beardifier {
 	private final BoundingBox moundApex;
 	private final HollowHillFunction hollowHillFunction;
 	private final HollowHillFunction hollowHillFunction1;
-	private int d;
+	private final int moundRadius = 4;
 	private int coordinateOffset;
 	public TrunkUnderDensityFunction(ObjectListIterator<Rigid> pieceIterator, boolean isBigTree) {
 		super(pieceIterator, (ObjectListIterator<JigsawJunction>) ObjectIterators.<JigsawJunction>emptyIterator());
@@ -35,8 +35,8 @@ public class TrunkUnderDensityFunction extends Beardifier {
 		coordinateOffset = random.nextInt(-length / 3, length / 3);
 		BoundingBox absouluteMoundApex = moundApex.moved(boundingBox.minX(), boundingBox.minY(), boundingBox.minZ());
 		int radius = getRadius(boundingBox);
-		hollowHillFunction = new HollowHillFunction(absouluteMoundApex.getCenter().getX() + (isXOriented ? coordinateOffset : radius * 1.5f), absouluteMoundApex.getCenter().getY() + radius / 3f - 1, absouluteMoundApex.getCenter().getZ() + (isXOriented ? radius * 1.5f : coordinateOffset), 4, 1);
-		hollowHillFunction1 = new HollowHillFunction(absouluteMoundApex.getCenter().getX() + (isXOriented ? coordinateOffset : radius * 1.5f), absouluteMoundApex.getCenter().getY() + radius / 3f, absouluteMoundApex.getCenter().getZ() + (isXOriented ? radius * 1.5f : coordinateOffset), 4, 1);
+		hollowHillFunction = new HollowHillFunction(absouluteMoundApex.getCenter().getX() + (isXOriented ? coordinateOffset : radius * 1.5f), absouluteMoundApex.getCenter().getY() + radius / 3f - 1, absouluteMoundApex.getCenter().getZ() + (isXOriented ? radius * 1.5f : coordinateOffset), moundRadius, 1);
+		hollowHillFunction1 = new HollowHillFunction(absouluteMoundApex.getCenter().getX() + (isXOriented ? coordinateOffset : radius * 1.5f), absouluteMoundApex.getCenter().getY() + radius / 3f, absouluteMoundApex.getCenter().getZ() + (isXOriented ? radius * 1.5f : coordinateOffset), moundRadius, 1);
 	}
 
 	@Override
