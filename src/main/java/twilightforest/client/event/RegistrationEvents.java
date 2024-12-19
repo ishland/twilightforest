@@ -58,6 +58,7 @@ import twilightforest.client.model.entity.*;
 import twilightforest.client.model.item.TrollsteinnModel;
 import twilightforest.client.particle.*;
 import twilightforest.client.renderer.PotionFlaskTooltipComponent;
+import twilightforest.client.renderer.RisingZombieRenderer;
 import twilightforest.client.renderer.TFSkyRenderer;
 import twilightforest.client.renderer.block.*;
 import twilightforest.client.renderer.entity.*;
@@ -381,7 +382,7 @@ public class RegistrationEvents {
 		event.registerEntityRenderer(TFEntities.HARBINGER_CUBE.get(), m -> new TFGenericMobRenderer<>(m, new HarbingerCubeModel<>(m.bakeLayer(TFModelLayers.HARBINGER_CUBE)), 1.0F, "apocalypse2.png"));
 		event.registerEntityRenderer(TFEntities.ADHERENT.get(), AdherentRenderer::new);
 		event.registerEntityRenderer(TFEntities.ROVING_CUBE.get(), RovingCubeRenderer::new);
-		event.registerEntityRenderer(TFEntities.RISING_ZOMBIE.get(), m -> new TFBipedRenderer<>(m, new RisingZombieModel(m.bakeLayer(TFModelLayers.RISING_ZOMBIE)), new RisingZombieModel(m.bakeLayer(ModelLayers.ZOMBIE_INNER_ARMOR)), new RisingZombieModel(m.bakeLayer(ModelLayers.ZOMBIE_OUTER_ARMOR)), 0.5F, "textures/entity/zombie/zombie.png"));
+		event.registerEntityRenderer(TFEntities.RISING_ZOMBIE.get(), RisingZombieRenderer::new);
 		event.registerEntityRenderer(TFEntities.PLATEAU_BOSS.get(), NoopRenderer::new);
 
 		// projectiles
