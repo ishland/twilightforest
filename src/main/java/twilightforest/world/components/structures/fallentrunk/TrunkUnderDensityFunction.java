@@ -71,15 +71,19 @@ public class TrunkUnderDensityFunction extends Beardifier {
 
 	protected HollowHillFunction getHollowHillFunction() {
 		Vec3i moundApexCorner = new Vec3i(
-			isXOriented ? random.nextInt(FallenTrunkPiece.ERODED_LENGTH + moundRadius, boundingBox.getXSpan() - FallenTrunkPiece.ERODED_LENGTH - moundRadius) : random.nextBoolean() ? 0 : -boundingBox.getXSpan(),
+			isXOriented ? random.nextInt(FallenTrunkPiece.ERODED_LENGTH + moundRadius, boundingBox.getXSpan() - FallenTrunkPiece.ERODED_LENGTH - moundRadius) : 0,
 			1,
-			!isXOriented ? random.nextInt(FallenTrunkPiece.ERODED_LENGTH + moundRadius, boundingBox.getZSpan() - FallenTrunkPiece.ERODED_LENGTH - moundRadius) : random.nextBoolean() ? 0 : -boundingBox.getZSpan());
+			!isXOriented ? random.nextInt(FallenTrunkPiece.ERODED_LENGTH + moundRadius, boundingBox.getZSpan() - FallenTrunkPiece.ERODED_LENGTH - moundRadius) : 0);
 		BoundingBox moundApex = BoundingBox.fromCorners(moundApexCorner, moundApexCorner);
 		int length = isXOriented ? boundingBox.getXSpan() : boundingBox.getZSpan();
 		int coordinateOffset = random.nextInt(-length / 3, length / 3);
 		BoundingBox absouluteMoundApex = moundApex.moved(boundingBox.minX(), boundingBox.minY(), boundingBox.minZ());
 		int radius = getRadius(boundingBox);
-		return new HollowHillFunction(absouluteMoundApex.getCenter().getX() + (isXOriented ? coordinateOffset : radius * 1.5f), absouluteMoundApex.getCenter().getY() + radius / 3f, absouluteMoundApex.getCenter().getZ() + (isXOriented ? radius * 1.5f : coordinateOffset), moundRadius, 1);
+		return new HollowHillFunction(
+			absouluteMoundApex.getCenter().getX() + (isXOriented ? coordinateOffset : random.nextBoolean() ? radius * 1.5f : 0),
+			absouluteMoundApex.getCenter().getY() + radius / 3f,
+			absouluteMoundApex.getCenter().getZ() + (!isXOriented ? coordinateOffset : random.nextBoolean() ? radius * 1.5f : 0),
+			moundRadius, 1);
 	}
 
 	protected Beardifier.Rigid getFallenTrunkPiece() {
