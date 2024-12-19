@@ -100,6 +100,7 @@ public class EntityEvents {
 				var zombie = EntityType.ZOMBIE.create(player.level());
 				zombie.copyPosition(player);
 				zombie.setCanPickUpLoot(true);
+				zombie.setBaby(false);
 				EventHooks.finalizeMobSpawn(zombie, player.serverLevel(), player.level().getCurrentDifficultyAt(player.blockPosition()), MobSpawnType.CONVERSION, null);
 				player.level().addFreshEntity(zombie);
 			} else if (dataMap != null && event.getEntity().level() instanceof ServerLevel) {
