@@ -644,10 +644,6 @@ public class Lich extends BaseTFBoss {
 		this.jumping = false;
 		//extinguish when teleporting
 		this.clearFire();
-		//set null target after teleporting so we choose a new target (for multiplayer fights)
-		if (this.getTarget() instanceof Player) {
-			this.setTarget(null);
-		}
 	}
 
 	//-----------------------------------------//
