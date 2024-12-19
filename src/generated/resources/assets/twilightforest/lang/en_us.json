@@ -894,6 +894,7 @@
   "death.attack.twilightforest.lostWords": "%1$s was at a loss for words after being killed by %2$s",
   "death.attack.twilightforest.lostWords.item": "%1$s was at a loss for words after being killed by %2$s using %3$s",
   "death.attack.twilightforest.moonworm": "%1$s was shot by Moonworm",
+  "death.attack.twilightforest.ominous": "%1$s was subsumed by ominous fire",
   "death.attack.twilightforest.reactor": "%1$s stood too close to a Carminite Reactor",
   "death.attack.twilightforest.reactor.player": "%1$s stood too close to a Carminite Reactor while escaping %2$s",
   "death.attack.twilightforest.schooled": "%1$s was schooled by %2$s",

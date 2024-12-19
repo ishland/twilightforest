@@ -45,6 +45,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.damagesource.DamageContainer;
+import net.neoforged.neoforge.event.EventHooks;
 import net.neoforged.neoforge.event.entity.ProjectileImpactEvent;
 import net.neoforged.neoforge.event.entity.living.FinalizeSpawnEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
@@ -73,6 +74,8 @@ import twilightforest.init.*;
 import twilightforest.item.FieryArmorItem;
 import twilightforest.item.YetiArmorItem;
 import twilightforest.network.WipeOreMeterPacket;
+import twilightforest.util.datamaps.EntityTransformation;
+import twilightforest.util.entities.EntityUtil;
 import twilightforest.world.components.structures.SpawnIndexProvider;
 import twilightforest.world.components.structures.finalcastle.FinalCastleBossGazeboComponent;
 import twilightforest.world.components.structures.start.TFStructureStart;
@@ -87,6 +90,23 @@ import java.util.UUID;
 public class EntityEvents {
 
 	private static final boolean SHIELD_PARRY_MOD_LOADED = ModList.get().isLoaded("parry");
+
+	@SubscribeEvent
+	public static void ominousFireConversion(LivingDeathEvent event) {
+		if (event.getSource().is(TFDamageTypes.OMINOUS_FIRE)) {
+			EntityTransformation dataMap = event.getEntity().getType().builtInRegistryHolder().getData(TFDataMaps.OMINOUS_FIRE);
+
+			if (event.getEntity() instanceof ServerPlayer player) {
+				var zombie = EntityType.ZOMBIE.create(player.level());
+				zombie.copyPosition(player);
+				zombie.setCanPickUpLoot(true);
+				EventHooks.finalizeMobSpawn(zombie, player.serverLevel(), player.level().getCurrentDifficultyAt(player.blockPosition()), MobSpawnType.CONVERSION, null);
+				player.level().addFreshEntity(zombie);
+			} else if (dataMap != null && event.getEntity().level() instanceof ServerLevel) {
+				EntityUtil.convertEntity(event.getEntity(), dataMap.result());
+			}
+		}
+	}
 
 	@SubscribeEvent
 	public static void alertPlayerCastleIsWIP(AdvancementEvent.AdvancementEarnEvent event) {

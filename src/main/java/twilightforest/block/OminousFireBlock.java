@@ -57,51 +57,13 @@ public class OminousFireBlock extends BaseFireBlock {
 
 	@Override
 	public ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader level, BlockPos pos, Player player) {
-		return new ItemStack(TFItems.EXANIMATE_ESSENCE.value());
+		return new ItemStack(TFItems.EXANIMATE_ESSENCE.get());
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
 	protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
 		if (!entity.getType().is(EntityTypeTags.UNDEAD)) {
-			if (entity.hurt(TFDamageTypes.getDamageSource(level, TFDamageTypes.OMINOUS_FIRE), 1.0F) && level instanceof ServerLevel && entity instanceof LivingEntity target && target.isDeadOrDying()) {
-                EntityTransformation dataMap = target.getType().builtInRegistryHolder().getData(TFDataMaps.OMINOUS_FIRE);
-
-				if (dataMap != null) {
-					Entity newEntity = dataMap.result().create(level);
-					if (newEntity == null) return;
-
-					newEntity.moveTo(target.getX(), target.getY(), target.getZ(), target.getYRot(), target.getXRot());
-					if (newEntity instanceof Mob mob && target.level() instanceof ServerLevelAccessor world) {
-						EventHooks.finalizeMobSpawn(mob, world, target.level().getCurrentDifficultyAt(target.blockPosition()), MobSpawnType.CONVERSION, null);
-					}
-
-					if (target instanceof Saddleable saddleable && saddleable.isSaddled() && !(newEntity instanceof Saddleable)) {
-						newEntity.spawnAtLocation(Items.SADDLE);
-					}
-
-					try { // try copying what can be copied
-						UUID uuid = newEntity.getUUID();
-						newEntity.load(target.saveWithoutId(newEntity.saveWithoutId(new CompoundTag())));
-						newEntity.setUUID(uuid);
-						if (newEntity instanceof LivingEntity living) {
-							living.setHealth(living.getMaxHealth());
-						}
-					} catch (Exception e) {
-						TwilightForestMod.LOGGER.warn("Couldn't transform entity NBT data", e);
-					}
-
-					target.level().addFreshEntity(newEntity);
-					target.discard();
-
-					if (target instanceof Mob mob) {
-						mob.spawnAnim();
-						mob.spawnAnim();
-					}
-					if (newEntity instanceof LivingEntity living) EventHooks.onLivingConvert(target, living);
-					level.levelEvent(null, 1026, pos, 0);
-				}
-			}
-        }
+			entity.hurt(TFDamageTypes.getDamageSource(level, TFDamageTypes.OMINOUS_FIRE), 1.0F);
+		}
 	}
 }
