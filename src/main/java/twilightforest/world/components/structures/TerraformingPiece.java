@@ -33,7 +33,7 @@ public class TerraformingPiece extends StructurePiece {
 
 	@Override
 	public void postProcess(WorldGenLevel level, StructureManager structureManager, ChunkGenerator generator, RandomSource random, BoundingBox box, ChunkPos chunkPos, BlockPos pos) {
-		placeBlockEdges(level, box, Blocks.DIAMOND_BLOCK.defaultBlockState());
+//		placeBlockEdges(level, box, Blocks.DIAMOND_BLOCK.defaultBlockState());
 		return;
 	}
 }
