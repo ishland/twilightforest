@@ -290,6 +290,7 @@ public class TFCreativeTabs {
 			output.accept(TFBlocks.UR_GHAST_BOSS_SPAWNER);
 			output.accept(TFBlocks.ALPHA_YETI_BOSS_SPAWNER);
 			output.accept(TFBlocks.SNOW_QUEEN_BOSS_SPAWNER);
+			output.accept(TFBlocks.SINISTER_SPAWNER);
 			output.accept(TFBlocks.ETCHED_NAGASTONE);
 			output.accept(TFBlocks.CRACKED_ETCHED_NAGASTONE);
 			output.accept(TFBlocks.MOSSY_ETCHED_NAGASTONE);
@@ -308,6 +309,17 @@ public class TFCreativeTabs {
 			output.accept(TFBlocks.BOLD_STONE_PILLAR);
 			output.accept(TFBlocks.TWISTED_STONE);
 			output.accept(TFBlocks.TWISTED_STONE_PILLAR);
+			output.accept(TFBlocks.TERRORCOTTA_LINES);
+			output.accept(TFBlocks.TERRORCOTTA_CURVES);
+			output.accept(TFBlocks.TERRORCOTTA_ARCS);
+			output.accept(TFBlocks.CHISELED_CANOPY_BOOKSHELF);
+			output.accept(TFBlocks.SKULL_CHEST);
+			output.accept(TFBlocks.KEEPSAKE_CASKET);
+			output.accept(TFBlocks.WROUGHT_IRON_FENCE);
+			output.accept(TFBlocks.CANDELABRA);
+			output.accept(TFBlocks.CORONATION_CARPET);
+			output.accept(TFBlocks.CANOPY_WINDOW);
+			output.accept(TFBlocks.CANOPY_WINDOW_PANE);
 			output.accept(TFBlocks.SMOKER);
 			output.accept(TFBlocks.FIRE_JET);
 			output.accept(TFBlocks.MAZESTONE);
@@ -415,6 +427,9 @@ public class TFCreativeTabs {
 			output.accept(TFItems.FIERY_BLOOD);
 			output.accept(TFItems.FIERY_TEARS);
 			output.accept(TFItems.FIERY_INGOT);
+			output.accept(TFItems.CROWN_SPLINTER);
+			output.accept(TFItems.WROUGHT_IRON_BAR);
+			output.accept(TFItems.EXANIMATE_ESSENCE);
 			output.accept(TFItems.ARCTIC_FUR);
 			output.accept(TFItems.ALPHA_YETI_FUR);
 			output.accept(TFItems.RAW_VENISON);
@@ -430,6 +445,8 @@ public class TFCreativeTabs {
 			output.accept(TFItems.CHARM_OF_KEEPING_1);
 			output.accept(TFItems.CHARM_OF_KEEPING_2);
 			output.accept(TFItems.CHARM_OF_KEEPING_3);
+			output.accept(TFItems.BRITTLE_FLASK);
+			output.accept(TFItems.GREATER_FLASK);
 			output.accept(TFItems.BORER_ESSENCE);
 			output.accept(TFItems.CARMINITE);
 			output.accept(TFItems.TOWER_KEY);
@@ -469,11 +486,6 @@ public class TFCreativeTabs {
 			output.accept(TFItems.MINING_CHEST_BOAT);
 			output.accept(TFItems.SORTING_CHEST_BOAT);
 			createSpawnEggsAlphabetical(output);
-
-			if (!FMLLoader.isProduction()) {
-				output.accept(TFItems.WROUGHT_IRON_BAR);
-				createPaintings(output, parameters.holders().lookupOrThrow(TFRegistries.Keys.MAGIC_PAINTINGS));
-			}
 		}).build());
 
 	public static final DeferredHolder<CreativeModeTab, CreativeModeTab> EQUIPMENT = TABS.register("equipment", () -> CreativeModeTab.builder()
@@ -539,15 +551,11 @@ public class TFCreativeTabs {
 			output.accept(TFItems.PHANTOM_CHESTPLATE);
 			generateGearWithEnchants(output, TFItems.NAGA_CHESTPLATE, new EnchantmentInstance(lookup.getOrThrow(Enchantments.FIRE_PROTECTION), 3));
 			generateGearWithEnchants(output, TFItems.NAGA_LEGGINGS, new EnchantmentInstance(lookup.getOrThrow(Enchantments.PROTECTION), 3));
+			output.accept(TFItems.MYSTIC_CROWN);
 			output.accept(TFItems.TWILIGHT_SCEPTER);
 			output.accept(TFItems.LIFEDRAIN_SCEPTER);
 			output.accept(TFItems.ZOMBIE_SCEPTER);
 			output.accept(TFItems.FORTIFICATION_SCEPTER);
-
-			if (!FMLLoader.isProduction()) {
-				output.accept(TFItems.EXANIMATE_ESSENCE);
-			}
-
 			output.accept(TFItems.LAMP_OF_CINDERS);
 			output.accept(TFItems.EMPERORS_CLOTH);
 			output.accept(TFItems.ORE_MAGNET);
