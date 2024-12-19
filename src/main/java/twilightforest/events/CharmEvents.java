@@ -15,6 +15,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.ResolvableProfile;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -235,26 +236,24 @@ public class CharmEvents {
 		}
 
 		if (!level.setBlockAndUpdate(immutablePos, setState)) {
-			TwilightForestMod.LOGGER.error("Could not place Keepsake Casket at " + pos);
+			TwilightForestMod.LOGGER.error("Could not place Keepsake Casket at {}", pos);
 			return;
 		}
 
 		if (!(level.getBlockEntity(immutablePos) instanceof KeepsakeCasketBlockEntity casket)) {
-			TwilightForestMod.LOGGER.error("Failed to set Keepsake Casket data at " + pos);
+			TwilightForestMod.LOGGER.error("Failed to set Keepsake Casket data at {}", pos);
 			return;
 		}
 
 		if (TFConfig.casketUUIDLocking) {
 			//make it so only the player who died can open the chest if our config allows us
-			casket.playeruuid = player.getGameProfile().getId();
+			casket.owner = new ResolvableProfile(player.getGameProfile());
 		} else {
-			casket.playeruuid = null;
+			casket.owner = null;
 		}
 
-		casket.playerName = player.getName().getString();
 		//some names are way too long for the casket so we'll cut them down
-		String modifiedName = casket.playerName.substring(0, Math.min(12, player.getName().getString().length()));
-		casket.casketname = modifiedName;
+		String modifiedName = player.getName().getString().substring(0, Math.min(12, player.getName().getString().length()));
 		casket.name = (Component.literal(modifiedName + "'s " + (level.getRandom().nextInt(1000) == 0 ? "Costco Casket" : casket.getDisplayName().getString())));
 
 		int casketCapacity = casket.getContainerSize();

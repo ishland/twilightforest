@@ -57,6 +57,7 @@ import twilightforest.components.item.SkullCandles;
 import twilightforest.config.TFConfig;
 import twilightforest.enums.BossVariant;
 import twilightforest.enums.extensions.TFItemDisplayContextEnumExtension;
+import twilightforest.init.TFBlockEntities;
 import twilightforest.init.TFBlocks;
 import twilightforest.init.TFDataComponents;
 import twilightforest.item.KnightmetalShieldItem;
@@ -78,8 +79,8 @@ public class ISTER extends BlockEntityWithoutLevelRenderer {
 			return INSTANCE.get();
 		}
 	});
-	private final KeepsakeCasketBlockEntity skullChest = KeepsakeCasketBlockEntity.createSkullChestBE(BlockPos.ZERO, TFBlocks.SKULL_CHEST.get().defaultBlockState());
-	private final KeepsakeCasketBlockEntity skullCasket = KeepsakeCasketBlockEntity.createKeepsakeCasketBE(BlockPos.ZERO, TFBlocks.KEEPSAKE_CASKET.get().defaultBlockState());
+	private final SkullChestBlockEntity skullChest = new SkullChestBlockEntity(BlockPos.ZERO, TFBlocks.SKULL_CHEST.get().defaultBlockState());
+	private final KeepsakeCasketBlockEntity keepsakeCasket = new KeepsakeCasketBlockEntity(BlockPos.ZERO, TFBlocks.KEEPSAKE_CASKET.get().defaultBlockState());
 	private final Map<Block, TFChestBlockEntity> chestEntities = Util.make(new HashMap<>(), map -> {
 		makeInstance(map, TFBlocks.TWILIGHT_OAK_CHEST);
 		makeInstance(map, TFBlocks.CANOPY_CHEST);
@@ -158,12 +159,15 @@ public class ISTER extends BlockEntityWithoutLevelRenderer {
 					TrophyRenderer.render(null, 180.0F, trophy, variant, !minecraft.isPaused() ? ClientEvents.time + minecraft.getTimer().getRealtimeDeltaTicks() : 0, pose, buffers, light, camera);
 				}
 
-			} else if (block instanceof SkullChestBlock) {
+			} else if (block instanceof KeepsakeCasketBlock) {
 				int damage = stack.getOrDefault(TFDataComponents.CASKET_DAMAGE, 0);
 
-				BlockEntity chestEntity = block == TFBlocks.KEEPSAKE_CASKET.value() ? this.skullCasket : this.skullChest;
-				if (minecraft.getBlockEntityRenderDispatcher().getRenderer(chestEntity) instanceof SkullChestRenderer<?> renderer) {
+				if (minecraft.getBlockEntityRenderDispatcher().getRenderer(this.keepsakeCasket) instanceof SkullChestRenderer<?> renderer) {
 					renderer.renderCasket(0.0F, pose, buffers, light, overlay, renderer.getTextureLocation(damage), Direction.NORTH);
+				}
+			} else if (block instanceof SkullChestBlock) {
+				if (minecraft.getBlockEntityRenderDispatcher().getRenderer(this.skullChest) instanceof SkullChestRenderer<?> renderer) {
+					renderer.renderCasket(0.0F, pose, buffers, light, overlay, renderer.getTextureLocation(0), Direction.NORTH);
 				}
 			} else if (block instanceof TFChestBlock) {
 				minecraft.getBlockEntityRenderDispatcher().renderItem(this.chestEntities.get(block), pose, buffers, light, overlay);

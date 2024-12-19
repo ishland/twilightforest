@@ -63,7 +63,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.TwilightForestMod;
 import twilightforest.block.*;
-import twilightforest.block.entity.KeepsakeCasketBlockEntity;
+import twilightforest.block.entity.SkullChestBlockEntity;
 import twilightforest.block.entity.SkullCandleBlockEntity;
 import twilightforest.config.TFConfig;
 import twilightforest.data.tags.EntityTagGenerator;
@@ -178,15 +178,12 @@ public class EntityEvents {
 	public static void onCasketBreak(BlockEvent.BreakEvent event) {
 		Block block = event.getState().getBlock();
 		Player player = event.getPlayer();
-		BlockEntity te = event.getLevel().getBlockEntity(event.getPos());
-		UUID checker;
 		if (block == TFBlocks.SKULL_CHEST.get() || block == TFBlocks.KEEPSAKE_CASKET.get()) {
-			if (te instanceof KeepsakeCasketBlockEntity casket) {
-				checker = casket.playeruuid;
-			} else checker = null;
-			if (checker != null) {
-				if (!((KeepsakeCasketBlockEntity) te).isEmpty()) {
-					if (!player.hasPermissions(3) || !player.getGameProfile().getId().equals(checker)) {
+			BlockEntity te = event.getLevel().getBlockEntity(event.getPos());
+			if (te instanceof SkullChestBlockEntity casket) {
+				ResolvableProfile checker = casket.owner;
+				if (checker != null && !casket.isEmpty()) {
+					if (!player.hasPermissions(3) || !player.getGameProfile().equals(checker.gameProfile())) {
 						event.setCanceled(true);
 					}
 				}

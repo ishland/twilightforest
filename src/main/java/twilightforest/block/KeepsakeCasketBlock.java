@@ -30,6 +30,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.block.entity.KeepsakeCasketBlockEntity;
+import twilightforest.block.entity.SkullChestBlockEntity;
 import twilightforest.enums.BlockLoggingEnum;
 import twilightforest.init.TFBlockEntities;
 import twilightforest.init.TFDataComponents;
@@ -54,34 +55,32 @@ public class KeepsakeCasketBlock extends SkullChestBlock {
 
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-		return KeepsakeCasketBlockEntity.createKeepsakeCasketBE(pos, state);
+		return new KeepsakeCasketBlockEntity(pos, state);
 	}
 
 	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-		return createTickerHelper(type, TFBlockEntities.KEEPSAKE_CASKET.get(), KeepsakeCasketBlockEntity::tick);
+		return createTickerHelper(type, TFBlockEntities.KEEPSAKE_CASKET.get(), SkullChestBlockEntity::tick);
 	}
 
 	@Override
 	protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
 		boolean flag = false;
 		if (state.getValue(BlockLoggingEnum.MULTILOGGED).getBlock() == Blocks.AIR || state.getValue(BlockLoggingEnum.MULTILOGGED).getFluid() != Fluids.EMPTY) {
-			if (!(stack.getItem() == TFItems.CHARM_OF_KEEPING_3.get())) {
+			if (stack.is(TFItems.CHARM_OF_KEEPING_3.get()) && state.getValue(BREAKAGE) > 0) {
+				stack.consume(1, player);
+				level.setBlockAndUpdate(pos, state.setValue(BREAKAGE, state.getValue(BREAKAGE) - 1));
+				level.playSound(null, pos, TFSounds.CASKET_REPAIR.get(), SoundSource.BLOCKS, 0.5F, level.getRandom().nextFloat() * 0.1F + 0.9F);
+				flag = true;
+			} else {
 				if (level.isClientSide()) {
 					return ItemInteractionResult.SUCCESS;
 				} else {
-					MenuProvider inamedcontainerprovider = this.getMenuProvider(state, level, pos);
+					MenuProvider provider = this.getMenuProvider(state, level, pos);
 
-					if (inamedcontainerprovider != null) {
-						player.openMenu(inamedcontainerprovider);
+					if (provider != null) {
+						player.openMenu(provider);
 					}
-					flag = true;
-				}
-			} else {
-				if (stack.getItem() == TFItems.CHARM_OF_KEEPING_3.get() && state.getValue(BREAKAGE) > 0) {
-					stack.consume(1, player);
-					level.setBlockAndUpdate(pos, state.setValue(BREAKAGE, state.getValue(BREAKAGE) - 1));
-					level.playSound(null, pos, TFSounds.CASKET_REPAIR.get(), SoundSource.BLOCKS, 0.5F, level.getRandom().nextFloat() * 0.1F + 0.9F);
 					flag = true;
 				}
 			}
