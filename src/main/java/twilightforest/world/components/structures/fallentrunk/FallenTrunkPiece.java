@@ -320,7 +320,7 @@ public class FallenTrunkPiece extends StructurePiece {
 				}
 			}
 
-			printHole(arr);
+//			printHole(arr);
 			return arr;
 		}
 
