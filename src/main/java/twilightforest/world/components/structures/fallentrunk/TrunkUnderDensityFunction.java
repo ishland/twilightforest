@@ -19,6 +19,7 @@ public class TrunkUnderDensityFunction extends Beardifier {
 	private final BoundingBox boundingBox;
 	private final HollowHillFunction[] hollowHillFunctions;
 	private final int moundRadius = 4;
+	protected final BoundingBox moundApex;
 
 	public TrunkUnderDensityFunction(ObjectListIterator<Rigid> pieceIterator, boolean isBigTree, int minMounds, int maxMounds) {
 		super(pieceIterator, (ObjectListIterator<JigsawJunction>) ObjectIterators.<JigsawJunction>emptyIterator());
@@ -26,6 +27,12 @@ public class TrunkUnderDensityFunction extends Beardifier {
 		boundingBox = getFallenTrunkPiece().box();
 		random = RandomSource.create(boundingBox.minX() * 14413411L + boundingBox.minZ() * 43387781L);
 		isXOriented = boundingBox.maxX() - boundingBox.minX() > boundingBox.maxZ() - boundingBox.minZ();
+		int length = isXOriented ? boundingBox.getXSpan() : boundingBox.getZSpan();
+		Vec3i moundApexCorner = new Vec3i(
+			isXOriented ?  length / 2 : 0,
+			1,
+			!isXOriented ? length / 2 : 0);
+		this.moundApex = BoundingBox.fromCorners(moundApexCorner, moundApexCorner);
 		this.hollowHillFunctions = new HollowHillFunction[random.nextInt(minMounds, maxMounds + 1)];
 		for(int i = 0; i < hollowHillFunctions.length; i++) {
 			hollowHillFunctions[i] = getHollowHillFunction();
@@ -70,13 +77,8 @@ public class TrunkUnderDensityFunction extends Beardifier {
 	}
 
 	protected HollowHillFunction getHollowHillFunction() {
-		Vec3i moundApexCorner = new Vec3i(
-			isXOriented ? random.nextInt(FallenTrunkPiece.ERODED_LENGTH + moundRadius, boundingBox.getXSpan() - FallenTrunkPiece.ERODED_LENGTH - moundRadius) : 0,
-			1,
-			!isXOriented ? random.nextInt(FallenTrunkPiece.ERODED_LENGTH + moundRadius, boundingBox.getZSpan() - FallenTrunkPiece.ERODED_LENGTH - moundRadius) : 0);
-		BoundingBox moundApex = BoundingBox.fromCorners(moundApexCorner, moundApexCorner);
 		int length = isXOriented ? boundingBox.getXSpan() : boundingBox.getZSpan();
-		int coordinateOffset = random.nextInt(-length / 3, length / 3);
+		int coordinateOffset = random.nextInt(-length / 4, length / 4);
 		BoundingBox absouluteMoundApex = moundApex.moved(boundingBox.minX(), boundingBox.minY(), boundingBox.minZ());
 		int radius = getRadius(boundingBox);
 		return new HollowHillFunction(
