@@ -91,7 +91,7 @@ public class FallenTrunkPiece extends StructurePiece {
 	@Override
 	public void postProcess(@NotNull WorldGenLevel level, @NotNull StructureManager structureManager, @NotNull ChunkGenerator generator, @NotNull RandomSource random,
 							@NotNull BoundingBox box, @NotNull ChunkPos chunkPos, @NotNull BlockPos pos) {
-		placeBlockEdges(level, box, Blocks.GOLD_BLOCK.defaultBlockState());
+//		placeBlockEdges(level, box, Blocks.GOLD_BLOCK.defaultBlockState());
 //		placeDiamondBlockEdges(level, this.boundingBox);
 		if (radius == FallenTrunkStructure.radiuses.get(0))
 			generateSmallFallenTrunk(level, RandomSource.create(pos.asLong()), box, pos, true);
