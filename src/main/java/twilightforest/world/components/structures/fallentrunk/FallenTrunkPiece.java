@@ -175,7 +175,7 @@ public class FallenTrunkPiece extends StructurePiece {
 	private void generateTrunkMainRod(WorldGenLevel level, RandomSource random, BoundingBox box, BlockPos pos, int dx, int dy, boolean hasHole, Hole hole) {
 		for (int dz = ERODED_LENGTH; dz < length - 1 - ERODED_LENGTH; dz++) {
 			BlockPos offsetPos = pos.offset(dx, dy, dz);
-			this.placeLog(level, log.getState(random, offsetPos).trySetValue(RotatedPillarBlock.AXIS, Direction.Axis.Z), dx, dy, dz, box, random, hasHole, hole);
+			this.placeLog(level, getLogState(random, offsetPos), dx, dy, dz, box, random, hasHole, hole);
 		}
 	}
 
@@ -185,7 +185,7 @@ public class FallenTrunkPiece extends StructurePiece {
 				break;
 
 			BlockPos offsetPos = pos.offset(dx, dy, dz);
-			this.placeLog(level, log.getState(random, offsetPos).trySetValue(RotatedPillarBlock.AXIS, Direction.Axis.Z), dx, dy, dz, box, random, hasHole, hole);
+			this.placeLog(level, getLogState(random, offsetPos), dx, dy, dz, box, random, hasHole, hole);
 		}
 
 		for (int dz = length - 1 - ERODED_LENGTH; dz < length - 1; dz++) {
@@ -193,7 +193,7 @@ public class FallenTrunkPiece extends StructurePiece {
 				break;
 
 			BlockPos offsetPos = pos.offset(dx, dy, dz);
-			this.placeLog(level, log.getState(random, offsetPos).trySetValue(RotatedPillarBlock.AXIS, Direction.Axis.Z), dx, dy, dz, box, random, hasHole, hole);
+			this.placeLog(level, getLogState(random, offsetPos), dx, dy, dz, box, random, hasHole, hole);
 		}
 	}
 
@@ -225,6 +225,10 @@ public class FallenTrunkPiece extends StructurePiece {
 		int ax = Math.abs(dx - this.radius);
 		int az = Math.abs(dy - this.radius);
 		return (int) (Math.max(ax, az) + (Math.min(ax, az) * 0.5));
+	}
+
+	private BlockState getLogState(RandomSource random, BlockPos pos) {
+		return log.getState(random, pos).trySetValue(RotatedPillarBlock.AXIS, Direction.Axis.Z);
 	}
 
 	private void placeLog(WorldGenLevel level, BlockState blockstate, int x, int y, int z, BoundingBox boundingbox, RandomSource random, boolean hasHole, Hole hole) {
