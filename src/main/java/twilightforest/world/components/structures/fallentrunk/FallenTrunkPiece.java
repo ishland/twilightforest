@@ -94,9 +94,9 @@ public class FallenTrunkPiece extends StructurePiece {
 //		placeBlockEdges(level, box, Blocks.GOLD_BLOCK.defaultBlockState());
 //		placeDiamondBlockEdges(level, this.boundingBox);
 		if (radius == FallenTrunkStructure.radiuses.get(0))
-			generateSmallFallenTrunk(level, RandomSource.create(pos.asLong()), box, pos, true);
+			generateSmallFallenTrunk(level, RandomSource.create(pos.asLong()), box, pos, random.nextBoolean());
 		if (radius == FallenTrunkStructure.radiuses.get(1))
-			generateFallenTrunk(level, RandomSource.create(pos.asLong()), box, pos, true, false);
+			generateFallenTrunk(level, RandomSource.create(pos.asLong()), box, pos, random.nextBoolean(), false);
 		if (radius == FallenTrunkStructure.radiuses.get(2))
 			generateFallenTrunk(level, RandomSource.create(pos.asLong()), box, pos, false, true);
 	}
