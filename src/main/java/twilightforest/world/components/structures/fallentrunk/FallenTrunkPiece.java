@@ -285,10 +285,10 @@ public class FallenTrunkPiece extends StructurePiece {
 			this.X_MAX_SIZE = piece.length / 4 + 1;
 			this.Y_MIN_SIZE = piece.getSideLength();
 			this.Y_MAX_SIZE = piece.getSideLength() * 2;
-			this.hole = buildHoleArray(piece.length, piece.getSideLength() * 4, random);
+			this.hole = buildHoleArray(piece.length, piece.getSideLength() * 4, random, piece);
 		}
 
-		private boolean[][] buildHoleArray(int length, int height, RandomSource random) {
+		private boolean[][] buildHoleArray(int length, int height, RandomSource random, FallenTrunkPiece piece) {
 			int arrayLength = length - (ERODED_LENGTH + 1) * 2;
 			boolean[][] arr = new boolean[height][arrayLength];
 
@@ -314,7 +314,7 @@ public class FallenTrunkPiece extends StructurePiece {
 				}
 
 				if (tries >= 10000)
-					TwilightForestMod.LOGGER.error("Too many tries during generation! Please contact TF devs with seed and blockPos");
+					TwilightForestMod.LOGGER.error("Too many tries during generation! Please contact TF devs with seed and {}", piece.boundingBox.getCenter().toString());
 
 				previousX1 = x1;
 				previousX2 = x2;
