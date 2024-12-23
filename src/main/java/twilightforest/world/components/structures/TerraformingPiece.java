@@ -14,8 +14,6 @@ import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSeriali
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
 import twilightforest.init.TFStructurePieceTypes;
 
-import static twilightforest.world.components.structures.fallentrunk.FallenTrunkPiece.placeBlockEdges;
-
 public class TerraformingPiece extends StructurePiece {
 	public TerraformingPiece(StructurePieceType type, int genDepth, BoundingBox boundingBox) {
 		super(type, genDepth, boundingBox);
@@ -26,14 +24,9 @@ public class TerraformingPiece extends StructurePiece {
 	}
 
 	@Override
-	protected void addAdditionalSaveData(StructurePieceSerializationContext context, CompoundTag tag) {
-		return;
-	}
+	protected void addAdditionalSaveData(StructurePieceSerializationContext context, CompoundTag tag) {}
 
 
 	@Override
-	public void postProcess(WorldGenLevel level, StructureManager structureManager, ChunkGenerator generator, RandomSource random, BoundingBox box, ChunkPos chunkPos, BlockPos pos) {
-//		placeBlockEdges(level, box, Blocks.DIAMOND_BLOCK.defaultBlockState());
-		return;
-	}
+	public void postProcess(WorldGenLevel level, StructureManager structureManager, ChunkGenerator generator, RandomSource random, BoundingBox box, ChunkPos chunkPos, BlockPos pos) {}
 }

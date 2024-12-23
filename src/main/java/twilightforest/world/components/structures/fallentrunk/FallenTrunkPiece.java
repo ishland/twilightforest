@@ -91,46 +91,12 @@ public class FallenTrunkPiece extends StructurePiece {
 	@Override
 	public void postProcess(@NotNull WorldGenLevel level, @NotNull StructureManager structureManager, @NotNull ChunkGenerator generator, @NotNull RandomSource random,
 							@NotNull BoundingBox box, @NotNull ChunkPos chunkPos, @NotNull BlockPos pos) {
-//		placeBlockEdges(level, box, Blocks.GOLD_BLOCK.defaultBlockState());
-//		placeDiamondBlockEdges(level, this.boundingBox);
 		if (radius == FallenTrunkStructure.radiuses.get(0))
 			generateSmallFallenTrunk(level, RandomSource.create(pos.asLong()), box, pos, random.nextBoolean());
 		if (radius == FallenTrunkStructure.radiuses.get(1))
 			generateFallenTrunk(level, RandomSource.create(pos.asLong()), box, pos, random.nextBoolean(), false);
 		if (radius == FallenTrunkStructure.radiuses.get(2))
 			generateFallenTrunk(level, RandomSource.create(pos.asLong()), box, pos, false, true);
-	}
-
-	public static void placeBlockEdges(WorldGenLevel level, BoundingBox box, BlockState state) {
-		// Edges along the X-axis
-		for (int x = box.minX(); x <= box.maxX(); x++) {
-			// Bottom edges (y = minY)
-			level.setBlock(new BlockPos(x, box.minY(), box.minZ()), state, 2);
-			level.setBlock(new BlockPos(x, box.minY(), box.maxZ()), state, 2);
-			// Top edges (y = maxY)
-			level.setBlock(new BlockPos(x, box.maxY(), box.minZ()), state, 2);
-			level.setBlock(new BlockPos(x, box.maxY(), box.maxZ()), state, 2);
-		}
-
-		// Edges along the Y-axis
-		for (int y = box.minY(); y <= box.maxY(); y++) {
-			// Vertical edges at minX
-			level.setBlock(new BlockPos(box.minX(), y, box.minZ()), state, 2);
-			level.setBlock(new BlockPos(box.minX(), y, box.maxZ()), state, 2);
-			// Vertical edges at maxX
-			level.setBlock(new BlockPos(box.maxX(), y, box.minZ()), state, 2);
-			level.setBlock(new BlockPos(box.maxX(), y, box.maxZ()), state, 2);
-		}
-
-		// Edges along the Z-axis
-		for (int z = box.minZ(); z <= box.maxZ(); z++) {
-			// Bottom edges (y = minY)
-			level.setBlock(new BlockPos(box.minX(), box.minY(), z), state, 2);
-			level.setBlock(new BlockPos(box.maxX(), box.minY(), z), state, 2);
-			// Top edges (y = maxY)
-			level.setBlock(new BlockPos(box.minX(), box.maxY(), z), state, 2);
-			level.setBlock(new BlockPos(box.maxX(), box.maxY(), z), state, 2);
-		}
 	}
 
 	private void generateSmallFallenTrunk(WorldGenLevel level, RandomSource random, BoundingBox box, BlockPos pos, boolean hasHole) {
