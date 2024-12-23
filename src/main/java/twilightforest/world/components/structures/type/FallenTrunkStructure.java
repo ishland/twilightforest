@@ -96,10 +96,11 @@ public class FallenTrunkStructure extends Structure implements CustomDensitySour
 			xOff, yOff, zOff,
 			xSize, ySize, zSize,
 			orientation);
+		long holeSeed = random.nextLong();
 
 		return Optional.of(new GenerationStub(new BlockPos(x, worldY, z), structurePiecesBuilder -> {
 			StructurePiece piece = new FallenTrunkPiece(length, radius, log, chestLootTable, spawnerMonster,
-				orientation, boundingBox);
+				orientation, boundingBox, holeSeed);
 			structurePiecesBuilder.addPiece(piece);
 			piece.addChildren(piece, structurePiecesBuilder, random);
 		}));

@@ -51,13 +51,15 @@ public class FallenTrunkPiece extends StructurePiece {
 	private final long holeSeed;
 	protected final Hole hole;
 
-	public FallenTrunkPiece(int length, int radius, BlockStateProvider log, ResourceKey<LootTable> chestLootTable, Holder<EntityType<?>> spawnerMonster, Direction orientation, BoundingBox boundingBox) {
+	public FallenTrunkPiece(int length, int radius, BlockStateProvider log, ResourceKey<LootTable> chestLootTable, Holder<EntityType<?>> spawnerMonster, Direction orientation, BoundingBox boundingBox, long seed) {
 		super(TFStructurePieceTypes.TFFallenTrunk.value(), 0, boundingBox);
 		this.length = length;
 		this.radius = radius;
 		this.log = log;
 		this.chestLootTable = chestLootTable;
 		this.spawnerMonster = spawnerMonster;
+		this.holeSeed = seed;
+		this.hole = new Hole(this, RandomSource.create(holeSeed));
 		setOrientation(orientation);
 	}
 
@@ -73,6 +75,8 @@ public class FallenTrunkPiece extends StructurePiece {
 		this.spawnerMonster = context.registryAccess().registry(Registries.ENTITY_TYPE)
 			.<Holder<EntityType<?>>>flatMap(reg -> reg.getHolder(dungeonMonster))
 			.orElse(DEFAULT_DUNGEON_MONSTER);
+		this.holeSeed = tag.getInt("hole_seed");
+		this.hole = new Hole(this, RandomSource.create(holeSeed));
 	}
 
 	@Override
@@ -82,6 +86,7 @@ public class FallenTrunkPiece extends StructurePiece {
 		tag.put("log", BlockStateProvider.CODEC.encodeStart(NbtOps.INSTANCE, this.log).resultOrPartial(TwilightForestMod.LOGGER::error).orElseGet(CompoundTag::new));
 		tag.putString("chest_loot_table", this.chestLootTable.location().toString());
 		tag.putString("spawner_monster", BuiltInRegistries.ENTITY_TYPE.getKey(this.spawnerMonster.value()).toString());
+		tag.putLong("hole_seed", this.holeSeed);
 	}
 
 	@Override
@@ -102,7 +107,6 @@ public class FallenTrunkPiece extends StructurePiece {
 	}
 
 	private void generateSmallFallenTrunk(WorldGenLevel level, RandomSource random, BoundingBox box, BlockPos pos, boolean hasHole) {
-		Hole hole = new Hole(this, random);
 		for (int dx = 0; dx <= 3; dx++) {
 			for (int dy = 0; dy <= 3; dy++) {
 				if (Math.abs(dx - 1.5) + Math.abs(dy - 1.5) != 2)
@@ -122,7 +126,6 @@ public class FallenTrunkPiece extends StructurePiece {
 	private void generateTrunk(WorldGenLevel level, RandomSource random, BoundingBox box, BlockPos pos, boolean hasHole) {
 		int hollow = radius / 2;
 		int diameter = radius * 2;
-		Hole hole = new Hole(this, random);
 
 		for (int dx = 0; dx <= diameter; dx++) {
 			for (int dy = 0; dy <= diameter; dy++) {
@@ -240,74 +243,5 @@ public class FallenTrunkPiece extends StructurePiece {
 		}
 
 		return length - 1;
-	}
-
-	private static class Hole {
-		private final int X_MIN_SIZE;
-		private final int X_MAX_SIZE;
-		private final int Y_MIN_SIZE;
-		private final int Y_MAX_SIZE;
-		private final boolean[][] hole;
-		private Hole(FallenTrunkPiece piece, RandomSource random) {
-			this.X_MIN_SIZE = piece.length / 6;
-			this.X_MAX_SIZE = piece.length / 4 + 1;
-			this.Y_MIN_SIZE = piece.getSideLength();
-			this.Y_MAX_SIZE = piece.getSideLength() * 2;
-			this.hole = buildHoleArray(piece.length, piece.getSideLength() * 4, random, piece);
-		}
-
-		private boolean[][] buildHoleArray(int length, int height, RandomSource random, FallenTrunkPiece piece) {
-			int arrayLength = length - (ERODED_LENGTH + 1) * 2;
-			boolean[][] arr = new boolean[height][arrayLength];
-
-
-			int xSize;
-			int ySize = random.nextInt(Y_MIN_SIZE, Y_MAX_SIZE);
-
-			int yOffset = random.nextInt(1, Y_MAX_SIZE - ySize + 1);
-
-			int previousX1 = Integer.MIN_VALUE, previousX2 = Integer.MAX_VALUE;
-			for (int dy = yOffset; dy < yOffset + ySize; dy++) {
-				xSize = random.nextInt(X_MIN_SIZE, X_MAX_SIZE + 1);
-				int x1 = random.nextInt(arrayLength - xSize - 1);
-				int x2 = x1 + xSize - 1;
-
-				int tries = 0;
-				while (tries < 10000 && (x1 == previousX1 || x2 == previousX2 && dy % Y_MIN_SIZE != 0) || x2 < previousX1 || x1 > previousX2
-					|| (float) (Math.min(x2, previousX2) - Math.max(previousX1, x1) + 1) / (Math.max(x2, previousX2) - Math.min(x1, previousX1) + 1) < 1 / 3f) {
-					xSize = random.nextInt(X_MIN_SIZE, X_MAX_SIZE + 1);
-					x1 = random.nextInt(Math.max(0, previousX1 - xSize), Math.min(arrayLength - xSize - 1, previousX2 + xSize));
-					x2 = x1 + xSize - 1;
-					tries++;
-				}
-
-				if (tries >= 10000)
-					TwilightForestMod.LOGGER.error("Too many tries during generation! Please contact TF devs with seed and {}", piece.boundingBox.getCenter().toString());
-
-				previousX1 = x1;
-				previousX2 = x2;
-
-				for (int x = x1; x <= x2; x++) {
-					arr[dy][x] = true;
-				}
-			}
-
-//			printHole(arr);
-			return arr;
-		}
-
-		private boolean isInHole(int x, int y) {
-			return hole[x][y];
-		}
-
-		private static void printHole(boolean[][] hole) {
-			System.out.println("\n\n\n");
-			for (boolean[] row : hole) {
-				for (boolean cell : row) {
-					System.out.print(cell ? "0" : "1");
-				}
-				System.out.println();
-			}
-		}
 	}
 }
