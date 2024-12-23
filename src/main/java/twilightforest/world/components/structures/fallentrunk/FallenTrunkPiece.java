@@ -42,12 +42,14 @@ public class FallenTrunkPiece extends StructurePiece {
 	public static final Holder<EntityType<?>> DEFAULT_DUNGEON_MONSTER = TFEntities.SWARM_SPIDER;
 
 	public static final int ERODED_LENGTH = 3;
-	private static final float MOSS_CHANCE = 0.44F;
-	private final BlockStateProvider log;
-	final int length;
+	protected static final float MOSS_CHANCE = 0.44F;
+	protected final BlockStateProvider log;
+	public final int length;
 	public final int radius;
-	private final ResourceKey<LootTable> chestLootTable;
-	private final Holder<EntityType<?>> spawnerMonster;
+	protected final ResourceKey<LootTable> chestLootTable;
+	protected final Holder<EntityType<?>> spawnerMonster;
+	private final long holeSeed;
+	protected final Hole hole;
 
 	public FallenTrunkPiece(int length, int radius, BlockStateProvider log, ResourceKey<LootTable> chestLootTable, Holder<EntityType<?>> spawnerMonster, Direction orientation, BoundingBox boundingBox) {
 		super(TFStructurePieceTypes.TFFallenTrunk.value(), 0, boundingBox);
@@ -219,7 +221,7 @@ public class FallenTrunkPiece extends StructurePiece {
 		return MoreObjects.firstNonNull(orientation, Direction.NORTH);  // orientation is always not null, just to remove warnings
 	}
 
-	private int getSideLength() {
+	protected int getSideLength() {
 		return radius == 1 ? 2 : this.radius * 2 - 1;
 	}
 
