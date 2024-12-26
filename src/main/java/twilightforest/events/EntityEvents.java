@@ -44,6 +44,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.damagesource.DamageContainer;
+import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.event.entity.ProjectileImpactEvent;
 import net.neoforged.neoforge.event.entity.living.FinalizeSpawnEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
@@ -69,6 +70,7 @@ import twilightforest.entity.projectile.ITFProjectile;
 import twilightforest.init.*;
 import twilightforest.item.FieryArmorItem;
 import twilightforest.item.YetiArmorItem;
+import twilightforest.network.SyncQuestsPacket;
 import twilightforest.network.WipeOreMeterPacket;
 import twilightforest.world.components.structures.SpawnIndexProvider;
 import twilightforest.world.components.structures.finalcastle.FinalCastleBossGazeboComponent;
@@ -436,6 +438,13 @@ public class EntityEvents {
 	public static void grantAdvancementIfNeeded(LivingDeathEvent event) {
 		if (!event.isCanceled() && event.getEntity().hasData(TFDataAttachments.MULTIPLAYER_FIGHT)) {
 			event.getEntity().getData(TFDataAttachments.MULTIPLAYER_FIGHT).grantGroupAdvancement(event.getEntity());
+		}
+	}
+
+	@SubscribeEvent
+	public static void syncQuestsOnLogin(PlayerEvent.PlayerLoggedInEvent event) {
+		if (event.getEntity() instanceof ServerPlayer player && !(player instanceof FakePlayer)) {
+			PacketDistributor.sendToPlayer(player, new SyncQuestsPacket(TwilightForestMod.getQuests().getQuestingRam()));
 		}
 	}
 }
