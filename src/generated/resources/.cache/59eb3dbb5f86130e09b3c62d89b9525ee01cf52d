@@ -1,4 +1,4 @@
-// 1.21.1	2024-12-03T23:39:24.4975452	Loot Tables
+// 1.21.1	2024-12-26T11:00:46.0075063	Loot Tables
 483a7e0c99d5cabeab1ba9f04bd8e88d0a8f7386 data/twilightforest/loot_table/aurora_cache.json
 002a6e2eccdc92db019bd775911912877b26771f data/twilightforest/loot_table/aurora_room.json
 afe7197a19b997d2f5c5980d9805b6093191b44f data/twilightforest/loot_table/blocks/acacia_banister.json
@@ -490,7 +490,7 @@ a2b2843532b1cb2832cd1f29c98ef0bd0e71dd99 data/twilightforest/loot_table/entities
 a55d5505e4edba8194e2cc6a07583748d24b4e17 data/twilightforest/loot_table/entities/death_tome_hurt.json
 04bb73a707746b3545507388fcdc73ae59b5739b data/twilightforest/loot_table/entities/deer.json
 3bc0e2265cfe30e7080b490aefb4d32a6e2a7b60 data/twilightforest/loot_table/entities/dwarf_rabbit.json
-df1d0b2ff70524b1628e7cfe0e62d2a360f238a6 data/twilightforest/loot_table/entities/fire_beetle.json
+85308e363af630f188b21b27ac48f38fe144a6ab data/twilightforest/loot_table/entities/fire_beetle.json
 7e832b0d2d3d986a9eda11f728f871732a181527 data/twilightforest/loot_table/entities/giant_miner.json
 648b86c28842d301b91d03368d0887864e77582f data/twilightforest/loot_table/entities/harbinger_cube.json
 8faf50c177a049132ed44b7f44a7359e03a67de1 data/twilightforest/loot_table/entities/hedge_spider.json
