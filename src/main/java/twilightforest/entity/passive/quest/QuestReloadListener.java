@@ -9,11 +9,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
-import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.ApiStatus;
 import twilightforest.TwilightForestMod;
 import twilightforest.entity.passive.quest.ram.QuestingRamContext;
-import twilightforest.network.SyncQuestsPacket;
 
 import java.util.Map;
 
@@ -41,8 +39,6 @@ public class QuestReloadListener extends SimpleJsonResourceReloadListener {
 			TwilightForestMod.LOGGER.error("Questing Ram quest file not found. Defaulting to fallback");
 			this.ram = QuestingRamContext.FALLBACK;
 		}
-
-		PacketDistributor.sendToAllPlayers(new SyncQuestsPacket(this.ram));
 	}
 
 	public QuestingRamContext getQuestingRam() {

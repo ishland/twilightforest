@@ -45,6 +45,7 @@ import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.damagesource.DamageContainer;
 import net.neoforged.neoforge.common.util.FakePlayer;
+import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 import net.neoforged.neoforge.event.entity.ProjectileImpactEvent;
 import net.neoforged.neoforge.event.entity.living.FinalizeSpawnEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
@@ -442,9 +443,11 @@ public class EntityEvents {
 	}
 
 	@SubscribeEvent
-	public static void syncQuestsOnLogin(PlayerEvent.PlayerLoggedInEvent event) {
-		if (event.getEntity() instanceof ServerPlayer player && !(player instanceof FakePlayer)) {
-			PacketDistributor.sendToPlayer(player, new SyncQuestsPacket(TwilightForestMod.getQuests().getQuestingRam()));
+	public static void handleQuestSyncing(OnDatapackSyncEvent event) {
+		if (event.getPlayer() != null) {
+			PacketDistributor.sendToPlayer(event.getPlayer(), new SyncQuestsPacket(TwilightForestMod.getQuests().getQuestingRam()));
+		} else {
+			event.getPlayerList().getPlayers().forEach(player -> PacketDistributor.sendToPlayer(player, new SyncQuestsPacket(TwilightForestMod.getQuests().getQuestingRam())));
 		}
 	}
 }
