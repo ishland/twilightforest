@@ -37,6 +37,7 @@ import twilightforest.init.custom.Enforcements;
 import twilightforest.util.landmarks.LandmarkUtil;
 import twilightforest.util.Restriction;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -53,7 +54,7 @@ public class TFWeatherRenderer {
 	public static final float[] rainzs = new float[1024];
 
 	@Nullable
-	private static BoundingBox protectedBox;
+	private static List<BoundingBox> protectedBoxes;
 
 	private static final RandomSource random = RandomSource.create();
 
@@ -243,45 +244,34 @@ public class TFWeatherRenderer {
 					double rainX = rainxs[i2] * 0.5D;
 					double rainZ = rainzs[i2] * 0.5D;
 
-					if (protectedBox != null && protectedBox.intersects(dx, dz, dx, dz)) {
-						int structureMin = protectedBox.minY() - 4;
-						int structureMax = protectedBox.maxY() + 4;
-						int rainMin = py - range;
-						int rainMax = py + range * 2;
+					if (protectedBoxes != null) {
+						for (BoundingBox box : protectedBoxes) {
+							if (!box.intersects(dx, dz, dx, dz))
+								continue;
+							int structureMin = protectedBoxes.getFirst().minY() - 4;
+							int structureMax = protectedBoxes.getFirst().maxY() + 4;
+							int rainMin = Math.clamp(py - range, structureMin, structureMax);
+							int rainMax = Math.clamp(py + range * 2, structureMin, structureMax);
 
-						if (rainMin < structureMin) {
-							rainMin = structureMin;
-						}
+							if (rainMin != rainMax) {
+								random.setSeed((long) dx * dx * 3121 + dx * 45238971L ^ (long) dz * dz * 418711 + dz * 13761L);
 
-						if (rainMax < structureMin) {
-							rainMax = structureMin;
-						}
+								if (drawFlag != 0) {
+									drawFlag = 0;
+									RenderSystem.setShader(GameRenderer::getParticleShader);
+									RenderSystem.setShaderTexture(0, SPARKLES_TEXTURE);
+									bufferbuilder = tessellator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.PARTICLE);
+								}
 
-						if (rainMin > structureMax) {
-							rainMin = structureMax;
-						}
-
-						if (rainMax > structureMax) {
-							rainMax = structureMax;
-						}
-
-						if (rainMin != rainMax) {
-							random.setSeed((long) dx * dx * 3121 + dx * 45238971L ^ (long) dz * dz * 418711 + dz * 13761L);
-
-							if (drawFlag != 0) {
-								drawFlag = 0;
-								RenderSystem.setShaderTexture(0, SPARKLES_TEXTURE);
-								bufferbuilder = tessellator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.PARTICLE);
+								float countFactor = ((float) (ticks & 511) + partialTicks) / 512.0F;
+								float uFactor = random.nextFloat() + combinedTicks * 0.02F * (float) random.nextGaussian();
+								float vFactor = random.nextFloat() + combinedTicks * 0.02F * (float) random.nextGaussian();
+								double xRange = dx + 0.5F - camera.x();
+								double zRange = dz + 0.5F - camera.z();
+								float distanceFromPlayer = Mth.sqrt((float) (xRange * xRange + zRange * zRange)) / range;
+								float alpha = ((1.0F - distanceFromPlayer * distanceFromPlayer) * 0.3F + 0.5F) * random.nextFloat();
+								renderEffect(bufferbuilder, rainX, rainZ, rainMin, rainMax, camera, dx, dz, countFactor, uFactor, vFactor, new float[]{1.0F, 1.0F, 1.0F, alpha}, 15 << 20 | 15 << 4);
 							}
-
-							float countFactor = ((float) (ticks & 511) + partialTicks) / 512.0F;
-							float uFactor = random.nextFloat() + combinedTicks * 0.02F * (float) random.nextGaussian();
-							float vFactor = random.nextFloat() + combinedTicks * 0.02F * (float) random.nextGaussian();
-							double xRange = dx + 0.5F - camera.x();
-							double zRange = dz + 0.5F - camera.z();
-							float distanceFromPlayer = Mth.sqrt((float) (xRange * xRange + zRange * zRange)) / range;
-							float alpha = ((1.0F - distanceFromPlayer * distanceFromPlayer) * 0.3F + 0.5F) * random.nextFloat();
-							renderEffect(bufferbuilder, rainX, rainZ, rainMin, rainMax, camera, dx, dz, countFactor, uFactor, vFactor, new float[]{1.0F, 1.0F, 1.0F, alpha}, 15 << 20 | 15 << 4);
 						}
 					}
 				}
@@ -345,11 +335,11 @@ public class TFWeatherRenderer {
 		int px = Mth.floor(camX);
 		int pz = Mth.floor(camZ);
 
-		return protectedBox != null && protectedBox.intersects(px - range, pz - range, px + range, pz + range);
+		return protectedBoxes != null && protectedBoxes.stream().anyMatch(box -> box.intersects(px - range, pz - range, px + range, pz + range));
 	}
 
-	public static void setProtectedBox(@Nullable BoundingBox protectedBox) {
-		TFWeatherRenderer.protectedBox = protectedBox;
+	public static void setProtectedBoxes(@Nullable List<BoundingBox> protectedBoxes) {
+		TFWeatherRenderer.protectedBoxes = protectedBoxes;
 	}
 
 	private static @Nullable RenderType getRenderType(Restriction restriction) {

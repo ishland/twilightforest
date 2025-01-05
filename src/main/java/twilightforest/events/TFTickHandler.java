@@ -14,6 +14,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
@@ -32,10 +33,7 @@ import twilightforest.util.landmarks.LandmarkUtil;
 import twilightforest.util.PlayerHelper;
 import twilightforest.world.components.structures.util.AdvancementLockedStructure;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
 @EventBusSubscriber(modid = TwilightForestMod.ID)
 public class TFTickHandler {
@@ -71,7 +69,7 @@ public class TFTickHandler {
 		}
 	}
 
-	private static void sendStructureProtectionPacket(Player player, BoundingBox sbb) {
+	private static void sendStructureProtectionPacket(Player player, List<BoundingBox> sbb) {
 		if (player instanceof ServerPlayer sp) {
 			PacketDistributor.sendToPlayer(sp, new StructureProtectionPacket(Optional.of(sbb)));
 		}
@@ -88,7 +86,11 @@ public class TFTickHandler {
 		ChunkPos chunkPlayer = player.chunkPosition();
 		return LandmarkUtil.locateNearestLandmarkStart(world, chunkPlayer.x, chunkPlayer.z).map(structureStart -> {
 			if (structureStart.getStructure() instanceof AdvancementLockedStructure advancementLockedStructure && !advancementLockedStructure.doesPlayerHaveRequiredAdvancements(player)) {
-				sendStructureProtectionPacket(player, structureStart.getBoundingBox());
+				List<BoundingBox> boundingBoxes = new ArrayList<>();
+				for (StructurePiece piece : structureStart.getPieces()) {
+					boundingBoxes.add(piece.getBoundingBox());
+				}
+				sendStructureProtectionPacket(player, boundingBoxes);
 				return true;
 			}
 
