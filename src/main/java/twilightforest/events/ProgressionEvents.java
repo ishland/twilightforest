@@ -30,6 +30,7 @@ import twilightforest.network.AreaProtectionPacket;
 import twilightforest.util.landmarks.LandmarkUtil;
 import twilightforest.util.landmarks.LegacyLandmarkPlacements;
 import twilightforest.util.WorldUtil;
+import twilightforest.world.components.structures.TFStructureComponent;
 import twilightforest.world.components.structures.util.ProgressionStructure;
 
 import java.util.ArrayList;
@@ -130,15 +131,8 @@ public class ProgressionEvents {
 		Optional<StructureStart> struct = LandmarkUtil.locateNearestLandmarkStart(level, SectionPos.blockToSectionCoord(pos.getX()), SectionPos.blockToSectionCoord(pos.getZ()));
 		if (struct.isPresent()) {
 			StructureStart structureStart = struct.get();
-			if (structureStart.getPieces().stream().anyMatch(structurePiece -> structurePiece.getBoundingBox().isInside(pos)) && structureStart.getStructure() instanceof ProgressionStructure structureHints) {
+			if (structureStart.getPieces().stream().anyMatch(structurePiece -> structurePiece.getBoundingBox().isInside(pos) && (!(structurePiece instanceof TFStructureComponent tfStructureComponent) || tfStructureComponent.isComponentProtected())) && structureStart.getStructure() instanceof ProgressionStructure structureHints) {
 				if (!structureHints.doesPlayerHaveRequiredAdvancements(player)/* && chunkGenerator.isBlockProtected(pos)*/) {
-					// what feature is nearby?  is it one the player has not unlocked?
-					ResourceKey<Structure> nearbyFeature = LegacyLandmarkPlacements.pickLandmarkAtBlock(pos.getX(), pos.getZ(), level);
-
-					// TODO: This is terrible but *works* for now.. proper solution is to figure out why the stronghold bounding box is going so high
-					if (nearbyFeature == TFStructures.KNIGHT_STRONGHOLD && pos.getY() >= WorldUtil.getGeneratorSeaLevel(level) - 2)
-						return false;
-
 					// send protection packet
 					List<BoundingBox> boxes = new ArrayList<>();
 					structureStart.getPieces().forEach(piece -> {
