@@ -14,7 +14,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
-import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
@@ -29,11 +28,15 @@ import twilightforest.init.TFDimension;
 import twilightforest.network.MissingAdvancementToastPacket;
 import twilightforest.network.StructureProtectionPacket;
 import twilightforest.util.Enforcement;
-import twilightforest.util.landmarks.LandmarkUtil;
 import twilightforest.util.PlayerHelper;
+import twilightforest.util.landmarks.LandmarkUtil;
+import twilightforest.world.components.structures.TFStructureComponent;
 import twilightforest.world.components.structures.util.AdvancementLockedStructure;
 
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Random;
 
 @EventBusSubscriber(modid = TwilightForestMod.ID)
 public class TFTickHandler {
@@ -81,7 +84,7 @@ public class TFTickHandler {
 		}
 	}
 
-	@SuppressWarnings("UnusedReturnValue")
+	@SuppressWarnings({"UnusedReturnValue", "deprecation"})
 	private static boolean checkForLockedStructuresSendPacket(Player player, ServerLevel world) {
 		ChunkPos chunkPlayer = player.chunkPosition();
 		return LandmarkUtil.locateNearestLandmarkStart(world, chunkPlayer.x, chunkPlayer.z).map(structureStart -> {
