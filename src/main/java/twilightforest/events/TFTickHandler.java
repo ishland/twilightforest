@@ -86,10 +86,7 @@ public class TFTickHandler {
 		ChunkPos chunkPlayer = player.chunkPosition();
 		return LandmarkUtil.locateNearestLandmarkStart(world, chunkPlayer.x, chunkPlayer.z).map(structureStart -> {
 			if (structureStart.getStructure() instanceof AdvancementLockedStructure advancementLockedStructure && !advancementLockedStructure.doesPlayerHaveRequiredAdvancements(player)) {
-				List<BoundingBox> boundingBoxes = new ArrayList<>();
-				for (StructurePiece piece : structureStart.getPieces()) {
-					boundingBoxes.add(piece.getBoundingBox());
-				}
+				List<BoundingBox> boundingBoxes = structureStart.getPieces().stream().filter(piece -> !(piece instanceof TFStructureComponent tfStructureComponent) || tfStructureComponent.isComponentProtected()).map(piece -> piece.getBoundingBox().inflatedBy(4)).toList();
 				sendStructureProtectionPacket(player, boundingBoxes);
 				return true;
 			}
