@@ -217,75 +217,85 @@ public class TFWeatherRenderer {
 	}
 
 	private static void renderLockedStructure(int ticks, float partialTicks, LightTexture lightmap, Vec3 camera) {
-		// draw locked structure thing
-		if (isNearLockedStructure(camera.x(), camera.z())) {
-			lightmap.turnOnLightLayer();
-			int px = Mth.floor(camera.x());
-			int py = Mth.floor(camera.y());
-			int pz = Mth.floor(camera.z());
-			Tesselator tessellator = Tesselator.getInstance();
-			BufferBuilder bufferbuilder = null;
-			RenderSystem.disableCull();
-			RenderSystem.enableBlend();
-			RenderSystem.defaultBlendFunc();
-			RenderSystem.enableDepthTest();
-			int range = 5;
-			if (Minecraft.useFancyGraphics()) {
-				range = 10;
-			}
+		if (!isNearLockedStructure(camera.x(), camera.z()) || protectedBoxes == null)
+			return;
 
-			int drawFlag = -1;
-			float combinedTicks = ticks + partialTicks;
+		lightmap.turnOnLightLayer();
+		int px = Mth.floor(camera.x());
+		int py = Mth.floor(camera.y());
+		int pz = Mth.floor(camera.z());
+		Tesselator tessellator = Tesselator.getInstance();
+		BufferBuilder bufferbuilder = null;
 
-			RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-			for (int dz = pz - range; dz <= pz + range; ++dz) {
-				for (int dx = px - range; dx <= px + range; ++dx) {
-					int i2 = (dz - pz + 16) * 32 + dx - px + 16;
-					double rainX = rainxs[i2] * 0.5D;
-					double rainZ = rainzs[i2] * 0.5D;
+		RenderSystem.disableCull();
+		RenderSystem.enableBlend();
+		RenderSystem.defaultBlendFunc();
+		RenderSystem.enableDepthTest();
 
-					if (protectedBoxes != null) {
-						for (BoundingBox box : protectedBoxes) {
-							if (!box.intersects(dx, dz, dx, dz))
-								continue;
-							int structureMin = protectedBoxes.getFirst().minY() - 4;
-							int structureMax = protectedBoxes.getFirst().maxY() + 4;
-							int rainMin = Math.clamp(py - range, structureMin, structureMax);
-							int rainMax = Math.clamp(py + range * 2, structureMin, structureMax);
+		int range = Minecraft.useFancyGraphics() ? 10 : 5;
+		float combinedTicks = ticks + partialTicks;
 
-							if (rainMin != rainMax) {
-								random.setSeed((long) dx * dx * 3121 + dx * 45238971L ^ (long) dz * dz * 418711 + dz * 13761L);
+		BoundingBox pBox = new BoundingBox(
+			px - range, py - range, pz - range,
+			px + range, py + 2 * range, pz + range
+		);
+		List<BoundingBox> boxesToRender = protectedBoxes.stream()
+			.filter(box -> box.intersects(pBox))
+			.toList();
 
-								if (drawFlag != 0) {
-									drawFlag = 0;
-									RenderSystem.setShader(GameRenderer::getParticleShader);
-									RenderSystem.setShaderTexture(0, SPARKLES_TEXTURE);
-									bufferbuilder = tessellator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.PARTICLE);
-								}
+		int drawFlag = -1;
+		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
-								float countFactor = ((float) (ticks & 511) + partialTicks) / 512.0F;
-								float uFactor = random.nextFloat() + combinedTicks * 0.02F * (float) random.nextGaussian();
-								float vFactor = random.nextFloat() + combinedTicks * 0.02F * (float) random.nextGaussian();
-								double xRange = dx + 0.5F - camera.x();
-								double zRange = dz + 0.5F - camera.z();
-								float distanceFromPlayer = Mth.sqrt((float) (xRange * xRange + zRange * zRange)) / range;
-								float alpha = ((1.0F - distanceFromPlayer * distanceFromPlayer) * 0.3F + 0.5F) * random.nextFloat();
-								renderEffect(bufferbuilder, rainX, rainZ, rainMin, rainMax, camera, dx, dz, countFactor, uFactor, vFactor, new float[]{1.0F, 1.0F, 1.0F, alpha}, 15 << 20 | 15 << 4);
-							}
-						}
+		for (int dx = pBox.minX(); dx <= pBox.maxX(); dx++) {
+			for (int dz = pBox.minZ(); dz <= pBox.maxZ(); dz++) {
+				int i2 = (dz - pz + 16) * 32 + dx - px + 16;
+				double rainX = rainxs[i2] * 0.5;
+				double rainZ = rainzs[i2] * 0.5;
+
+				for (BoundingBox box : boxesToRender) {
+					if (!box.intersects(dx, dz, dx, dz))
+						continue;
+
+					int rainMin = Math.max(pBox.minY(), box.minY());
+					int rainMax = Math.min(pBox.maxY(), box.maxY() + 1);  // + 1 because renderEffect() renders from rainMin to rainMax as floats
+
+					if (rainMin >= rainMax)
+						return;
+
+					random.setSeed((long) dx * dx * 3121 + dx * 45238971L ^ (long) dz * dz * 418711 + dz * 13761L);
+
+					if (drawFlag != 0) {
+						drawFlag = 0;
+						RenderSystem.setShader(GameRenderer::getParticleShader);
+						RenderSystem.setShaderTexture(0, SPARKLES_TEXTURE);
+						bufferbuilder = tessellator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.PARTICLE);
 					}
+
+					float countFactor = ((ticks & 511) + partialTicks) / 512.0F;
+					float uFactor = random.nextFloat() + combinedTicks * 0.02F * (float) random.nextGaussian();
+					float vFactor = random.nextFloat() + combinedTicks * 0.02F * (float) random.nextGaussian();
+					double xRange = dx + 0.5 - camera.x();
+					double zRange = dz + 0.5 - camera.z();
+					float distanceFromPlayer = Mth.sqrt((float) (xRange * xRange + zRange * zRange)) / range;
+					float alpha = ((1.0F - distanceFromPlayer * distanceFromPlayer) * 0.3F + 0.5F) * random.nextFloat();
+
+					renderEffect(bufferbuilder, rainX, rainZ, rainMin, rainMax, camera, dx, dz,
+						countFactor, uFactor, vFactor,
+						new float[]{1.0F, 1.0F, 1.0F, alpha},
+						15 << 20 | 15 << 4);
 				}
 			}
-
-			if (drawFlag == 0) {
-				BufferUploader.drawWithShader(bufferbuilder.buildOrThrow());
-			}
-
-			RenderSystem.enableCull();
-			RenderSystem.disableBlend();
-			lightmap.turnOffLightLayer();
 		}
+
+		if (drawFlag == 0) {
+			BufferUploader.drawWithShader(bufferbuilder.buildOrThrow());
+		}
+
+		RenderSystem.enableCull();
+		RenderSystem.disableBlend();
+		lightmap.turnOffLightLayer();
 	}
+
 
 	private static void renderEffect(BufferBuilder bufferBuilder, double rainX, double rainZ, int minY, int maxY, Vec3 camera, int dx, int dz, float countFactor, float uFactor, float vFactor, float[] color, int light) {
 		int blockLight = light >> 16 & 65535;
