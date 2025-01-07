@@ -97,6 +97,26 @@ public final class Codecs {
 		};
 	}
 
+	public static final StreamCodec<ByteBuf, Pair<BoundingBox, Boolean>> BOX_AND_FLAG_STREAM_CODEC = new StreamCodec<>() {
+		@Override
+		public Pair<BoundingBox, Boolean> decode(ByteBuf buf) {
+			// First read the BoundingBox
+			BoundingBox box = BOX_STREAM_CODEC.decode(buf);
+			// Then read the Boolean
+			boolean flag = buf.readBoolean();
+			// Return the Pair
+			return Pair.of(box, flag);
+		}
+
+		@Override
+		public void encode(ByteBuf buf, Pair<BoundingBox, Boolean> boxAndFlag) {
+			// Encode the BoundingBox
+			BOX_STREAM_CODEC.encode(buf, boxAndFlag.getFirst());
+			// Encode the Boolean
+			buf.writeBoolean(boxAndFlag.getSecond());
+		}
+	};
+
 	private static DataResult<BlockPos> parseString2BlockPos(String string) {
 		try {
 			return Util.fixedSize(Arrays.stream(string.split(" *, *")).mapToInt(Integer::parseInt), 3).map(arr -> new BlockPos(arr[0], arr[1], arr[2]));
