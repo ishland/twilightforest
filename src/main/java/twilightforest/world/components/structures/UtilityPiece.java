@@ -10,16 +10,15 @@ import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
-import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
 import twilightforest.init.TFStructurePieceTypes;
 
-public class TerraformingPiece extends StructurePiece {
-	public TerraformingPiece(int genDepth, BoundingBox boundingBox) {
-		super(TFStructurePieceTypes.TFTerraformingPiece.value(), genDepth, boundingBox);
+public class UtilityPiece extends StructurePiece {
+	public UtilityPiece(int genDepth, BoundingBox boundingBox) {
+		super(TFStructurePieceTypes.TFUtilityPiece.value(), genDepth, boundingBox);
 	}
 
-	public TerraformingPiece(StructurePieceSerializationContext context, CompoundTag compoundTag) {
-		super(TFStructurePieceTypes.TFTerraformingPiece.value(), compoundTag);
+	public UtilityPiece(StructurePieceSerializationContext context, CompoundTag compoundTag) {
+		super(TFStructurePieceTypes.TFUtilityPiece.value(), compoundTag);
 	}
 
 	@Override

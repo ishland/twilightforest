@@ -33,7 +33,7 @@ import twilightforest.init.TFBlocks;
 import twilightforest.init.TFEntities;
 import twilightforest.init.TFStructurePieceTypes;
 import twilightforest.world.components.chunkgenerators.HollowHillFunction;
-import twilightforest.world.components.structures.TerraformingPiece;
+import twilightforest.world.components.structures.UtilityPiece;
 import twilightforest.world.components.structures.type.FallenTrunkStructure;
 
 import java.util.HashSet;
@@ -88,7 +88,7 @@ public class FallenTrunkPiece extends StructurePiece {
 
 	@Override
 	public void addChildren(@NotNull StructurePiece parent, StructurePieceAccessor list, @NotNull RandomSource rand) {
-		StructurePiece terraformingPiece = new TerraformingPiece(0, boundingBox.inflatedBy(16));
+		StructurePiece terraformingPiece = new UtilityPiece(0, boundingBox.inflatedBy(16));
 		list.addPiece(terraformingPiece);
 	}
 

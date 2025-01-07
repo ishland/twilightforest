@@ -32,7 +32,7 @@ public class TFStructurePieceTypes {
 	public static final DeferredHolder<StructurePieceType, StructurePieceType> TFHydra = registerPieceType("TFHydra", HydraLairComponent::new);
 	public static final DeferredHolder<StructurePieceType, StructurePieceType> TFYeti = registerPieceType("TFYeti", YetiCaveComponent::new);
 	public static final DeferredHolder<StructurePieceType, StructurePieceType> TFFallenTrunk = registerPieceType("TFFallenTrunk", FallenTrunkPiece::new);
-	public static final DeferredHolder<StructurePieceType, StructurePieceType> TFTerraformingPiece = registerPieceType("TFTerraformingPiece", TerraformingPiece::new);
+	public static final DeferredHolder<StructurePieceType, StructurePieceType> TFUtilityPiece = registerPieceType("TFUtilityPiece", UtilityPiece::new);
 
 	// Hollow Tree
 	public static final DeferredHolder<StructurePieceType, StructurePieceType> TFHTLB = registerPieceType("TFHTLB", HollowTreeLargeBranch::new);
