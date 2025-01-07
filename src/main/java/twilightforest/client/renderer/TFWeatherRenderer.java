@@ -217,13 +217,20 @@ public class TFWeatherRenderer {
 	}
 
 	private static void renderLockedStructure(int ticks, float partialTicks, LightTexture lightmap, Vec3 camera) {
-		if (!isNearLockedStructure(camera.x(), camera.z()) || protectedBoxes == null)
-			return;
-
-		lightmap.turnOnLightLayer();
+		int range = Minecraft.useFancyGraphics() ? 10 : 5;
 		int px = Mth.floor(camera.x());
 		int py = Mth.floor(camera.y());
 		int pz = Mth.floor(camera.z());
+
+		BoundingBox pBox = new BoundingBox(
+			px - range, py - range, pz - range,
+			px + range, py + 2 * range, pz + range
+		);
+
+		if (!isNearLockedPiece(pBox))
+			return;
+
+		lightmap.turnOnLightLayer();
 		Tesselator tessellator = Tesselator.getInstance();
 		BufferBuilder bufferbuilder = null;
 
@@ -232,13 +239,8 @@ public class TFWeatherRenderer {
 		RenderSystem.defaultBlendFunc();
 		RenderSystem.enableDepthTest();
 
-		int range = Minecraft.useFancyGraphics() ? 10 : 5;
 		float combinedTicks = ticks + partialTicks;
 
-		BoundingBox pBox = new BoundingBox(
-			px - range, py - range, pz - range,
-			px + range, py + 2 * range, pz + range
-		);
 		List<BoundingBox> boxesToRender = protectedBoxes.stream()
 			.filter(box -> box.intersects(pBox))
 			.toList();
@@ -340,12 +342,8 @@ public class TFWeatherRenderer {
 		return false;
 	}
 
-	private static boolean isNearLockedStructure(double camX, double camZ) {
-		final int range = 15;
-		int px = Mth.floor(camX);
-		int pz = Mth.floor(camZ);
-
-		return protectedBoxes != null && protectedBoxes.stream().anyMatch(box -> box.intersects(px - range, pz - range, px + range, pz + range));
+	private static boolean isNearLockedPiece(BoundingBox pBox) {
+		return protectedBoxes != null && protectedBoxes.stream().anyMatch(box -> box.intersects(pBox));
 	}
 
 	public static void setProtectedBoxes(@Nullable List<BoundingBox> protectedBoxes) {
