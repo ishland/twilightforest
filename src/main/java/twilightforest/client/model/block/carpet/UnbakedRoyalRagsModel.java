@@ -101,6 +101,6 @@ public class UnbakedRoyalRagsModel implements IUnbakedGeometry<UnbakedRoyalRagsM
 
 		ResourceLocation renderTypeHint = context.getRenderTypeHint();
 		RenderTypeGroup renderTypes = renderTypeHint != null ? context.getRenderType(renderTypeHint) : RenderTypeGroup.EMPTY;
-		return new ConnectedTextureModel(EnumSet.of(Direction.UP), false, List.of(TFBlocks.ROYAL_RAGS.get()), baseQuads, quads, spriteGetter.apply(context.getMaterial("wool")), new BakedOverrides(baker, overrides, spriteGetter), context.getTransforms(), renderTypes);
+		return new ConnectedTextureModel(EnumSet.of(Direction.UP), false, List.of(TFBlocks.CORONATION_CARPET.get()), baseQuads, quads, spriteGetter.apply(context.getMaterial("wool")), new BakedOverrides(baker, overrides, spriteGetter), context.getTransforms(), renderTypes);
 	}
 }

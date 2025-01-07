@@ -6,17 +6,15 @@ import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
@@ -30,6 +28,7 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.neoforged.neoforge.common.ItemAbilities;
 import net.neoforged.neoforge.fluids.FluidUtil;
 import net.neoforged.neoforge.fluids.capability.templates.VoidFluidHandler;
 import twilightforest.block.entity.BrazierBlockEntity;
@@ -81,12 +80,12 @@ public class BrazierBlock extends BaseEntityBlock {
 	}
 
 	@Override
-	protected BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos currentPos, BlockPos facingPos) {
+	protected BlockState updateShape(BlockState state, LevelReader reader, ScheduledTickAccess access, BlockPos pos, Direction direction, BlockPos facingPos, BlockState facingState, RandomSource random) {
 		DoubleBlockHalf half = state.getValue(HALF);
-		if (facing.getAxis() != Direction.Axis.Y || half == DoubleBlockHalf.LOWER != (facing == Direction.UP)) {
-			return half == DoubleBlockHalf.LOWER && facing == Direction.DOWN && !state.canSurvive(level, currentPos)
+		if (direction.getAxis() != Direction.Axis.Y || half == DoubleBlockHalf.LOWER != (direction == Direction.UP)) {
+			return half == DoubleBlockHalf.LOWER && direction == Direction.DOWN && !state.canSurvive(reader, pos)
 				? Blocks.AIR.defaultBlockState()
-				: super.updateShape(state, facing, facingState, level, currentPos, facingPos);
+				: super.updateShape(state, reader, access, pos, direction, facingPos, facingState, random);
 		} else {
 			return facingState.getBlock() instanceof BrazierBlock && facingState.getValue(HALF) != half
 				? facingState.setValue(HALF, half)
@@ -96,14 +95,14 @@ public class BrazierBlock extends BaseEntityBlock {
 
 	@Override
 	public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
-		if (!level.isClientSide && (player.isCreative() || !player.hasCorrectToolForDrops(state, level, pos))) {
+		if (!level.isClientSide() && (player.isCreative() || !player.hasCorrectToolForDrops(state, level, pos))) {
 			DoubleBlockHalf half = state.getValue(HALF);
 			if (half == DoubleBlockHalf.UPPER) {
 				BlockPos below = pos.below();
 				BlockState blockstate = level.getBlockState(below);
 				if (blockstate.is(state.getBlock()) && blockstate.getValue(HALF) == DoubleBlockHalf.LOWER) {
 					BlockState blockstate1 = blockstate.getFluidState().is(Fluids.WATER) ? Blocks.WATER.defaultBlockState() : Blocks.AIR.defaultBlockState();
-					level.setBlock(below, blockstate1, 35);
+					level.setBlock(below, blockstate1, Block.UPDATE_SUPPRESS_DROPS | Block.UPDATE_ALL);
 					level.levelEvent(player, 2001, below, Block.getId(blockstate));
 				}
 			}
@@ -117,7 +116,7 @@ public class BrazierBlock extends BaseEntityBlock {
 	public BlockState getStateForPlacement(BlockPlaceContext context) {
 		BlockPos blockpos = context.getClickedPos();
 		Level level = context.getLevel();
-		if (blockpos.getY() < level.getMaxBuildHeight() - 1 && level.getBlockState(blockpos.above()).canBeReplaced(context)) {
+		if (blockpos.getY() < level.getMaxY() - 1 && level.getBlockState(blockpos.above()).canBeReplaced(context)) {
 			return this.defaultBlockState().setValue(HALF, DoubleBlockHalf.LOWER);
 		} else {
 			return null;
@@ -137,10 +136,10 @@ public class BrazierBlock extends BaseEntityBlock {
 	}
 
 	@Override
-	protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
+	protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
 		if (state.is(this) && state.getValue(HALF) == DoubleBlockHalf.UPPER) {
-			if (state.getValue(LIGHT) != BrazierLight.FULL && (stack.is(Items.FLINT_AND_STEEL) || stack.is(Items.FIRE_CHARGE))) {
-				level.setBlock(pos, state.cycle(LIGHT), 11);
+			if (state.getValue(LIGHT) != BrazierLight.FULL && stack.canPerformAction(ItemAbilities.FIRESTARTER_LIGHT)) {
+				level.setBlock(pos, state.cycle(LIGHT), Block.UPDATE_ALL_IMMEDIATE);
 				level.getBlockState(pos.below()).cycle(LIGHT);
 				if (stack.is(Items.FLINT_AND_STEEL)) {
 					stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
@@ -149,7 +148,7 @@ public class BrazierBlock extends BaseEntityBlock {
 				}
 				level.playSound(null, pos, SoundEvents.FLINTANDSTEEL_USE, SoundSource.BLOCKS);
 				player.awardStat(Stats.ITEM_USED.get(stack.getItem()));
-				return ItemInteractionResult.sidedSuccess(level.isClientSide());
+				return InteractionResult.SUCCESS;
 			}
 
 			if (state.getValue(LIGHT).isLit()) {
@@ -159,9 +158,9 @@ public class BrazierBlock extends BaseEntityBlock {
 						level.getBlockState(pos.below()).setValue(LIGHT, BrazierLight.OFF);
 						level.playSound(null, pos, SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS);
 						player.awardStat(Stats.ITEM_USED.get(stack.getItem()));
-						return ItemInteractionResult.sidedSuccess(level.isClientSide());
+						return InteractionResult.SUCCESS;
 					} else {
-						return ItemInteractionResult.FAIL;
+						return InteractionResult.FAIL;
 					}
 				}
 			}

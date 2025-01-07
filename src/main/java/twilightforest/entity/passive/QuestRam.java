@@ -12,7 +12,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.util.FastColor;
+import net.minecraft.util.ARGB;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -107,12 +107,12 @@ public class QuestRam extends Animal implements EnforcedHomePoint {
 	}
 
 	@Override
-	protected void customServerAiStep() {
+	protected void customServerAiStep(ServerLevel level) {
 		if (--this.randomTickDivider <= 0) {
 			this.randomTickDivider = 70 + this.getRandom().nextInt(50);
 
 			if (this.countColorsSet() > 15 && !this.getRewarded()) {
-				this.rewardQuest();
+				this.rewardQuest(level);
 				this.setRewarded(true);
 			}
 
@@ -123,14 +123,14 @@ public class QuestRam extends Animal implements EnforcedHomePoint {
 			this.playAmbientSound();
 		}
 
-		super.customServerAiStep();
+		super.customServerAiStep(level);
 	}
 
-	private void rewardQuest() {
+	private void rewardQuest(ServerLevel level) {
 		// todo flesh the context out more
 		LootParams ctx = new LootParams.Builder((ServerLevel) this.level()).withParameter(LootContextParams.THIS_ENTITY, this).create(LootContextParamSets.PIGLIN_BARTER);
 		ObjectArrayList<ItemStack> rewards = this.level().getServer().reloadableRegistries().getLootTable(TwilightForestMod.getQuests().getQuestingRam().lootTable()).getRandomItems(ctx);
-		rewards.forEach(stack -> this.spawnAtLocation(stack, 1.0F));
+		rewards.forEach(stack -> this.spawnAtLocation(level, stack, 1.0F));
 
 		for (ServerPlayer player : this.level().getEntitiesOfClass(ServerPlayer.class, getBoundingBox().inflate(16.0D, 16.0D, 16.0D))) {
 			TFAdvancements.QUEST_RAM_COMPLETED.get().trigger(player);
@@ -150,11 +150,6 @@ public class QuestRam extends Animal implements EnforcedHomePoint {
 		} else {
 			return super.interactAt(player, vec, hand);
 		}
-	}
-
-	@Override
-	public AABB getBoundingBoxForCulling() {
-		return super.getBoundingBoxForCulling().inflate(3.0D);
 	}
 
 	public boolean tryAccept(ItemStack stack) {
@@ -221,7 +216,7 @@ public class QuestRam extends Animal implements EnforcedHomePoint {
 					ParticlePacket packet = new ParticlePacket();
 
 					for (int i = 0; i < iterations; i++) {
-						packet.queueParticle(ColorParticleOption.create(ParticleTypes.ENTITY_EFFECT, FastColor.ARGB32.red(colorVal), FastColor.ARGB32.green(colorVal), FastColor.ARGB32.blue(colorVal)), false,
+						packet.queueParticle(ColorParticleOption.create(ParticleTypes.ENTITY_EFFECT, colorVal), false,
 							this.getX() + (this.getRandom().nextDouble() - 0.5D) * this.getBbWidth() * 1.5D,
 							this.getY() + this.getRandom().nextDouble() * this.getBbHeight() * 1.5D,
 							this.getZ() + (this.getRandom().nextDouble() - 0.5D) * this.getBbWidth() * 1.5D,

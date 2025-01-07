@@ -46,7 +46,7 @@ public class FortificationWandItem extends Item {
 
 		if (!player.isCreative())
 			player.getCooldowns().addCooldown(stack, 1200);
-		return InteractionResultHolder.success(stack);
+		return InteractionResult.SUCCESS;
 	}
 
 	@Override

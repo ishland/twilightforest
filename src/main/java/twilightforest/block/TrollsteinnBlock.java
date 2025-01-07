@@ -98,7 +98,7 @@ public class TrollsteinnBlock extends Block {
 		if (rand.nextBoolean()) this.sparkle(level, pos);
 	}
 
-	DustParticleOptions PURPL = new DustParticleOptions(new Vector3f(0.25F, 0.0F, 0.5F), 1.0F);
+	DustParticleOptions PURPL = new DustParticleOptions(4194432, 1.0F);
 
 	// [VanillaCopy] Based on RedstoneOreBlock.spawnParticles
 	private void sparkle(Level level, BlockPos pos) {

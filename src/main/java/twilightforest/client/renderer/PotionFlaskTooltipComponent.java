@@ -6,7 +6,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
+import net.minecraft.client.renderer.CoreShaders;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -39,8 +41,8 @@ public class PotionFlaskTooltipComponent implements ClientTooltipComponent {
 	}
 
 	@Override
-	public int getHeight() {
-		return this.getDescriptionHeight(Minecraft.getInstance().font) + 13 + 8;
+	public int getHeight(Font font) {
+		return this.getDescriptionHeight(font) + 13 + 8;
 	}
 
 	@Override
@@ -66,7 +68,7 @@ public class PotionFlaskTooltipComponent implements ClientTooltipComponent {
 	private List<Component> getPotionTooltips() {
 		if (this.component.potion().potion().isPresent()) {
 			List<Component> tooltips = new ArrayList<>();
-			tooltips.add(Component.translatable(Potion.getName(this.component.potion().potion(), "item.minecraft.potion.effect.")));
+			tooltips.add(this.component.potion().getName("item.minecraft.potion.effect."));
 			this.component.potion().addPotionTooltip(tooltips::add, 1.0F, Minecraft.getInstance().level.tickRateManager().tickrate());
 			return tooltips;
 		}
@@ -78,8 +80,7 @@ public class PotionFlaskTooltipComponent implements ClientTooltipComponent {
 	}
 
 	@Override
-	public void renderImage(Font font, int x, int y, GuiGraphics graphics) {
-		int offs = 113; //TODO replace with 4th param in 1.21.2+ so things properly center
+	public void renderImage(Font font, int x, int y, int xOffs, int yOffs, GuiGraphics graphics) {
 		if (this.component.potion().potion().isEmpty()) {
 			graphics.drawWordWrap(font, EMPTY_DESCRIPTION, x, y, WIDTH, 11184810);
 		} else {
@@ -94,7 +95,7 @@ public class PotionFlaskTooltipComponent implements ClientTooltipComponent {
 				height += font.split(component, WIDTH).size() * font.lineHeight + 1;
 			}
 		}
-		this.drawPotionBar(x + this.getContentXOffset(offs), y + this.getDescriptionHeight(font) + 4, font, graphics);
+		this.drawPotionBar(x + this.getContentXOffset(xOffs), y + this.getDescriptionHeight(font) + 4, font, graphics);
 	}
 
 	private void drawPotionBar(int x, int y, Font font, GuiGraphics graphics) {
@@ -111,11 +112,11 @@ public class PotionFlaskTooltipComponent implements ClientTooltipComponent {
 			}
 			int widthProg = segmentSplit;
 			for (int i = 1; i < this.maxDoses; i++) {
-				graphics.blitSprite(DOSE_SPRITE, x + widthProg, y, 1, 13);
+				graphics.blitSprite(RenderType::guiTextured, DOSE_SPRITE, x + widthProg, y, 1, 13);
 				widthProg += segmentSplit;
 			}
 		}
-		graphics.blitSprite(BORDER_SPRITE, x, y, WIDTH, 13);
+		graphics.blitSprite(RenderType::guiTextured, BORDER_SPRITE, x, y, WIDTH, 13);
 	}
 
 	private void renderPotion(PoseStack stack, int xPosition, int yPosition, int desiredWidth, int desiredHeight, int color) {
@@ -123,7 +124,7 @@ public class PotionFlaskTooltipComponent implements ClientTooltipComponent {
 		int green = (color >> 8) & 255;
 		int blue = color & 255;
 		TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(IClientFluidTypeExtensions.of(Fluids.WATER).getStillTexture());
-		RenderSystem.setShader(GameRenderer::getPositionTexShader);
+		RenderSystem.setShader(CoreShaders.POSITION_TEX);
 		RenderSystem.setShaderTexture(0, InventoryMenu.BLOCK_ATLAS);
 		int xTileCount = desiredWidth / 16;
 		int xRemainder = desiredWidth - (xTileCount * 16);

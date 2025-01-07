@@ -41,7 +41,7 @@ public class TextureGeneratorReloadListener implements ResourceManagerReloadList
 								for (int x = 0; x < 48 * tfScale; x++) {
 									for (int y = 58 * tfScale; y < 96 * tfScale; y++) {
 										// If the loaded tf boat chest texture has non-transparent pixels below the boat section of the texture, return
-										if (tfImage.getPixelRGBA(x, y) != 0x00000000) return;
+										if (tfImage.getPixel(x, y) != 0x00000000) return;
 									}
 								}
 
@@ -50,7 +50,7 @@ public class TextureGeneratorReloadListener implements ResourceManagerReloadList
 										newImage.copyFrom(vanillaImage);
 										for (int x = 0; x < 102 * vanillaScale; x++) {
 											for (int y = 0; y < 52 * vanillaScale; y++) {
-												newImage.setPixelRGBA(x, y, tfImage.getPixelRGBA(x / (vanillaScale / tfScale), y / (vanillaScale / tfScale)));
+												newImage.setPixel(x, y, tfImage.getPixel(x / (vanillaScale / tfScale), y / (vanillaScale / tfScale)));
 											}
 										}
 
@@ -75,7 +75,7 @@ public class TextureGeneratorReloadListener implements ResourceManagerReloadList
 								} else {
 									for (int x = 0; x < 48 * tfScale; x++) {
 										for (int y = 58 * tfScale; y < 96 * tfScale; y++) {
-											tfImage.setPixelRGBA(x, y, vanillaImage.getPixelRGBA(x / (tfScale / vanillaScale), y / (tfScale / vanillaScale)));
+											tfImage.setPixel(x, y, vanillaImage.getPixel(x / (tfScale / vanillaScale), y / (tfScale / vanillaScale)));
 										}
 									}
 

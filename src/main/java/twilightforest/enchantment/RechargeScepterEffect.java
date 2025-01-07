@@ -27,7 +27,7 @@ public record RechargeScepterEffect() implements EnchantmentEntityEffect {
 
 	public static void applyRecharge(ServerLevel level, ItemStack item, Entity entity) {
 		if (entity instanceof Player player && item.getDamageValue() == item.getMaxDamage()) {
-			List<ScepterRepairRecipe> recipes = level.getRecipeManager().getAllRecipesFor(RecipeType.CRAFTING).stream().filter(holder -> holder.value() instanceof ScepterRepairRecipe).map(RecipeHolder::value).map(ScepterRepairRecipe.class::cast).toList();
+			List<ScepterRepairRecipe> recipes = level.recipeAccess().getRecipes().stream().filter(holder -> holder.value() instanceof ScepterRepairRecipe).map(RecipeHolder::value).map(ScepterRepairRecipe.class::cast).toList();
 			List<Integer> slotsToConsume = new ArrayList<>();
 			for (var recipe : recipes) {
 				if (item.is(recipe.getScepter())) {
@@ -40,21 +40,21 @@ public record RechargeScepterEffect() implements EnchantmentEntityEffect {
 							item.setDamageValue(0);
 							return;
 						}
-						for (var ingredient : recipe.getIngredients()) {
+						for (var ingredient : recipe.placementInfo().ingredients()) {
 							if (ingredient.test(stack)) {
 								slotsToConsume.add(i);
-								if (slotsToConsume.size() == recipe.getIngredients().size()) break scepterItemsCheck;
+								if (slotsToConsume.size() == recipe.placementInfo().ingredients().size()) break scepterItemsCheck;
 							}
 						}
 					}
 
-					if (slotsToConsume.size() == recipe.getIngredients().size()) {
+					if (slotsToConsume.size() == recipe.placementInfo().ingredients().size()) {
 						for (int slot : slotsToConsume) {
 							ItemStack stack = player.getInventory().items.get(slot);
 							stack.shrink(1);
-							if (stack.hasCraftingRemainingItem()) {
-								if (!player.getInventory().add(stack.getCraftingRemainingItem())) {
-									player.drop(stack.getCraftingRemainingItem(), false);
+							if (!stack.getCraftingRemainder().isEmpty()) {
+								if (!player.getInventory().add(stack.getCraftingRemainder())) {
+									player.drop(stack.getCraftingRemainder(), false);
 								}
 							}
 						}

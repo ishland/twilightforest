@@ -1,7 +1,7 @@
 package twilightforest.network;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.MapRenderer;
+import net.minecraft.client.renderer.MapRenderer;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -38,7 +38,7 @@ public record MagicMapPacket(ClientboundMapItemDataPacket inner, List<String> co
 				public void run() {
 					Level level = ctx.player().level();
 					// [VanillaCopy] ClientPacketListener#handleMapItemData with our own mapdatas
-					MapRenderer mapitemrenderer = Minecraft.getInstance().gameRenderer.getMapRenderer();
+					MapRenderer mapitemrenderer = Minecraft.getInstance().getMapRenderer();
 					String s = MagicMapItem.getMapName(message.inner.mapId().id());
 					TFMagicMapData mapdata = TFMagicMapData.getMagicMapData(level, s);
 					if (mapdata == null) {

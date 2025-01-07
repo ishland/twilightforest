@@ -85,8 +85,8 @@ public class LoyalZombie extends TamableAnimal {
 	}
 
 	@Override
-	public boolean doHurtTarget(Entity entity) {
-		boolean success = entity.hurt(this.damageSources().mobAttack(this), 7.0F);
+	public boolean doHurtTarget(ServerLevel level, Entity entity) {
+		boolean success = entity.hurtServer(level, this.damageSources().mobAttack(this), 7.0F);
 
 		if (success) {
 			entity.push(0.0D, 0.2D, 0.0D);
@@ -101,7 +101,7 @@ public class LoyalZombie extends TamableAnimal {
 		// the effect here is that we die shortly after our 60 second lifespan
 		if (!this.level().isClientSide() && this.getEffect(MobEffects.DAMAGE_BOOST) == null) {
 			if (this.tickCount % 20 == 0) {
-				this.hurt(TFDamageTypes.getDamageSource(this.level(), TFDamageTypes.EXPIRED), 2);
+				this.hurt(this.damageSources().source(TFDamageTypes.EXPIRED), 2);
 			}
 		}
 
@@ -117,7 +117,7 @@ public class LoyalZombie extends TamableAnimal {
 			this.heal(1.0F);
 			this.playSound(SoundEvents.ZOMBIE_INFECT, this.getSoundVolume(), this.getVoicePitch());
 			player.getItemInHand(hand).consume(1, player);
-			return InteractionResult.sidedSuccess(this.level().isClientSide());
+			return InteractionResult.SUCCESS;
 		}
 
 		return super.interactAt(player, vec3, hand);
@@ -186,7 +186,7 @@ public class LoyalZombie extends TamableAnimal {
 	}
 
 	@Override
-	protected void dropExperience(@Nullable Entity entity) {
+	protected void dropExperience(ServerLevel level, @Nullable Entity entity) {
 
 	}
 

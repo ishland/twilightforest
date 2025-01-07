@@ -23,7 +23,6 @@ import net.minecraft.world.RandomizableContainer;
 import net.minecraft.world.entity.Display;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -577,7 +576,7 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 				};
 				if (!jarEntity.fillFromLootTable(lootTableId, random.nextLong(), level.getLevel())) {
 					ResourceLocation itemId = ResourceLocation.bySeparator(label, '.');
-					jarEntity.getItemHandler().setItem(new ItemStack(level.registryAccess().registry(Registries.ITEM).<Function<ResourceLocation, Item>>map(reg -> reg::get).orElse($ -> Items.AIR).apply(itemId)));
+					jarEntity.getItemHandler().setItem(new ItemStack(level.registryAccess().lookup(Registries.ITEM).<Function<ResourceLocation, Item>>map(reg -> reg::getValue).orElse(rl -> Items.AIR).apply(itemId)));
 				}
 				int itemRotation = this.placeSettings.getRotation().ordinal() * 4 + (parameters.length == 3 ? this.getHeadRotation(parameters[2], random) : 0);
 				jarEntity.setItemRotation(Math.floorMod(itemRotation, 16));
