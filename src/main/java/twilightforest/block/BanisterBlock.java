@@ -221,10 +221,10 @@ public class BanisterBlock extends HorizontalDirectionalBlock implements SimpleW
 			level.playSound(null, pos, SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1.0F, 1.0F);
 			if (belowState.getBlock() instanceof BanisterBlock && belowState.getValue(SHAPE) != BanisterShape.SHORT) {
 				// If the state below is a non-short banister, we never use extended banisters
-				level.setBlock(pos, newState.setValue(EXTENDED, false), 3);
+				level.setBlock(pos, newState.setValue(EXTENDED, false), Block.UPDATE_ALL);
 			} else {
 				// If we reach BanisterShape.TALL it means we went a full cycle, so we'll also cycle the extension
-				level.setBlock(pos, newState.getValue(SHAPE) == BanisterShape.TALL ? newState.cycle(EXTENDED) : newState, 3);
+				level.setBlock(pos, newState.getValue(SHAPE) == BanisterShape.TALL ? newState.cycle(EXTENDED) : newState, Block.UPDATE_ALL);
 			}
 
 

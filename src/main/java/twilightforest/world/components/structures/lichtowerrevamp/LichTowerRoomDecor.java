@@ -8,6 +8,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
@@ -18,6 +19,7 @@ import net.minecraft.world.level.levelgen.structure.TerrainAdjustment;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 import net.neoforged.neoforge.common.world.PieceBeardifierModifier;
+import twilightforest.beans.Autowired;
 import twilightforest.init.TFStructurePieceTypes;
 import twilightforest.util.TFStructureHelper;
 import twilightforest.util.jigsaw.JigsawPlaceContext;
@@ -26,28 +28,27 @@ import twilightforest.world.components.structures.TwilightJigsawPiece;
 import twilightforest.world.components.structures.TwilightTemplateStructurePiece;
 
 public class LichTowerRoomDecor extends TwilightJigsawPiece implements PieceBeardifierModifier {
-	private final boolean isInCenterTower;
+	@Autowired
+	private static LichTowerUtil lichTowerUtil;
 
 	public LichTowerRoomDecor(StructurePieceSerializationContext ctx, CompoundTag compoundTag) {
 		super(TFStructurePieceTypes.LICH_TOWER_DECOR.value(), compoundTag, ctx, readSettings(compoundTag));
 
-		LichTowerUtil.addDefaultProcessors(this.placeSettings.addProcessor(LichTowerUtil.ROOM_SPAWNERS));
-		this.isInCenterTower = compoundTag.getBoolean("is_in_central");
+		LichTowerUtil.addDefaultProcessors(this.placeSettings.addProcessor(lichTowerUtil.getRoomSpawnerProcessor()));
 	}
 
-	public LichTowerRoomDecor(int genDepth, StructureTemplateManager structureManager, ResourceLocation templateLocation, JigsawPlaceContext jigsawContext, boolean isInCenterTower) {
+	public LichTowerRoomDecor(int genDepth, StructureTemplateManager structureManager, ResourceLocation templateLocation, JigsawPlaceContext jigsawContext) {
 		super(TFStructurePieceTypes.LICH_TOWER_DECOR.value(), genDepth, structureManager, templateLocation, jigsawContext);
 
-		LichTowerUtil.addDefaultProcessors(this.placeSettings.addProcessor(LichTowerUtil.ROOM_SPAWNERS));
-		this.isInCenterTower = isInCenterTower;
+		LichTowerUtil.addDefaultProcessors(this.placeSettings.addProcessor(lichTowerUtil.getRoomSpawnerProcessor()));
 	}
 
-	public static void addDecor(TwilightTemplateStructurePiece parent, StructurePieceAccessor pieceAccessor, RandomSource random, JigsawRecord connection, int newDepth, StructureTemplateManager structureManager, boolean isInCenterTower) {
-		ResourceLocation decorId = LichTowerUtil.rollRandomDecor(random, false);
+	public static void addDecor(TwilightTemplateStructurePiece parent, StructurePieceAccessor pieceAccessor, RandomSource random, JigsawRecord connection, int newDepth, StructureTemplateManager structureManager) {
+		ResourceLocation decorId = lichTowerUtil.rollRandomDecor(random, false);
 		JigsawPlaceContext placeableJunction = JigsawPlaceContext.pickPlaceableJunction(parent.templatePosition(), connection.pos(), connection.orientation(), structureManager, decorId, "twilightforest:lich_tower/decor", random);
 
 		if (placeableJunction != null) {
-			StructurePiece decor = new LichTowerRoomDecor(newDepth, structureManager, decorId, placeableJunction, isInCenterTower);
+			StructurePiece decor = new LichTowerRoomDecor(newDepth, structureManager, decorId, placeableJunction);
 			pieceAccessor.addPiece(decor);
 			decor.addChildren(parent, pieceAccessor, random);
 		}
@@ -56,23 +57,21 @@ public class LichTowerRoomDecor extends TwilightJigsawPiece implements PieceBear
 	@Override
 	protected void addAdditionalSaveData(StructurePieceSerializationContext ctx, CompoundTag structureTag) {
 		super.addAdditionalSaveData(ctx, structureTag);
-
-		structureTag.putBoolean("is_in_central", this.isInCenterTower);
 	}
 
 	@Override
 	protected void handleDataMarker(String label, BlockPos pos, WorldGenLevel level, RandomSource random, BoundingBox chunkBounds, ChunkGenerator chunkGen) {
-		level.setBlock(pos, Blocks.AIR.defaultBlockState(), 2);
+		level.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS);
 
 		switch (label) {
 			case "sapling" -> {
-				level.setBlock(pos, TFStructureHelper.randomPlant(random), 2);
+				level.setBlock(pos, TFStructureHelper.randomPlant(random), Block.UPDATE_CLIENTS);
 			}
 			case "tree" -> {
 				ResourceKey<ConfiguredFeature<?, ?>> randomTree = TFStructureHelper.randomTree(random.nextInt(4));
 				Registry<ConfiguredFeature<?, ?>> featureRegistry = level.registryAccess().lookupOrThrow(Registries.CONFIGURED_FEATURE);
-				if (!featureRegistry.getValueOrThrow(randomTree).place(level, chunkGen, random, pos)) {
-					level.setBlock(pos, TFStructureHelper.randomPlant(random), 2);
+				if (!featureRegistry.get(randomTree).place(level, chunkGen, random, pos)) {
+					level.setBlock(pos, TFStructureHelper.randomPlant(random), Block.UPDATE_CLIENTS);
 				}
 			}
 		}

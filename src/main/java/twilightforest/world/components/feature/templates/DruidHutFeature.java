@@ -80,7 +80,7 @@ public class DruidHutFeature extends TemplateFeature<SwizzleConfig> {
          */
 		// removeBlock calls are required due to WorldGenRegion jank with cached TEs, this ensures the correct TE is used
 		if ("spawner".equals(s)) {
-			if (world.removeBlock(blockPos, false) && world.setBlock(blockPos, Blocks.SPAWNER.defaultBlockState(), 16 | 2)) {
+			if (world.removeBlock(blockPos, false) && world.setBlock(blockPos, Blocks.SPAWNER.defaultBlockState(), Block.UPDATE_KNOWN_SHAPE | Block.UPDATE_CLIENTS)) {
 				BlockEntity tile = world.getBlockEntity(blockPos);
 
 				if (tile instanceof SpawnerBlockEntity ms) {
@@ -104,7 +104,7 @@ public class DruidHutFeature extends TemplateFeature<SwizzleConfig> {
 				default -> chest.setValue(HorizontalDirectionalBlock.FACING, rotation.rotate(mirror.mirror(Direction.NORTH)));
 			};
 
-			TFLootTables.generateLootContainer(world, blockPos, chest, 16 | 2, (s.endsWith("J") ? TFLootTables.HUT_JUNK : TFLootTables.BASEMENT));
+			TFLootTables.generateLootContainer(world, blockPos, chest, Block.UPDATE_KNOWN_SHAPE | Block.UPDATE_CLIENTS, (s.endsWith("J") ? TFLootTables.HUT_JUNK : TFLootTables.BASEMENT));
 		} else if (s.startsWith("barrel")) {
 			world.removeBlock(blockPos, false);
 			BlockState chest = Blocks.BARREL.defaultBlockState();
@@ -118,7 +118,7 @@ public class DruidHutFeature extends TemplateFeature<SwizzleConfig> {
 				default -> chest.setValue(BlockStateProperties.FACING, rotation.rotate(mirror.mirror(Direction.UP)));
 			};
 
-			TFLootTables.generateLootContainer(world, blockPos, chest, 16 | 2, TFLootTables.HUT_JUNK);
+			TFLootTables.generateLootContainer(world, blockPos, chest, Block.UPDATE_KNOWN_SHAPE | Block.UPDATE_CLIENTS, TFLootTables.HUT_JUNK);
 		} else if (s.startsWith("painting")) {
 			world.removeBlock(blockPos, false);
 

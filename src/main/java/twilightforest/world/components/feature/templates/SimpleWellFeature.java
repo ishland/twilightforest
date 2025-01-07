@@ -66,7 +66,7 @@ public class SimpleWellFeature extends TemplateFeature<SwizzleConfig> {
 		if (!s.startsWith("loot")) return;
 
 		if (random.nextBoolean()) {
-			world.setBlock(blockPos, random.nextBoolean() ? Blocks.COBBLESTONE.defaultBlockState() : Blocks.MOSSY_COBBLESTONE.defaultBlockState(), 16 | 2);
+			world.setBlock(blockPos, random.nextBoolean() ? Blocks.COBBLESTONE.defaultBlockState() : Blocks.MOSSY_COBBLESTONE.defaultBlockState(), Block.UPDATE_KNOWN_SHAPE | Block.UPDATE_CLIENTS);
 			return;
 		}
 
@@ -79,10 +79,10 @@ public class SimpleWellFeature extends TemplateFeature<SwizzleConfig> {
 			default -> rotation.rotate(mirror.mirror(Direction.NORTH));
 		};
 
-		TFLootTables.generateLootContainer(world, blockPos, Blocks.BARREL.defaultBlockState().setValue(BarrelBlock.FACING, dir), 16 | 2, TFLootTables.WELL);
+		TFLootTables.generateLootContainer(world, blockPos, Blocks.BARREL.defaultBlockState().setValue(BarrelBlock.FACING, dir), Block.UPDATE_KNOWN_SHAPE | Block.UPDATE_CLIENTS, TFLootTables.WELL);
 
 		if (random.nextBoolean()) return;
 
-		world.setBlock(blockPos.relative(dir), Blocks.HOPPER.defaultBlockState().setValue(HopperBlock.FACING, dir.getOpposite()), 16 | 2);
+		world.setBlock(blockPos.relative(dir), Blocks.HOPPER.defaultBlockState().setValue(HopperBlock.FACING, dir.getOpposite()), Block.UPDATE_KNOWN_SHAPE | Block.UPDATE_CLIENTS);
 	}
 }

@@ -140,7 +140,7 @@ public class HorizontalHollowLogBlock extends Block implements WaterloggedBlock 
 
 		if (stack.is(TFBlocks.MOSS_PATCH.asItem())) {
 			if (canChangeVariant(variant, level, pos, stateAxis)) {
-				level.setBlock(pos, state.setValue(VARIANT, HollowLogVariants.Horizontal.MOSS), 3);
+				level.setBlock(pos, state.setValue(VARIANT, HollowLogVariants.Horizontal.MOSS), Block.UPDATE_ALL);
 				level.playSound(null, pos, SoundEvents.MOSS_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
 				stack.consume(1, player);
 
@@ -148,7 +148,7 @@ public class HorizontalHollowLogBlock extends Block implements WaterloggedBlock 
 			}
 		} else if (stack.is(Blocks.SHORT_GRASS.asItem())) {
 			if (variant == HollowLogVariants.Horizontal.MOSS) {
-				level.setBlock(pos, state.setValue(VARIANT, HollowLogVariants.Horizontal.MOSS_AND_GRASS), 3);
+				level.setBlock(pos, state.setValue(VARIANT, HollowLogVariants.Horizontal.MOSS_AND_GRASS), Block.UPDATE_ALL);
 				level.playSound(null, pos, SoundEvents.GRASS_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
 				stack.consume(1, player);
 
@@ -156,7 +156,7 @@ public class HorizontalHollowLogBlock extends Block implements WaterloggedBlock 
 			}
 		} else if (stack.is(Items.SNOWBALL)) {
 			if (canChangeVariant(variant, level, pos, stateAxis)) {
-				level.setBlock(pos, state.setValue(VARIANT, HollowLogVariants.Horizontal.SNOW), 3);
+				level.setBlock(pos, state.setValue(VARIANT, HollowLogVariants.Horizontal.SNOW), Block.UPDATE_ALL);
 				level.playSound(null, pos, SoundEvents.SNOW_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
 				stack.consume(1, player);
 
@@ -164,7 +164,7 @@ public class HorizontalHollowLogBlock extends Block implements WaterloggedBlock 
 			}
 		} else if (stack.canPerformAction(ItemAbilities.SHOVEL_DIG)) {
 			if (variant == HollowLogVariants.Horizontal.SNOW) {
-				level.setBlock(pos, state.setValue(VARIANT, HollowLogVariants.Horizontal.EMPTY), 3);
+				level.setBlock(pos, state.setValue(VARIANT, HollowLogVariants.Horizontal.EMPTY), Block.UPDATE_ALL);
 				level.playSound(null, pos, SoundEvents.SNOW_BREAK, SoundSource.BLOCKS, 1.0F, 1.0F);
 				if (!player.isCreative()) {
 					stack.hurtAndBreak(1, player, hand == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
@@ -175,7 +175,7 @@ public class HorizontalHollowLogBlock extends Block implements WaterloggedBlock 
 			}
 		} else if (stack.canPerformAction(ItemAbilities.SHEARS_HARVEST)) {
 			if (variant == HollowLogVariants.Horizontal.MOSS || variant == HollowLogVariants.Horizontal.MOSS_AND_GRASS) {
-				level.setBlock(pos, state.setValue(VARIANT, HollowLogVariants.Horizontal.EMPTY), 3);
+				level.setBlock(pos, state.setValue(VARIANT, HollowLogVariants.Horizontal.EMPTY), Block.UPDATE_ALL);
 				level.playSound(null, pos, SoundEvents.SHEEP_SHEAR, SoundSource.BLOCKS, 1.0F, 1.0F);
 
 				if (!player.isCreative()) {

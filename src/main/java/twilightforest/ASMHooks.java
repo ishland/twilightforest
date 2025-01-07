@@ -31,6 +31,8 @@ import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.levelgen.DensityFunction;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.RandomState;
+import net.minecraft.world.level.levelgen.blending.Blender;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
 import net.minecraft.world.level.levelgen.structure.pieces.PiecesContainer;
@@ -85,7 +87,7 @@ public class ASMHooks {
 	 * {@link twilightforest.asm.transformers.armor.CancelArmorRenderingTransformer}<p/>
 	 *
 	 * Injection Point:<br/>
-	 * {@link net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer#renderArmorPiece(PoseStack, MultiBufferSource, LivingEntity, EquipmentSlot, int, HumanoidModel)}
+	 * {@link net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer#renderArmorPiece(PoseStack, MultiBufferSource, LivingEntity, EquipmentSlot, int, HumanoidModel, float, float, float, float, float, float)}
 	 */
 	public static boolean cancelArmorRendering(boolean o, ItemStack stack) {
 		if (o && stack.get(TFDataComponents.EMPERORS_CLOTH) != null) {
@@ -102,7 +104,7 @@ public class ASMHooks {
 	 * {@link twilightforest.asm.transformers.beardifier.InitializeCustomBeardifierFieldsDuringForStructuresInChunkTransformer}<p/>
 	 *
 	 * Injection point:<br/>
-	 * {@link net.minecraft.world.level.levelgen.Beardifier#forStructuresInChunk(StructureManager, ChunkPos)}
+	 * {@link net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator#createNoiseChunk(ChunkAccess, StructureManager, Blender, RandomState)}
 	 */
 	public static ObjectListIterator<DensityFunction> gatherCustomTerrain(StructureManager structureManager, ChunkPos chunkPos) {
 		ObjectArrayList<DensityFunction> customStructureTerraforms = new ObjectArrayList<>(10);

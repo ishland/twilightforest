@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.HolderSet;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
@@ -49,7 +50,7 @@ public final class FeaturePlacers {
 			home.setRestrictionPoint(GlobalPos.of(levelAccessor.getLevel().dimension(), pos));
 		}
 		levelAccessor.addFreshEntityWithPassengers(mob);
-		levelAccessor.setBlock(pos, Blocks.AIR.defaultBlockState(), 2);
+		levelAccessor.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS);
 	}
 
 	/**
@@ -92,18 +93,21 @@ public final class FeaturePlacers {
 		if (predicate.apply(world, pos)) setter.set(pos, config.getState(random, pos));
 	}
 
-	// Use for trunks with Odd-count widths
 	public static void placeCircleOdd(LevelSimulatedReader world, BiConsumer<BlockPos, BlockState> placer, BiFunction<LevelSimulatedReader, BlockPos, Boolean> predicate, RandomSource random, BlockPos centerPos, float radius, BlockStateProvider config) {
+		placeCircleOdd(world, placer, predicate, random, centerPos, radius, config, false);
+	}
+
+	// Use for trunks with Odd-count widths
+	public static void placeCircleOdd(LevelSimulatedReader world, BiConsumer<BlockPos, BlockState> placer, BiFunction<LevelSimulatedReader, BlockPos, Boolean> predicate, RandomSource random, BlockPos centerPos, float radius, BlockStateProvider config, boolean useLegacyDistance) {
 		// Normally, I'd use mutable pos here but there are multiple bits of logic down the line that force
 		// the pos to be immutable causing multiple same BlockPos instances to exist.
-		float radiusSquared = radius * radius;
 		FeaturePlacers.placeProvidedBlock(world, placer, predicate, centerPos, config, random);
 
 		// trace out a quadrant
 		for (int x = 0; x <= radius; x++) {
 			for (int z = 1; z <= radius; z++) {
 				// if we're inside the blob, fill it
-				if (x * x + z * z <= radiusSquared) {
+				if (isWithinCircle(x, z, radius, useLegacyDistance)) {
 					// do four at a time for easiness!
 					FeaturePlacers.placeProvidedBlock(world, placer, predicate, centerPos.offset(x, 0, z), config, random);
 					FeaturePlacers.placeProvidedBlock(world, placer, predicate, centerPos.offset(-x, 0, -z), config, random);
@@ -115,18 +119,21 @@ public final class FeaturePlacers {
 		}
 	}
 
-	// Use for trunks with Even-count widths
 	public static void placeCircleEven(LevelSimulatedReader world, BiConsumer<BlockPos, BlockState> placer, BiFunction<LevelSimulatedReader, BlockPos, Boolean> predicate, RandomSource random, BlockPos centerPos, float radius, BlockStateProvider config) {
+		placeCircleEven(world, placer, predicate, random, centerPos, radius, config, false);
+	}
+
+	// Use for trunks with Even-count widths
+	public static void placeCircleEven(LevelSimulatedReader world, BiConsumer<BlockPos, BlockState> placer, BiFunction<LevelSimulatedReader, BlockPos, Boolean> predicate, RandomSource random, BlockPos centerPos, float radius, BlockStateProvider config, boolean useLegacyDistance) {
 		// Normally, I'd use mutable pos here but there are multiple bits of logic down the line that force
 		// the pos to be immutable causing multiple same BlockPos instances to exist.
-		float radiusSquared = radius * radius;
 		FeaturePlacers.placeProvidedBlock(world, placer, predicate, centerPos, config, random);
 
 		// trace out a quadrant
 		for (int x = 0; x <= radius; x++) {
 			for (int z = 0; z <= radius; z++) {
 				// if we're inside the blob, fill it
-				if (x * x + z * z <= radiusSquared) {
+				if (isWithinCircle(x, z, radius, useLegacyDistance)) {
 					// do four at a time for easiness!
 					FeaturePlacers.placeProvidedBlock(world, placer, predicate, centerPos.offset(1 + x, 0, 1 + z), config, random);
 					FeaturePlacers.placeProvidedBlock(world, placer, predicate, centerPos.offset(-x, 0, -z), config, random);
@@ -136,6 +143,17 @@ public final class FeaturePlacers {
 				}
 			}
 		}
+	}
+
+	public static boolean isWithinCircle(int x, int z, float radius, boolean useLegacyDistance) {
+		if (useLegacyDistance) {
+			int absX = Math.abs(x);
+			int absZ = Math.abs(z);
+			int legacyDistance = absX == 3 && absZ == 3 ? 6 : (int) (Math.max(absX, absZ) + Math.min(absX, absZ) * 0.5F);
+			return legacyDistance <= radius;
+		}
+
+		return (x * x + z * z) <= radius * radius;
 	}
 
 	public static void placeSpheroid(LevelSimulatedReader world, FoliagePlacer.FoliageSetter setter, BiFunction<LevelSimulatedReader, BlockPos, Boolean> predicate, RandomSource random, BlockPos centerPos, float xzRadius, float yRadius, float verticalBias, BlockStateProvider config) {
@@ -239,7 +257,7 @@ public final class FeaturePlacers {
 	// [VanillaCopy] TrunkPlacer.placeLog - Swapped TreeConfiguration for BlockStateProvider
 	// If possible, use TrunkPlacer.placeLog instead
 	public static boolean placeIfValidTreePos(LevelSimulatedReader world, BiConsumer<BlockPos, BlockState> placer, RandomSource random, BlockPos pos, BlockStateProvider config) {
-		if (TreeFeature.validTreePos(world, pos)) {
+		if (validTreePos(world, pos)) {
 			placer.accept(pos, config.getState(random, pos));
 			return true;
 		} else {
@@ -254,6 +272,10 @@ public final class FeaturePlacers {
 		} else {
 			return false;
 		}
+	}
+
+	public static boolean validTreePos(LevelSimulatedReader world, BlockPos pos) {
+		return TreeFeature.validTreePos(world, pos) || world.isStateAtPosition(pos, (state -> state.is(BlockTags.FLOWERS)));
 	}
 
 	/**
@@ -277,7 +299,7 @@ public final class FeaturePlacers {
 
 	private static void setIfEmpty(LevelAccessor world, BlockPos pos, BlockState state) {
 		if (world.isEmptyBlock(pos)) {
-			world.setBlock(pos, state, 3);
+			world.setBlock(pos, state, Block.UPDATE_ALL);
 		}
 	}
 
@@ -309,13 +331,13 @@ public final class FeaturePlacers {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	public static void traceExposedRoot(LevelSimulatedReader worldReader, RootPlacer worldPlacer, RandomSource random, BlockStateProvider exposedRoot, BlockStateProvider dirtRoot, Iterable<BlockPos> posTracer) {
 		// Trace block positions and alternate the root tracing once "underground"
 		for (BlockPos exposedPos : posTracer) {
-			if (FeatureUtil.anyBelowMatch(exposedPos, worldPlacer.getRootPenetrability() - 1, (blockPos -> worldReader.isStateAtPosition(blockPos, (state) -> FeatureLogic.ROOT_SHOULD_SKIP.test(state)
-				&& state != dirtRoot.getState(random, blockPos)
-				&& state != exposedRoot.getState(random, exposedPos)))))
-				return;
+			if (worldReader.isStateAtPosition(exposedPos, FeatureLogic.ROOT_SHOULD_SKIP)) {
+                continue;
+            }
 
 			// Is the position considered not underground?
 			if (FeatureLogic.hasEmptyNeighborExceptBelow(worldReader, exposedPos)) {
@@ -395,7 +417,7 @@ public final class FeaturePlacers {
 			BlockPos posElevated = pos.above(dY);
 
 			if (level.getBlockState(posElevated).is(target)) {
-				level.setBlock(posElevated, replacement, 3);
+				level.setBlock(posElevated, replacement, Block.UPDATE_ALL);
 			}
 		}
 	}
@@ -407,7 +429,7 @@ public final class FeaturePlacers {
 			BlockPos posElevated = pos.above(dY);
 
 			if (level.getBlockState(posElevated).is(target)) {
-				level.setBlock(posElevated, replacement, 3);
+				level.setBlock(posElevated, replacement, Block.UPDATE_ALL);
 			}
 		}
 	}

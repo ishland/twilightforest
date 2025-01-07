@@ -8,10 +8,7 @@ import com.mojang.math.Axis;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.SkullModelBase;
-import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.Sheets;
+import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.blockentity.SkullBlockRenderer;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -19,6 +16,7 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.item.BlockItem;
@@ -27,7 +25,10 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.item.component.ResolvableProfile;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.CandleBlock;
+import net.minecraft.world.level.block.ChestBlock;
+import net.minecraft.world.level.block.SkullBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
@@ -36,10 +37,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import twilightforest.TwilightForestMod;
 import twilightforest.beans.Autowired;
 import twilightforest.block.*;
-import twilightforest.block.entity.CandelabraBlockEntity;
-import twilightforest.block.entity.KeepsakeCasketBlockEntity;
-import twilightforest.block.entity.TFChestBlockEntity;
-import twilightforest.block.entity.TFTrappedChestBlockEntity;
+import twilightforest.block.entity.*;
 import twilightforest.client.event.ClientEvents;
 import twilightforest.client.model.TFModelLayers;
 import twilightforest.client.model.entity.KnightmetalShieldModel;
@@ -47,6 +45,7 @@ import twilightforest.client.model.entity.LichModel;
 import twilightforest.client.model.entity.TrophyBlockModel;
 import twilightforest.client.renderer.block.JarRenderer;
 import twilightforest.client.renderer.block.SkullCandleRenderer;
+import twilightforest.client.renderer.block.SkullChestRenderer;
 import twilightforest.client.renderer.block.TrophyRenderer;
 import twilightforest.client.renderer.entity.LichRenderer;
 import twilightforest.components.item.CandelabraData;
@@ -76,7 +75,8 @@ public class ISTER extends BlockEntityWithoutLevelRenderer {
 			return INSTANCE.get();
 		}
 	});
-	private final KeepsakeCasketBlockEntity casket = new KeepsakeCasketBlockEntity(BlockPos.ZERO, TFBlocks.KEEPSAKE_CASKET.get().defaultBlockState());
+	private final KeepsakeCasketBlockEntity skullChest = KeepsakeCasketBlockEntity.createSkullChestBE(BlockPos.ZERO, TFBlocks.SKULL_CHEST.get().defaultBlockState());
+	private final KeepsakeCasketBlockEntity skullCasket = KeepsakeCasketBlockEntity.createKeepsakeCasketBE(BlockPos.ZERO, TFBlocks.KEEPSAKE_CASKET.get().defaultBlockState());
 	private final Map<Block, TFChestBlockEntity> chestEntities = Util.make(new HashMap<>(), map -> {
 		makeInstance(map, TFBlocks.TWILIGHT_OAK_CHEST);
 		makeInstance(map, TFBlocks.CANOPY_CHEST);
@@ -101,6 +101,7 @@ public class ISTER extends BlockEntityWithoutLevelRenderer {
 	private Map<BossVariant, TrophyBlockModel> trophies = TrophyRenderer.createTrophyRenderers(Minecraft.getInstance().getEntityModels());
 	private Map<SkullBlock.Type, SkullModelBase> skulls = SkullBlockRenderer.createSkullRenderers(Minecraft.getInstance().getEntityModels());
 	private final CandelabraBlockEntity candelabra = new CandelabraBlockEntity(BlockPos.ZERO, TFBlocks.CANDELABRA.get().defaultBlockState());
+	private final BrazierBlockEntity brazier = new BrazierBlockEntity(BlockPos.ZERO, TFBlocks.BRAZIER.get().defaultBlockState());
 
 	// Use the cached INSTANCE.get instead
 	private ISTER() {
@@ -154,8 +155,13 @@ public class ISTER extends BlockEntityWithoutLevelRenderer {
 					TrophyRenderer.render(null, 180.0F, trophy, variant, !minecraft.isPaused() ? ClientEvents.time + minecraft.getDeltaTracker().getRealtimeDeltaTicks() : 0, pose, buffers, light, camera);
 				}
 
-			} else if (block instanceof KeepsakeCasketBlock) {
-				minecraft.getBlockEntityRenderDispatcher().renderItem(this.casket, pose, buffers, light, overlay);
+			} else if (block instanceof SkullChestBlock) {
+				int damage = stack.getOrDefault(TFDataComponents.CASKET_DAMAGE, 0);
+
+				BlockEntity chestEntity = block == TFBlocks.KEEPSAKE_CASKET.value() ? this.skullCasket : this.skullChest;
+				if (minecraft.getBlockEntityRenderDispatcher().getRenderer(chestEntity) instanceof SkullChestRenderer<?> renderer) {
+					renderer.renderCasket(0.0F, pose, buffers, light, overlay, renderer.getTextureLocation(damage), Direction.NORTH);
+				}
 			} else if (block instanceof TFChestBlock) {
 				minecraft.getBlockEntityRenderDispatcher().renderItem(this.chestEntities.get(block), pose, buffers, light, overlay);
 			} else if (block instanceof TFTrappedChestBlock) {
@@ -182,7 +188,7 @@ public class ISTER extends BlockEntityWithoutLevelRenderer {
 
 				minecraft.getBlockRenderer().renderSingleBlock(
 					AbstractSkullCandleBlock.candleColorToCandle(AbstractSkullCandleBlock.CandleColors.colorFromInt(skullCandles.color()))
-						.defaultBlockState().setValue(CandleBlock.CANDLES, skullCandles.count()), pose, buffers, light, overlay, ModelData.EMPTY, RenderType.cutout());
+						.defaultBlockState().setValue(CandleBlock.CANDLES, skullCandles.count()), pose, buffers, light, OverlayTexture.NO_OVERLAY, ModelData.EMPTY, RenderType.cutout());
 			} else if (block instanceof CandelabraBlock) {
 				//we need to render the candelabra block here since we have to use builtin/entity on the item.
 				//This doesnt allow us to set the item parent to the candelabra block, and without it, only the candles render, if any
@@ -216,6 +222,11 @@ public class ISTER extends BlockEntityWithoutLevelRenderer {
 						bufferSource.endBatch();
 					}
 				}
+			} else if (block instanceof BrazierBlock brazierBlock) {
+				BlockEntity blockEntity = brazierBlock.newBlockEntity(BlockPos.ZERO, block.defaultBlockState());
+				if (blockEntity != null) {
+					minecraft.getBlockEntityRenderDispatcher().getRenderer(blockEntity).render(blockEntity, 0, pose, buffers, light, overlay);
+				}
 			}
 		} else if (item instanceof KnightmetalShieldItem) {
 			pose.pushPose();
@@ -232,7 +243,8 @@ public class ISTER extends BlockEntityWithoutLevelRenderer {
 				pose.mulPose(Axis.XP.rotationDegrees(30));
 				pose.mulPose(Axis.YP.rotationDegrees(45));
 			} else {
-				pose.translate(0.5F, -0.0625, -0.5F);
+				pose.translate(0.5F, 0.0F, -0.5F);
+				pose.scale(1.05F, 1.05F, 1.05F);
 			}
 			lichModel.hat.render(pose, buffers.getBuffer(RenderType.entityCutoutNoCull(LichRenderer.TEXTURE)), light, overlay);
 			pose.popPose();

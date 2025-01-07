@@ -6,6 +6,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
@@ -51,7 +52,7 @@ public class CarminiteBuilderBlockEntity extends BlockEntity {
 
 				// make a block
 				if (te.blocksMade <= RANGE && level.isEmptyBlock(nextPos)) {
-					level.setBlock(nextPos, te.blockBuiltState, 3);
+					level.setBlock(nextPos, te.blockBuiltState, Block.UPDATE_ALL);
 
 					level.playSound(null, pos, TFSounds.BUILDER_CREATE.get(), SoundSource.BLOCKS, 0.75F, 1.2F);
 

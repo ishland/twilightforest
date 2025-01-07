@@ -3,6 +3,8 @@ package twilightforest.data;
 import net.minecraft.advancements.*;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentPredicate;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -22,6 +24,7 @@ import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.common.util.Lazy;
 import twilightforest.TwilightForestMod;
 import twilightforest.advancements.*;
+import twilightforest.advancements.predicate.ItemColorPredicate;
 import twilightforest.beans.Autowired;
 import twilightforest.block.Experiment115Block;
 import twilightforest.components.item.PotionFlaskComponent;
@@ -447,7 +450,7 @@ public class TFAdvancementGenerator implements AdvancementProvider.AdvancementGe
 				Component.translatable("advancement.twilightforest.full_mettle_alchemist"),
 				Component.translatable("advancement.twilightforest.full_mettle_alchemist.desc"),
 				null, AdvancementType.CHALLENGE, true, true, true)
-			.addCriterion("drink_4_harming", drinkFromFlaskTriggerInstanceFactory.drankPotion(4, MinMaxBounds.Ints.atMost(7), Potions.STRONG_HARMING))
+			.addCriterion("drink_4_harming", drinkFromFlaskTriggerInstanceFactory.drankPotion(3, MinMaxBounds.Ints.atMost(6), Potions.STRONG_HARMING))
 			.rewards(AdvancementRewards.Builder.experience(100))
 			.save(consumer, "twilightforest:full_mettle_alchemist");
 
@@ -510,25 +513,24 @@ public class TFAdvancementGenerator implements AdvancementProvider.AdvancementGe
 			.addCriterion("place_complete_e115", ItemUsedOnLocationTrigger.TriggerInstance.itemUsedOnBlock(LocationPredicate.Builder.location().setBlock(BlockPredicate.Builder.block().of(registries.lookupOrThrow(Registries.BLOCK), TFBlocks.EXPERIMENT_115.get()).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(Experiment115Block.REGENERATE, true))), ItemPredicate.Builder.item().of(registries.lookupOrThrow(Registries.ITEM), Items.REDSTONE)))
 			.save(consumer, "twilightforest:experiment_115_self_replenishing");
 
-		// FIXME How can we check if arctic armor is dyed from its original color?
-		//Advancement.Builder.advancement().parent(yeti).display(
-		//				TFItems.ARCTIC_CHESTPLATE,
-		//				Component.translatable("advancement.twilightforest.arctic_dyed"),
-		//				Component.translatable("advancement.twilightforest.arctic_dyed.desc"),
-		//				null, AdvancementType.TASK, true, true, false)
-		//		.addCriterion("helmet", InventoryChangeTrigger.TriggerInstance.hasItems(ItemPredicate.Builder.item().of(TFItems.ARCTIC_HELMET).hasNbt(arcticDye(TFItems.ARCTIC_HELMET)).build()))
-		//		.addCriterion("chestplate", InventoryChangeTrigger.TriggerInstance.hasItems(ItemPredicate.Builder.item().of(TFItems.ARCTIC_CHESTPLATE).hasNbt(arcticDye(TFItems.ARCTIC_CHESTPLATE)).build()))
-		//		.addCriterion("leggings", InventoryChangeTrigger.TriggerInstance.hasItems(ItemPredicate.Builder.item().of(TFItems.ARCTIC_LEGGINGS).hasNbt(arcticDye(TFItems.ARCTIC_LEGGINGS)).build()))
-		//		.addCriterion("boots", InventoryChangeTrigger.TriggerInstance.hasItems(ItemPredicate.Builder.item().of(TFItems.ARCTIC_BOOTS).hasNbt(arcticDye(TFItems.ARCTIC_BOOTS)).build()))
-		//		.rewards(AdvancementRewards.Builder.experience(25))
-		//		.save(consumer, "twilightforest:arctic_armor_dyed");
+		Advancement.Builder.advancement().parent(yeti).display(
+						TFItems.ARCTIC_CHESTPLATE.get(),
+						Component.translatable("advancement.twilightforest.arctic_dyed"),
+						Component.translatable("advancement.twilightforest.arctic_dyed.desc"),
+						null, AdvancementType.TASK, true, true, false)
+				.addCriterion("helmet", InventoryChangeTrigger.TriggerInstance.hasItems(ItemPredicate.Builder.item().of(TFItems.ARCTIC_HELMET.get()).withSubPredicate(TFItemSubPredicates.COLOR.get(), ItemColorPredicate.anyColor()).build()))
+				.addCriterion("chestplate", InventoryChangeTrigger.TriggerInstance.hasItems(ItemPredicate.Builder.item().of(TFItems.ARCTIC_CHESTPLATE.get()).withSubPredicate(TFItemSubPredicates.COLOR.get(), ItemColorPredicate.anyColor()).build()))
+				.addCriterion("leggings", InventoryChangeTrigger.TriggerInstance.hasItems(ItemPredicate.Builder.item().of(TFItems.ARCTIC_LEGGINGS.get()).withSubPredicate(TFItemSubPredicates.COLOR.get(), ItemColorPredicate.anyColor()).build()))
+				.addCriterion("boots", InventoryChangeTrigger.TriggerInstance.hasItems(ItemPredicate.Builder.item().of(TFItems.ARCTIC_BOOTS.get()).withSubPredicate(TFItemSubPredicates.COLOR.get(), ItemColorPredicate.anyColor()).build()))
+				.rewards(AdvancementRewards.Builder.experience(25))
+				.save(consumer, "twilightforest:arctic_armor_dyed");
 
 		Advancement.Builder.advancement().parent(yeti).display(
 				TFItems.GLASS_SWORD,
 				Component.translatable("advancement.twilightforest.glass_sword"),
 				Component.translatable("advancement.twilightforest.glass_sword.desc"),
 				null, AdvancementType.CHALLENGE, true, true, true)
-			.addCriterion("broken_sword", ItemDurabilityTrigger.TriggerInstance.changedDurability(Optional.of(ItemPredicate.Builder.item().of(registries.lookupOrThrow(Registries.ITEM), TFItems.GLASS_SWORD).build()), MinMaxBounds.Ints.exactly(-1)))
+			.addCriterion("broken_sword", SimpleAdvancementTrigger.TriggerInstance.brokenSword())
 			.rewards(AdvancementRewards.Builder.experience(42))
 			.save(consumer, "twilightforest:break_glass_sword");
 
@@ -559,15 +561,6 @@ public class TFAdvancementGenerator implements AdvancementProvider.AdvancementGe
 		));
 		return itemstack;
 	}
-
-	//private CompoundTag arcticDye(Item item) {
-	//	ItemStack itemstack = new ItemStack(item);
-	//	CompoundTag compoundtag = itemstack.getOrCreateTagElement("display");
-	//	CompoundTag color = itemstack.getOrCreateTagElement("hasColor");
-	//	color.putBoolean("hasColor", true);
-	//	compoundtag.put("display", color);
-	//	return compoundtag;
-	//}
 
 	private Advancement.Builder addTFKillable(HolderLookup.Provider registries, Advancement.Builder builder) {
 		for (EntityType<?> entity : TF_KILLABLE.get()) {

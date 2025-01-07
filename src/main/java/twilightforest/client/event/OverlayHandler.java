@@ -10,13 +10,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.ARGB;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -97,36 +95,43 @@ public class OverlayHandler {
 					RenderSystem.disableDepthTest();
 					RenderSystem.depthMask(false);
 					RenderSystem.enableBlend();
+					graphics.setColor(1.0F, 1.0F, 1.0F, (float) portal.getPortalTimer() / (float) TFPortalAttachment.MAX_TICKS);
 					TextureAtlasSprite textureatlassprite = minecraft.getBlockRenderer().getBlockModelShaper().getParticleIcon(TFBlocks.TWILIGHT_PORTAL.get().defaultBlockState());
-					graphics.blitSprite(RenderType::guiTexturedOverlay, textureatlassprite, 0, 0, window.getGuiScaledWidth(), window.getGuiScaledHeight(), ARGB.white((float) portal.getPortalTimer() / (float) TFPortalAttachment.MAX_TICKS));
+					graphics.blit(0, 0, -90, window.getGuiScaledWidth(), window.getGuiScaledHeight(), textureatlassprite);
 					RenderSystem.disableBlend();
 					RenderSystem.depthMask(true);
 					RenderSystem.enableDepthTest();
+					graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
 				}
 			}
 		});
 	}
 
 	private static void renderIndicator(Minecraft minecraft, GuiGraphics graphics, Gui gui, Player player, int screenWidth, int screenHeight) {
-        if (minecraft.options.getCameraType().isFirstPerson() && (minecraft.gameMode.getPlayerMode() != GameType.SPECTATOR || gui.canRenderCrosshairForSpectator(minecraft.hitResult)) && minecraft.crosshairPickEntity instanceof QuestRam ram) {
-            ItemStack stack = player.getInventory().getItem(player.getInventory().selected);
-            if (!stack.isEmpty() && stack.is(ItemTags.WOOL)) {
-				RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.ONE_MINUS_DST_COLOR, GlStateManager.DestFactor.ONE_MINUS_SRC_COLOR, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-				int j = ((screenHeight - 1) / 2) - 11;
-				int k = ((screenWidth - 1) / 2) - 3;
-                if (ram.guessColor(stack) != null && !ram.isColorPresent(Objects.requireNonNull(ram.guessColor(stack)))) {
-                    graphics.blitSprite(RenderType::guiTexturedOverlay, QUESTING_RAM_X_SPRITE, k, j, 7, 7);
-                } else {
-                    graphics.blitSprite(RenderType::guiTexturedOverlay, QUESTING_RAM_CHECK_SPRITE, k, j, 7, 7);
-                }
-				RenderSystem.defaultBlendFunc();
-            }
-        }
+		if (minecraft.options.getCameraType().isFirstPerson() && (minecraft.gameMode.getPlayerMode() != GameType.SPECTATOR || gui.canRenderCrosshairForSpectator(minecraft.hitResult)) && minecraft.crosshairPickEntity instanceof QuestRam ram) {
+			ItemStack stack = player.getInventory().getItem(player.getInventory().selected);
+			if (!stack.isEmpty()) {
+				for (var questEntry : TwilightForestMod.getQuests().getQuestingRam().questItems().entrySet()) {
+					if (questEntry.getValue().test(stack)) {
+						RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.ONE_MINUS_DST_COLOR, GlStateManager.DestFactor.ONE_MINUS_SRC_COLOR, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+						int j = ((screenHeight - 1) / 2) - 11;
+						int k = ((screenWidth - 1) / 2) - 3;
+						if (!ram.isColorPresent(questEntry.getKey())) {
+							graphics.blitSprite(QUESTING_RAM_X_SPRITE, k, j, 7, 7);
+						} else {
+							graphics.blitSprite(QUESTING_RAM_CHECK_SPRITE, k, j, 7, 7);
+						}
+						RenderSystem.defaultBlendFunc();
+						break;
+					}
+				}
+			}
+		}
 	}
 
 	private static void renderShieldCount(GuiGraphics graphics, Gui gui, int screenWidth, int screenHeight, int shieldCount) {
 		for (int i = 0; i < Math.min(shieldCount, 10); i++) {
-			graphics.blitSprite(RenderType::guiTexturedOverlay, FORTIFICATION_SHIELD_SPRITE, screenWidth / 2 - 91 + (i * 8), screenHeight - gui.leftHeight, 9, 9);
+			graphics.blitSprite(FORTIFICATION_SHIELD_SPRITE, screenWidth / 2 - 91 + (i * 8), screenHeight - gui.leftHeight, 9, 9);
 		}
 		gui.leftHeight += 10;
 	}

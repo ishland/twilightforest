@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
@@ -46,9 +47,9 @@ public class LampostFeature extends Feature<BlockStateConfiguration> {
 
 		// generate lamp
 		for (int dy = 0; dy < height; dy++) {
-			world.setBlock(pos.above(dy), TFBlocks.CANOPY_FENCE.get().defaultBlockState(), 16 | 2);
+			world.setBlock(pos.above(dy), TFBlocks.CANOPY_FENCE.get().defaultBlockState(), Block.UPDATE_KNOWN_SHAPE | Block.UPDATE_CLIENTS);
 		}
-		world.setBlock(pos.above(height), config.state.rotate(ROTATIONS[rand.nextInt(ROTATIONS.length)]), 16 | 2);
+		world.setBlock(pos.above(height), config.state.rotate(ROTATIONS[rand.nextInt(ROTATIONS.length)]), Block.UPDATE_KNOWN_SHAPE | Block.UPDATE_CLIENTS);
 		return true;
 	}
 }

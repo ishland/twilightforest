@@ -12,6 +12,7 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelSimulatedReader;
 import net.minecraft.world.level.LevelWriter;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -41,7 +42,7 @@ public class SnowTreeFeature extends Feature<TreeConfiguration> {
 	}
 
 	private static void setBlockKnownShape(LevelWriter p_67257_, BlockPos p_67258_, BlockState p_67259_) {
-		p_67257_.setBlock(p_67258_, p_67259_, 19);
+		p_67257_.setBlock(p_67258_, p_67259_, Block.UPDATE_KNOWN_SHAPE | Block.UPDATE_ALL);
 	}
 
 	public static boolean validTreePos(LevelSimulatedReader reader, BlockPos pos) {
@@ -113,17 +114,17 @@ public class SnowTreeFeature extends Feature<TreeConfiguration> {
 		Set<BlockPos> set3 = Sets.newHashSet();
 		BiConsumer<BlockPos, BlockState> biconsumer = (p_160555_, p_160556_) -> {
 			set.add(p_160555_.immutable());
-			worldgenlevel.setBlock(p_160555_, p_160556_, 19);
+			worldgenlevel.setBlock(p_160555_, p_160556_, Block.UPDATE_KNOWN_SHAPE | Block.UPDATE_ALL);
 		};
 		BiConsumer<BlockPos, BlockState> biconsumer1 = (p_160548_, p_160549_) -> {
 			set1.add(p_160548_.immutable());
-			worldgenlevel.setBlock(p_160548_, p_160549_, 19);
+			worldgenlevel.setBlock(p_160548_, p_160549_, Block.UPDATE_KNOWN_SHAPE | Block.UPDATE_ALL);
 		};
 		FoliagePlacer.FoliageSetter setter = new FoliagePlacer.FoliageSetter() {
 			@Override
 			public void set(BlockPos pos, BlockState state) {
 				set2.add(pos.immutable());
-				worldgenlevel.setBlock(pos, state, 19);
+				worldgenlevel.setBlock(pos, state, Block.UPDATE_KNOWN_SHAPE | Block.UPDATE_ALL);
 			}
 
 			@Override
@@ -133,7 +134,7 @@ public class SnowTreeFeature extends Feature<TreeConfiguration> {
 		};
 		BiConsumer<BlockPos, BlockState> biconsumer3 = (p_225290_, p_225291_) -> {
 			set3.add(p_225290_.immutable());
-			worldgenlevel.setBlock(p_225290_, p_225291_, 19);
+			worldgenlevel.setBlock(p_225290_, p_225291_, Block.UPDATE_KNOWN_SHAPE | Block.UPDATE_ALL);
 		};
 		boolean flag = this.doPlace(worldgenlevel, randomsource, blockpos, biconsumer, biconsumer1, setter, treeconfiguration);
 		if (flag && (!set1.isEmpty() || !set2.isEmpty())) {

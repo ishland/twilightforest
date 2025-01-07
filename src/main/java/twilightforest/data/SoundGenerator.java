@@ -306,6 +306,8 @@ public class SoundGenerator extends TFSoundProvider {
 		this.generateExistingSoundWithSubtitle(TFSounds.BUILDER_OFF, SoundEvents.COMPARATOR_CLICK, "Carminite Builder deactivates");
 		this.generateExistingSoundWithSubtitle(TFSounds.BUILDER_ON, SoundEvents.COMPARATOR_CLICK, "Carminite Builder activates");
 		this.generateExistingSoundWithSubtitle(TFSounds.BUILDER_REPLACE, SoundEvents.ITEM_PICKUP, "Built Block expires");
+		this.generateNewSoundWithSubtitle(TFSounds.CANDELABRA_LIGHT, "random/candelabra/light", 1, "Candelabra dims");
+		this.generateNewSoundWithSubtitle(TFSounds.CANDELABRA_OMINOUS, "random/candelabra/ominous", 1, "Candelabra sparks");
 		this.generateNewSoundWithSubtitle(TFSounds.CASKET_CLOSE, "random/casket/close", 1, "Keepsake Casket closes");
 		this.generateExistingSoundWithSubtitle(TFSounds.CASKET_LOCKED, SoundEvents.CHEST_LOCKED, "Keepsake Casket clicks");
 		this.generateNewSoundWithSubtitle(TFSounds.CASKET_OPEN, "random/casket/open", 1, "Keepsake Casket opens");

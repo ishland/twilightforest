@@ -12,10 +12,7 @@ import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.WorldGenLevel;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.ChestBlock;
-import net.minecraft.world.level.block.Mirror;
-import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.StructureMode;
@@ -176,7 +173,7 @@ public class GraveyardFeature extends Feature<NoneFeatureConfiguration> {
 						data.addAll(trap.filterBlocks(placementPos, placementsettings, Blocks.STRUCTURE_BLOCK));
 						if (world.setBlock(placement.offset(chestloc), Blocks.TRAPPED_CHEST.defaultBlockState().setValue(ChestBlock.FACING, Direction.WEST).rotate(rotation).mirror(mirror), flags)) {
 							TFLootTables.generateChestContents(world, placement.offset(chestloc), TFLootTables.GRAVEYARD);
-							world.setBlock(placement.offset(chestloc).below(), Blocks.MOSSY_COBBLESTONE.defaultBlockState(), 3);
+							world.setBlock(placement.offset(chestloc).below(), Blocks.MOSSY_COBBLESTONE.defaultBlockState(), Block.UPDATE_ALL);
 						}
 						Wraith wraith = new Wraith(TFEntities.WRAITH.get(), world.getLevel());
 						wraith.setPos(placement.getX(), placement.getY(), placement.getZ());
@@ -194,7 +191,7 @@ public class GraveyardFeature extends Feature<NoneFeatureConfiguration> {
 				if ("spawner".equals(s)) {
 					world.removeBlock(p, false);
 					if (rand.nextInt(4) == 0) {
-						if (world.setBlock(p, Blocks.SPAWNER.defaultBlockState(), 3)) {
+						if (world.setBlock(p, Blocks.SPAWNER.defaultBlockState(), Block.UPDATE_ALL)) {
 							SpawnerBlockEntity ms = (SpawnerBlockEntity) world.getBlockEntity(p);
 							if (ms != null)
 								ms.setEntityId(TFEntities.RISING_ZOMBIE.get(), rand);

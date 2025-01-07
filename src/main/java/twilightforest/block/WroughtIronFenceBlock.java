@@ -41,6 +41,9 @@ public class WroughtIronFenceBlock extends Block implements SimpleWaterloggedBlo
 	public static final EnumProperty<FenceSide> WEST_FENCE = EnumProperty.create("west_fence", FenceSide.class);
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
+	private static final VoxelShape FINIAL_HEAD_SHAPE = Block.box(6.5D, 17.0D, 6.5D, 9.5D, 20.0D, 9.5D);
+	private static final VoxelShape FINIAL_NECK_SHAPE = Block.box(7.5D, 16.0D, 7.5D, 8.5D, 17.0D, 8.5D);
+	private static final VoxelShape FINIAL_SHAPE = Shapes.or(FINIAL_HEAD_SHAPE, FINIAL_NECK_SHAPE);
 	private static final VoxelShape POST_SHAPE = Block.box(7.0D, 0.0D, 7.0D, 9.0D, 16.0D, 9.0D);
 	private static final VoxelShape NORTH_SHAPE = Block.box(7.0D, 0.0D, 0.0D, 9.0D, 16.0D, 8.0D);
 	private static final VoxelShape SOUTH_SHAPE = Block.box(7.0D, 0.0D, 8.0D, 9.0D, 16.0D, 16.0D);
@@ -61,6 +64,9 @@ public class WroughtIronFenceBlock extends Block implements SimpleWaterloggedBlo
 		VoxelShape finalShape = Shapes.empty();
 		if (state.getValue(POST) != PostState.NONE) {
 			finalShape = POST_SHAPE;
+			if (state.getValue(POST) == PostState.CAPPED) {
+				finalShape = Shapes.or(finalShape, FINIAL_SHAPE);
+			}
 		}
 		if (state.getValue(NORTH_FENCE) != FenceSide.NONE) {
 			finalShape = Shapes.or(finalShape, NORTH_SHAPE);

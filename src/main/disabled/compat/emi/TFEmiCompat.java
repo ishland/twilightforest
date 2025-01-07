@@ -16,11 +16,14 @@ import dev.emi.emi.recipe.special.EmiGrindstoneDisenchantingRecipe;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.block.Block;
-import twilightforest.config.TFConfig;
 import twilightforest.compat.RecipeViewerConstants;
 import twilightforest.compat.emi.recipes.*;
+import twilightforest.config.TFConfig;
 import twilightforest.init.TFBlocks;
 import twilightforest.init.TFItems;
+import twilightforest.init.TFRecipes;
+import twilightforest.item.recipe.EmperorsClothRecipe;
+import twilightforest.item.recipe.MoonwormQueenRepairRecipe;
 import twilightforest.item.recipe.NoTemplateSmithingRecipe;
 import twilightforest.item.recipe.ScepterRepairRecipe;
 
@@ -51,8 +54,10 @@ public class TFEmiCompat implements EmiPlugin {
 		registry.addCategory(TRANSFORMATION);
 		registry.addCategory(MOONWORM_QUEEN);
 
-		registry.addWorkstation(VanillaEmiRecipeCategories.CRAFTING, EmiStack.of(TFBlocks.UNCRAFTING_TABLE));
-		registry.addWorkstation(UNCRAFTING, EmiStack.of(TFBlocks.UNCRAFTING_TABLE));
+		if (!TFConfig.disableEntireTable) {
+			registry.addWorkstation(VanillaEmiRecipeCategories.CRAFTING, EmiStack.of(TFBlocks.UNCRAFTING_TABLE));
+			registry.addWorkstation(UNCRAFTING, EmiStack.of(TFBlocks.UNCRAFTING_TABLE));
+		}
 		registry.addWorkstation(CRUMBLE_HORN, EmiStack.of(TFItems.CRUMBLE_HORN));
 		registry.addWorkstation(TRANSFORMATION, EmiStack.of(TFItems.TRANSFORMATION_POWDER));
 		registry.addWorkstation(MOONWORM_QUEEN, EmiStack.of(TFItems.MOONWORM_QUEEN));
@@ -69,8 +74,14 @@ public class TFEmiCompat implements EmiPlugin {
 		for (Pair<Block, Block> info : RecipeViewerConstants.getCrumbleHornRecipes()) {
 			registry.addRecipe(new EmiCrumbleHornRecipe(info.getFirst(), info.getSecond()));
 		}
-		registry.addRecipe(new EmiMoonwormQueenRecipe());
-		registry.addRecipe(new EmiEmperorsClothRecipe());
+
+		if (!manager.getAllRecipesFor(RecipeType.CRAFTING).stream().filter(holder -> holder.value() instanceof MoonwormQueenRepairRecipe).toList().isEmpty()) {
+			registry.addRecipe(new EmiMoonwormQueenRecipe());
+		}
+
+		if (!manager.getAllRecipesFor(RecipeType.CRAFTING).stream().filter(holder -> holder.value() instanceof EmperorsClothRecipe).toList().isEmpty()) {
+			registry.addRecipe(new EmiEmperorsClothRecipe());
+		}
 
 		for (RecipeHolder<SmithingRecipe> holder : manager.getAllRecipesFor(RecipeType.SMITHING).stream().filter(holder -> holder.value() instanceof NoTemplateSmithingRecipe).toList()) {
 			NoTemplateSmithingRecipe recipe = (NoTemplateSmithingRecipe) holder.value();

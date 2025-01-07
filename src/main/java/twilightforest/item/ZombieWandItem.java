@@ -1,6 +1,7 @@
 package twilightforest.item;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
@@ -18,7 +19,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
+import twilightforest.enchantment.RechargeScepterEffect;
 import twilightforest.entity.monster.LoyalZombie;
+import twilightforest.init.TFEnchantments;
 import twilightforest.init.TFEntities;
 import twilightforest.init.TFItems;
 import twilightforest.init.TFSounds;
@@ -72,8 +75,13 @@ public class ZombieWandItem extends Item {
 	}
 
 	@Override
-	public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
-		return false;
+	public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
+		if (entity.tickCount % 20 == 0 && level instanceof ServerLevel serverLevel && stack.has(DataComponents.ENCHANTMENTS) && !isSelected) {
+			int renewal = stack.get(DataComponents.ENCHANTMENTS).getLevel(level.holderOrThrow(TFEnchantments.RENEWAL));
+			if (renewal > 0) {
+				RechargeScepterEffect.applyRecharge(serverLevel, stack, entity);
+			}
+		}
 	}
 
 	@Override

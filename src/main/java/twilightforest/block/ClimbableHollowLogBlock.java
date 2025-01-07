@@ -133,7 +133,7 @@ public class ClimbableHollowLogBlock extends HorizontalDirectionalBlock implemen
 
 		if (stack.canPerformAction(ItemAbilities.SHEARS_HARVEST)) {
 			HollowLogVariants.Climbable variant = state.getValue(VARIANT);
-			level.setBlock(pos, this.vertical.value().defaultBlockState().setValue(VerticalHollowLogBlock.WATERLOGGED, variant == HollowLogVariants.Climbable.LADDER_WATERLOGGED), 3);
+			level.setBlock(pos, this.vertical.value().defaultBlockState().setValue(VerticalHollowLogBlock.WATERLOGGED, variant == HollowLogVariants.Climbable.LADDER_WATERLOGGED), Block.UPDATE_ALL);
 			level.playSound(null, pos, SoundEvents.SHEEP_SHEAR, SoundSource.BLOCKS, 1.0F, 1.0F);
 			if (!player.isCreative()) {
 				stack.hurtAndBreak(1, player, hand == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);

@@ -55,7 +55,7 @@ public class MangroveSaplingBlock extends SaplingBlock implements SimpleWaterlog
 	@Override
 	public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource rand) {
 		if (!isInWater(state, level, pos)) {
-			level.setBlock(pos, this.defaultBlockState().setValue(WATERLOGGED, false), 2);
+			level.setBlock(pos, this.defaultBlockState().setValue(WATERLOGGED, false), Block.UPDATE_CLIENTS);
 		}
 	}
 

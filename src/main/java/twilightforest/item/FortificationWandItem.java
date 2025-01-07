@@ -1,16 +1,20 @@
 package twilightforest.item;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import twilightforest.enchantment.RechargeScepterEffect;
 import twilightforest.init.TFDataAttachments;
+import twilightforest.init.TFEnchantments;
 import twilightforest.init.TFSounds;
 import twilightforest.util.TFItemStackUtils;
 
@@ -42,13 +46,17 @@ public class FortificationWandItem extends Item {
 
 		if (!player.isCreative())
 			player.getCooldowns().addCooldown(stack, 1200);
-
-		return InteractionResult.SUCCESS;
+		return InteractionResultHolder.success(stack);
 	}
 
 	@Override
-	public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
-		return false;
+	public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
+		if (entity.tickCount % 20 == 0 && level instanceof ServerLevel serverLevel && stack.has(DataComponents.ENCHANTMENTS) && !isSelected) {
+			int renewal = stack.get(DataComponents.ENCHANTMENTS).getLevel(level.holderOrThrow(TFEnchantments.RENEWAL));
+			if (renewal > 0) {
+				RechargeScepterEffect.applyRecharge(serverLevel, stack, entity);
+			}
+		}
 	}
 
 	@Override

@@ -89,7 +89,7 @@ public class JEIUncraftingCategory implements IRecipeCategory<CraftingRecipe> {
 
 	@Override
 	public void draw(CraftingRecipe recipe, IRecipeSlotsView views, GuiGraphics graphics, double mouseX, double mouseY) {
-		int cost = recipe instanceof UncraftingRecipe ur ? ur.getCost() : RecipeViewerConstants.getRecipeCost(views.getSlotViews().stream().map(view -> view.getDisplayedItemStack().orElse(ItemStack.EMPTY)).toList());
+		int cost = recipe instanceof UncraftingRecipe ur ? ur.getCost() : RecipeViewerConstants.getRecipeCost(views.getSlotViews(RecipeIngredientRole.OUTPUT).stream().map(view -> view.getDisplayedItemStack().orElse(ItemStack.EMPTY)).toList());
 		if (cost > 0) {
 			String costStr = cost + "";
 			graphics.drawString(Minecraft.getInstance().font, costStr, 45 - Minecraft.getInstance().font.width(costStr), 22, RecipeViewerConstants.getXPColor(cost), true);

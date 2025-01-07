@@ -17,6 +17,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
@@ -131,7 +132,7 @@ public class HollowTreeLeafDungeon extends HollowTreePiece {
 		if (state.getBlock() instanceof ChestBlock) state = state.setValue(ChestBlock.FACING, direction.getOpposite());
 
 		if (sbb.isInside(pos) && !world.getBlockState(pos).is(state.getBlock())) {
-			world.setBlock(pos, state, 2);
+			world.setBlock(pos, state, Block.UPDATE_CLIENTS);
 
 			if (world.getBlockEntity(pos) instanceof RandomizableContainerBlockEntity randomLootContainer)
 				randomLootContainer.setLootTable(lootTable, random.nextLong());
@@ -145,7 +146,7 @@ public class HollowTreeLeafDungeon extends HollowTreePiece {
 		BlockPos pos = this.getWorldPos(x, y, z);
 
 		if (sbb.isInside(pos) && !world.getBlockState(pos).is(Blocks.SPAWNER)) {
-			world.setBlock(pos, Blocks.SPAWNER.defaultBlockState(), 2);
+			world.setBlock(pos, Blocks.SPAWNER.defaultBlockState(), Block.UPDATE_CLIENTS);
 
 			if (world.getBlockEntity(pos) instanceof SpawnerBlockEntity spawner)
 				spawner.setEntityId(monsterID, rand);

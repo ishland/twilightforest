@@ -13,6 +13,7 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CandleBlock;
 import net.minecraft.world.level.block.Rotation;
@@ -34,11 +35,12 @@ import twilightforest.util.DirectionUtil;
 import twilightforest.util.entities.EntityUtil;
 import twilightforest.util.jigsaw.JigsawPlaceContext;
 import twilightforest.util.jigsaw.JigsawRecord;
+import twilightforest.world.components.structures.SpawnIndexProvider;
 import twilightforest.world.components.structures.TwilightJigsawPiece;
 
 import java.util.List;
 
-public final class LichBossRoom extends TwilightJigsawPiece implements PieceBeardifierModifier {
+public final class LichBossRoom extends TwilightJigsawPiece implements PieceBeardifierModifier, SpawnIndexProvider.Deny {
 	public LichBossRoom(StructurePieceSerializationContext ctx, CompoundTag compoundTag) {
 		super(TFStructurePieceTypes.LICH_BOSS_ROOM.get(), compoundTag, ctx, readSettings(compoundTag));
 
@@ -69,7 +71,7 @@ public final class LichBossRoom extends TwilightJigsawPiece implements PieceBear
 			BlockPos placeAt = center.offset(x, y, z);
 
 			if (chunkBounds.isInside(placeAt) && level.getBlockState(placeAt).isAir()) {
-				level.setBlock(placeAt, candle, 2);
+				level.setBlock(placeAt, candle, Block.UPDATE_CLIENTS);
 			}
 		}
 	}

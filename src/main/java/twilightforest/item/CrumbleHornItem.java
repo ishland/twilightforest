@@ -123,7 +123,7 @@ public class CrumbleHornItem extends Item {
 			}
 		} else {
 			if (serverLevel.getRandom().nextFloat() < crumbleMap.chanceToCrumble()) {
-				serverLevel.setBlock(pos, crumbleMap.result().withPropertiesOf(state), 3);
+				serverLevel.setBlock(pos, crumbleMap.result().withPropertiesOf(state), Block.UPDATE_ALL);
 				serverLevel.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(state));
 				if (living instanceof ServerPlayer player) {
 					player.awardStat(Stats.ITEM_USED.get(this));

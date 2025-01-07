@@ -16,6 +16,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkGenerator;
@@ -141,10 +142,10 @@ public class HollowTreeTrunk extends HollowTreePiece {
 
 		// roots
 		// 3-5 roots at the bottom
-		this.buildBranchRing(list, rand, index, 3, 2, 6, 0.75D, 3, 5, 3, false);
+		this.buildBranchRing(list, rand, index, 4, 2, 6, 0.75D, 3, 5, 3, false);
 
 		// several more taproots
-		this.buildBranchRing(list, rand, index, 1, 2, 8, 0.9D, 3, 5, 3, false);
+		this.buildBranchRing(list, rand, index, 2, 2, 8, 0.9D, 3, 5, 3, false);
 	}
 
 	/**
@@ -308,7 +309,7 @@ public class HollowTreeTrunk extends HollowTreePiece {
 
 		BlockState decor = this.bug.getState(random, src).rotate(world, src, facing);
 		if (world.getBlockState(src).canBeReplaced() && decor.canSurvive(world, src)) {
-			world.setBlock(src, decor, 3);
+			world.setBlock(src, decor, Block.UPDATE_ALL);
 		}
 	}
 }

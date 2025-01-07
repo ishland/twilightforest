@@ -6,6 +6,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -110,13 +111,13 @@ public class LargeWinterTreeFeature extends TFTreeFeature<TFTreeFeatureConfig> {
 	private void buildTrunk(LevelAccessor world, BiConsumer<BlockPos, BlockState> trunkPlacer, RandomSource rand, BlockPos pos, int treeHeight, TFTreeFeatureConfig config) {
 		for (int dy = 0; dy < treeHeight; dy++) {
 			if (FeaturePlacers.placeIfValidTreePos(world, trunkPlacer, rand, pos.offset(0, dy, 0), config.trunkProvider) && dy == 0)
-				world.setBlock(pos.offset(0, -1, 0), Blocks.DIRT.defaultBlockState(), 19);
+				world.setBlock(pos.offset(0, -1, 0), Blocks.DIRT.defaultBlockState(), Block.UPDATE_KNOWN_SHAPE | Block.UPDATE_ALL);
 			if (FeaturePlacers.placeIfValidTreePos(world, trunkPlacer, rand, pos.offset(0, dy, 1), config.trunkProvider) && dy == 0)
-				world.setBlock(pos.offset(0, -1, 1), Blocks.DIRT.defaultBlockState(), 19);
+				world.setBlock(pos.offset(0, -1, 1), Blocks.DIRT.defaultBlockState(), Block.UPDATE_KNOWN_SHAPE | Block.UPDATE_ALL);
 			if (FeaturePlacers.placeIfValidTreePos(world, trunkPlacer, rand, pos.offset(1, dy, 0), config.trunkProvider) && dy == 0)
-				world.setBlock(pos.offset(1, -1, 0), Blocks.DIRT.defaultBlockState(), 19);
+				world.setBlock(pos.offset(1, -1, 0), Blocks.DIRT.defaultBlockState(), Block.UPDATE_KNOWN_SHAPE | Block.UPDATE_ALL);
 			if (FeaturePlacers.placeIfValidTreePos(world, trunkPlacer, rand, pos.offset(1, dy, 1), config.trunkProvider) && dy == 0)
-				world.setBlock(pos.offset(1, -1, 1), Blocks.DIRT.defaultBlockState(), 19);
+				world.setBlock(pos.offset(1, -1, 1), Blocks.DIRT.defaultBlockState(), Block.UPDATE_KNOWN_SHAPE | Block.UPDATE_ALL);
 		}
 	}
 }

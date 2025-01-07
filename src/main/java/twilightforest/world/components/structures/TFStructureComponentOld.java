@@ -116,7 +116,7 @@ public abstract class TFStructureComponentOld extends TFStructureComponent imple
 	protected static void setSpawnerInWorld(WorldGenLevel world, BoundingBox sbb, EntityType<?> monsterID, Consumer<SpawnerBlockEntity> spawnerModifier, BlockPos pos) {
 		if (sbb.isInside(pos)) {
 			if (world.getBlockState(pos).getBlock() != Blocks.SPAWNER)
-				world.setBlock(pos, Blocks.SPAWNER.defaultBlockState(), 2);
+				world.setBlock(pos, Blocks.SPAWNER.defaultBlockState(), Block.UPDATE_CLIENTS);
 
 			BlockEntity tileEntitySpawner = world.getBlockEntity(pos);
 			if (tileEntitySpawner instanceof SpawnerBlockEntity spawner) {
@@ -260,7 +260,7 @@ public abstract class TFStructureComponentOld extends TFStructureComponent imple
 		int dz = getWorldZ(x, z);
 		BlockPos pos = new BlockPos(dx, dy, dz);
 		if (sbb.isInside(pos) && world.getBlockState(pos).getBlock() != Blocks.OAK_SIGN) {
-			world.setBlock(pos, Blocks.OAK_SIGN.defaultBlockState().setValue(StandingSignBlock.ROTATION, this.getOrientation().get2DDataValue() * 4), 2);
+			world.setBlock(pos, Blocks.OAK_SIGN.defaultBlockState().setValue(StandingSignBlock.ROTATION, this.getOrientation().get2DDataValue() * 4), Block.UPDATE_CLIENTS);
 
 			if (world.getBlockEntity(pos) instanceof SignBlockEntity sign) {
 				sign.frontText = sign.frontText.setMessage(1, Component.literal(string0)).setMessage(2, Component.literal(string1));

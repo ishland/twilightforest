@@ -524,10 +524,10 @@ public class TFTeleporter {
 		// portal in it
 		BlockState portal = TFBlocks.TWILIGHT_PORTAL.get().defaultBlockState().setValue(TFPortalBlock.DISALLOW_RETURN, (locked || !TFConfig.shouldReturnPortalBeUsable));
 
-		world.setBlock(pos, portal, 2);
-		world.setBlock(pos.east(), portal, 2);
-		world.setBlock(pos.south(), portal, 2);
-		world.setBlock(pos.east().south(), portal, 2);
+		world.setBlock(pos, portal, Block.UPDATE_CLIENTS);
+		world.setBlock(pos.east(), portal, Block.UPDATE_CLIENTS);
+		world.setBlock(pos.south(), portal, Block.UPDATE_CLIENTS);
+		world.setBlock(pos.east().south(), portal, Block.UPDATE_CLIENTS);
 
 		// meh, let's just make a bunch of air over it for 4 squares
 		for (int dx = -1; dx <= 2; dx++) {
@@ -539,21 +539,21 @@ public class TFTeleporter {
 		}
 
 		// finally, "nature decorations"!
-		world.setBlock(pos.west().north().above(), randNatureBlock(world.getRandom()), 2);
-		world.setBlock(pos.north().above(), randNatureBlock(world.getRandom()), 2);
-		world.setBlock(pos.east().north().above(), randNatureBlock(world.getRandom()), 2);
-		world.setBlock(pos.east(2).north().above(), randNatureBlock(world.getRandom()), 2);
+		world.setBlock(pos.west().north().above(), randNatureBlock(world.getRandom()), Block.UPDATE_CLIENTS);
+		world.setBlock(pos.north().above(), randNatureBlock(world.getRandom()), Block.UPDATE_CLIENTS);
+		world.setBlock(pos.east().north().above(), randNatureBlock(world.getRandom()), Block.UPDATE_CLIENTS);
+		world.setBlock(pos.east(2).north().above(), randNatureBlock(world.getRandom()), Block.UPDATE_CLIENTS);
 
-		world.setBlock(pos.west().above(), randNatureBlock(world.getRandom()), 2);
-		world.setBlock(pos.east(2).above(), randNatureBlock(world.getRandom()), 2);
+		world.setBlock(pos.west().above(), randNatureBlock(world.getRandom()), Block.UPDATE_CLIENTS);
+		world.setBlock(pos.east(2).above(), randNatureBlock(world.getRandom()), Block.UPDATE_CLIENTS);
 
-		world.setBlock(pos.west().south().above(), randNatureBlock(world.getRandom()), 2);
-		world.setBlock(pos.east(2).south().above(), randNatureBlock(world.getRandom()), 2);
+		world.setBlock(pos.west().south().above(), randNatureBlock(world.getRandom()), Block.UPDATE_CLIENTS);
+		world.setBlock(pos.east(2).south().above(), randNatureBlock(world.getRandom()), Block.UPDATE_CLIENTS);
 
-		world.setBlock(pos.west().south(2).above(), randNatureBlock(world.getRandom()), 2);
-		world.setBlock(pos.south(2).above(), randNatureBlock(world.getRandom()), 2);
-		world.setBlock(pos.east().south(2).above(), randNatureBlock(world.getRandom()), 2);
-		world.setBlock(pos.east(2).south(2).above(), randNatureBlock(world.getRandom()), 2);
+		world.setBlock(pos.west().south(2).above(), randNatureBlock(world.getRandom()), Block.UPDATE_CLIENTS);
+		world.setBlock(pos.south(2).above(), randNatureBlock(world.getRandom()), Block.UPDATE_CLIENTS);
+		world.setBlock(pos.east().south(2).above(), randNatureBlock(world.getRandom()), Block.UPDATE_CLIENTS);
+		world.setBlock(pos.east(2).south(2).above(), randNatureBlock(world.getRandom()), Block.UPDATE_CLIENTS);
 
 		return pos;
 	}

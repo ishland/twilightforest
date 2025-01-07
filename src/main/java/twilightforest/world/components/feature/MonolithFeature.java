@@ -5,6 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.Feature;
@@ -67,16 +68,16 @@ public class MonolithFeature extends Feature<NoneFeatureConfiguration> {
 		}
 
 		for (int cy = 0; cy <= h0; cy++) {
-			world.setBlock(pos.offset(0, cy - 1, 0), cy == ht ? Blocks.LAPIS_BLOCK.defaultBlockState() : Blocks.OBSIDIAN.defaultBlockState(), 3);
+			world.setBlock(pos.offset(0, cy - 1, 0), cy == ht ? Blocks.LAPIS_BLOCK.defaultBlockState() : Blocks.OBSIDIAN.defaultBlockState(), Block.UPDATE_ALL);
 		}
 		for (int cy = 0; cy <= h1; cy++) {
-			world.setBlock(pos.offset(1, cy - 1, 0), cy == ht ? Blocks.LAPIS_BLOCK.defaultBlockState() : Blocks.OBSIDIAN.defaultBlockState(), 3);
+			world.setBlock(pos.offset(1, cy - 1, 0), cy == ht ? Blocks.LAPIS_BLOCK.defaultBlockState() : Blocks.OBSIDIAN.defaultBlockState(), Block.UPDATE_ALL);
 		}
 		for (int cy = 0; cy <= h2; cy++) {
-			world.setBlock(pos.offset(0, cy - 1, 1), cy == ht ? Blocks.LAPIS_BLOCK.defaultBlockState() : Blocks.OBSIDIAN.defaultBlockState(), 3);
+			world.setBlock(pos.offset(0, cy - 1, 1), cy == ht ? Blocks.LAPIS_BLOCK.defaultBlockState() : Blocks.OBSIDIAN.defaultBlockState(), Block.UPDATE_ALL);
 		}
 		for (int cy = 0; cy <= h3; cy++) {
-			world.setBlock(pos.offset(1, cy - 1, 1), cy == ht ? Blocks.LAPIS_BLOCK.defaultBlockState() : Blocks.OBSIDIAN.defaultBlockState(), 3);
+			world.setBlock(pos.offset(1, cy - 1, 1), cy == ht ? Blocks.LAPIS_BLOCK.defaultBlockState() : Blocks.OBSIDIAN.defaultBlockState(), Block.UPDATE_ALL);
 		}
 
 		// spawn a few ravens nearby

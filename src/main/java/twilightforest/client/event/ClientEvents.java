@@ -15,6 +15,8 @@ import net.minecraft.client.renderer.CompiledShaderProgram;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.client.renderer.entity.state.PlayerRenderState;
+import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
@@ -315,7 +317,7 @@ public class ClientEvents {
 
 	private static void unrenderHeadWithTrophies(RenderLivingEvent.Pre<?, ?, ?> event) {
 		ItemStack stack = event.getRenderState().headItem;
-		boolean visible = !(stack.getItem() instanceof TrophyItem) && !(stack.getItem() instanceof SkullCandleItem) && !areCuriosEquipped(event.getRenderState());
+		boolean visible = !(stack.getItem() instanceof TrophyItem) && !areCuriosEquipped(event.getRenderState());
 		boolean isPlayer = event.getRenderState() instanceof PlayerRenderState;
 		if (event.getRenderer().getModel() instanceof HeadedModel headedModel) {
 			headedModel.getHead().visible = visible && (!isPlayer || headedModel.getHead().visible);  // some mods like Better Combat can move player's head and hide it in the first person view
@@ -327,7 +329,7 @@ public class ClientEvents {
 
 	private static boolean areCuriosEquipped(EntityRenderState entity) {
 //		if (ModList.get().isLoaded("curios")) {
-//			return CuriosCompat.isCurioEquippedAndVisible(entity, stack -> stack.getItem() instanceof TrophyItem) || CuriosCompat.isCurioEquippedAndVisible(entity, stack -> stack.getItem() instanceof SkullCandleItem);
+//			return CuriosCompat.isCurioEquippedAndVisible(entity, stack -> stack.getItem() instanceof TrophyItem);
 //		}
 		return false;
 	}

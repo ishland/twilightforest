@@ -17,6 +17,7 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.neoforged.neoforge.event.EventHooks;
@@ -157,7 +158,7 @@ public class TowerwoodBorer extends Monster {
 				// TF - add a random chance to dig. This should prevent them from instantly digging away
 				if (state.is(TFBlocks.TOWERWOOD) && this.mob.getRandom().nextInt(5) == 0) {
 					// TF - Change block type
-					level.setBlock(blockpos, TFBlocks.INFESTED_TOWERWOOD.get().defaultBlockState(), 3);
+					level.setBlock(blockpos, TFBlocks.INFESTED_TOWERWOOD.get().defaultBlockState(), Block.UPDATE_ALL);
 					this.mob.spawnAnim();
 					this.mob.discard();
 				}
@@ -210,7 +211,7 @@ public class TowerwoodBorer extends Monster {
 									this.borer.gameEvent(GameEvent.BLOCK_DESTROY);
 								} else {
 									// TF - reset to normal tower wood
-									world.setBlock(offsetPos, TFBlocks.TOWERWOOD.get().defaultBlockState(), 3);
+									world.setBlock(offsetPos, TFBlocks.TOWERWOOD.get().defaultBlockState(), Block.UPDATE_ALL);
 								}
 
 								if (random.nextBoolean()) {

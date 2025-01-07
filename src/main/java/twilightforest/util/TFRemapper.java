@@ -43,6 +43,8 @@ public class TFRemapper {
 		remapEntryFromRegistries("stone_twist_thin", "twisted_stone_pillar", blockReg, itemReg);
 		remapEntryFromRegistries("stone_pillar_bold", "bold_stone_pillar", blockReg, itemReg);
 		remapEntryFromRegistries("empty_bookshelf", "empty_canopy_bookshelf", blockReg, itemReg);
+		remapEntryFromRegistries("royal_rags", "coronation_carpet", blockReg, itemReg);
+		remapEntryFromRegistries("cursed_spawner", "sinister_spawner", blockReg, itemReg);
 
 		remapEntryFromRegistries("huge_lilypad", "huge_lily_pad", blockReg, itemReg);
 		remapEntryFromRegistries("huge_waterlily", "huge_water_lily", blockReg, itemReg);

@@ -157,7 +157,7 @@ public class HollowTreeStructure extends Structure implements DecorationClearanc
 			if (posCheck.equals(pos))
 				continue;
 
-			if (!FeatureLogic.worldGenReplaceable(level.getBlockState(posCheck)))
+			if (!FeatureLogic.treesReplaceable(level.getBlockState(posCheck)))
 				return false;
 		}
 
@@ -206,12 +206,17 @@ public class HollowTreeStructure extends Structure implements DecorationClearanc
 	}
 
 	@Override
+	public boolean isGrassDecoAllowed() {
+		return this.decorationConfig.vegetation();
+	}
+
+	@Override
 	public boolean shouldAdjustToTerrain() {
 		return true;
 	}
 
 	@Override
-	public int chunkClearanceRadius() {
+	public float chunkClearanceRadius() {
 		return this.decorationConfig.chunkClearanceRadius();
 	}
 

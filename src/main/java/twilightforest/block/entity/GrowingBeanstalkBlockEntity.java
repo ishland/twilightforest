@@ -9,6 +9,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -183,7 +184,7 @@ public class GrowingBeanstalkBlockEntity extends BlockEntity {
 	private void tryToPlaceLeaves(Level level, BlockPos pos, int distance) {
 		BlockState state = level.getBlockState(pos);
 		if (state.isAir() || state.is(BlockTags.LEAVES)) {
-			level.setBlock(pos, TFBlocks.BEANSTALK_LEAVES.get().defaultBlockState().setValue(LeavesBlock.DISTANCE, distance), 2);
+			level.setBlock(pos, TFBlocks.BEANSTALK_LEAVES.get().defaultBlockState().setValue(LeavesBlock.DISTANCE, distance), Block.UPDATE_CLIENTS);
 		}
 	}
 

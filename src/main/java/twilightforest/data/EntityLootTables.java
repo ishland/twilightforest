@@ -53,7 +53,6 @@ public class EntityLootTables extends EntityLootSubProvider {
 		add(TFEntities.SQUIRREL.get(), emptyLootTable());
 		add(TFEntities.DWARF_RABBIT.get(), fromEntityLootTable(EntityType.RABBIT));
 		add(TFEntities.HEDGE_SPIDER.get(), fromEntityLootTable(EntityType.SPIDER));
-		add(TFEntities.FIRE_BEETLE.get(), fromEntityLootTable(EntityType.CREEPER));
 		add(TFEntities.HOSTILE_WOLF.get(), fromEntityLootTable(EntityType.WOLF));
 		add(TFEntities.KING_SPIDER.get(), fromEntityLootTable(EntityType.SPIDER));
 		add(TFEntities.MIST_WOLF.get(), fromEntityLootTable(EntityType.WOLF));
@@ -79,6 +78,18 @@ public class EntityLootTables extends EntityLootSubProvider {
 		add(TFEntities.BIGHORN_SHEEP.get(), TFLootTables.BIGHORN_SHEEP_RED, sheepLootTableBuilderWithDrop(Blocks.RED_WOOL));
 		add(TFEntities.BIGHORN_SHEEP.get(), TFLootTables.BIGHORN_SHEEP_WHITE, sheepLootTableBuilderWithDrop(Blocks.WHITE_WOOL));
 		add(TFEntities.BIGHORN_SHEEP.get(), TFLootTables.BIGHORN_SHEEP_YELLOW, sheepLootTableBuilderWithDrop(Blocks.YELLOW_WOOL));
+
+		add(TFEntities.FIRE_BEETLE.get(),
+			LootTable.lootTable()
+				.withPool(
+					LootPool.lootPool()
+						.setRolls(ConstantValue.exactly(1.0F))
+						.add(
+							LootItem.lootTableItem(Items.GUNPOWDER)
+								.apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 2.0F)))
+								.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F)))
+						)
+				));
 
 		add(TFEntities.ARMORED_GIANT.get(),
 			LootTable.lootTable()
@@ -134,7 +145,7 @@ public class EntityLootTables extends EntityLootSubProvider {
 					.add(LootItem.lootTableItem(Items.PORKCHOP)
 						.apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 3.0F)))
 						.apply(SmeltItemFunction.smelted().when(this.shouldSmeltLoot()))
-						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries,  UniformGenerator.between(0.0F, 1.0F)))
+						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F)))
 						.apply(SetNameFunction.setName(Component.translatable("item.twilightforest.boarkchop").withStyle(Style.EMPTY.withItalic(false)), SetNameFunction.Target.ITEM_NAME)
 							.when(LootItemRandomChanceCondition.randomChance(0.002F))
 							.when(LootItemKilledByPlayerCondition.killedByPlayer())))));
@@ -145,13 +156,13 @@ public class EntityLootTables extends EntityLootSubProvider {
 					.setRolls(ConstantValue.exactly(1))
 					.add(LootItem.lootTableItem(TFItems.ARMOR_SHARD.get())
 						.apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 2.0F)))
-						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries,  UniformGenerator.between(0.0F, 1.0F)))))
+						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F)))))
 				.withPool(LootPool.lootPool()
 					.setRolls(ConstantValue.exactly(1))
 					.add(LootItem.lootTableItem(Items.COD)
 						.apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 1.0F)))
 						.apply(SmeltItemFunction.smelted().when(this.shouldSmeltLoot()))
-						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries,  UniformGenerator.between(0.0F, 1.0F))))
+						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F))))
 					.when(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(this.registries, 0.5F, 0.1F))));
 
 		add(TFEntities.UPPER_GOBLIN_KNIGHT.get(),
@@ -160,7 +171,7 @@ public class EntityLootTables extends EntityLootSubProvider {
 					.setRolls(ConstantValue.exactly(1))
 					.add(LootItem.lootTableItem(TFItems.ARMOR_SHARD.get())
 						.apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 2.0F)))
-						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries,  UniformGenerator.between(0.0F, 1.0F))))));
+						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F))))));
 
 		add(TFEntities.LOWER_GOBLIN_KNIGHT.get(),
 			LootTable.lootTable()
@@ -168,7 +179,7 @@ public class EntityLootTables extends EntityLootSubProvider {
 					.setRolls(ConstantValue.exactly(1))
 					.add(LootItem.lootTableItem(TFItems.ARMOR_SHARD.get())
 						.apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 2.0F)))
-						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries,  UniformGenerator.between(0.0F, 1.0F))))));
+						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F))))));
 
 		add(TFEntities.WRAITH.get(),
 			LootTable.lootTable()
@@ -176,7 +187,7 @@ public class EntityLootTables extends EntityLootSubProvider {
 					.setRolls(ConstantValue.exactly(1))
 					.add(LootItem.lootTableItem(Items.GLOWSTONE_DUST)
 						.apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 2.0F)))
-						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries,  UniformGenerator.between(0.0F, 1.0F))))));
+						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F))))));
 
 		add(TFEntities.REDCAP.get(),
 			LootTable.lootTable()
@@ -184,7 +195,7 @@ public class EntityLootTables extends EntityLootSubProvider {
 					.setRolls(ConstantValue.exactly(1))
 					.add(LootItem.lootTableItem(Items.COAL)
 						.apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 1.0F)))
-						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries,  UniformGenerator.between(0.0F, 1.0F))))));
+						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F))))));
 
 		add(TFEntities.YETI.get(),
 			LootTable.lootTable()
@@ -192,7 +203,7 @@ public class EntityLootTables extends EntityLootSubProvider {
 					.setRolls(ConstantValue.exactly(1))
 					.add(LootItem.lootTableItem(TFItems.ARCTIC_FUR.get())
 						.apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 2.0F)))
-						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries,  UniformGenerator.between(0.0F, 1.0F))))));
+						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F))))));
 
 		add(TFEntities.WINTER_WOLF.get(),
 			LootTable.lootTable()
@@ -200,7 +211,7 @@ public class EntityLootTables extends EntityLootSubProvider {
 					.setRolls(ConstantValue.exactly(1))
 					.add(LootItem.lootTableItem(TFItems.ARCTIC_FUR.get())
 						.apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 2.0F)))
-						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries,  UniformGenerator.between(0.0F, 1.0F))))));
+						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F))))));
 
 		add(TFEntities.TINY_BIRD.get(),
 			LootTable.lootTable()
@@ -208,7 +219,7 @@ public class EntityLootTables extends EntityLootSubProvider {
 					.setRolls(ConstantValue.exactly(1))
 					.add(LootItem.lootTableItem(Items.FEATHER)
 						.apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 2.0F)))
-						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries,  UniformGenerator.between(0.0F, 1.0F))))));
+						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F))))));
 
 		add(TFEntities.PENGUIN.get(),
 			LootTable.lootTable()
@@ -216,7 +227,7 @@ public class EntityLootTables extends EntityLootSubProvider {
 					.setRolls(ConstantValue.exactly(1))
 					.add(LootItem.lootTableItem(Items.FEATHER)
 						.apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 2.0F)))
-						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries,  UniformGenerator.between(0.0F, 1.0F))))));
+						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F))))));
 
 		add(TFEntities.ICE_CRYSTAL.get(),
 			LootTable.lootTable()
@@ -224,7 +235,7 @@ public class EntityLootTables extends EntityLootSubProvider {
 					.setRolls(ConstantValue.exactly(1))
 					.add(LootItem.lootTableItem(Items.SNOWBALL)
 						.apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 2.0F)))
-						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries,  UniformGenerator.between(0.0F, 1.0F))))));
+						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F))))));
 
 		add(TFEntities.UNSTABLE_ICE_CORE.get(),
 			LootTable.lootTable()
@@ -232,7 +243,7 @@ public class EntityLootTables extends EntityLootSubProvider {
 					.setRolls(ConstantValue.exactly(1))
 					.add(LootItem.lootTableItem(Items.SNOWBALL)
 						.apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 2.0F)))
-						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries,  UniformGenerator.between(0.0F, 1.0F))))));
+						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F))))));
 
 		add(TFEntities.STABLE_ICE_CORE.get(),
 			LootTable.lootTable()
@@ -240,7 +251,7 @@ public class EntityLootTables extends EntityLootSubProvider {
 					.setRolls(ConstantValue.exactly(1))
 					.add(LootItem.lootTableItem(Items.SNOWBALL)
 						.apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 2.0F)))
-						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries,  UniformGenerator.between(0.0F, 1.0F))))));
+						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F))))));
 
 		add(TFEntities.SNOW_GUARDIAN.get(),
 			LootTable.lootTable()
@@ -248,7 +259,7 @@ public class EntityLootTables extends EntityLootSubProvider {
 					.setRolls(ConstantValue.exactly(1))
 					.add(LootItem.lootTableItem(Items.SNOWBALL)
 						.apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 2.0F)))
-						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries,  UniformGenerator.between(0.0F, 1.0F))))));
+						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F))))));
 
 		add(TFEntities.RAVEN.get(),
 			LootTable.lootTable()
@@ -256,7 +267,7 @@ public class EntityLootTables extends EntityLootSubProvider {
 					.setRolls(ConstantValue.exactly(1))
 					.add(LootItem.lootTableItem(TFItems.RAVEN_FEATHER.get())
 						.apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 2.0F)))
-						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries,  UniformGenerator.between(0.0F, 1.0F))))));
+						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F))))));
 
 		add(TFEntities.TOWERWOOD_BORER.get(),
 			LootTable.lootTable()
@@ -264,7 +275,7 @@ public class EntityLootTables extends EntityLootSubProvider {
 					.setRolls(ConstantValue.exactly(1))
 					.add(LootItem.lootTableItem(TFItems.BORER_ESSENCE.get())
 						.apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 2.0F)))
-						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries,  UniformGenerator.between(0.0F, 1.0F))))));
+						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F))))));
 
 		add(TFEntities.SKELETON_DRUID.get(),
 			LootTable.lootTable()
@@ -272,12 +283,12 @@ public class EntityLootTables extends EntityLootSubProvider {
 					.setRolls(ConstantValue.exactly(1))
 					.add(LootItem.lootTableItem(Items.BONE)
 						.apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 2.0F)))
-						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries,  UniformGenerator.between(0.0F, 1.0F)))))
+						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F)))))
 				.withPool(LootPool.lootPool()
 					.setRolls(ConstantValue.exactly(1))
 					.add(LootItem.lootTableItem(TFItems.TORCHBERRIES.get())
 						.apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 2.0F)))
-						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries,  UniformGenerator.between(0.0F, 1.0F))))));
+						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F))))));
 
 		add(TFEntities.DEER.get(),
 			LootTable.lootTable()
@@ -285,13 +296,13 @@ public class EntityLootTables extends EntityLootSubProvider {
 					.setRolls(ConstantValue.exactly(1))
 					.add(LootItem.lootTableItem(Items.LEATHER)
 						.apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 2.0F)))
-						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries,  UniformGenerator.between(0.0F, 1.0F)))))
+						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F)))))
 				.withPool(LootPool.lootPool()
 					.setRolls(ConstantValue.exactly(1))
 					.add(LootItem.lootTableItem(TFItems.RAW_VENISON.get())
 						.apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 3.0F)))
 						.apply(SmeltItemFunction.smelted().when(this.shouldSmeltLoot()))
-						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries,  UniformGenerator.between(0.0F, 1.0F))))));
+						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F))))));
 
 		add(TFEntities.KOBOLD.get(),
 			LootTable.lootTable()
@@ -299,12 +310,12 @@ public class EntityLootTables extends EntityLootSubProvider {
 					.setRolls(ConstantValue.exactly(1))
 					.add(LootItem.lootTableItem(Items.WHEAT)
 						.apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 2.0F)))
-						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries,  UniformGenerator.between(0.0F, 1.0F)))))
+						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F)))))
 				.withPool(LootPool.lootPool()
 					.setRolls(ConstantValue.exactly(1))
 					.add(LootItem.lootTableItem(Items.GOLD_NUGGET)
 						.apply(SetItemCountFunction.setCount(UniformGenerator.between(-1.0F, 1.0F)))
-						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries,  UniformGenerator.between(0.0F, 1.0F))))
+						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F))))
 					.when(LootItemKilledByPlayerCondition.killedByPlayer())));
 
 		add(TFEntities.MAZE_SLIME.get(),
@@ -313,7 +324,7 @@ public class EntityLootTables extends EntityLootSubProvider {
 					.setRolls(ConstantValue.exactly(1))
 					.add(LootItem.lootTableItem(Items.SLIME_BALL)
 						.apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)))
-						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries,  UniformGenerator.between(0.0F, 1.0F)))))
+						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F)))))
 				.withPool(LootPool.lootPool()
 					.setRolls(ConstantValue.exactly(1))
 					.add(LootItem.lootTableItem(TFItems.CHARM_OF_KEEPING_1.get()))
@@ -325,7 +336,7 @@ public class EntityLootTables extends EntityLootSubProvider {
 					.setRolls(ConstantValue.exactly(1))
 					.add(LootItem.lootTableItem(TFItems.RAW_MEEF.get())
 						.apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)))
-						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries,  UniformGenerator.between(0.0F, 1.0F)))
+						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F)))
 						.apply(SmeltItemFunction.smelted().when(this.shouldSmeltLoot()))))
 				.withPool(LootPool.lootPool()
 					.setRolls(ConstantValue.exactly(1))
@@ -338,12 +349,12 @@ public class EntityLootTables extends EntityLootSubProvider {
 					.setRolls(ConstantValue.exactly(1))
 					.add(LootItem.lootTableItem(Items.IRON_INGOT)
 						.apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 2.0F)))
-						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries,  UniformGenerator.between(0.0F, 1.0F)))))
+						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F)))))
 				.withPool(LootPool.lootPool()
 					.setRolls(ConstantValue.exactly(1))
 					.add(LootItem.lootTableItem(TFBlocks.TOWERWOOD.get()))
 					.apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 2.0F)))
-					.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries,  UniformGenerator.between(0.0F, 1.0F)))));
+					.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F)))));
 
 		add(TFEntities.SLIME_BEETLE.get(),
 			LootTable.lootTable()
@@ -351,7 +362,7 @@ public class EntityLootTables extends EntityLootSubProvider {
 					.setRolls(ConstantValue.exactly(1.0F))
 					.add(LootItem.lootTableItem(Items.SLIME_BALL)
 						.apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 2.0F)))
-						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries,  UniformGenerator.between(0.0F, 1.0F))))));
+						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F))))));
 
 		add(TFEntities.TROLL.get(),
 			LootTable.lootTable()
@@ -366,7 +377,7 @@ public class EntityLootTables extends EntityLootSubProvider {
 					.setRolls(ConstantValue.exactly(1))
 					.add(LootItem.lootTableItem(Items.PAPER))
 					.apply(SetItemCountFunction.setCount(ConstantValue.exactly(3)))
-					.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries,  UniformGenerator.between(0, 1))))
+					.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0, 1))))
 				.withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1))
 					.add(LootItem.lootTableItem(Items.WRITABLE_BOOK).setWeight(2).setQuality(3))
 					.add(LootItem.lootTableItem(Items.BOOK).setWeight(19))
@@ -403,7 +414,7 @@ public class EntityLootTables extends EntityLootSubProvider {
 					.setRolls(ConstantValue.exactly(1.0F))
 					.add(LootItem.lootTableItem(TFItems.NAGA_SCALE.get())
 						.apply(SetItemCountFunction.setCount(UniformGenerator.between(6.0F, 11.0F)))
-						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries,  UniformGenerator.between(0.0F, 1.0F)))
+						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F)))
 						.apply(MultiplayerBasedAdditionLootFunction.addForAllParticipatingPlayers(UniformGenerator.between(2.0F, 4.0F)))))
 				.withPool(LootPool.lootPool()
 					.name("naga_trophy")
@@ -437,14 +448,14 @@ public class EntityLootTables extends EntityLootSubProvider {
 					.setRolls(ConstantValue.exactly(1.0F))
 					.add(LootItem.lootTableItem(Items.ENDER_PEARL)
 						.apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 4.0F)))
-						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries,  UniformGenerator.between(0.0F, 1.0F)))
+						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F)))
 						.apply(MultiplayerBasedAdditionLootFunction.addForAllParticipatingPlayers(UniformGenerator.between(0.0F, 2.0F)))))
 				.withPool(LootPool.lootPool()
 					.name("lich_bones")
 					.setRolls(ConstantValue.exactly(1.0F))
 					.add(LootItem.lootTableItem(Items.BONE)
 						.apply(SetItemCountFunction.setCount(UniformGenerator.between(5.0F, 9.0F)))
-						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries,  UniformGenerator.between(0.0F, 1.0F)))))
+						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F)))))
 				.withPool(LootPool.lootPool()
 					.name("lich_trophy")
 					.setRolls(ConstantValue.exactly(1.0F))
@@ -456,7 +467,7 @@ public class EntityLootTables extends EntityLootSubProvider {
 					.name("minoshroom_stroganoff")
 					.setRolls(MultiplayerBasedNumberProvider.rollsForPlayers(UniformGenerator.between(0.0F, 1.0F), UniformGenerator.between(2.0F, 5.0F)))
 					.add(LootItem.lootTableItem(TFItems.MEEF_STROGANOFF.get())
-						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries,  UniformGenerator.between(0.0F, 1.0F)))))
+						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F)))))
 				.withPool(LootPool.lootPool()
 					.name("minoshroom_trophy")
 					.setRolls(ConstantValue.exactly(1.0F))
@@ -474,14 +485,14 @@ public class EntityLootTables extends EntityLootSubProvider {
 					.setRolls(ConstantValue.exactly(1.0F))
 					.add(LootItem.lootTableItem(TFItems.HYDRA_CHOP.get())
 						.apply(SetItemCountFunction.setCount(UniformGenerator.between(5.0F, 35.0F)))
-						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries,  UniformGenerator.between(0.0F, 1.0F)))
+						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F)))
 						.apply(MultiplayerBasedAdditionLootFunction.addForAllParticipatingPlayers(UniformGenerator.between(5.0F, 10.0F)))))
 				.withPool(LootPool.lootPool()
 					.name("hydra_blood")
 					.setRolls(ConstantValue.exactly(1.0F))
 					.add(LootItem.lootTableItem(TFItems.FIERY_BLOOD.get())
 						.apply(SetItemCountFunction.setCount(UniformGenerator.between(7.0F, 10.0F)))
-						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries,  UniformGenerator.between(0.0F, 2.0F)))
+						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 2.0F)))
 						.apply(MultiplayerBasedAdditionLootFunction.addForAllParticipatingPlayers(UniformGenerator.between(1.0F, 3.0F)))))
 				.withPool(LootPool.lootPool()
 					.name("hydra_trophy")
@@ -513,14 +524,14 @@ public class EntityLootTables extends EntityLootSubProvider {
 					.setRolls(ConstantValue.exactly(4.0F))
 					.add(LootItem.lootTableItem(TFItems.CARMINITE.get())
 						.apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 3.0F)))
-						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries,  UniformGenerator.between(0.0F, 1.0F)))
+						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F)))
 						.apply(MultiplayerBasedAdditionLootFunction.addForAllParticipatingPlayers(UniformGenerator.between(1.0F, 3.0F)))))
 				.withPool(LootPool.lootPool()
 					.name("ur_ghast_tears")
 					.setRolls(ConstantValue.exactly(2.0F))
 					.add(LootItem.lootTableItem(TFItems.FIERY_TEARS.get())
 						.apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 5.0F)))
-						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries,  UniformGenerator.between(0.0F, 1.0F)))
+						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F)))
 						.apply(MultiplayerBasedAdditionLootFunction.addForAllParticipatingPlayers(UniformGenerator.between(1.0F, 2.0F)))))
 				.withPool(LootPool.lootPool()
 					.name("ur_ghast_trophy")
@@ -534,14 +545,14 @@ public class EntityLootTables extends EntityLootSubProvider {
 					.setRolls(ConstantValue.exactly(1.0F))
 					.add(LootItem.lootTableItem(TFItems.ALPHA_YETI_FUR.get())
 						.apply(SetItemCountFunction.setCount(ConstantValue.exactly(6.0F)))
-						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries,  UniformGenerator.between(0.0F, 1.0F)))
+						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F)))
 						.apply(MultiplayerBasedAdditionLootFunction.addForAllParticipatingPlayers(UniformGenerator.between(1.0F, 3.0F)))))
 				.withPool(LootPool.lootPool()
 					.name("alpha_yeti_bombs")
 					.setRolls(ConstantValue.exactly(1.0F))
 					.add(LootItem.lootTableItem(TFItems.ICE_BOMB.get())
 						.apply(SetItemCountFunction.setCount(ConstantValue.exactly(6.0F)))
-						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries,  UniformGenerator.between(0.0F, 1.0F)))
+						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F)))
 						.apply(MultiplayerBasedAdditionLootFunction.addForAllParticipatingPlayers(UniformGenerator.between(0.0F, 2.0F)))))
 				.withPool(LootPool.lootPool()
 					.name("alpha_yeti_trophy")
@@ -560,7 +571,7 @@ public class EntityLootTables extends EntityLootSubProvider {
 					.setRolls(UniformGenerator.between(1.0F, 4.0F))
 					.add(LootItem.lootTableItem(Blocks.PACKED_ICE.asItem())
 						.apply(SetItemCountFunction.setCount(ConstantValue.exactly(7.0F)))
-						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries,  UniformGenerator.between(0.0F, 1.0F)))))
+						.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F)))))
 				.withPool(LootPool.lootPool()
 					.name("snow_queen_snowballs")
 					.setRolls(UniformGenerator.between(2.0F, 5.0F))

@@ -19,12 +19,14 @@ import net.minecraft.world.level.block.entity.PotDecorations;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.gameevent.GameEvent;
+import twilightforest.TwilightForestMod;
 import twilightforest.block.CandelabraBlock;
 import twilightforest.block.LightableBlock;
 import twilightforest.components.item.CandelabraData;
 import twilightforest.init.TFBlockEntities;
 import twilightforest.init.TFDataComponents;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -52,7 +54,7 @@ public class CandelabraBlockEntity extends BlockEntity {
 	}
 
 	public void setCandle(int index, Block block) {
-		List<Block> list = this.data.ordered();
+		List<Block> list = new ArrayList<>(this.data.ordered());
 		list.set(index, block);
 		this.data = new CandelabraData(list);
 		this.updateState(index);
@@ -90,7 +92,7 @@ public class CandelabraBlockEntity extends BlockEntity {
 				blockstate = blockstate.setValue(CandelabraBlock.LIGHTING, LightableBlock.Lighting.NONE);
 			}
 
-			this.getLevel().setBlock(this.getBlockPos(), blockstate, 3);
+			this.getLevel().setBlock(this.getBlockPos(), blockstate, Block.UPDATE_ALL);
 			this.getLevel().gameEvent(GameEvent.BLOCK_CHANGE, this.getBlockPos(), GameEvent.Context.of(blockstate));
 		}
 	}

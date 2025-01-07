@@ -6,10 +6,10 @@
   ],
   "allow_biome_surface_decorations": false,
   "allow_biome_underground_decorations": true,
+  "allow_biome_vegetation": false,
   "ambient_spawns": [],
   "biomes": "#twilightforest:valid_lich_tower_biomes",
-  "center_in_chunk": false,
-  "chunk_clearance_radius": 1,
+  "chunk_clearance_radius": 2.5,
   "hint_item": {
     "components": {
       "minecraft:written_book_content": {

@@ -11,6 +11,7 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
@@ -65,6 +66,8 @@ public class TFBlocks {
 	public static final DeferredBlock<Block> ROPE = register("rope", RopeBlock::new, () -> BlockBehaviour.Properties.of().forceSolidOff().noOcclusion().pushReaction(PushReaction.DESTROY).sound(SoundType.WOOL).strength(0.3F, 3.0F));
 	public static final DeferredBlock<TransparentBlock> CANOPY_WINDOW = registerWithItem("canopy_window", TransparentBlock::new, () -> BlockBehaviour.Properties.of().instrument(NoteBlockInstrument.HAT).strength(0.3F).sound(SoundType.GLASS).noOcclusion().isValidSpawn((pState, pLevel, pPos, pValue) -> false).isRedstoneConductor((pState, pLevel, pPos) -> false).isSuffocating((pState, pLevel, pPos) -> false).isViewBlocking((pState, pLevel, pPos) -> false));
 	public static final DeferredBlock<IronBarsBlock> CANOPY_WINDOW_PANE = registerWithItem("canopy_window_pane", IronBarsBlock::new, () -> BlockBehaviour.Properties.of().instrument(NoteBlockInstrument.HAT).strength(0.3F).sound(SoundType.GLASS).noOcclusion());
+	public static final DeferredBlock<Block> SINISTER_SPAWNER = register("sinister_spawner", () -> new SinisterSpawnerBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.SPAWNER).noLootTable()));
+	public static final DeferredBlock<Block> BRAZIER = register("brazier", () -> new BrazierBlock(BlockBehaviour.Properties.of().sound(SoundType.WOOD).lightLevel(state -> state.getValue(BrazierBlock.HALF) == DoubleBlockHalf.UPPER ? state.getValue(BrazierBlock.LIGHT).getLight() : 0).pushReaction(PushReaction.DESTROY)));
 
 	//naga courtyard
 	public static final DeferredBlock<Block> NAGASTONE_HEAD = registerWithItem("nagastone_head", TFHorizontalBlock::new, () -> BlockBehaviour.Properties.of().instrument(NoteBlockInstrument.BASEDRUM).mapColor(MapColor.STONE).requiresCorrectToolForDrops().sound(SoundType.STONE).strength(1.5F, 6.0F));
@@ -106,7 +109,7 @@ public class TFBlocks {
 	public static final DeferredBlock<RotatedPillarBlock> TERRORCOTTA_ARCS = registerWithItem("terrorcotta_arcs", RotatedPillarBlock::new, () -> BlockBehaviour.Properties.of().mapColor(MapColor.STONE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5F, 6.0F));
 	public static final DeferredBlock<GlazedTerracottaBlock> TERRORCOTTA_CURVES = registerWithItem("terrorcotta_curves", GlazedTerracottaBlock::new, () -> BlockBehaviour.Properties.of().mapColor(MapColor.STONE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5F, 6.0F));
 	public static final DeferredBlock<BinaryRotatedBlock> TERRORCOTTA_LINES = registerWithItem("terrorcotta_lines", BinaryRotatedBlock::new, () -> BlockBehaviour.Properties.of().mapColor(MapColor.STONE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5F, 6.0F));
-	public static final DeferredBlock<CarpetBlock> ROYAL_RAGS = registerWithItem("royal_rags", properties -> new WoolCarpetBlock(DyeColor.RED, properties), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.RED_CARPET).isValidSpawn(Blocks::always));
+	public static final DeferredBlock<CarpetBlock> CORONATION_CARPET = register("coronation_carpet", () -> new WoolCarpetBlock(DyeColor.RED, BlockBehaviour.Properties.ofFullCopy(Blocks.RED_CARPET).isValidSpawn(Blocks::always)));
 
 	//labyrinth
 	public static final DeferredBlock<Block> MAZESTONE = registerWithItem("mazestone", Block::new, () -> BlockBehaviour.Properties.of().instrument(NoteBlockInstrument.BASEDRUM).mapColor(MapColor.STONE).requiresCorrectToolForDrops().sound(SoundType.STONE).strength(100.0F, 5.0F));
@@ -220,7 +223,7 @@ public class TFBlocks {
 
 	//mini structures
 	public static final DeferredBlock<Block> TWILIGHT_PORTAL_MINIATURE_STRUCTURE = registerWithItem("twilight_portal_miniature_structure", MiniatureStructureBlock::new, () -> BlockBehaviour.Properties.of().noCollission().noOcclusion().requiresCorrectToolForDrops().strength(0.75F));
-	//	public static final DeferredBlock<Block> HEDGE_MAZE_MINIATURE_STRUCTURE = register("hedge_maze_miniature_structure", MiniatureStructureBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TWILIGHT_PORTAL_MINIATURE_STRUCTURE.get()));
+//	public static final DeferredBlock<Block> HEDGE_MAZE_MINIATURE_STRUCTURE = register("hedge_maze_miniature_structure", MiniatureStructureBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TWILIGHT_PORTAL_MINIATURE_STRUCTURE.get()));
 //	public static final DeferredBlock<Block> HOLLOW_HILL_MINIATURE_STRUCTURE = register("hollow_hill_miniature_structure", MiniatureStructureBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TWILIGHT_PORTAL_MINIATURE_STRUCTURE.get()));
 //	public static final DeferredBlock<Block> QUEST_GROVE_MINIATURE_STRUCTURE = register("quest_grove_miniature_structure", MiniatureStructureBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TWILIGHT_PORTAL_MINIATURE_STRUCTURE.get()));
 //	public static final DeferredBlock<Block> MUSHROOM_TOWER_MINIATURE_STRUCTURE = register("mushroom_tower_miniature_structure", MiniatureStructureBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TWILIGHT_PORTAL_MINIATURE_STRUCTURE.get()));
@@ -597,8 +600,6 @@ public class TFBlocks {
 	public static final DeferredBlock<FlowerPotBlock> POTTED_THORN = register("potted_thorn", properties -> new SpecialFlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, BROWN_THORNS, properties), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.FLOWER_POT));
 	public static final DeferredBlock<FlowerPotBlock> POTTED_GREEN_THORN = register("potted_green_thorn", properties -> new SpecialFlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, GREEN_THORNS, properties), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.FLOWER_POT));
 	public static final DeferredBlock<FlowerPotBlock> POTTED_DEAD_THORN = register("potted_dead_thorn", properties -> new SpecialFlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, BURNT_THORNS, properties), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.FLOWER_POT));
-
-	public static final DeferredBlock<Block> CURSED_SPAWNER = registerWithItem("cursed_spawner", CursedSpawnerBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.SPAWNER).noLootTable());
 
 	public static <T extends Block> DeferredBlock<T> register(String name, Function<BlockBehaviour.Properties, T> block, Supplier<BlockBehaviour.Properties> properties) {
 		return BLOCKS.register(name, () -> block.apply(properties.get().setId(ResourceKey.create(Registries.BLOCK, TwilightForestMod.prefix(name)))));

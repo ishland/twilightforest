@@ -8,10 +8,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.WorldGenLevel;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.PipeBlock;
-import net.minecraft.world.level.block.Rotation;
-import net.minecraft.world.level.block.SlabBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.SlabType;
 import net.minecraft.world.level.chunk.ChunkGenerator;
@@ -461,8 +458,8 @@ public class TowerMainComponent extends TowerWingComponent {
 			BlockState aboveBlockState = world.getBlockState(tCoords.above());
 			if (blockState.isAir() && aboveBlockState.isAir() && EntityUtil.getEntitiesInAABB(world, new AABB(tCoords)).size() == 0) {
 				// if not, place a torch
-				world.setBlock(tCoords, Blocks.OAK_FENCE.defaultBlockState().setValue(PipeBlock.PROPERTY_BY_DIRECTION.get(direction.getOpposite()), true), 2);
-				world.setBlock(tCoords.above(), Blocks.TORCH.defaultBlockState(), 2);
+				world.setBlock(tCoords, Blocks.OAK_FENCE.defaultBlockState().setValue(PipeBlock.PROPERTY_BY_DIRECTION.get(direction.getOpposite()), true), Block.UPDATE_CLIENTS);
+				world.setBlock(tCoords.above(), Blocks.TORCH.defaultBlockState(), Block.UPDATE_CLIENTS);
 			}
 		}
 	}

@@ -2,6 +2,7 @@ package twilightforest.item;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ColorParticleOption;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
@@ -30,7 +31,9 @@ import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.data.tags.EntityTagGenerator;
+import twilightforest.enchantment.RechargeScepterEffect;
 import twilightforest.init.TFDamageTypes;
+import twilightforest.init.TFEnchantments;
 import twilightforest.init.TFItems;
 import twilightforest.init.TFSounds;
 import twilightforest.loot.TFLootTables;
@@ -61,8 +64,13 @@ public class LifedrainScepterItem extends Item {
 	}
 
 	@Override
-	public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
-		return false;
+	public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
+		if (entity.tickCount % 20 == 0 && level instanceof ServerLevel serverLevel && stack.has(DataComponents.ENCHANTMENTS) && !isSelected) {
+			int renewal = stack.get(DataComponents.ENCHANTMENTS).getLevel(level.holderOrThrow(TFEnchantments.RENEWAL));
+			if (renewal > 0) {
+				RechargeScepterEffect.applyRecharge(serverLevel, stack, entity);
+			}
+		}
 	}
 
 	/**

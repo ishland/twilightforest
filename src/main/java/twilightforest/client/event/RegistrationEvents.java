@@ -54,6 +54,7 @@ import twilightforest.TwilightForestMod;
 import twilightforest.client.*;
 import twilightforest.client.model.TFModelLayers;
 import twilightforest.client.model.armor.*;
+import twilightforest.client.model.block.BrazierModel;
 import twilightforest.client.model.block.ReactorDebrisModel;
 import twilightforest.client.model.block.aurorablock.NoiseVaryingModelLoader;
 import twilightforest.client.model.block.carpet.RoyalRagsModelLoader;
@@ -65,6 +66,8 @@ import twilightforest.client.model.block.patch.PatchModelLoader;
 import twilightforest.client.model.entity.*;
 import twilightforest.client.model.item.TrollsteinnModel;
 import twilightforest.client.particle.*;
+import twilightforest.client.renderer.PotionFlaskTooltipComponent;
+import twilightforest.client.renderer.TFSkyRenderer;
 import twilightforest.client.renderer.block.*;
 import twilightforest.client.renderer.entity.*;
 import twilightforest.client.renderer.entity.layers.IceLayer;
@@ -108,6 +111,8 @@ public class RegistrationEvents {
 		bus.addListener(OverlayHandler::registerOverlays);
 
 		bus.addListener(TFShaders::registerShaders);
+
+		bus.addListener(RegisterClientTooltipComponentFactoriesEvent.class, event -> event.register(BrittleFlaskItem.Tooltip.class, PotionFlaskTooltipComponent::new));
 	}
 
 	private static void registerModelLoaders(ModelEvent.RegisterGeometryLoaders event) {
@@ -316,6 +321,7 @@ public class RegistrationEvents {
 		((ReloadableResourceManager)Minecraft.getInstance().getResourceManager()).listeners.addFirst(JappaPackReloadListener.INSTANCE);
 		MagicPaintingTextureManager.instance = new MagicPaintingTextureManager(Minecraft.getInstance().getTextureManager());
 		event.registerReloadListener(MagicPaintingTextureManager.instance);
+		event.registerReloadListener(TextureGeneratorReloadListener.INSTANCE);
 	}
 
 	private static void registerScreens(RegisterMenuScreensEvent event) {
@@ -414,6 +420,7 @@ public class RegistrationEvents {
 		event.registerBlockEntityRenderer(TFBlockEntities.TROPHY.get(), TrophyRenderer::new);
 		event.registerBlockEntityRenderer(TFBlockEntities.TF_CHEST.get(), TFChestRenderer::new);
 		event.registerBlockEntityRenderer(TFBlockEntities.TF_TRAPPED_CHEST.get(), TFChestRenderer::new);
+		event.registerBlockEntityRenderer(TFBlockEntities.SKULL_CHEST.get(), SkullChestRenderer::new);
 		event.registerBlockEntityRenderer(TFBlockEntities.KEEPSAKE_CASKET.get(), KeepsakeCasketRenderer::new);
 		event.registerBlockEntityRenderer(TFBlockEntities.SKULL_CANDLE.get(), SkullCandleRenderer::new);
 		event.registerBlockEntityRenderer(TFBlockEntities.REACTOR_DEBRIS.get(), ReactorDebrisRenderer::new);
@@ -421,7 +428,8 @@ public class RegistrationEvents {
 		event.registerBlockEntityRenderer(TFBlockEntities.CANDELABRA.get(), CandelabraRenderer::new);
 		event.registerBlockEntityRenderer(TFBlockEntities.JAR.get(), JarRenderer::new);
 		event.registerBlockEntityRenderer(TFBlockEntities.MASON_JAR.get(), JarRenderer.MasonJarRenderer::new);
-		event.registerBlockEntityRenderer(TFBlockEntities.CURSED_SPAWNER.get(), CursedSpawnerRenderer::new);
+		event.registerBlockEntityRenderer(TFBlockEntities.SINISTER_SPAWNER.get(), SinisterSpawnerRenderer::new);
+		event.registerBlockEntityRenderer(TFBlockEntities.BRAZIER.get(), BrazierRenderer::new);
 	}
 
 	private static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
@@ -518,8 +526,9 @@ public class RegistrationEvents {
 
 		event.registerLayerDefinition(TFModelLayers.CICADA, CicadaModel::create);
 		event.registerLayerDefinition(TFModelLayers.FIREFLY, FireflyModel::create);
-		event.registerLayerDefinition(TFModelLayers.KEEPSAKE_CASKET, KeepsakeCasketRenderer::create);
+		event.registerLayerDefinition(TFModelLayers.KEEPSAKE_CASKET, SkullChestRenderer::create);
 		event.registerLayerDefinition(TFModelLayers.MOONWORM, MoonwormModel::create);
+		event.registerLayerDefinition(TFModelLayers.BRAZIER, BrazierModel::create);
 
 		event.registerLayerDefinition(TFModelLayers.RED_THREAD, RedThreadModel::create);
 
@@ -629,7 +638,7 @@ public class RegistrationEvents {
 		}, TFBlocks.WISPY_CLOUD.get(), TFBlocks.RAINY_CLOUD.get(), TFBlocks.SNOWY_CLOUD.get(), TFBlocks.FLUFFY_CLOUD.get());
 
 		event.registerItem(ISTER.CLIENT_ITEM_EXTENSION,
-			TFBlocks.CICADA.asItem(), TFBlocks.FIREFLY.asItem(), TFBlocks.MOONWORM.asItem(), TFBlocks.KEEPSAKE_CASKET.asItem(), TFBlocks.CANDELABRA.asItem(),
+			TFBlocks.CICADA.asItem(), TFBlocks.FIREFLY.asItem(), TFBlocks.MOONWORM.asItem(), TFBlocks.SKULL_CHEST.asItem(), TFBlocks.KEEPSAKE_CASKET.asItem(), TFBlocks.CANDELABRA.asItem(), TFBlocks.BRAZIER.asItem(),
 			TFItems.CICADA_JAR.get(), TFItems.FIREFLY_JAR.get(), TFItems.MASON_JAR.get(), TFItems.KNIGHTMETAL_SHIELD.get(), TFItems.MYSTIC_CROWN.value(),
 			TFBlocks.TWILIGHT_OAK_CHEST.asItem(), TFBlocks.CANOPY_CHEST.asItem(), TFBlocks.MANGROVE_CHEST.asItem(), TFBlocks.DARK_CHEST.asItem(), TFBlocks.TIME_CHEST.asItem(), TFBlocks.TRANSFORMATION_CHEST.asItem(), TFBlocks.MINING_CHEST.asItem(), TFBlocks.SORTING_CHEST.asItem(),
 			TFBlocks.TWILIGHT_OAK_TRAPPED_CHEST.asItem(), TFBlocks.CANOPY_TRAPPED_CHEST.asItem(), TFBlocks.MANGROVE_TRAPPED_CHEST.asItem(), TFBlocks.DARK_TRAPPED_CHEST.asItem(), TFBlocks.TIME_TRAPPED_CHEST.asItem(), TFBlocks.TRANSFORMATION_TRAPPED_CHEST.asItem(), TFBlocks.MINING_TRAPPED_CHEST.asItem(), TFBlocks.SORTING_TRAPPED_CHEST.asItem(),

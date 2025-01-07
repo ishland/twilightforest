@@ -117,11 +117,11 @@ public class BlockSpikeFeature extends Feature<NoneFeatureConfiguration> {
 
 					if (FeatureLogic.worldGenReplaceable(level.getBlockState(placement)) && (dY > 0 || placement.getY() < level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, placement.getX(), placement.getZ()) - 2)) {
 						if (ore.right().isPresent()) {
-							level.setBlock(placement, ore.right().get().defaultBlockState(), 3);
+							level.setBlock(placement, ore.right().get().defaultBlockState(), Block.UPDATE_ALL);
 						} else {
 							// FIXME Deduplicate this construction of the weightedlist, tt is constructed many times per generation
 							WeightedRandomList<WeightedEntry.Wrapper<Block>> entries = WeightedRandomList.create(ore.left().get().stream().map(pair -> WeightedEntry.wrap(pair.getFirst(), pair.getSecond())).toList());
-							level.setBlock(placement, entries.getRandom(random).orElse(WeightedEntry.wrap(Blocks.STONE, 1)).data().defaultBlockState(), 3);
+							level.setBlock(placement, entries.getRandom(random).orElse(WeightedEntry.wrap(Blocks.STONE, 1)).data().defaultBlockState(), Block.UPDATE_ALL);
 						}
 					}
 				}

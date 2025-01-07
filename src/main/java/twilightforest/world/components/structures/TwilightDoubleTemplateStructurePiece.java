@@ -11,6 +11,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.StructureMode;
@@ -83,7 +84,7 @@ public abstract class TwilightDoubleTemplateStructurePiece extends TwilightTempl
 						TwilightForestMod.LOGGER.error("Error while parsing blockstate {} in jigsaw block @ {}", s, structureBlockInfo.pos());
 					}
 
-					worldGenLevel.setBlock(structureBlockInfo.pos(), blockState, 3);
+					worldGenLevel.setBlock(structureBlockInfo.pos(), blockState, Block.UPDATE_ALL);
 				}
 			}
 		}

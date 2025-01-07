@@ -76,7 +76,7 @@ public enum BlockLoggingEnum implements StringRepresentable {
 			Fluid stateFluid = state.getValue(MULTILOGGED).fluid;
 
 			if (stateFluid != Fluids.EMPTY) {
-				world.setBlock(pos, state.setValue(MULTILOGGED, AIR), 3);
+				world.setBlock(pos, state.setValue(MULTILOGGED, AIR), Block.UPDATE_ALL);
 			}
 
 			return new ItemStack(stateFluid.getBucket());
@@ -93,7 +93,7 @@ public enum BlockLoggingEnum implements StringRepresentable {
 
 			if (stateFluid != fluidState.getType() && Ref.FLUIDS.containsKey(fluidState.getType())) {
 				if (!world.isClientSide()) {
-					world.setBlock(pos, state.setValue(MULTILOGGED, Ref.FLUIDS.get(fluidState.getType())), 3);
+					world.setBlock(pos, state.setValue(MULTILOGGED, Ref.FLUIDS.get(fluidState.getType())), Block.UPDATE_ALL);
 					world.scheduleTick(pos, fluidState.getType(), fluidState.getType().getTickDelay(world));
 				}
 				return true;

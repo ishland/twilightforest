@@ -10,6 +10,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
@@ -101,7 +102,7 @@ public class HollowLogVerticalTests {
 
 		verify(stack, times(1)).is(Blocks.VINE.asItem());
 		ArgumentCaptor<BlockState> climbable = ArgumentCaptor.captor();
-		verify(level, times(1)).setBlock(eq(BlockPos.ZERO), climbable.capture(), eq(3));
+		verify(level, times(1)).setBlock(eq(BlockPos.ZERO), climbable.capture(), eq(Block.UPDATE_ALL));
 		assertSame(HollowLogVariants.Climbable.VINE, climbable.getValue().getValue(ClimbableHollowLogBlock.VARIANT));
 		assertSame(Direction.NORTH, climbable.getValue().getValue(ClimbableHollowLogBlock.FACING));
 		verify(level, times(1)).playSound(null, BlockPos.ZERO, SoundEvents.VINE_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
@@ -135,7 +136,7 @@ public class HollowLogVerticalTests {
 		verify(stack, times(1)).is(Blocks.VINE.asItem());
 		verify(stack, times(1)).is(Blocks.LADDER.asItem());
 		ArgumentCaptor<BlockState> climbable = ArgumentCaptor.captor();
-		verify(level, times(1)).setBlock(eq(BlockPos.ZERO), climbable.capture(), eq(3));
+		verify(level, times(1)).setBlock(eq(BlockPos.ZERO), climbable.capture(), eq(Block.UPDATE_ALL));
 		assertSame(HollowLogVariants.Climbable.LADDER, climbable.getValue().getValue(ClimbableHollowLogBlock.VARIANT));
 		assertSame(Direction.NORTH, climbable.getValue().getValue(ClimbableHollowLogBlock.FACING));
 		verify(level, times(1)).playSound(null, BlockPos.ZERO, SoundEvents.LADDER_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
@@ -167,7 +168,7 @@ public class HollowLogVerticalTests {
 		verify(stack, times(1)).is(Blocks.VINE.asItem());
 		verify(stack, times(1)).is(Blocks.LADDER.asItem());
 		ArgumentCaptor<BlockState> climbable = ArgumentCaptor.captor();
-		verify(level, times(1)).setBlock(eq(BlockPos.ZERO), climbable.capture(), eq(3));
+		verify(level, times(1)).setBlock(eq(BlockPos.ZERO), climbable.capture(), eq(Block.UPDATE_ALL));
 		assertSame(HollowLogVariants.Climbable.LADDER_WATERLOGGED, climbable.getValue().getValue(ClimbableHollowLogBlock.VARIANT));
 		assertSame(Direction.NORTH, climbable.getValue().getValue(ClimbableHollowLogBlock.FACING));
 		verify(level, times(1)).playSound(null, BlockPos.ZERO, SoundEvents.LADDER_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);

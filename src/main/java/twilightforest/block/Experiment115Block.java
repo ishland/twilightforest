@@ -105,7 +105,7 @@ public class Experiment115Block extends Block {
 			int i = state.getValue(BITES_TAKEN);
 
 			if (i < 7) {
-				level.setBlock(pos, state.setValue(BITES_TAKEN, i + 1), 3);
+				level.setBlock(pos, state.setValue(BITES_TAKEN, i + 1), Block.UPDATE_ALL);
 			} else {
 				level.removeBlock(pos, false);
 			}

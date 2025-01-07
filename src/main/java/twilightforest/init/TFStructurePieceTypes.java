@@ -8,6 +8,7 @@ import twilightforest.TwilightForestMod;
 import twilightforest.world.components.structures.*;
 import twilightforest.world.components.structures.courtyard.*;
 import twilightforest.world.components.structures.darktower.*;
+import twilightforest.world.components.structures.fallentrunk.FallenTrunkPiece;
 import twilightforest.world.components.structures.finalcastle.*;
 import twilightforest.world.components.structures.hollowtree.*;
 import twilightforest.world.components.structures.icetower.*;
@@ -30,6 +31,8 @@ public class TFStructurePieceTypes {
 	public static final DeferredHolder<StructurePieceType, StructurePieceType> TFQuestGrove = registerPieceType("TFQuest1", QuestGrove::new);
 	public static final DeferredHolder<StructurePieceType, StructurePieceType> TFHydra = registerPieceType("TFHydra", HydraLairComponent::new);
 	public static final DeferredHolder<StructurePieceType, StructurePieceType> TFYeti = registerPieceType("TFYeti", YetiCaveComponent::new);
+	public static final DeferredHolder<StructurePieceType, StructurePieceType> TFFallenTrunk = registerPieceType("TFFallenTrunk", FallenTrunkPiece::new);
+	public static final DeferredHolder<StructurePieceType, StructurePieceType> TFTerraformingPiece = registerPieceType("TFTerraformingPiece", TerraformingPiece::new);
 
 	// Hollow Tree
 	public static final DeferredHolder<StructurePieceType, StructurePieceType> TFHTLB = registerPieceType("TFHTLB", HollowTreeLargeBranch::new);
@@ -100,6 +103,10 @@ public class TFStructurePieceTypes {
 	public static final DeferredHolder<StructurePieceType, StructurePieceType> LICH_FOYER_DECORATION = registerPieceType("TFLT" + "TFoyD", LichTowerFoyerDecor::new);
 	public static final DeferredHolder<StructurePieceType, StructurePieceType> LICH_BOSS_ROOM = registerPieceType("TFLT" + "TBoss", LichBossRoom::new);
 	public static final DeferredHolder<StructurePieceType, StructurePieceType> LICH_BOSS_ROOF = registerPieceType("TFLT" + "TBossRoof", LichBossRoof::new);
+	public static final DeferredHolder<StructurePieceType, StructurePieceType> LICH_PERIMETER_FENCE = registerPieceType("TFLT" + "Fence", LichPerimeterFence::new);
+	public static final DeferredHolder<StructurePieceType, StructurePieceType> LICH_YARD_PATH = registerPieceType("TFLT" + "Path", LichYardBox::new);
+	public static final DeferredHolder<StructurePieceType, StructurePieceType> LICH_YARD_GRAVE = registerPieceType("TFLT" + "Grave", LichYardGrave::new);
+	public static final DeferredHolder<StructurePieceType, StructurePieceType> LICH_YARD_LIGHTS = registerPieceType("TFLT" + "Light", LichYardLights::new);
 
 	// Labyrinth
 	//public static final DeferredHolder<StructurePieceType, StructurePieceType> TFLr = registerPieceType("TFLr", StructureStartLabyrinth::new);

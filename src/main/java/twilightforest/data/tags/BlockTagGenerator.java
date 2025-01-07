@@ -408,6 +408,7 @@ public class BlockTagGenerator extends ModdedBlockTagGenerator {
 			TFBlocks.GREEN_FORCE_FIELD.get(),
 			TFBlocks.BLUE_FORCE_FIELD.get(),
 			TFBlocks.VIOLET_FORCE_FIELD.get(),
+			TFBlocks.SKULL_CHEST.get(),
 			TFBlocks.KEEPSAKE_CASKET.get(),
 			TFBlocks.TROPHY_PEDESTAL.get()
 		).add( // [VanillaCopy] WITHER_IMMUNE - Do NOT include that tag in this tag
@@ -463,6 +464,7 @@ public class BlockTagGenerator extends ModdedBlockTagGenerator {
 
 		// TODO add more grave mods to this list
 		this.tag(PROGRESSION_ALLOW_BREAKING)
+			.add(TFBlocks.SKULL_CHEST.get())
 			.add(TFBlocks.KEEPSAKE_CASKET.get())
 			.addOptional(ResourceLocation.fromNamespaceAndPath("gravestone", "gravestone"));
 
@@ -506,7 +508,7 @@ public class BlockTagGenerator extends ModdedBlockTagGenerator {
 
 		this.tag(BlockTags.SMALL_DRIPLEAF_PLACEABLE).add(TFBlocks.UBEROUS_SOIL.get());
 
-		this.tag(BlockTags.FEATURES_CANNOT_REPLACE).addTag(COMMON_PROTECTIONS).add(TFBlocks.LIVEROOT_BLOCK.get(), TFBlocks.MANGROVE_ROOT.get());
+		this.tag(BlockTags.FEATURES_CANNOT_REPLACE).addTag(COMMON_PROTECTIONS).add(TFBlocks.LIVEROOT_BLOCK.get(), TFBlocks.MANGROVE_ROOT.get(), TFBlocks.SINISTER_SPAWNER.get());
 		// For anything that permits replacement during Worldgen
 		this.tag(WORLDGEN_REPLACEABLES).addTags(BlockTags.LUSH_GROUND_REPLACEABLE, BlockTags.REPLACEABLE_BY_TREES);
 
@@ -644,12 +646,13 @@ public class BlockTagGenerator extends ModdedBlockTagGenerator {
 			TFBlocks.IRON_LADDER.get(),
 			TFBlocks.TWISTED_STONE.get(),
 			TFBlocks.TWISTED_STONE_PILLAR.get(),
+			TFBlocks.SKULL_CHEST.get(),
 			TFBlocks.KEEPSAKE_CASKET.get(),
 			TFBlocks.BOLD_STONE_PILLAR.get(),
 			TFBlocks.TERRORCOTTA_CURVES.value(),
 			TFBlocks.TERRORCOTTA_LINES.value(),
 			TFBlocks.TERRORCOTTA_ARCS.value(),
-			TFBlocks.CURSED_SPAWNER.value()
+			TFBlocks.SINISTER_SPAWNER.value()
 		).addTags(MAZESTONE, CASTLE_BLOCKS, DEADROCK);
 
 		this.tag(BlockTags.MINEABLE_WITH_SHOVEL).add(
@@ -756,6 +759,12 @@ public class BlockTagGenerator extends ModdedBlockTagGenerator {
 
 		this.tag(BlockTags.SWORD_EFFICIENT)
 			.add(TFBlocks.HUGE_LILY_PAD.get());
+
+		this.tag(Tags.Blocks.BOOKSHELVES)
+			.add(TFBlocks.CANOPY_BOOKSHELF.get());
+
+		this.tag(BlockTags.WOOL_CARPETS)
+			.add(TFBlocks.CORONATION_CARPET.get());
 	}
 
 	public static TagKey<Block> create(String tagName) {

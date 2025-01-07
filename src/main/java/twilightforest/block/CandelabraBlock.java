@@ -7,6 +7,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.Vec3i;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
@@ -52,6 +53,10 @@ import net.neoforged.neoforge.common.Tags;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.block.entity.CandelabraBlockEntity;
 import twilightforest.components.item.CandelabraData;
+import twilightforest.data.tags.ItemTagGenerator;
+import twilightforest.init.TFItems;
+import twilightforest.init.TFParticleType;
+import twilightforest.init.TFSounds;
 
 import java.util.List;
 import java.util.Optional;
@@ -109,9 +114,9 @@ public class CandelabraBlock extends BaseEntityBlock implements LightableBlock, 
 	public int getLightEmission(BlockState state, BlockGetter getter, BlockPos pos) {
 		int candleCount = getCandleCount(state);
 		return switch (state.getValue(LIGHTING)) {
-			default -> 0;
 			case DIM, OMINOUS -> 2 * candleCount;
 			case NORMAL -> 5 * candleCount;
+			default -> 0;
 		};
 	}
 
@@ -159,40 +164,59 @@ public class CandelabraBlock extends BaseEntityBlock implements LightableBlock, 
 			if (level.getBlockEntity(pos) instanceof CandelabraBlockEntity candelabra) {
 				int i = this.getSlot(state.getValue(FACING), result.getLocation().subtract(result.getBlockPos().getX(), result.getBlockPos().getY(), result.getBlockPos().getZ()));
 				if (state.getValue(CANDLES.get(i)) && player.isSecondaryUseActive()) {
-					if (!level.isClientSide()) {
-						ItemStack itemstack = new ItemStack(candelabra.removeCandle(i));
-						level.playSound(null, pos, SoundEvents.CANDLE_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
-						if (player.hasInfiniteMaterials()) {
-							if (!player.getInventory().contains(itemstack)) {
-								player.getInventory().add(itemstack);
-							}
-						} else {
-							if (!player.getInventory().add(itemstack)) {
-								player.drop(itemstack, false);
-							}
+					ItemStack itemstack = new ItemStack(candelabra.removeCandle(i));
+					level.playSound(null, pos, SoundEvents.CANDLE_PLACE, SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.1F + 0.9F);
+					if (player.hasInfiniteMaterials()) {
+						if (!player.getInventory().contains(itemstack)) {
+							player.getInventory().add(itemstack);
 						}
-						level.gameEvent(player, GameEvent.BLOCK_CHANGE, pos);
+					} else {
+						if (!player.getInventory().add(itemstack)) {
+							player.drop(itemstack, false);
+						}
 					}
+					level.gameEvent(player, GameEvent.BLOCK_CHANGE, pos);
 					return InteractionResult.SUCCESS;
 				} else if (!state.getValue(CANDLES.get(i))) {
 					if (stack.is(ItemTags.CANDLES) && stack.getItem() instanceof BlockItem block) {
 						if (!level.isClientSide()) {
 							player.awardStat(Stats.ITEM_USED.get(stack.getItem()));
 							candelabra.setCandle(i, block.getBlock());
-							level.playSound(null, pos, SoundEvents.CANDLE_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
+							level.playSound(null, pos, SoundEvents.CANDLE_PLACE, SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.1F + 0.9F);
 							stack.consume(1, player);
 						}
 						return InteractionResult.SUCCESS;
 					}
 				}
 			}
-		}
-		if (stack.is(Tags.Items.DUSTS_REDSTONE) && state.getValue(LIGHTING) == Lighting.NORMAL) {
+		} else if (stack.is(Tags.Items.DUSTS_REDSTONE) && state.getValue(LIGHTING) == Lighting.NORMAL) {
 			level.setBlockAndUpdate(pos, state.setValue(LIGHTING, Lighting.DIM));
 			stack.consume(1, player);
+			level.playSound(null, pos, TFSounds.CANDELABRA_LIGHT.get(), SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.1F + 0.9F);
+			if (level.isClientSide()) {
+				this.eruptFlameParticles(TFParticleType.DIM_FLAME.get(), level, pos, state);
+			}
 			return InteractionResult.SUCCESS;
+		} else if ((stack.is(ItemTagGenerator.SCEPTERS) || stack.is(TFItems.EXANIMATE_ESSENCE)) && state.getValue(LIGHTING) == Lighting.NORMAL) {
+			level.setBlockAndUpdate(pos, state.setValue(LIGHTING, Lighting.OMINOUS));
+			level.playSound(null, pos, TFSounds.CANDELABRA_OMINOUS.get(), SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.1F + 0.9F);
+			if (level.isClientSide()) {
+				this.eruptFlameParticles(TFParticleType.OMINOUS_FLAME.get(), level, pos, state);
+			}
+			return ItemInteractionResult.sidedSuccess(level.isClientSide());
 		}
 		return this.lightCandles(state, level, pos, player, hand);
+	}
+
+	private void eruptFlameParticles(ParticleOptions particle, Level level, BlockPos pos, BlockState state) {
+		for (int i = 0; i < 3; i++) {
+			if (state.getValue(CANDLES.get(i))) {
+				Vec3 vec = Iterables.get(this.getParticleOffsets(state, level, pos), i);
+				for (int j = 0; j < 5; j++) {
+					level.addParticle(particle, pos.getX() + vec.x, pos.getY() + vec.y, pos.getZ() + vec.z, (level.getRandom().nextDouble() - 0.5D) * 0.05D, 0.015F, (level.getRandom().nextDouble() - 0.5D) * 0.05D);
+				}
+			}
+		}
 	}
 
 	protected void updateNeighborsBasedOnRotation(Level level, BlockPos pos, BlockState state) {
@@ -280,7 +304,7 @@ public class CandelabraBlock extends BaseEntityBlock implements LightableBlock, 
 			boolean flag = state.getValue(LIGHTING) != Lighting.NONE;
 			if (flag) this.extinguish(null, state, accessor, pos);
 
-			accessor.setBlock(pos, state.setValue(WATERLOGGED, true).setValue(LIGHTING, Lighting.NONE), 3);
+			accessor.setBlock(pos, state.setValue(WATERLOGGED, true).setValue(LIGHTING, Lighting.NONE), Block.UPDATE_ALL);
 			accessor.scheduleTick(pos, fluid.getType(), fluid.getType().getTickDelay(accessor));
 			return true;
 		} else {

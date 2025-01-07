@@ -247,7 +247,7 @@ public class ItemModelGenerator extends ItemModelProvider {
 		toBlockModel(TFBlocks.TERRORCOTTA_ARCS.get(), prefix("block/terrorcotta_arcs"));
 		toBlockModel(TFBlocks.TERRORCOTTA_LINES.get(), prefix("block/terrorcotta_lines_0"));
 		toBlockModel(TFBlocks.TERRORCOTTA_CURVES.get(), prefix("block/terrorcotta_curves_90"));
-		carpet(TFBlocks.ROYAL_RAGS.getRegisteredName(), TFBlocks.ROYAL_RAGS.getId().withPrefix("block/"));
+		carpet(TFBlocks.CORONATION_CARPET.getRegisteredName(), TFBlocks.CORONATION_CARPET.getId().withPrefix("block/"));
 
 		withExistingParent(TFBlocks.OAK_BANISTER.getId().toString(), prefix("item/banister_item")).texture("texture", "minecraft:block/oak_planks");
 		withExistingParent(TFBlocks.SPRUCE_BANISTER.getId().toString(), prefix("item/banister_item")).texture("texture", "minecraft:block/spruce_planks");
@@ -491,6 +491,8 @@ public class ItemModelGenerator extends ItemModelProvider {
 		singleTexTool(TFItems.LIFEDRAIN_SCEPTER);
 		singleTexTool(TFItems.ZOMBIE_SCEPTER);
 		singleTexTool(TFItems.FORTIFICATION_SCEPTER);
+		exanimateEssence(TFItems.EXANIMATE_ESSENCE);
+		singleTex(TFItems.WROUGHT_IRON_BAR);
 		singleTex(TFItems.MAGIC_PAINTING);
 		ModelFile active = generated("ore_meter_active", prefix("item/ore_meter_active"));
 		singleTex(TFItems.ORE_METER).override().predicate(TwilightForestMod.prefix("active"), 1).model(active).end();
@@ -687,14 +689,14 @@ public class ItemModelGenerator extends ItemModelProvider {
 		singleTex(TFItems.MINING_BOAT);
 		singleTex(TFItems.SORTING_BOAT);
 
-		singleTex(TFItems.TWILIGHT_OAK_CHEST_BOAT);
-		singleTex(TFItems.CANOPY_CHEST_BOAT);
-		singleTex(TFItems.MANGROVE_CHEST_BOAT);
-		singleTex(TFItems.DARK_CHEST_BOAT);
-		singleTex(TFItems.TIME_CHEST_BOAT);
-		singleTex(TFItems.TRANSFORMATION_CHEST_BOAT);
-		singleTex(TFItems.MINING_CHEST_BOAT);
-		singleTex(TFItems.SORTING_CHEST_BOAT);
+		chestBoat(TFItems.TWILIGHT_OAK_CHEST_BOAT);
+		chestBoat(TFItems.CANOPY_CHEST_BOAT);
+		chestBoat(TFItems.MANGROVE_CHEST_BOAT);
+		chestBoat(TFItems.DARK_CHEST_BOAT);
+		chestBoat(TFItems.TIME_CHEST_BOAT);
+		chestBoat(TFItems.TRANSFORMATION_CHEST_BOAT);
+		chestBoat(TFItems.MINING_CHEST_BOAT);
+		chestBoat(TFItems.SORTING_CHEST_BOAT);
 
 		generated(TFItems.NAGA_BANNER_PATTERN.getId().getPath(), prefix("item/tf_banner_pattern"));
 		generated(TFItems.LICH_BANNER_PATTERN.getId().getPath(), prefix("item/tf_banner_pattern"));
@@ -712,7 +714,7 @@ public class ItemModelGenerator extends ItemModelProvider {
 		generated("trophy_quest", prefix("item/trophy_quest"));
 		generated("shield", prefix("item/lich_shield_frame"), prefix("item/lich_shield_fill"));
 
-		this.toBlock(TFBlocks.CURSED_SPAWNER.value());
+		this.toBlock(TFBlocks.SINISTER_SPAWNER.value());
 	}
 
 	private ItemModelBuilder fullbright(String name, ResourceLocation... layers) {
@@ -764,6 +766,10 @@ public class ItemModelGenerator extends ItemModelProvider {
 
 	private ItemModelBuilder singleTex(DeferredHolder<?, ?> item) {
 		return generated(item.getId().getPath(), prefix("item/" + item.getId().getPath()));
+	}
+
+	private ItemModelBuilder chestBoat(DeferredHolder<?, ?> item) {
+		return this.generated(item.getId().getPath(), ResourceLocation.withDefaultNamespace("item/oak_chest_boat"), prefix("item/" + item.getId().getPath()));
 	}
 
 	private ItemModelBuilder specialTool(DeferredHolder<Item, ? extends Item> item) {
@@ -955,6 +961,14 @@ public class ItemModelGenerator extends ItemModelProvider {
 			.end()
 			.end()
 			.override().predicate(prefix("alt"), 1).model(alt).end();
+	}
+
+	private ItemModelBuilder exanimateEssence(DeferredItem<Item> item) {
+		ItemModelBuilder builder = withExistingParent(item.getId().getPath(), "item/generated");
+		builder = builder.texture("layer0", prefix("item/exanimate_powder"));
+		builder = builder.texture("layer1", prefix("item/exanimate_flames"));
+		builder = builder.customLoader(ItemLayerModelBuilder::begin).emissive(15, 15, 1)/*.renderType("minecraft:translucent", 0)*/.end();
+		return builder;
 	}
 
 	@Override
