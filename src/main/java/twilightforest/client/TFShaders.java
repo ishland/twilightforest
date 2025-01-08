@@ -12,9 +12,9 @@ public class TFShaders {
 	public static ShaderProgram AURORA;
 
 	public static void registerShaders(RegisterShadersEvent event) {
-		RED_THREAD = new ShaderProgram(TwilightForestMod.prefix("red_thread/red_thread"), DefaultVertexFormat.BLOCK, ShaderDefines.EMPTY);
+		RED_THREAD = new ShaderProgram(TwilightForestMod.prefix("core/red_thread/red_thread"), DefaultVertexFormat.BLOCK, ShaderDefines.EMPTY);
 		event.registerShader(RED_THREAD);
-		AURORA = new ShaderProgram(TwilightForestMod.prefix("aurora/aurora"), DefaultVertexFormat.POSITION_COLOR, ShaderDefines.EMPTY);
+		AURORA = new ShaderProgram(TwilightForestMod.prefix("core/aurora/aurora"), DefaultVertexFormat.POSITION_COLOR, ShaderDefines.EMPTY);
 		event.registerShader(AURORA);
 	}
 }

@@ -35,9 +35,7 @@ public class SnowQueenModel extends HumanoidModel<SnowQueenRenderState> implemen
 				.addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F),
 			PartPose.offset(0.0F, -4.0F, 0.0F));
 
-		partdefinition.addOrReplaceChild("hat", CubeListBuilder.create(), PartPose.ZERO);
-
-		var crown = head.addOrReplaceChild("crown", CubeListBuilder.create(), PartPose.ZERO);
+		var crown = head.addOrReplaceChild("hat", CubeListBuilder.create(), PartPose.ZERO);
 
 		makeFrontCrown(crown, -1.0F, -4.0F, 10.0F, 0);
 		makeFrontCrown(crown, 0.0F, 4.0F, -10.0F, 1);
@@ -131,7 +129,7 @@ public class SnowQueenModel extends HumanoidModel<SnowQueenRenderState> implemen
 				.addBox(-4.5F, 10.0F, -2.5F, 9.0F, 14.0F, 5.0F),
 			PartPose.ZERO);
 
-		partdefinition.addOrReplaceChild("head", CubeListBuilder.create()
+		var head = partdefinition.addOrReplaceChild("head", CubeListBuilder.create()
 				.texOffs(0, 0)
 				.addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F),
 			PartPose.ZERO);
@@ -156,7 +154,7 @@ public class SnowQueenModel extends HumanoidModel<SnowQueenRenderState> implemen
 				.addBox(-2.0F, -2.0F, -2.0F, 3.0F, 12.0F, 4.0F),
 			PartPose.offset(-5.0F, 2.0F, 0.0F));
 
-		var hat = partdefinition.addOrReplaceChild("hat", CubeListBuilder.create(), PartPose.ZERO);
+		var hat = head.addOrReplaceChild("hat", CubeListBuilder.create(), PartPose.ZERO);
 
 		hat.addOrReplaceChild("crown_front", CubeListBuilder.create()
 				.texOffs(24, 0)

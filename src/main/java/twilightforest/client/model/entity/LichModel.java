@@ -29,7 +29,7 @@ public class LichModel extends HumanoidModel<LichRenderState> implements TrophyB
 		MeshDefinition meshdefinition = HumanoidModel.createMesh(CubeDeformation.NONE, 0.0F);
 		PartDefinition partdefinition = meshdefinition.getRoot();
 
-		partdefinition.addOrReplaceChild("hat", CubeListBuilder.create()
+		partdefinition.getChild("head").addOrReplaceChild("hat", CubeListBuilder.create()
 				.texOffs(32, 0)
 				.addBox(-4.0F, -12.0F, -4.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.5F)),
 			PartPose.ZERO);

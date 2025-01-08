@@ -27,9 +27,7 @@ public class BlockChainGoblinModel extends FixedHumanoidModel<BlockChainGoblinRe
 				.addBox(0.0F, -10.0F, 0.0F, 0.0F, 0.0F, 0.0F),
 			PartPose.offset(0.0F, 10.0F, 0.0F));
 
-		partdefinition.addOrReplaceChild("hat", CubeListBuilder.create(), PartPose.ZERO);
-
-		head.addOrReplaceChild("helmet", CubeListBuilder.create()
+		head.addOrReplaceChild("hat", CubeListBuilder.create()
 				.texOffs(0, 0)
 				.addBox(-2.5F, -8.0F, -2.5F, 5.0F, 9.0F, 5.0F),
 			PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 0.7854F, 0.0F));
@@ -96,9 +94,7 @@ public class BlockChainGoblinModel extends FixedHumanoidModel<BlockChainGoblinRe
 				.addBox(-7.5F, -9.0F, -2.03F, 15.0F, 10.0F, 2.0F),
 			PartPose.offsetAndRotation(0.0F, 11.0F, 0.0F, 0.0F, -0.7853981633974483F, 0.0F));
 
-		partdefinition.addOrReplaceChild("hat", CubeListBuilder.create(), PartPose.ZERO);
-
-		head.addOrReplaceChild("helm", CubeListBuilder.create()
+		head.addOrReplaceChild("hat", CubeListBuilder.create()
 				.texOffs(0, 5)
 				.addBox(-2.5F, -7.0F, -2.5F, 5.0F, 8.0F, 5.0F),
 			PartPose.rotation(0.0F, 0.7853981633974483F, 0.0F));

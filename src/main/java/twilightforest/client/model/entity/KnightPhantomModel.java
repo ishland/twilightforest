@@ -34,7 +34,7 @@ public class KnightPhantomModel extends HumanoidModel<KnightPhatomRenderState> i
 		MeshDefinition meshdefinition = HumanoidModel.createMesh(CubeDeformation.NONE, 0.0F);
 		PartDefinition partdefinition = meshdefinition.getRoot();
 
-		partdefinition.addOrReplaceChild("hat", CubeListBuilder.create(),
+		partdefinition.getChild("head").addOrReplaceChild("hat", CubeListBuilder.create(),
 			PartPose.ZERO);
 
 		partdefinition.addOrReplaceChild("right_arm", CubeListBuilder.create()
@@ -65,13 +65,13 @@ public class KnightPhantomModel extends HumanoidModel<KnightPhatomRenderState> i
 		PartDefinition partdefinition = meshdefinition.getRoot();
 		CubeDeformation deformation = new CubeDeformation(0.25F);
 
-		partdefinition.addOrReplaceChild("head",
+		var head = partdefinition.addOrReplaceChild("head",
 			CubeListBuilder.create()
 				.texOffs(0, 0)
 				.addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F),
 			PartPose.offset(0.0F, -4.0F, 0.0F));
 
-		partdefinition.addOrReplaceChild("hat", CubeListBuilder.create(),
+		head.addOrReplaceChild("hat", CubeListBuilder.create(),
 			PartPose.ZERO);
 
 		var helm = partdefinition.addOrReplaceChild("helmet",

@@ -27,7 +27,7 @@ public class MinotaurModel extends HumanoidModel<HumanoidRenderState> {
 				.addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F),
 			PartPose.offset(0.0F, 0.0F, 0.0F));
 
-		partdefinition.addOrReplaceChild("hat", CubeListBuilder.create(), PartPose.ZERO);
+		head.addOrReplaceChild("hat", CubeListBuilder.create(), PartPose.ZERO);
 
 		head.addOrReplaceChild("snout", CubeListBuilder.create()
 				.texOffs(9, 12)
@@ -61,7 +61,7 @@ public class MinotaurModel extends HumanoidModel<HumanoidRenderState> {
 		MeshDefinition meshdefinition = HumanoidModel.createMesh(CubeDeformation.NONE, 0.0F);
 		PartDefinition partdefinition = meshdefinition.getRoot();
 
-		partdefinition.addOrReplaceChild("head", CubeListBuilder.create()
+		var head = partdefinition.addOrReplaceChild("head", CubeListBuilder.create()
 				.texOffs(0, 0)
 				.addBox(-4.0F, -10.0F, -4.0F, 8.0F, 8.0F, 8.0F)
 				.texOffs(25, 1)
@@ -76,7 +76,7 @@ public class MinotaurModel extends HumanoidModel<HumanoidRenderState> {
 				.addBox(6.0F, -11.0F, -1.0F, 2.0F, 2.0F, 2.0F),
 			PartPose.offset(0.0F, -2.0F, 0.0F));
 
-		partdefinition.addOrReplaceChild("hat", CubeListBuilder.create(), PartPose.ZERO);
+		head.addOrReplaceChild("hat", CubeListBuilder.create(), PartPose.ZERO);
 
 		partdefinition.addOrReplaceChild("body", CubeListBuilder.create()
 				.texOffs(34, 0)

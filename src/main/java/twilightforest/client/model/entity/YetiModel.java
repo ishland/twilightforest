@@ -31,12 +31,12 @@ public class YetiModel extends HumanoidModel<YetiRenderState> {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 
-		partdefinition.addOrReplaceChild("head", CubeListBuilder.create()
+		var head = partdefinition.addOrReplaceChild("head", CubeListBuilder.create()
 				.texOffs(0, 0)
 				.addBox(-4.0F, -8.0F, -4.0F, 0.0F, 0.0F, 0.0F),
 			PartPose.ZERO);
 
-		partdefinition.addOrReplaceChild("hat", CubeListBuilder.create()
+		head.addOrReplaceChild("hat", CubeListBuilder.create()
 				.texOffs(32, 0)
 				.addBox(-4.0F, -8.0F, -4.0F, 0.0F, 0.0F, 0.0F),
 			PartPose.ZERO);

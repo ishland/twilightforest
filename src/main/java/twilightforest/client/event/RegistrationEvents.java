@@ -67,7 +67,6 @@ import twilightforest.client.model.entity.*;
 import twilightforest.client.model.item.TrollsteinnModel;
 import twilightforest.client.particle.*;
 import twilightforest.client.renderer.PotionFlaskTooltipComponent;
-import twilightforest.client.renderer.TFSkyRenderer;
 import twilightforest.client.renderer.block.*;
 import twilightforest.client.renderer.entity.*;
 import twilightforest.client.renderer.entity.layers.IceLayer;
@@ -77,6 +76,7 @@ import twilightforest.client.renderer.map.MagicMapPlayerIconRenderer;
 import twilightforest.components.item.PotionFlaskComponent;
 import twilightforest.init.*;
 import twilightforest.item.*;
+import twilightforest.item.mapdata.TFMagicMapData;
 import twilightforest.potions.FrostedEffect;
 import twilightforest.util.woods.TFWoodTypes;
 
@@ -692,7 +692,7 @@ public class RegistrationEvents {
 		return optifinePresent;
 	}
 
-	public static<S extends LivingEntityRenderState, M extends EntityModel<S>> void registerCustomRenderData(RegisterRenderStateModifiersEvent event) {
+	public static void registerCustomRenderData(RegisterRenderStateModifiersEvent event) {
 		event.registerEntityModifier(new TypeToken<LivingEntityRenderer<?, ?, ?>>() {}, (living, state) -> state.setRenderData(ShieldLayer.SHIELD_COUNT_KEY, ShieldLayer.getShieldCount(living)));
 		event.registerEntityModifier(new TypeToken<LivingEntityRenderer<?, ?, ?>>() {}, (living, state) -> {
 			AttributeInstance speed = living.getAttribute(Attributes.MOVEMENT_SPEED);
@@ -704,5 +704,8 @@ public class RegistrationEvents {
             state.setRenderData(IceLayer.FROST_COUNT_KEY, frost.amount());
 			state.setRenderData(IceLayer.FROST_ID_KEY, living.getId());
         });
+
+		event.registerMapModifier((data, state) -> state.setRenderData(TFMagicMapData.MAGIC_MAP_KEY, data instanceof TFMagicMapData));
+		event.registerMapModifier((data, state) -> state.setRenderData(TFMagicMapData.CONQUERED_STRUCTURES_KEY, data instanceof TFMagicMapData map ? map.conqueredStructures : List.of()));
 	}
 }

@@ -7,31 +7,33 @@ import net.minecraft.client.renderer.texture.AbstractTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
-import net.minecraft.world.entity.vehicle.Boat;
 import twilightforest.TwilightForestMod;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class TextureGeneratorReloadListener implements ResourceManagerReloadListener {
 	public static final TextureGeneratorReloadListener INSTANCE = new TextureGeneratorReloadListener();
-	private static final EnumMap<Boat.Type, AbstractTexture> BOAT_CACHE = new EnumMap<>(Boat.Type.class);
+	private static final Map<String, AbstractTexture> BOAT_CACHE = new HashMap<>();
 	private static final AtomicReference<NativeImage> ref = new AtomicReference<>();
+	private static final List<String> TF_BOATS = List.of("twilight_oak", "canopy", "mangrove", "dark", "time", "transformation", "mining", "sorting");
 
 	@Override
 	public void onResourceManagerReload(ResourceManager manager) {
 		// Get a default boat chest texture
-		ResourceLocation oak = getTextureLocation(Boat.Type.OAK);
+		ResourceLocation oak = getTextureLocation(ResourceLocation.withDefaultNamespace("oak"));
 
 		manager.getResource(oak).ifPresent(vanillaResource -> {
 			try (InputStream vanillaStream = vanillaResource.open()) {
 				NativeImage vanillaImage = NativeImage.read(vanillaStream);
 				int defaultScale = 128;
 				int vanillaScale = vanillaImage.getWidth() / defaultScale;
-				for (Boat.Type type : Boat.Type.values()) {
-					ResourceLocation location = getTextureLocation(type);
+				for (String type : TF_BOATS) {
+					ResourceLocation location = getTextureLocation(TwilightForestMod.prefix(type));
 					if (location.getNamespace().equals(TwilightForestMod.ID)) { // We only want to do this to our boats
 						manager.getResource(location).ifPresent(tfResource -> {
 							try (InputStream tfStream = tfResource.open()) {
@@ -110,7 +112,7 @@ public class TextureGeneratorReloadListener implements ResourceManagerReloadList
 		ref.set(null);
 	}
 
-	private static ResourceLocation getTextureLocation(Boat.Type type) {
-		return ResourceLocation.parse(type.getName()).withPrefix("textures/entity/chest_boat/").withSuffix(".png");
+	private static ResourceLocation getTextureLocation(ResourceLocation texture) {
+		return texture.withPrefix("textures/entity/chest_boat/").withSuffix(".png");
 	}
 }

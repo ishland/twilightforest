@@ -26,12 +26,12 @@ public class LowerGoblinKnightModel extends HumanoidModel<LowerGoblinKnightRende
 		MeshDefinition meshdefinition = HumanoidModel.createMesh(CubeDeformation.NONE, 0);
 		PartDefinition partdefinition = meshdefinition.getRoot();
 
-		partdefinition.addOrReplaceChild("head", CubeListBuilder.create()
+		var head = partdefinition.addOrReplaceChild("head", CubeListBuilder.create()
 				.texOffs(0, 32)
 				.addBox(-2.5F, -5.0F, -3.5F, 5.0F, 5.0F, 5.0F),
 			PartPose.offset(0.0F, 10.0F, 1.0F));
 
-		partdefinition.addOrReplaceChild("hat", CubeListBuilder.create(),
+		head.addOrReplaceChild("hat", CubeListBuilder.create(),
 			PartPose.ZERO);
 
 		partdefinition.addOrReplaceChild("body", CubeListBuilder.create()
@@ -71,12 +71,12 @@ public class LowerGoblinKnightModel extends HumanoidModel<LowerGoblinKnightRende
 		MeshDefinition meshdefinition = HumanoidModel.createMesh(CubeDeformation.NONE, 0.0F);
 		PartDefinition partdefinition = meshdefinition.getRoot();
 
-		partdefinition.addOrReplaceChild("head", CubeListBuilder.create()
+		var head = partdefinition.addOrReplaceChild("head", CubeListBuilder.create()
 				.texOffs(0, 30)
 				.addBox(-2.5F, -5.0F, -3.5F, 5.0F, 5.0F, 5.0F),
 			PartPose.offset(0.0F, 8.0F, 1.0F));
 
-		partdefinition.addOrReplaceChild("hat", CubeListBuilder.create(),
+		head.addOrReplaceChild("hat", CubeListBuilder.create(),
 			PartPose.ZERO);
 
 		partdefinition.addOrReplaceChild("body", CubeListBuilder.create()

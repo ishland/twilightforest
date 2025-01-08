@@ -19,16 +19,16 @@ import twilightforest.item.mapdata.TFMagicMapData;
 
 public class ConqueredMapIconRenderer implements IMapDecorationRenderer {
 
-	private boolean isConquered(MapItemSavedData data, MapRenderState.MapDecorationRenderState decoration) {
-		if (data instanceof TFMagicMapData map) {
-			return map.conqueredStructures.contains(MagicMapItem.makeName(decoration.type, decoration.x, decoration.y));
+	private boolean isConquered(MapRenderState state, MapRenderState.MapDecorationRenderState decoration) {
+		if (state.getRenderData(TFMagicMapData.CONQUERED_STRUCTURES_KEY) != null && !state.getRenderData(TFMagicMapData.CONQUERED_STRUCTURES_KEY).isEmpty()) {
+			return state.getRenderData(TFMagicMapData.CONQUERED_STRUCTURES_KEY).contains(MagicMapItem.makeName(decoration.type, decoration.x, decoration.y));
 		}
 		return false;
 	}
 
 	@Override
 	public boolean render(MapRenderState.MapDecorationRenderState decoState, PoseStack stack, MultiBufferSource source, MapRenderState state, MapDecorationTextureManager manager, boolean inItemFrame, int light, int index) {
-		if (this.isConquered(mapData, decoState)) {
+		if (this.isConquered(state, decoState)) {
 			stack.pushPose();
 			stack.translate(0.0F + decoState.x / 2.0F + 64.0F, 0.0F + decoState.y / 2.0F + 64.0F, 0.0F);
 			stack.mulPose(Axis.ZP.rotationDegrees((decoState.rot * 360) / 16.0F));
