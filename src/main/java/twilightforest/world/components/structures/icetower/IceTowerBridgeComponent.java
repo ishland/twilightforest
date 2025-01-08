@@ -35,7 +35,7 @@ public class IceTowerBridgeComponent extends TFStructureComponentOld {
 		this.length = length;
 		this.setOrientation(direction);
 		this.extraZlength = zLength;
-		this.boundingBox = BoundingBoxUtils.getComponentToAddBoundingBox(x, y, z, 0, 0, 0, length, 6, 5 + zLength, direction, false);
+		this.boundingBox = BoundingBoxUtils.getComponentToAddBoundingBox(x, y, z, 0, 0, -zLength, length, 6, 5 + zLength, direction, false);
 	}
 
 	@Override
