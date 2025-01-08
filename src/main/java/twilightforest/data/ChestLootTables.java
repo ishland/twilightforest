@@ -323,8 +323,7 @@ public record ChestLootTables(HolderLookup.Provider registries) implements LootT
 					.add(LootItem.lootTableItem(TFBlocks.TIME_SAPLING).setWeight(25))
 					.add(LootItem.lootTableItem(TFBlocks.TRANSFORMATION_SAPLING).setWeight(25))
 					.add(LootItem.lootTableItem(TFBlocks.MINING_SAPLING).setWeight(25))
-					.add(LootItem.lootTableItem(TFBlocks.SORTING_SAPLING).setWeight(25))
-					.add(LootItem.lootTableItem(TFItems.MUSIC_DISC_SUPERSTITIOUS).setWeight(25))));
+					.add(LootItem.lootTableItem(TFBlocks.SORTING_SAPLING).setWeight(25))));
 
 		register.accept(TFLootTables.FALLEN_TRUNK_LOOT,
 			LootTable.lootTable()
