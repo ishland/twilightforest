@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "twilightforest:huge_lily_pad"
-    },
-    {
-      "item": "twilightforest:transformation_powder"
-    }
+    "twilightforest:huge_lily_pad",
+    "twilightforest:transformation_powder"
   ],
   "result": {
     "count": 4,

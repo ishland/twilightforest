@@ -1,7 +1,5 @@
 {
-  "carvers": {
-    "air": "twilightforest:highland_caves"
-  },
+  "carvers": "twilightforest:highland_caves",
   "downfall": 0.0,
   "effects": {
     "fog_color": 12648408,

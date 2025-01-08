@@ -1,5 +1,5 @@
 {
-  "carvers": {},
+  "carvers": [],
   "creature_spawn_probability": 0.15,
   "downfall": 0.1,
   "effects": {
@@ -42,8 +42,7 @@
     [],
     [],
     [
-      "minecraft:seagrass_normal",
-      "minecraft:seagrass_simple"
+      "minecraft:seagrass_normal"
     ],
     [
       "minecraft:freeze_top_layer"

@@ -455,18 +455,12 @@ public class LangGenerator extends TFLangProvider {
 		this.addBannerPattern("quest_ram", "Questing Ram Swirls");
 
 		this.addBlock(TFBlocks.ZOMBIE_SKULL_CANDLE, "Zombie Skull Candle");
-		this.addBlock(TFBlocks.ZOMBIE_WALL_SKULL_CANDLE, "Zombie Wall Skull Candle");
 		this.addBlock(TFBlocks.SKELETON_SKULL_CANDLE, "Skeleton Skull Candle");
-		this.addBlock(TFBlocks.SKELETON_WALL_SKULL_CANDLE, "Skeleton Wall Skull Candle");
 		this.addBlock(TFBlocks.WITHER_SKELE_SKULL_CANDLE, "Wither Skeleton Skull Candle");
-		this.addBlock(TFBlocks.WITHER_SKELE_WALL_SKULL_CANDLE, "Wither Skeleton Wall Skull Candle");
 		this.addBlock(TFBlocks.CREEPER_SKULL_CANDLE, "Creeper Skull Candle");
-		this.addBlock(TFBlocks.CREEPER_WALL_SKULL_CANDLE, "Creeper Wall Skull Candle");
 		this.addBlock(TFBlocks.PLAYER_SKULL_CANDLE, "Player Skull Candle");
 		this.add("block.twilightforest.player_skull_candle.named", "%s's Head with Candles");
-		this.addBlock(TFBlocks.PLAYER_WALL_SKULL_CANDLE, "Player Wall Skull Candle");
 		this.addBlock(TFBlocks.PIGLIN_SKULL_CANDLE, "Piglin Skull Candle");
-		this.addBlock(TFBlocks.PIGLIN_WALL_SKULL_CANDLE, "Piglin Wall Skull Candle");
 
 		this.addBlock(TFBlocks.UNCRAFTING_TABLE, "Uncrafting Table");
 		this.add("block.twilightforest.uncrafting_table.disabled", "This block has been disabled.");

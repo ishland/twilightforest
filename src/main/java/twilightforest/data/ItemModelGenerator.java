@@ -1,6 +1,7 @@
 package twilightforest.data;
 
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.models.ItemModelGenerators;
@@ -505,10 +506,10 @@ public class ItemModelGenerator extends ItemModelProvider {
 		singleTex(TFItems.LIVEROOT);
 		singleTex(TFItems.RAW_IRONWOOD);
 		singleTex(TFItems.IRONWOOD_INGOT);
-		trimmedArmor(TFItems.IRONWOOD_HELMET);
-		trimmedArmor(TFItems.IRONWOOD_CHESTPLATE);
-		trimmedArmor(TFItems.IRONWOOD_LEGGINGS);
-		trimmedArmor(TFItems.IRONWOOD_BOOTS);
+		trimmedArmor(TFItems.IRONWOOD_HELMET, "helmet");
+		trimmedArmor(TFItems.IRONWOOD_CHESTPLATE, "chestplate");
+		trimmedArmor(TFItems.IRONWOOD_LEGGINGS, "leggings");
+		trimmedArmor(TFItems.IRONWOOD_BOOTS, "boots");
 		singleTexTool(TFItems.IRONWOOD_SWORD);
 		singleTexTool(TFItems.IRONWOOD_PICKAXE);
 		singleTexTool(TFItems.IRONWOOD_AXE);
@@ -521,17 +522,17 @@ public class ItemModelGenerator extends ItemModelProvider {
 		singleTex(TFItems.FIERY_BLOOD);
 		singleTex(TFItems.FIERY_TEARS);
 		singleTexFullbright(TFItems.FIERY_INGOT);
-		trimmedFullbrightArmor(TFItems.FIERY_HELMET);
-		trimmedFullbrightArmor(TFItems.FIERY_CHESTPLATE);
-		trimmedFullbrightArmor(TFItems.FIERY_LEGGINGS);
-		trimmedFullbrightArmor(TFItems.FIERY_BOOTS);
+		trimmedFullbrightArmor(TFItems.FIERY_HELMET, "helmet");
+		trimmedFullbrightArmor(TFItems.FIERY_CHESTPLATE, "chestplate");
+		trimmedFullbrightArmor(TFItems.FIERY_LEGGINGS, "leggings");
+		trimmedFullbrightArmor(TFItems.FIERY_BOOTS, "boots");
 		singleTexFullbrightTool(TFItems.FIERY_SWORD);
 		singleTexFullbrightTool(TFItems.FIERY_PICKAXE);
 		singleTex(TFItems.STEELEAF_INGOT);
-		trimmedArmor(TFItems.STEELEAF_HELMET);
-		trimmedArmor(TFItems.STEELEAF_CHESTPLATE);
-		trimmedArmor(TFItems.STEELEAF_LEGGINGS);
-		trimmedArmor(TFItems.STEELEAF_BOOTS);
+		trimmedArmor(TFItems.STEELEAF_HELMET, "helmet");
+		trimmedArmor(TFItems.STEELEAF_CHESTPLATE, "chestplate");
+		trimmedArmor(TFItems.STEELEAF_LEGGINGS, "leggings");
+		trimmedArmor(TFItems.STEELEAF_BOOTS, "boots");
 		singleTexTool(TFItems.STEELEAF_SWORD);
 		singleTexTool(TFItems.STEELEAF_PICKAXE);
 		singleTexTool(TFItems.STEELEAF_AXE);
@@ -567,16 +568,16 @@ public class ItemModelGenerator extends ItemModelProvider {
 		singleTex(TFItems.ARMOR_SHARD);
 		singleTex(TFItems.ARMOR_SHARD_CLUSTER);
 		singleTex(TFItems.KNIGHTMETAL_INGOT);
-		trimmedArmor(TFItems.KNIGHTMETAL_HELMET);
-		trimmedArmor(TFItems.KNIGHTMETAL_CHESTPLATE);
-		trimmedArmor(TFItems.KNIGHTMETAL_LEGGINGS);
-		trimmedArmor(TFItems.KNIGHTMETAL_BOOTS);
+		trimmedArmor(TFItems.KNIGHTMETAL_HELMET, "helmet");
+		trimmedArmor(TFItems.KNIGHTMETAL_CHESTPLATE, "chestplate");
+		trimmedArmor(TFItems.KNIGHTMETAL_LEGGINGS, "leggings");
+		trimmedArmor(TFItems.KNIGHTMETAL_BOOTS, "boots");
 		singleTexTool(TFItems.KNIGHTMETAL_SWORD);
 		singleTexTool(TFItems.KNIGHTMETAL_PICKAXE);
 		singleTexTool(TFItems.KNIGHTMETAL_AXE);
 		singleTex(TFItems.KNIGHTMETAL_RING);
-		trimmedArmor(TFItems.PHANTOM_HELMET);
-		trimmedArmor(TFItems.PHANTOM_CHESTPLATE);
+		trimmedArmor(TFItems.PHANTOM_HELMET, "helmet");
+		trimmedArmor(TFItems.PHANTOM_CHESTPLATE, "chestplate");
 		lamp(TFItems.LAMP_OF_CINDERS);
 		singleTex(TFItems.POCKET_WATCH);
 		singleTex(TFItems.EMPERORS_CLOTH);
@@ -585,15 +586,15 @@ public class ItemModelGenerator extends ItemModelProvider {
 		singleTex(TFItems.ALPHA_YETI_FUR);
 		//yeti helmets cant be trimmed
 		singleTex(TFItems.YETI_HELMET);
-		trimmedArmor(TFItems.YETI_CHESTPLATE);
-		trimmedArmor(TFItems.YETI_LEGGINGS);
-		trimmedArmor(TFItems.YETI_BOOTS);
+		trimmedArmor(TFItems.YETI_CHESTPLATE, "chestplate");
+		trimmedArmor(TFItems.YETI_LEGGINGS, "leggings");
+		trimmedArmor(TFItems.YETI_BOOTS, "boots");
 		singleTex(TFItems.ICE_BOMB);
 		singleTex(TFItems.ARCTIC_FUR);
-		trimmedLayeredArmor(TFItems.ARCTIC_HELMET);
-		trimmedLayeredArmor(TFItems.ARCTIC_CHESTPLATE);
-		trimmedLayeredArmor(TFItems.ARCTIC_LEGGINGS);
-		trimmedLayeredArmor(TFItems.ARCTIC_BOOTS);
+		trimmedLayeredArmor(TFItems.ARCTIC_HELMET, "helmet");
+		trimmedLayeredArmor(TFItems.ARCTIC_CHESTPLATE, "chestplate");
+		trimmedLayeredArmor(TFItems.ARCTIC_LEGGINGS, "leggings");
+		trimmedLayeredArmor(TFItems.ARCTIC_BOOTS, "boots");
 		singleTex(TFItems.MAGIC_BEANS);
 		ModelFile triplePulling0 = bowItem("triple_bow_pulling_0", prefix("item/triple_bow_pulling_0"));
 		ModelFile triplePulling1 = bowItem("triple_bow_pulling_1", prefix("item/triple_bow_pulling_1"));
@@ -872,24 +873,24 @@ public class ItemModelGenerator extends ItemModelProvider {
 			.perspective(ItemDisplayContext.GUI, gui.texture("all", parent)).end();
 	}
 
-	private ItemModelBuilder trimmedArmor(DeferredItem<ArmorItem> armor) {
+	private ItemModelBuilder trimmedArmor(DeferredItem<ArmorItem> armor, String slotKey) {
 		ItemModelBuilder base = this.singleTex(armor);
 		for (ItemModelGenerators.TrimModelData trim : ItemModelGenerators.GENERATED_TRIM_MODELS) {
 			String material = trim.name();
 			String name = armor.getId().getPath() + "_" + material + "_trim";
 			ModelFile trimModel = this.withExistingParent(name, this.mcLoc("item/generated"))
 				.texture("layer0", prefix("item/" + armor.getId().getPath()))
-				.texture("layer1", this.mcLoc("trims/items/" + armor.get().getEquipmentSlot(armor.toStack()).getName() + "_trim_" + material));
+				.texture("layer1", this.mcLoc("trims/items/" + slotKey + "_trim_" + material));
 			base.override().predicate(ResourceLocation.withDefaultNamespace("trim_type"), trim.itemModelIndex()).model(trimModel).end();
 		}
 		return base;
 	}
 
-	private void trimmedFullbrightArmor(DeferredItem<ArmorItem> armor) {
-		this.trimmedArmor(armor).customLoader(ItemLayerModelBuilder::begin).emissive(15, 15, 0).renderType("minecraft:translucent", 0).end();
+	private void trimmedFullbrightArmor(DeferredItem<ArmorItem> armor, String slotKey) {
+		this.trimmedArmor(armor, slotKey).customLoader(ItemLayerModelBuilder::begin).emissive(15, 15, 0).renderType("minecraft:translucent", 0).end();
 	}
 
-	private void trimmedLayeredArmor(DeferredItem<ArmorItem> armor) {
+	private void trimmedLayeredArmor(DeferredItem<ArmorItem> armor, String slotKey) {
 		ItemModelBuilder base = this.generated(armor.getId().getPath(), prefix("item/" + armor.getId().getPath()), prefix("item/" + armor.getId().getPath() + "_0"));
 		for (ItemModelGenerators.TrimModelData trim : ItemModelGenerators.GENERATED_TRIM_MODELS) {
 			String material = trim.name();
@@ -897,7 +898,7 @@ public class ItemModelGenerator extends ItemModelProvider {
 			ModelFile trimModel = this.withExistingParent(name, this.mcLoc("item/generated"))
 				.texture("layer0", prefix("item/" + armor.getId().getPath()))
 				.texture("layer1", prefix("item/" + armor.getId().getPath() + "_0"))
-				.texture("layer2", this.mcLoc("trims/items/" + armor.get().getEquipmentSlot(armor.toStack()).getName() + "_trim_" + material));
+				.texture("layer2", this.mcLoc("trims/items/" + slotKey + "_trim_" + material));
 			base.override().predicate(ResourceLocation.withDefaultNamespace("trim_type"), trim.itemModelIndex()).model(trimModel).end();
 		}
 	}

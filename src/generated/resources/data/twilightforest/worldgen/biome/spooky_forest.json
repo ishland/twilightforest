@@ -1,7 +1,5 @@
 {
-  "carvers": {
-    "air": "twilightforest:tf_caves"
-  },
+  "carvers": "twilightforest:tf_caves",
   "downfall": 1.0,
   "effects": {
     "fog_color": 8549265,

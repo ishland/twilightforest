@@ -3,12 +3,8 @@
   "category": "redstone",
   "group": "trapped_chest",
   "key": {
-    "#": {
-      "item": "twilightforest:twilight_oak_planks"
-    },
-    "C": {
-      "item": "minecraft:trapped_chest"
-    }
+    "#": "twilightforest:twilight_oak_planks",
+    "C": "minecraft:trapped_chest"
   },
   "pattern": [
     "###",

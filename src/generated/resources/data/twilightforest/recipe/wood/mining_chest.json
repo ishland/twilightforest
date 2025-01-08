@@ -3,12 +3,8 @@
   "category": "misc",
   "group": "chest",
   "key": {
-    "#": {
-      "item": "twilightforest:mining_planks"
-    },
-    "C": {
-      "item": "minecraft:chest"
-    }
+    "#": "twilightforest:mining_planks",
+    "C": "minecraft:chest"
   },
   "pattern": [
     "###",

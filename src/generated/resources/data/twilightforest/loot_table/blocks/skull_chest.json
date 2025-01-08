@@ -3,7 +3,17 @@
   "pools": [
     {
       "bonus_rolls": 0.0,
-      "entries": [],
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "twilightforest:skull_chest"
+        }
+      ],
       "rolls": 1.0
     }
   ],

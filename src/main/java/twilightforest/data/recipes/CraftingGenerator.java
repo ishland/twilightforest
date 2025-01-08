@@ -514,10 +514,10 @@ public class CraftingGenerator extends CraftingDataHelper {
 		charmRecipe(getter, "charm_of_keeping_3", TFItems.CHARM_OF_KEEPING_3, TFItems.CHARM_OF_KEEPING_2);
 		charmRecipe(getter, "charm_of_life_2", TFItems.CHARM_OF_LIFE_2, TFItems.CHARM_OF_LIFE_1);
 
-		SpecialRecipeBuilder.special(MoonwormQueenRepairRecipe::new).save(this.output, this.createKey("moonworm_queen_repair_recipe").toString());
-		SpecialRecipeBuilder.special(MagicMapCloningRecipe::new).save(this.output, this.createKey("magic_map_cloning_recipe").toString());
-		SpecialRecipeBuilder.special(MazeMapCloningRecipe::new).save(this.output, this.createKey("maze_map_cloning_recipe").toString());
-		SpecialRecipeBuilder.special(EmperorsClothRecipe::new).save(this.output, this.createKey("emperors_cloth_recipe").toString());
+		SpecialRecipeBuilder.special(MoonwormQueenRepairRecipe::new).save(this.output, this.createKey("moonworm_queen_repair_recipe"));
+		SpecialRecipeBuilder.special(MagicMapCloningRecipe::new).save(this.output, this.createKey("magic_map_cloning_recipe"));
+		SpecialRecipeBuilder.special(MazeMapCloningRecipe::new).save(this.output, this.createKey("maze_map_cloning_recipe"));
+		SpecialRecipeBuilder.special(EmperorsClothRecipe::new).save(this.output, this.createKey("emperors_cloth_recipe"));
 
 		NoSmithingTemplateRecipeBuilder
 			.noTemplate(Ingredient.of(getter.getOrThrow(Tags.Items.ARMORS)), Ingredient.of(TFItems.EMPERORS_CLOTH.get()), RecipeCategory.MISC)
@@ -907,24 +907,24 @@ public class CraftingGenerator extends CraftingDataHelper {
 	}
 
 	private <T extends AbstractCookingRecipe> void cookingRecipes(String processName, RecipeSerializer<T> process, AbstractCookingRecipe.Factory<T> factory, int smeltingTime) {
-		SimpleCookingRecipeBuilder.generic(Ingredient.of(TFItems.RAW_MEEF.get()), RecipeCategory.FOOD, TFItems.COOKED_MEEF.get(), 0.35F, smeltingTime, process, factory).unlockedBy("has_food", has(TFItems.RAW_MEEF.get())).save(this.output, this.createKey("food/" + processName + "_meef").toString());
-		SimpleCookingRecipeBuilder.generic(Ingredient.of(TFItems.RAW_VENISON.get()), RecipeCategory.FOOD, TFItems.COOKED_VENISON.get(), 0.35F, smeltingTime, process, factory).unlockedBy("has_food", has(TFItems.RAW_VENISON.get())).save(this.output, this.createKey("food/" + processName + "_venison").toString());
+		SimpleCookingRecipeBuilder.generic(Ingredient.of(TFItems.RAW_MEEF.get()), RecipeCategory.FOOD, TFItems.COOKED_MEEF.get(), 0.35F, smeltingTime, process, factory).unlockedBy("has_food", has(TFItems.RAW_MEEF.get())).save(this.output, this.createKey("food/" + processName + "_meef"));
+		SimpleCookingRecipeBuilder.generic(Ingredient.of(TFItems.RAW_VENISON.get()), RecipeCategory.FOOD, TFItems.COOKED_VENISON.get(), 0.35F, smeltingTime, process, factory).unlockedBy("has_food", has(TFItems.RAW_VENISON.get())).save(this.output, this.createKey("food/" + processName + "_venison"));
 	}
 
 	private <T extends AbstractCookingRecipe> void ingotRecipes(String processName, RecipeSerializer<T> process, AbstractCookingRecipe.Factory<T> factory, int smeltingTime) {
-		SimpleCookingRecipeBuilder.generic(Ingredient.of(TFItems.ARMOR_SHARD_CLUSTER.get()), RecipeCategory.MISC, TFItems.KNIGHTMETAL_INGOT.get(), 1.0F, smeltingTime, process, factory).unlockedBy("has_item", has(TFItems.ARMOR_SHARD_CLUSTER.get())).group("knightmetal_ingot").save(this.output, this.createKey("material/" + processName + "_knightmetal_ingot").toString());
-		SimpleCookingRecipeBuilder.generic(Ingredient.of(TFItems.RAW_IRONWOOD.get()), RecipeCategory.MISC, TFItems.IRONWOOD_INGOT.get(), 1.0F, smeltingTime, process, factory).unlockedBy("has_item", has(TFItems.RAW_IRONWOOD.get())).group("ironwood_ingot").save(this.output, this.createKey("material/" + processName + "_ironwood_ingot").toString());
+		SimpleCookingRecipeBuilder.generic(Ingredient.of(TFItems.ARMOR_SHARD_CLUSTER.get()), RecipeCategory.MISC, TFItems.KNIGHTMETAL_INGOT.get(), 1.0F, smeltingTime, process, factory).unlockedBy("has_item", has(TFItems.ARMOR_SHARD_CLUSTER.get())).group("knightmetal_ingot").save(this.output, this.createKey("material/" + processName + "_knightmetal_ingot"));
+		SimpleCookingRecipeBuilder.generic(Ingredient.of(TFItems.RAW_IRONWOOD.get()), RecipeCategory.MISC, TFItems.IRONWOOD_INGOT.get(), 1.0F, smeltingTime, process, factory).unlockedBy("has_item", has(TFItems.RAW_IRONWOOD.get())).group("ironwood_ingot").save(this.output, this.createKey("material/" + processName + "_ironwood_ingot"));
 	}
 
 	private void crackedWoodRecipes() {
-		SimpleCookingRecipeBuilder.smoking(Ingredient.of(TFBlocks.TOWERWOOD.get()), RecipeCategory.BUILDING_BLOCKS, TFBlocks.CRACKED_TOWERWOOD.get(), 0.1F, 100).unlockedBy("has_item", has(TFBlocks.TOWERWOOD.get())).save(this.output, this.createKey("wood/" + "smoked" + "_cracked_towerwood").toString());
+		SimpleCookingRecipeBuilder.smoking(Ingredient.of(TFBlocks.TOWERWOOD.get()), RecipeCategory.BUILDING_BLOCKS, TFBlocks.CRACKED_TOWERWOOD.get(), 0.1F, 100).unlockedBy("has_item", has(TFBlocks.TOWERWOOD.get())).save(this.output, this.createKey("wood/" + "smoked" + "_cracked_towerwood"));
 	}
 
 	private void crackedStoneRecipes() {
-		SimpleCookingRecipeBuilder.smelting(Ingredient.of(TFBlocks.NAGASTONE_PILLAR.get()), RecipeCategory.BUILDING_BLOCKS, TFBlocks.CRACKED_NAGASTONE_PILLAR.get(), 0.1F, 200).unlockedBy("has_item", has(TFBlocks.NAGASTONE_PILLAR.get())).save(this.output, this.createKey("nagastone/" + "smelted" + "_cracked_nagastone_pillar").toString());
-		SimpleCookingRecipeBuilder.smelting(Ingredient.of(TFBlocks.ETCHED_NAGASTONE.get()), RecipeCategory.BUILDING_BLOCKS, TFBlocks.CRACKED_ETCHED_NAGASTONE.get(), 0.1F, 200).unlockedBy("has_item", has(TFBlocks.ETCHED_NAGASTONE.get())).save(this.output, this.createKey("nagastone/" + "smelted" + "_cracked_etched_nagastone").toString());
-		SimpleCookingRecipeBuilder.smelting(Ingredient.of(TFBlocks.MAZESTONE_BRICK.get()), RecipeCategory.BUILDING_BLOCKS, TFBlocks.CRACKED_MAZESTONE.get(), 0.1F, 200).unlockedBy("has_item", has(TFBlocks.MAZESTONE_BRICK.get())).save(this.output, this.createKey("maze_stone/" + "smelted" + "_maze_stone_cracked").toString());
-		SimpleCookingRecipeBuilder.smelting(Ingredient.of(TFBlocks.CASTLE_BRICK.get()), RecipeCategory.BUILDING_BLOCKS, TFBlocks.CRACKED_CASTLE_BRICK.get(), 0.1F, 200).unlockedBy("has_item", has(TFBlocks.CASTLE_BRICK.get())).save(this.output, this.createKey("castleblock/" + "smelted" + "_cracked_castle_brick").toString());
-		SimpleCookingRecipeBuilder.smelting(Ingredient.of(TFBlocks.UNDERBRICK.get()), RecipeCategory.BUILDING_BLOCKS, TFBlocks.CRACKED_UNDERBRICK.get(), 0.1F, 200).unlockedBy("has_item", has(TFBlocks.UNDERBRICK.get())).save(this.output, this.createKey("smelted" + "_cracked_underbrick").toString());
+		SimpleCookingRecipeBuilder.smelting(Ingredient.of(TFBlocks.NAGASTONE_PILLAR.get()), RecipeCategory.BUILDING_BLOCKS, TFBlocks.CRACKED_NAGASTONE_PILLAR.get(), 0.1F, 200).unlockedBy("has_item", has(TFBlocks.NAGASTONE_PILLAR.get())).save(this.output, this.createKey("nagastone/" + "smelted" + "_cracked_nagastone_pillar"));
+		SimpleCookingRecipeBuilder.smelting(Ingredient.of(TFBlocks.ETCHED_NAGASTONE.get()), RecipeCategory.BUILDING_BLOCKS, TFBlocks.CRACKED_ETCHED_NAGASTONE.get(), 0.1F, 200).unlockedBy("has_item", has(TFBlocks.ETCHED_NAGASTONE.get())).save(this.output, this.createKey("nagastone/" + "smelted" + "_cracked_etched_nagastone"));
+		SimpleCookingRecipeBuilder.smelting(Ingredient.of(TFBlocks.MAZESTONE_BRICK.get()), RecipeCategory.BUILDING_BLOCKS, TFBlocks.CRACKED_MAZESTONE.get(), 0.1F, 200).unlockedBy("has_item", has(TFBlocks.MAZESTONE_BRICK.get())).save(this.output, this.createKey("maze_stone/" + "smelted" + "_maze_stone_cracked"));
+		SimpleCookingRecipeBuilder.smelting(Ingredient.of(TFBlocks.CASTLE_BRICK.get()), RecipeCategory.BUILDING_BLOCKS, TFBlocks.CRACKED_CASTLE_BRICK.get(), 0.1F, 200).unlockedBy("has_item", has(TFBlocks.CASTLE_BRICK.get())).save(this.output, this.createKey("castleblock/" + "smelted" + "_cracked_castle_brick"));
+		SimpleCookingRecipeBuilder.smelting(Ingredient.of(TFBlocks.UNDERBRICK.get()), RecipeCategory.BUILDING_BLOCKS, TFBlocks.CRACKED_UNDERBRICK.get(), 0.1F, 200).unlockedBy("has_item", has(TFBlocks.UNDERBRICK.get())).save(this.output, this.createKey("smelted" + "_cracked_underbrick"));
 	}
 }

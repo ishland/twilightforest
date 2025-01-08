@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "minecraft:moss_block"
-    },
-    {
-      "item": "twilightforest:transformation_powder"
-    }
+    "minecraft:moss_block",
+    "twilightforest:transformation_powder"
   ],
   "result": {
     "count": 8,
