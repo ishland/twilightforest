@@ -24,6 +24,7 @@ import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import twilightforest.TwilightForestMod;
 import twilightforest.data.tags.BlockTagGenerator;
+import twilightforest.entity.boss.Hydra;
 import twilightforest.entity.monster.Kobold;
 import twilightforest.init.TFStructures;
 import twilightforest.network.AreaProtectionPacket;
