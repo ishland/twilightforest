@@ -439,12 +439,12 @@ public class CandelabraBlock extends BaseEntityBlock implements LightableBlock, 
 	}
 
 	@Override
-	public ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader level, BlockPos pos, Player player) {
+	public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData, Player player) {
 		if (level.getBlockEntity(pos) instanceof CandelabraBlockEntity candelabra && candelabra.getCandles() != CandelabraData.EMPTY) {
 			ItemStack itemstack = new ItemStack(this);
 			itemstack.applyComponents(candelabra.collectComponents());
 			return itemstack;
 		}
-		return super.getCloneItemStack(state, target, level, pos, player);
+		return super.getCloneItemStack(level, pos, state, includeData, player);
 	}
 }

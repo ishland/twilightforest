@@ -574,7 +574,7 @@ public class Naga extends BaseTFBoss {
                     Vec3 particlePos = start.add(diff.scale(factor)).add(Math.sin(preciseTime * Math.PI * 0.075D) * xMul, Math.sin(preciseTime * Math.PI * 0.025D) * 0.1D, Math.cos(preciseTime * Math.PI * 0.0625D) * zMul);//Some sine waves to make it slither-y;
                     BlockHitResult blockhitresult = this.level().clip(new ClipContext(particlePos.add(0.0D, 2.0D, 0.0D), particlePos.subtract(0.0D, 3.0D, 0.0D), ClipContext.Block.COLLIDER, ClipContext.Fluid.WATER, CollisionContext.empty()));
                     particlePos = blockhitresult.getLocation().add(0.0D, 0.15D, 0.0D);
-					this.level().addParticle(ParticleTypes.COMPOSTER, false, particlePos.x(), particlePos.y(), particlePos.z(), 0.0D, 0.0D, 0.0D);
+					this.level().addParticle(ParticleTypes.COMPOSTER, particlePos.x(), particlePos.y(), particlePos.z(), 0.0D, 0.0D, 0.0D);
                 }
             }
         }

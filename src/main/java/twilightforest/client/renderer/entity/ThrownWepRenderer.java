@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.client.renderer.item.ItemModelResolver;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
@@ -14,11 +15,11 @@ import twilightforest.entity.projectile.ThrownWep;
 
 public class ThrownWepRenderer extends EntityRenderer<ThrownWep, ThrownWepRenderState> {
 
-	private final ItemRenderer itemRenderer;
+	private final ItemModelResolver resolver;
 
 	public ThrownWepRenderer(EntityRendererProvider.Context context) {
 		super(context);
-		this.itemRenderer = context.getItemRenderer();
+		this.resolver = context.getItemModelResolver();
 	}
 
 	@Override
@@ -43,8 +44,8 @@ public class ThrownWepRenderer extends EntityRenderer<ThrownWep, ThrownWepRender
 		stack.translate(-f9, -f10, -(f12 + f11));
 		stack.translate(0.0F, 0.0F, f12 + f11);
 
-		if (state.itemModel != null) {
-			this.itemRenderer.render(state.item, ItemDisplayContext.GROUND, false, stack, buffer, light, OverlayTexture.NO_OVERLAY, state.itemModel);
+		if (state.item.isEmpty()) {
+			state.item.render(stack, buffer, light, OverlayTexture.NO_OVERLAY);
 		}
 		stack.popPose();
 	}
@@ -57,9 +58,7 @@ public class ThrownWepRenderer extends EntityRenderer<ThrownWep, ThrownWepRender
 	@Override
 	public void extractRenderState(ThrownWep entity, ThrownWepRenderState state, float partialTick) {
 		super.extractRenderState(entity, state, partialTick);
-		ItemStack itemstack = entity.getItem();
-		state.itemModel = !itemstack.isEmpty() ? this.itemRenderer.getModel(itemstack, entity.level(), null, entity.getId()) : null;
-		state.item = itemstack.copy();
+		this.resolver.updateForNonLiving(state.item, entity.getItem(), ItemDisplayContext.GROUND, entity);
 		state.yRot = entity.getYRot(partialTick);
 	}
 }

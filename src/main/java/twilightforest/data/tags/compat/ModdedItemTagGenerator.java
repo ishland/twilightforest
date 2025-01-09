@@ -8,7 +8,6 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import twilightforest.TwilightForestMod;
 import twilightforest.data.tags.ItemTagGenerator;
 import twilightforest.init.TFBlocks;
@@ -31,8 +30,8 @@ public class ModdedItemTagGenerator extends ItemTagsProvider {
 
 	public static final TagKey<Item> RANDOMIUM_BLACKLIST = createTagFor("randomium", "blacklist");
 
-	public ModdedItemTagGenerator(PackOutput output, CompletableFuture<HolderLookup.Provider> future, CompletableFuture<TagLookup<Block>> provider, ExistingFileHelper helper) {
-		super(output, future, provider, TwilightForestMod.ID, helper);
+	public ModdedItemTagGenerator(PackOutput output, CompletableFuture<HolderLookup.Provider> future, CompletableFuture<TagLookup<Block>> provider) {
+		super(output, future, provider, TwilightForestMod.ID);
 	}
 
 	@Override

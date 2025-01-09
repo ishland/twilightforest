@@ -508,7 +508,7 @@ public class Lich extends BaseTFBoss {
 						double tx = source.x() + (target.x() - source.x()) * trailFactor + this.getRandom().nextGaussian() * 0.005D;
 						double ty = source.y() + 0.2D + (target.y() - source.y()) * trailFactor + this.getRandom().nextGaussian() * 0.005D;
 						double tz = source.z() + (target.z() - source.z()) * trailFactor + this.getRandom().nextGaussian() * 0.005D;
-						packet.queueParticle(ColorParticleOption.create(ParticleTypes.ENTITY_EFFECT, red, green, blue), false, tx, ty, tz, 0.0D, 0.0D, 0.0D);
+						packet.queueParticle(ColorParticleOption.create(ParticleTypes.ENTITY_EFFECT, red, green, blue), tx, ty, tz, 0.0D, 0.0D, 0.0D);
 					}
 
 					PacketDistributor.sendToPlayersTrackingEntity(this, packet);
@@ -712,7 +712,7 @@ public class Lich extends BaseTFBoss {
 				double x = (this.getRandom().nextDouble() - 0.5D) * 0.7D;
 				double y = this.getRandom().nextDouble() * this.getBbHeight();
 				double z = (this.getRandom().nextDouble() - 0.5D) * 0.7D;
-				this.level().addParticle(this.getRandom().nextBoolean() || hurt ? BONE_PARTICLE : ParticleTypes.SMOKE, false, pos.x() + x, pos.y() + y, pos.z() + z, 0.0D, 0.0D, 0.0D);
+				this.level().addParticle(this.getRandom().nextBoolean() || hurt ? BONE_PARTICLE : ParticleTypes.SMOKE, pos.x() + x, pos.y() + y, pos.z() + z, 0.0D, 0.0D, 0.0D);
 			}
 
 			if (hurt) {
@@ -723,7 +723,7 @@ public class Lich extends BaseTFBoss {
 					double x1 = x + (this.getRandom().nextDouble() - 0.5D) * 0.1D;
 					double y1 = y + (this.getRandom().nextDouble() - 0.5D) * 0.1D;
 					double z1 = z + (this.getRandom().nextDouble() - 0.5D) * 0.1D;
-					this.level().addParticle(this.getRandom().nextBoolean() ? BONE_PARTICLE : ParticleTypes.CLOUD, false, pos.x() + x1, pos.y() + y1, pos.z() + z1, 0.0D, 0.0D, 0.0D);
+					this.level().addParticle(this.getRandom().nextBoolean() ? BONE_PARTICLE : ParticleTypes.CLOUD, pos.x() + x1, pos.y() + y1, pos.z() + z1, 0.0D, 0.0D, 0.0D);
 				}
 			}
 
@@ -732,7 +732,7 @@ public class Lich extends BaseTFBoss {
 					double x = (this.getRandom().nextDouble() - 0.5D) * 0.7D;
 					double y = this.getRandom().nextDouble() * this.getBbHeight();
 					double z = (this.getRandom().nextDouble() - 0.5D) * 0.7D;
-					this.level().addParticle(this.getRandom().nextBoolean() ? BONE_PARTICLE : ParticleTypes.CLOUD, false, pos.x() + x, pos.y() + y, pos.z() + z, 0.0D, 0.0D, 0.0D);
+					this.level().addParticle(this.getRandom().nextBoolean() ? BONE_PARTICLE : ParticleTypes.CLOUD, pos.x() + x, pos.y() + y, pos.z() + z, 0.0D, 0.0D, 0.0D);
 				}
 			}
 		} else if (this.deathTime == DEATH_ANIMATION_POINT_B) {
@@ -740,7 +740,7 @@ public class Lich extends BaseTFBoss {
 			for (int i = 0; i < 3; i++) {
 				double x = (this.getRandom().nextDouble() - 0.5D) * 0.75D;
 				double z = (this.getRandom().nextDouble() - 0.5D) * 0.75D;
-				this.level().addParticle(ParticleTypes.CLOUD, false, pos.x() + x, pos.y(), pos.z() + z, 0.0D, 0.0D, 0.0D);
+				this.level().addParticle(ParticleTypes.CLOUD, pos.x() + x, pos.y(), pos.z() + z, 0.0D, 0.0D, 0.0D);
 			}
 		} else if (this.deathTime > DEATH_ANIMATION_POINT_B) {
 			Vec3 start = this.position().add(0.0D, 0.45F, 0.0D);
@@ -754,7 +754,7 @@ public class Lich extends BaseTFBoss {
 			for (double i = 0.0D; i < 1.0D; i += 0.2D) {
 				double x = Math.sin((powFactor + i) * Math.PI * 2.0D) * expandFactor * 1.25D;
 				double z = Math.cos((powFactor + i) * Math.PI * 2.0D) * expandFactor * 1.25D;
-				this.level().addParticle(TFParticleType.OMINOUS_FLAME.get(), false, particlePos.x() + x, particlePos.y() - 0.25D, particlePos.z() + z, 0.0D, 0.0D, 0.0D);
+				this.level().addParticle(TFParticleType.OMINOUS_FLAME.get(), particlePos.x() + x, particlePos.y() - 0.25D, particlePos.z() + z, 0.0D, 0.0D, 0.0D);
 			}
 		}
 	}

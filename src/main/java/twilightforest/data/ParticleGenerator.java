@@ -2,7 +2,6 @@ package twilightforest.data;
 
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.common.data.ParticleDescriptionProvider;
 import twilightforest.TwilightForestMod;
 import twilightforest.init.TFParticleType;
@@ -11,8 +10,8 @@ import java.util.Iterator;
 
 public class ParticleGenerator extends ParticleDescriptionProvider {
 
-	public ParticleGenerator(PackOutput output, ExistingFileHelper helper) {
-		super(output, helper);
+	public ParticleGenerator(PackOutput output) {
+		super(output);
 	}
 
 	@Override

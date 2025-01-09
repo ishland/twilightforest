@@ -3,7 +3,6 @@ package twilightforest.data.helpers;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.common.data.SoundDefinition;
 import net.neoforged.neoforge.common.data.SoundDefinitionsProvider;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -13,8 +12,8 @@ import twilightforest.data.LangGenerator;
 
 public abstract class TFSoundProvider extends SoundDefinitionsProvider {
 
-	protected TFSoundProvider(PackOutput output, ExistingFileHelper helper) {
-		super(output, TwilightForestMod.ID, helper);
+	protected TFSoundProvider(PackOutput output) {
+		super(output, TwilightForestMod.ID);
 	}
 
 	public void generateNewSoundWithSubtitle(DeferredHolder<SoundEvent, SoundEvent> event, String baseSoundDirectory, int numberOfSounds, String subtitle) {

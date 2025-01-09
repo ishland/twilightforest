@@ -1,7 +1,6 @@
 package twilightforest.client.model.block.connected;
 
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.block.model.BakedOverrides;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -32,26 +31,18 @@ public class ConnectedTextureModel implements IDynamicBakedModel {
 	private final List<BakedQuad>@Nullable[] baseQuads;
 	private final BakedQuad[][][] quads;
 	private final TextureAtlasSprite particle;
-	private final BakedOverrides overrides;
 	private final ItemTransforms transforms;
-	@Nullable
-	private final ChunkRenderTypeSet blockRenderTypes;
-	@Nullable
-	private final List<RenderType> itemRenderTypes;
 	private final List<Block> validConnectors;
 	private static final ModelProperty<ConnectedTextureData> DATA = new ModelProperty<>();
 
-	public ConnectedTextureModel(EnumSet<Direction> enabledFaces, boolean renderOnDisabledFaces, List<Block> connectableBlocks, List<BakedQuad>@Nullable[] baseQuads, BakedQuad[][][] quads, TextureAtlasSprite particle, BakedOverrides overrides, ItemTransforms transforms, RenderTypeGroup group) {
+	public ConnectedTextureModel(EnumSet<Direction> enabledFaces, boolean renderOnDisabledFaces, List<Block> connectableBlocks, List<BakedQuad>@Nullable[] baseQuads, BakedQuad[][][] quads, TextureAtlasSprite particle, ItemTransforms transforms) {
 		this.enabledFaces = enabledFaces;
 		this.renderOnDisabledFaces = renderOnDisabledFaces;
 		this.validConnectors = connectableBlocks;
 		this.baseQuads = baseQuads;
 		this.quads = quads;
 		this.particle = particle;
-		this.overrides = overrides;
 		this.transforms = transforms;
-		this.blockRenderTypes = !group.isEmpty() ? ChunkRenderTypeSet.of(group.block()) : null;
-		this.itemRenderTypes = !group.isEmpty() ? List.of(group.entity()) : null;
 	}
 
 	@NotNull
@@ -133,38 +124,16 @@ public class ConnectedTextureModel implements IDynamicBakedModel {
 		return true;
 	}
 
-	@Override
-	public boolean isCustomRenderer() {
-		return false;
-	}
-
 	@NotNull
 	@Override
 	public TextureAtlasSprite getParticleIcon() {
 		return this.particle;
 	}
 
-	@Override
-	public BakedOverrides overrides() {
-		return this.overrides;
-	}
-
 	@NotNull
 	@Override
 	public ItemTransforms getTransforms() {
 		return this.transforms;
-	}
-
-	@NotNull
-	@Override
-	public ChunkRenderTypeSet getRenderTypes(@NotNull BlockState state, @NotNull RandomSource rand, @NotNull ModelData data) {
-		return this.blockRenderTypes != null ? this.blockRenderTypes : IDynamicBakedModel.super.getRenderTypes(state, rand, data);
-	}
-
-	@NotNull
-	@Override
-	public List<RenderType> getRenderTypes(@NotNull ItemStack stack) {
-		return this.itemRenderTypes != null ? this.itemRenderTypes : IDynamicBakedModel.super.getRenderTypes(stack);
 	}
 
 	private static final class ConnectedTextureData {

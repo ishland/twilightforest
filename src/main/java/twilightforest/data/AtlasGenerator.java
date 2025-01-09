@@ -4,7 +4,6 @@ import net.minecraft.client.renderer.texture.atlas.sources.SingleFile;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.common.data.SpriteSourceProvider;
 import twilightforest.TwilightForestMod;
 import twilightforest.client.MagicPaintingTextureManager;
@@ -18,8 +17,8 @@ import java.util.concurrent.CompletableFuture;
 public class AtlasGenerator extends SpriteSourceProvider {
 	public static final Map<ResourceLocation, MagicPaintingVariant> MAGIC_PAINTING_HELPER = new HashMap<>();
 
-	public AtlasGenerator(PackOutput output, CompletableFuture<HolderLookup.Provider> provider, ExistingFileHelper helper) {
-		super(output, provider, TwilightForestMod.ID, helper);
+	public AtlasGenerator(PackOutput output, CompletableFuture<HolderLookup.Provider> provider) {
+		super(output, provider, TwilightForestMod.ID);
 	}
 
 	@Override

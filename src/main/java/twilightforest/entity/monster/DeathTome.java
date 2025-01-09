@@ -99,7 +99,6 @@ public class DeathTome extends Monster implements RangedAttackMob {
 		};
 		flyingpathnavigation.setCanOpenDoors(false);
 		flyingpathnavigation.setCanFloat(false);
-		flyingpathnavigation.setCanPassDoors(true);
 		return flyingpathnavigation;
 	}
 

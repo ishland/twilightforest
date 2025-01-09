@@ -94,7 +94,7 @@ public class LifedrainScepterItem extends Item {
 			double y = level.getRandom().nextFloat() * target.getBbHeight() - gaussY * gaussFactor + (level.random.nextGaussian() * gaussY);
 			double z = level.getRandom().nextFloat() * target.getBbWidth() * 1.5F - target.getBbWidth() - gaussZ * gaussFactor + (level.random.nextGaussian() * gaussZ);
 
-			particlePacket.queueParticle(options, false, target.getX() + x, target.getY() + y, target.getZ() + z, x * speed, y * speed, z * speed);
+			particlePacket.queueParticle(options, target.getX() + x, target.getY() + y, target.getZ() + z, x * speed, y * speed, z * speed);
 		}
 
 		PacketDistributor.sendToPlayersTrackingEntity(target, particlePacket);

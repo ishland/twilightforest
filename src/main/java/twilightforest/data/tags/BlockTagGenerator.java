@@ -8,7 +8,6 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.Tags;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import twilightforest.TwilightForestMod;
 import twilightforest.data.tags.compat.ModdedBlockTagGenerator;
 import twilightforest.init.TFBlocks;
@@ -99,8 +98,8 @@ public class BlockTagGenerator extends ModdedBlockTagGenerator {
 
 	public static final TagKey<Block> SMALL_LAKES_DONT_REPLACE = create("small_lakes_dont_replace");
 
-	public BlockTagGenerator(PackOutput output, CompletableFuture<HolderLookup.Provider> future, ExistingFileHelper helper) {
-		super(output, future, helper);
+	public BlockTagGenerator(PackOutput output, CompletableFuture<HolderLookup.Provider> future) {
+		super(output, future);
 	}
 
 	@SuppressWarnings("unchecked")

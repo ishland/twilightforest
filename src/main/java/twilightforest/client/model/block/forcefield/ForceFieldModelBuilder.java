@@ -15,9 +15,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.neoforged.neoforge.client.model.ExtraFaceData;
-import net.neoforged.neoforge.client.model.generators.CustomLoaderBuilder;
-import net.neoforged.neoforge.client.model.generators.ModelBuilder;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.client.model.generators.template.CustomLoaderBuilder;
 import org.apache.commons.lang3.mutable.MutableObject;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
@@ -28,25 +26,32 @@ import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
-public class ForceFieldModelBuilder<T extends ModelBuilder<T>> extends CustomLoaderBuilder<T> {
-	protected final List<ForceFieldElementBuilder> elements = new ArrayList<>();
+public class ForceFieldModelBuilder extends CustomLoaderBuilder {
+	protected List<ForceFieldElementBuilder> elements = new ArrayList<>();
 
-	public static <T extends ModelBuilder<T>> ForceFieldModelBuilder<T> begin(T parent, ExistingFileHelper helper) {
-		return new ForceFieldModelBuilder<>(parent, helper);
+	public static ForceFieldModelBuilder begin() {
+		return new ForceFieldModelBuilder();
 	}
 
-	private ForceFieldModelBuilder<T> self() {
+	private ForceFieldModelBuilder self() {
 		return this;
 	}
 
-	protected ForceFieldModelBuilder(T parent, ExistingFileHelper helper) {
-		super(TwilightForestMod.prefix("force_field"), parent, helper, false);
+	protected ForceFieldModelBuilder() {
+		super(TwilightForestMod.prefix("force_field"), false);
 	}
 
 	public ForceFieldElementBuilder forceFieldElement() {
 		ForceFieldElementBuilder ret = new ForceFieldElementBuilder();
 		elements.add(ret);
 		return ret;
+	}
+
+	@Override
+	protected CustomLoaderBuilder copyInternal() {
+		ForceFieldModelBuilder builder = new ForceFieldModelBuilder();
+		builder.elements = this.elements;
+		return builder;
 	}
 
 	@Override
@@ -276,7 +281,7 @@ public class ForceFieldModelBuilder<T extends ModelBuilder<T>> extends CustomLoa
 			return new BlockElement(from, to, faces, this.rotation == null ? null : this.rotation.build(), this.shade, this.skyLight, new ExtraFaceData(this.color, this.blockLight, this.skyLight, this.hasAmbientOcclusion));
 		}
 
-		public ForceFieldModelBuilder<T> end() {
+		public ForceFieldModelBuilder end() {
 			return self();
 		}
 

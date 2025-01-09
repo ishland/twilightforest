@@ -64,10 +64,8 @@ public class SkullChestBlock extends BaseEntityBlock implements BlockLoggingEnum
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
 	public RenderShape getRenderShape(BlockState state) {
-		// ENTITYBLOCK_ANIMATED uses only the BlockEntityRender while MODEL uses both the BER and baked model
-		return state.getValue(BlockLoggingEnum.MULTILOGGED).getBlock() == Blocks.AIR ? RenderShape.ENTITYBLOCK_ANIMATED : RenderShape.MODEL;
+		return RenderShape.MODEL;
 	}
 
 	@Override

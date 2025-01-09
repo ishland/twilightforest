@@ -8,7 +8,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import twilightforest.TwilightForestMod;
 import twilightforest.data.tags.BlockTagGenerator;
 import twilightforest.init.TFBlocks;
@@ -26,8 +25,8 @@ public class ModdedBlockTagGenerator extends IntrinsicHolderTagsProvider<Block> 
 	public static final TagKey<Block> FD_COMPOST_ACTIVATORS = createTagFor("farmersdelight", "compost_activators");
 	public static final TagKey<Block> FD_HEAT_SOURCES = createTagFor("farmersdelight", "heat_sources");
 
-	public ModdedBlockTagGenerator(PackOutput output, CompletableFuture<HolderLookup.Provider> future, ExistingFileHelper helper) {
-		super(output, Registries.BLOCK, future, block -> block.builtInRegistryHolder().key(), TwilightForestMod.ID, helper);
+	public ModdedBlockTagGenerator(PackOutput output, CompletableFuture<HolderLookup.Provider> future) {
+		super(output, Registries.BLOCK, future, block -> block.builtInRegistryHolder().key(), TwilightForestMod.ID);
 	}
 
 	@Override

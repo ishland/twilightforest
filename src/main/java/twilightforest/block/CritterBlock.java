@@ -167,7 +167,7 @@ public abstract class CritterBlock extends BaseEntityBlock implements SimpleWate
 
 			for (int i = 0; i < 50; i++) {
 				boolean wallBug = state.getValue(FACING) != Direction.UP;
-				level.addParticle(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.SLIME_BLOCK.defaultBlockState()), true,
+				level.addParticle(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.SLIME_BLOCK.defaultBlockState()),
 					pos.getX() + Mth.nextFloat(level.getRandom(), 0.25F, 0.75F),
 					pos.getY() + (wallBug ? 0.5F : 0.0F),
 					pos.getZ() + Mth.nextFloat(level.getRandom(), 0.25F, 0.75F),

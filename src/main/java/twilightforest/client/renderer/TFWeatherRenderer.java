@@ -41,8 +41,9 @@ import twilightforest.util.Restriction;
 import java.util.Optional;
 
 /**
- * Copypasta of LevelRenderer.renderRainSnow() hacked to include progression environmental effects
+ * Copypasta of WeatherEffectRenderer.render() hacked to include progression environmental effects
  */
+//TODO modernize, weather rendering has changed a lot
 public class TFWeatherRenderer {
 
 	public static final ResourceLocation RAIN_TEXTURES = ResourceLocation.withDefaultNamespace("textures/environment/rain.png");
@@ -73,24 +74,23 @@ public class TFWeatherRenderer {
 		}
 	}
 
-	public static boolean renderSnowAndRain(ClientLevel level, int ticks, float partialTicks, LightTexture lightmap, Vec3 camera) {
+	public static boolean renderSnowAndRain(ClientLevel level, int ticks, float partialTicks, Vec3 camera) {
 		Minecraft mc = Minecraft.getInstance();
 		if (EnforceProgressionStatusPacket.enforcedProgression && mc.player != null && !mc.player.isCreative() && !mc.player.isSpectator()) {
 			// locked biome weather effects
-			renderLockedBiome(ticks, partialTicks, level, lightmap, mc.player, camera);
+			renderLockedBiome(ticks, partialTicks, level, mc.player, camera);
 
 			// locked structures
-			renderLockedStructure(ticks, partialTicks, lightmap, camera);
+			renderLockedStructure(ticks, partialTicks, camera);
 		}
 
 		//render normal weather anyway
 		return false;
 	}
 
-	private static void renderLockedBiome(int ticks, float partialTicks, ClientLevel level, LightTexture lightmap, LocalPlayer player, Vec3 camera) {
+	private static void renderLockedBiome(int ticks, float partialTicks, ClientLevel level, LocalPlayer player, Vec3 camera) {
 		// check nearby for locked biome
 		if (isNearLockedBiome(level, player)) {
-			lightmap.turnOnLightLayer();
 
 			int px = Mth.floor(camera.x());
 			int py = Mth.floor(camera.y());
@@ -212,14 +212,12 @@ public class TFWeatherRenderer {
 
 			RenderSystem.enableCull();
 			RenderSystem.disableBlend();
-			lightmap.turnOffLightLayer();
 		}
 	}
 
-	private static void renderLockedStructure(int ticks, float partialTicks, LightTexture lightmap, Vec3 camera) {
+	private static void renderLockedStructure(int ticks, float partialTicks, Vec3 camera) {
 		// draw locked structure thing
 		if (isNearLockedStructure(camera.x(), camera.z())) {
-			lightmap.turnOnLightLayer();
 			int px = Mth.floor(camera.x());
 			int py = Mth.floor(camera.y());
 			int pz = Mth.floor(camera.z());
@@ -294,7 +292,6 @@ public class TFWeatherRenderer {
 
 			RenderSystem.enableCull();
 			RenderSystem.disableBlend();
-			lightmap.turnOffLightLayer();
 		}
 	}
 

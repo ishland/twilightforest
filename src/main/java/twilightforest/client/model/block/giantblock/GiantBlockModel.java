@@ -28,24 +28,15 @@ import java.util.List;
 public class GiantBlockModel implements IDynamicBakedModel {
 
 	private static final ModelProperty<GiantBlockData> DATA = new ModelProperty<>();
-	private static final FaceBakery FACE_BAKERY = new FaceBakery();
 
 	private final TextureAtlasSprite[] textures;
 	private final TextureAtlasSprite particle;
-	private final BakedOverrides overrides;
 	private final ItemTransforms transforms;
-	@Nullable
-	private final ChunkRenderTypeSet blockRenderTypes;
-	@Nullable
-	private final List<RenderType> itemRenderTypes;
 
-	public GiantBlockModel(TextureAtlasSprite[] texture, TextureAtlasSprite particle, BakedOverrides overrides, ItemTransforms transforms, RenderTypeGroup group) {
+	public GiantBlockModel(TextureAtlasSprite[] texture, TextureAtlasSprite particle, ItemTransforms transforms) {
 		this.textures = texture;
 		this.particle = particle;
-		this.overrides = overrides;
 		this.transforms = transforms;
-		this.blockRenderTypes = !group.isEmpty() ? ChunkRenderTypeSet.of(group.block()) : null;
-		this.itemRenderTypes = !group.isEmpty() ? List.of(group.entity()) : null;
 	}
 
 	@Override
@@ -59,7 +50,7 @@ public class GiantBlockModel implements IDynamicBakedModel {
 			TextureAtlasSprite sprite = this.textures[this.textures.length > 1 ? side.ordinal() : 0];
 
 			if (!Iterables.contains(GiantBlock.getVolume(pos), pos.offset(side.getUnitVec3i()))) {
-				quads.add(FACE_BAKERY.bakeQuad(new Vector3f(0.0F, 0.0F, 0.0F), new Vector3f(16.0F, 16.0F, 16.0F), new BlockElementFace(side, side.ordinal(), side.name(), new BlockFaceUV(new float[]{0.0F + coords.x, 0.0F + coords.z, 4.0F + coords.x, 4.0F + coords.z}, 0)), sprite, side, BlockModelRotation.X0_Y0, null, true, 0));
+				quads.add(FaceBakery.bakeQuad(new Vector3f(0.0F, 0.0F, 0.0F), new Vector3f(16.0F, 16.0F, 16.0F), new BlockElementFace(side, side.ordinal(), side.name(), new BlockFaceUV(new float[]{0.0F + coords.x, 0.0F + coords.z, 4.0F + coords.x, 4.0F + coords.z}, 0)), sprite, side, BlockModelRotation.X0_Y0, null, true, 0));
 			}
 		}
 
@@ -134,36 +125,14 @@ public class GiantBlockModel implements IDynamicBakedModel {
 	}
 
 	@Override
-	public boolean isCustomRenderer() {
-		return false;
-	}
-
-	@Override
 	public TextureAtlasSprite getParticleIcon() {
 		return this.particle;
-	}
-
-	@Override
-	public BakedOverrides overrides() {
-		return this.overrides;
 	}
 
 	@NotNull
 	@Override
 	public ItemTransforms getTransforms() {
 		return this.transforms;
-	}
-
-	@NotNull
-	@Override
-	public ChunkRenderTypeSet getRenderTypes(@NotNull BlockState state, @NotNull RandomSource rand, @NotNull ModelData data) {
-		return this.blockRenderTypes != null ? this.blockRenderTypes : IDynamicBakedModel.super.getRenderTypes(state, rand, data);
-	}
-
-	@NotNull
-	@Override
-	public List<RenderType> getRenderTypes(@NotNull ItemStack stack) {
-		return this.itemRenderTypes != null ? this.itemRenderTypes : IDynamicBakedModel.super.getRenderTypes(stack);
 	}
 
 	//modeldata holder

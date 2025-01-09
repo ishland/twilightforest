@@ -51,7 +51,7 @@ public class Bighorn extends Sheep {
 
 		Bighorn babySheep = TFEntities.BIGHORN_SHEEP.get().create(level, EntitySpawnReason.BREEDING);
 		if (babySheep != null) {
-			babySheep.setColor(this.getOffspringColor(level, this, otherParent));
+			babySheep.setColor(DyeColor.getMixedColor(level, this.getColor(), otherParent.getColor()));
 		}
 		return babySheep;
 	}

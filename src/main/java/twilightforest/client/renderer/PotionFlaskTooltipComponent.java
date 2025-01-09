@@ -9,6 +9,7 @@ import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent
 import net.minecraft.client.renderer.CoreShaders;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -123,9 +124,9 @@ public class PotionFlaskTooltipComponent implements ClientTooltipComponent {
 		int red = (color >> 16) & 255;
 		int green = (color >> 8) & 255;
 		int blue = color & 255;
-		TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(IClientFluidTypeExtensions.of(Fluids.WATER).getStillTexture());
+		TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(IClientFluidTypeExtensions.of(Fluids.WATER).getStillTexture());
 		RenderSystem.setShader(CoreShaders.POSITION_TEX);
-		RenderSystem.setShaderTexture(0, InventoryMenu.BLOCK_ATLAS);
+		RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_BLOCKS);
 		int xTileCount = desiredWidth / 16;
 		int xRemainder = desiredWidth - (xTileCount * 16);
 		int yTileCount = desiredHeight / 16;

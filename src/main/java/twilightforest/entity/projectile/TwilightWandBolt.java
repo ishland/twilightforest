@@ -65,7 +65,7 @@ public class TwilightWandBolt extends TFThrowable {
 		if (id == EntityEvent.DEATH) {
 			ParticleOptions particle = new ItemParticleOption(ParticleTypes.ITEM, new ItemStack(Items.ENDER_PEARL));
 			for (int i = 0; i < 8; i++) {
-				this.level().addParticle(particle, false, this.getX(), this.getY(), this.getZ(), this.random.nextGaussian() * 0.05D, random.nextDouble() * 0.2D, random.nextGaussian() * 0.05D);
+				this.level().addParticle(particle, this.getX(), this.getY(), this.getZ(), this.random.nextGaussian() * 0.05D, random.nextDouble() * 0.2D, random.nextGaussian() * 0.05D);
 			}
 		} else {
 			super.handleEntityEvent(id);

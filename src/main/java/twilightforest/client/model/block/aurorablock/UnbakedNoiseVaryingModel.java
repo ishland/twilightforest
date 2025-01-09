@@ -1,19 +1,16 @@
 package twilightforest.client.model.block.aurorablock;
 
 import net.minecraft.client.renderer.block.model.BlockModel;
-import net.minecraft.client.renderer.block.model.ItemOverride;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.renderer.block.model.TextureSlots;
 import net.minecraft.client.resources.model.*;
 import net.minecraft.resources.ResourceLocation;
-import net.neoforged.neoforge.client.model.geometry.IGeometryBakingContext;
-import net.neoforged.neoforge.client.model.geometry.IUnbakedGeometry;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 
-public class UnbakedNoiseVaryingModel implements IUnbakedGeometry<UnbakedNoiseVaryingModel> {
+public class UnbakedNoiseVaryingModel implements UnbakedModel {
 	private final String[] importVariants;
 	private final List<BlockModel> variants;
 
@@ -23,7 +20,7 @@ public class UnbakedNoiseVaryingModel implements IUnbakedGeometry<UnbakedNoiseVa
 	}
 
 	@Override
-	public void resolveDependencies(UnbakedModel.Resolver modelGetter, IGeometryBakingContext context) {
+	public void resolveDependencies(UnbakedModel.Resolver modelGetter) {
 		for (String variant : this.importVariants) {
 			BlockModel checkedParent = resolveParent(modelGetter, variant);
 
@@ -42,12 +39,12 @@ public class UnbakedNoiseVaryingModel implements IUnbakedGeometry<UnbakedNoiseVa
 	}
 
 	@Override
-	public BakedModel bake(IGeometryBakingContext context, ModelBaker baker, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelState, List<ItemOverride> overrides) {
+	public BakedModel bake(TextureSlots textureSlots, ModelBaker baker, ModelState modelState, boolean hasAmbientOcclusion, boolean useBlockLight, ItemTransforms transforms) {
 		BakedModel[] bakedVariants = new BakedModel[this.importVariants.length];
 
 		for (int i = 0; i < bakedVariants.length; i++) {
 			BlockModel variant = this.variants.get(i);
-			bakedVariants[i] = variant.bake(baker, spriteGetter, modelState);
+			bakedVariants[i] = variant.bake(textureSlots, baker, modelState, hasAmbientOcclusion, useBlockLight, transforms);
 		}
 
 		return new NoiseVaryingModel(bakedVariants);

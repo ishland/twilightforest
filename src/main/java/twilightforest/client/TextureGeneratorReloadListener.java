@@ -4,6 +4,8 @@ import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.blaze3d.platform.TextureUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.AbstractTexture;
+import net.minecraft.client.renderer.texture.ReloadableTexture;
+import net.minecraft.client.renderer.texture.TextureContents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
@@ -18,7 +20,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class TextureGeneratorReloadListener implements ResourceManagerReloadListener {
 	public static final TextureGeneratorReloadListener INSTANCE = new TextureGeneratorReloadListener();
-	private static final Map<String, AbstractTexture> BOAT_CACHE = new HashMap<>();
+	private static final Map<String, ReloadableTexture> BOAT_CACHE = new HashMap<>();
 	private static final AtomicReference<NativeImage> ref = new AtomicReference<>();
 	private static final List<String> TF_BOATS = List.of("twilight_oak", "canopy", "mangrove", "dark", "time", "transformation", "mining", "sorting");
 
@@ -59,15 +61,16 @@ public class TextureGeneratorReloadListener implements ResourceManagerReloadList
 										ref.set(newImage);
 
 										if (BOAT_CACHE.containsKey(type)) {
-											BOAT_CACHE.get(type).load(manager);
+											BOAT_CACHE.get(type).loadContents(manager);
 										} else {
-											AbstractTexture texture = new AbstractTexture() {
+											ReloadableTexture texture = new ReloadableTexture(location) {
 												@Override
-												public void load(ResourceManager resourceManager) {
+												public TextureContents loadContents(ResourceManager resourceManager) {
 													if (ref.get() == null)
-														return;
+														return TextureContents.createMissing();
 													TextureUtil.prepareImage(this.getId(), 0, ref.get().getWidth(), ref.get().getHeight());
-													ref.get().upload(0, 0, 0, 0, 0, ref.get().getWidth(), ref.get().getHeight(), false, false, false, true);
+													ref.get().upload(0, 0, 0, 0, 0, ref.get().getWidth(), ref.get().getHeight(), true);
+													return new TextureContents(ref.get(), null);
 												}
 											};
 											Minecraft.getInstance().getTextureManager().register(location, texture);
@@ -84,15 +87,16 @@ public class TextureGeneratorReloadListener implements ResourceManagerReloadList
 									ref.set(tfImage);
 
 									if (BOAT_CACHE.containsKey(type)) {
-										BOAT_CACHE.get(type).load(manager);
+										BOAT_CACHE.get(type).loadContents(manager);
 									} else {
-										AbstractTexture texture = new AbstractTexture() {
+										ReloadableTexture texture = new ReloadableTexture(location) {
 											@Override
-											public void load(ResourceManager resourceManager) {
+											public TextureContents loadContents(ResourceManager resourceManager) {
 												if (ref.get() == null)
-													return;
+													return TextureContents.createMissing();
 												TextureUtil.prepareImage(this.getId(), 0, ref.get().getWidth(), ref.get().getHeight());
-												ref.get().upload(0, 0, 0, 0, 0, ref.get().getWidth(), ref.get().getHeight(), false, false, false, true);
+												ref.get().upload(0, 0, 0, 0, 0, ref.get().getWidth(), ref.get().getHeight(), true);
+												return new TextureContents(ref.get(), null);
 											}
 										};
 										Minecraft.getInstance().getTextureManager().register(location, texture);

@@ -6,13 +6,14 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.Sheets;
+import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.util.context.ContextKey;
 import net.minecraft.world.entity.LivingEntity;
@@ -25,7 +26,7 @@ import twilightforest.init.TFDataAttachments;
 
 public class ShieldLayer<S extends LivingEntityRenderState, M extends EntityModel<S>> extends RenderLayer<S, M> {
 
-	public static final ModelResourceLocation LOC = ModelResourceLocation.standalone(TwilightForestMod.prefix("item/shield"));
+	public static final ResourceLocation LOC = TwilightForestMod.prefix("item/shield");
 	private static final Direction[] DIRS = ArrayUtils.add(Direction.values(), null);
 
 	public static ContextKey<Integer> SHIELD_COUNT_KEY = new ContextKey<>(TwilightForestMod.prefix("shield_count"));
@@ -67,13 +68,13 @@ public class ShieldLayer<S extends LivingEntityRenderState, M extends EntityMode
 			// push the shields outwards from the center of rotation
 			stack.translate(0.0F, 0.0F, -0.7F);
 
-			BakedModel model = Minecraft.getInstance().getModelManager().getModel(LOC);
+			BakedModel model = Minecraft.getInstance().getModelManager().getStandaloneModel(LOC);
 			for (Direction dir : DIRS) {
-				Minecraft.getInstance().getItemRenderer().renderQuadList(
+				ItemRenderer.renderQuadList(
 					stack,
 					buffer.getBuffer(Sheets.translucentItemSheet()),
 					model.getQuads(null, dir, Minecraft.getInstance().font.random, ModelData.EMPTY, Sheets.translucentItemSheet()),
-					ItemStack.EMPTY,
+					new int[0],
 					0xF000F0,
 					OverlayTexture.NO_OVERLAY
 				);

@@ -151,7 +151,7 @@ public abstract class AbstractSkullCandleBlock extends BaseEntityBlock implement
 	}
 
 	@Override
-	public ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader level, BlockPos pos, Player player) {
+	public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData, Player player) {
 		ItemStack newStack = new ItemStack(this);
 
 		if (level.getBlockEntity(pos) instanceof SkullCandleBlockEntity sc) {

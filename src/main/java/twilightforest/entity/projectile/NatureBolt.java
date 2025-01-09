@@ -53,7 +53,7 @@ public class NatureBolt extends TFThrowable implements ITFProjectile, ItemSuppli
 	public void handleEntityEvent(byte id) {
 		if (id == EntityEvent.DEATH) {
 			for (int i = 0; i < 8; ++i) {
-				this.level().addParticle(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.OAK_LEAVES.defaultBlockState()), false, this.getX(), this.getY(), this.getZ(), random.nextGaussian() * 0.05D, random.nextDouble() * 0.2D, random.nextGaussian() * 0.05D);
+				this.level().addParticle(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.OAK_LEAVES.defaultBlockState()), this.getX(), this.getY(), this.getZ(), random.nextGaussian() * 0.05D, random.nextDouble() * 0.2D, random.nextGaussian() * 0.05D);
 			}
 		} else {
 			super.handleEntityEvent(id);

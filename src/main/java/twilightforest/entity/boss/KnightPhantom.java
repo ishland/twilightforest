@@ -617,7 +617,7 @@ public class KnightPhantom extends BaseTFBoss {
 				double x = (this.random.nextDouble() - 0.5D) * 0.15D * i;
 				double y = (this.random.nextDouble() - 0.5D) * 0.15D * i;
 				double z = (this.random.nextDouble() - 0.5D) * 0.15D * i;
-				this.level().addParticle(ParticleTypes.SMOKE, false, particlePos.x() + x, particlePos.y() + y, particlePos.z() + z, 0.0D, 0.0D, 0.0D);
+				this.level().addParticle(ParticleTypes.SMOKE, particlePos.x() + x, particlePos.y() + y, particlePos.z() + z, 0.0D, 0.0D, 0.0D);
 			}
 		} else if (!this.getNearbyKnights().isEmpty() || this.getEntityData().get(IT_IS_OVER)) {
 			if (this.deathTime == DYING_TICKS) { // Poof when going invisible
@@ -649,7 +649,7 @@ public class KnightPhantom extends BaseTFBoss {
 					double x = (this.random.nextDouble() - 0.5D) * 0.15D * i;
 					double y = (this.random.nextDouble() - 0.5D) * 0.15D * i;
 					double z = (this.random.nextDouble() - 0.5D) * 0.15D * i;
-					this.level().addParticle(ParticleTypes.SMOKE, false, particlePos.x() + x, particlePos.y() + y, particlePos.z() + z, 0.0D, 0.0D, 0.0D);
+					this.level().addParticle(ParticleTypes.SMOKE, particlePos.x() + x, particlePos.y() + y, particlePos.z() + z, 0.0D, 0.0D, 0.0D);
 				}
 			}
 		}

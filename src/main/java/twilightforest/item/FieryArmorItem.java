@@ -5,6 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.resources.model.EquipmentClientInfo;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
@@ -13,7 +14,6 @@ import net.minecraft.world.item.equipment.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.equipment.ArmorType;
-import net.minecraft.world.item.equipment.EquipmentModel;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import twilightforest.client.model.TFModelLayers;
 import twilightforest.client.model.armor.FieryArmorModel;
@@ -37,9 +37,9 @@ public class FieryArmorItem extends ArmorItem {
 		public static final ArmorRender INSTANCE = new ArmorRender();
 
 		@Override
-		public Model getHumanoidArmorModel(ItemStack stack, EquipmentModel.LayerType type, Model original) {
+		public Model getHumanoidArmorModel(ItemStack stack, EquipmentClientInfo.LayerType type, Model original) {
 			EntityModelSet models = Minecraft.getInstance().getEntityModels();
-			ModelPart root = models.bakeLayer(type == EquipmentModel.LayerType.HUMANOID_LEGGINGS ? TFModelLayers.FIERY_ARMOR_INNER : TFModelLayers.FIERY_ARMOR_OUTER);
+			ModelPart root = models.bakeLayer(type == EquipmentClientInfo.LayerType.HUMANOID_LEGGINGS ? TFModelLayers.FIERY_ARMOR_INNER : TFModelLayers.FIERY_ARMOR_OUTER);
 			return new FieryArmorModel<>(root);
 		}
 	}

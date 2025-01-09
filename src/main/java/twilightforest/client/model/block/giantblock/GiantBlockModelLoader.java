@@ -4,9 +4,9 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import net.minecraft.resources.ResourceLocation;
-import net.neoforged.neoforge.client.model.geometry.IGeometryLoader;
+import net.neoforged.neoforge.client.model.UnbakedModelLoader;
 
-public class GiantBlockModelLoader implements IGeometryLoader<UnbakedGiantBlockModel> {
+public class GiantBlockModelLoader implements UnbakedModelLoader<UnbakedGiantBlockModel> {
 
 	public static final GiantBlockModelLoader INSTANCE = new GiantBlockModelLoader();
 

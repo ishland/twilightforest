@@ -12,13 +12,13 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.neoforged.neoforge.client.model.geometry.IGeometryLoader;
+import net.neoforged.neoforge.client.model.UnbakedModelLoader;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
-public class ConnectedTextureModelLoader implements IGeometryLoader<UnbakedConnectedTextureModel> {
+public class ConnectedTextureModelLoader implements UnbakedModelLoader<UnbakedConnectedTextureModel> {
 	public static final ConnectedTextureModelLoader INSTANCE = new ConnectedTextureModelLoader();
 
 	public ConnectedTextureModelLoader() {

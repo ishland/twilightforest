@@ -10,7 +10,6 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.neoforged.neoforge.common.Tags;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import twilightforest.TwilightForestMod;
 import twilightforest.init.TFDamageTypes;
 
@@ -20,8 +19,8 @@ public class DamageTypeTagGenerator extends TagsProvider<DamageType> {
 
 	public static final TagKey<DamageType> BREAKS_LICH_SHIELDS = create("breaks_lich_shields");
 
-	public DamageTypeTagGenerator(PackOutput output, CompletableFuture<HolderLookup.Provider> future, ExistingFileHelper helper) {
-		super(output, Registries.DAMAGE_TYPE, future, TwilightForestMod.ID, helper);
+	public DamageTypeTagGenerator(PackOutput output, CompletableFuture<HolderLookup.Provider> future) {
+		super(output, Registries.DAMAGE_TYPE, future, TwilightForestMod.ID);
 	}
 
 	@Override

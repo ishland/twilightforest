@@ -13,7 +13,9 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.*;
 import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
+import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
+import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.client.resources.PlayerSkin;
@@ -39,7 +41,7 @@ public class TFGiantRenderer<T extends GiantMiner> extends HumanoidMobRenderer<T
 		this.normalModel = this.getModel();
 		this.slimModel = new GiantModel(context.bakeLayer(ModelLayers.PLAYER_SLIM), true);
 
-		this.addLayer(new GiantItemInHandLayer<>(this, context.getItemRenderer()));
+		this.addLayer(new GiantItemInHandLayer<>(this));
 		this.addLayer(new HumanoidArmorLayer<>(this, new HumanoidModel<>(context.bakeLayer(ModelLayers.PLAYER_INNER_ARMOR)), new HumanoidModel<>(context.bakeLayer(ModelLayers.PLAYER_OUTER_ARMOR)), context.getEquipmentRenderer()));
 	}
 
@@ -87,17 +89,15 @@ public class TFGiantRenderer<T extends GiantMiner> extends HumanoidMobRenderer<T
 		}
 	}
 
-	public static class GiantItemInHandLayer<S extends LivingEntityRenderState, M extends EntityModel<S> & ArmedModel> extends ItemInHandLayer<S, M> {
-		private final ItemRenderer itemRenderer;
+	public static class GiantItemInHandLayer<S extends HumanoidRenderState, M extends EntityModel<S> & ArmedModel> extends ItemInHandLayer<S, M> {
 
-		public GiantItemInHandLayer(RenderLayerParent<S, M> renderer, ItemRenderer itemRenderer) {
-			super(renderer, itemRenderer);
-			this.itemRenderer = itemRenderer;
+		public GiantItemInHandLayer(RenderLayerParent<S, M> renderer) {
+			super(renderer);
 		}
 
 		@Override
-		protected void renderArmWithItem(S state, @Nullable BakedModel model, ItemStack item, ItemDisplayContext context, HumanoidArm arm, PoseStack stack, MultiBufferSource source, int light) {
-			if (!item.isEmpty()) {
+		protected void renderArmWithItem(S renderState, ItemStackRenderState itemStackRenderState, HumanoidArm arm, PoseStack stack, MultiBufferSource source, int light) {
+			if (!itemStackRenderState.isEmpty()) {
 				stack.pushPose();
 				this.getParentModel().translateToHand(arm, stack);
 				stack.mulPose(Axis.XP.rotationDegrees(-90.0F));
@@ -107,7 +107,7 @@ public class TFGiantRenderer<T extends GiantMiner> extends HumanoidMobRenderer<T
 				stack.translate((float) (flag ? -1 : 1) / 16.0F, 0.0D, -0.5D);
 				// TF - scale items down to accurately match the actual size it would be in a giant's hand
 				stack.scale(0.25F, 0.25F, 0.25F);
-				this.itemRenderer.render(item, context, flag, stack, source, light, OverlayTexture.NO_OVERLAY, model);
+				itemStackRenderState.render(stack, source, light, OverlayTexture.NO_OVERLAY);
 				stack.popPose();
 			}
 		}

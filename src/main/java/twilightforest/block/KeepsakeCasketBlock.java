@@ -114,12 +114,12 @@ public class KeepsakeCasketBlock extends SkullChestBlock {
 	}
 
 	@Override
-	public ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader level, BlockPos pos, Player player) {
+	public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData, Player player) {
 		if (state.getValue(BREAKAGE) > 0) {
 			ItemStack itemstack = new ItemStack(this);
 			itemstack.applyComponents(DataComponentPatch.builder().set(TFDataComponents.CASKET_DAMAGE.get(), state.getValue(BREAKAGE)).build());
 			return itemstack;
 		}
-		return super.getCloneItemStack(state, target, level, pos, player);
+		return super.getCloneItemStack(level, pos, state, includeData, player);
 	}
 }

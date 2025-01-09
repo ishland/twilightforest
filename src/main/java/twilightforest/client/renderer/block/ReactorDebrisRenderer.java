@@ -44,7 +44,7 @@ public class ReactorDebrisRenderer implements BlockEntityRenderer<ReactorDebrisB
 		if (entity.getLevel() == null) return;
 
 		poseStack.pushPose();
-		VertexConsumer builder = buffer.getBuffer(RenderType.itemEntityTranslucentCull(InventoryMenu.BLOCK_ATLAS));
+		VertexConsumer builder = buffer.getBuffer(RenderType.itemEntityTranslucentCull(TextureAtlas.LOCATION_BLOCKS));
 		Matrix4f matrix = poseStack.last().pose();
 		QuadRenderInfo info = new QuadRenderInfo(builder, matrix, light, overlay);
 

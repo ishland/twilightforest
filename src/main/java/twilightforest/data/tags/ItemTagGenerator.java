@@ -11,7 +11,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.Tags;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import twilightforest.TwilightForestMod;
 import twilightforest.data.tags.compat.ModdedItemTagGenerator;
 import twilightforest.init.TFBlocks;
@@ -94,8 +93,8 @@ public class ItemTagGenerator extends ModdedItemTagGenerator {
 
 	public static final TagKey<Item> SCEPTERS = create("scepters");
 
-	public ItemTagGenerator(PackOutput output, CompletableFuture<HolderLookup.Provider> future, CompletableFuture<TagLookup<Block>> provider, ExistingFileHelper helper) {
-		super(output, future, provider, helper);
+	public ItemTagGenerator(PackOutput output, CompletableFuture<HolderLookup.Provider> future, CompletableFuture<TagLookup<Block>> provider) {
+		super(output, future, provider);
 	}
 
 	@SuppressWarnings("unchecked")

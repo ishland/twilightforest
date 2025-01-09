@@ -315,7 +315,7 @@ public class UncraftingMenu extends AbstractCraftingMenu {
 	}
 
 	protected static boolean isComplete(List<Ingredient> list) { //TODO: check if properly ported
-		return !list.isEmpty() && list.stream().noneMatch((ingredient) -> ingredient.items().isEmpty());
+		return !list.isEmpty() && list.stream().noneMatch((ingredient) -> ingredient.isEmpty());
 	}
 
 	private static boolean matches(ItemStack input, ItemStack output) {
@@ -608,7 +608,7 @@ public class UncraftingMenu extends AbstractCraftingMenu {
 		ItemStack[] stacks = new ItemStack[recipe.display().size()];
 
 		for (int i = 0; i < recipe.display().size(); i++) {
-			ItemStack[] matchingStacks = recipe.placementInfo().ingredients().get(i).items().stream().filter(s -> !s.is(ItemTagGenerator.BANNED_UNCRAFTING_INGREDIENTS)).map(p -> new ItemStack(p.value())).toArray(ItemStack[]::new);
+			ItemStack[] matchingStacks = recipe.placementInfo().ingredients().get(i).getValues().stream().filter(s -> !s.is(ItemTagGenerator.BANNED_UNCRAFTING_INGREDIENTS)).map(p -> new ItemStack(p.value())).toArray(ItemStack[]::new);
 			stacks[i] = matchingStacks.length > 0 ? matchingStacks[Math.floorMod(this.ingredientsInCycle, matchingStacks.length)] : ItemStack.EMPTY;
 		}
 

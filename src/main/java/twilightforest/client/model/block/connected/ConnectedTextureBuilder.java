@@ -6,20 +6,18 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
-import net.neoforged.neoforge.client.model.generators.CustomLoaderBuilder;
-import net.neoforged.neoforge.client.model.generators.ModelBuilder;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.client.model.generators.template.CustomLoaderBuilder;
 import twilightforest.TwilightForestMod;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("unused")
-public class ConnectedTextureBuilder<T extends ModelBuilder<T>> extends CustomLoaderBuilder<T> {
+public class ConnectedTextureBuilder extends CustomLoaderBuilder {
 
-	private final List<Direction> enabledFaces = new ArrayList<>();
-	private final List<Block> connectableBlocks = new ArrayList<>();
-	private final List<TagKey<Block>> connectableTags = new ArrayList<>();
+	private List<Direction> enabledFaces = new ArrayList<>();
+	private List<Block> connectableBlocks = new ArrayList<>();
+	private List<TagKey<Block>> connectableTags = new ArrayList<>();
 	private boolean renderOnDisabledFaces = true;
 
 	private int baseTintIndex = -1;
@@ -27,54 +25,68 @@ public class ConnectedTextureBuilder<T extends ModelBuilder<T>> extends CustomLo
 	private int tintIndex = -1;
 	private int emissivity = 0;
 
-	protected ConnectedTextureBuilder(T parent, ExistingFileHelper existingFileHelper) {
-		super(TwilightForestMod.prefix("connected_texture_block"), parent, existingFileHelper, false);
+	protected ConnectedTextureBuilder() {
+		super(TwilightForestMod.prefix("connected_texture_block"), false);
 	}
 
-	public static <T extends ModelBuilder<T>> ConnectedTextureBuilder<T> begin(T parent, ExistingFileHelper helper) {
-		return new ConnectedTextureBuilder<>(parent, helper);
+	public static ConnectedTextureBuilder begin() {
+		return new ConnectedTextureBuilder();
 	}
 
-	public ConnectedTextureBuilder<T> addConnectionFaces(Direction... faces) {
+	public ConnectedTextureBuilder addConnectionFaces(Direction... faces) {
 		this.enabledFaces.addAll(List.of(faces));
 		return this;
 	}
 
-	public ConnectedTextureBuilder<T> disableRenderingOnDisabledFaces() {
+	public ConnectedTextureBuilder disableRenderingOnDisabledFaces() {
 		this.renderOnDisabledFaces = false;
 		return this;
 	}
 
-	public ConnectedTextureBuilder<T> setBaseTintIndex(int index) {
+	public ConnectedTextureBuilder setBaseTintIndex(int index) {
 		this.baseTintIndex = index;
 		return this;
 	}
 
-	public ConnectedTextureBuilder<T> setOverlayTintIndex(int index) {
+	public ConnectedTextureBuilder setOverlayTintIndex(int index) {
 		this.tintIndex = index;
 		return this;
 	}
 
-	public ConnectedTextureBuilder<T> setBaseEmissivity(int value) {
+	public ConnectedTextureBuilder setBaseEmissivity(int value) {
 		this.baseEmissivity = value;
 		return this;
 	}
 
-	public ConnectedTextureBuilder<T> setOverlayEmissivity(int value) {
+	public ConnectedTextureBuilder setOverlayEmissivity(int value) {
 		this.emissivity = value;
 		return this;
 	}
 
-	public final ConnectedTextureBuilder<T> connectsTo(Block... blocks) {
+	public final ConnectedTextureBuilder connectsTo(Block... blocks) {
 		this.connectableBlocks.addAll(List.of(blocks));
 		return this;
 	}
 
 	@SuppressWarnings("varargs")
 	@SafeVarargs
-	public final ConnectedTextureBuilder<T> connectsTo(TagKey<Block>... blocks) {
+	public final ConnectedTextureBuilder connectsTo(TagKey<Block>... blocks) {
 		this.connectableTags.addAll(List.of(blocks));
 		return this;
+	}
+
+	@Override
+	protected ConnectedTextureBuilder copyInternal() {
+		ConnectedTextureBuilder builder = new ConnectedTextureBuilder();
+		builder.enabledFaces = List.copyOf(this.enabledFaces);
+		builder.connectableBlocks = List.copyOf(this.connectableBlocks);
+		builder.connectableTags = List.copyOf(this.connectableTags);
+		builder.renderOnDisabledFaces = this.renderOnDisabledFaces;
+		builder.baseTintIndex = this.baseTintIndex;
+		builder.baseEmissivity = this.baseEmissivity;
+		builder.tintIndex = this.tintIndex;
+		builder.emissivity = this.emissivity;
+		return builder;
 	}
 
 	@Override

@@ -8,8 +8,6 @@ import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.neoforged.neoforge.common.Tags;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
-import org.jetbrains.annotations.Nullable;
 import twilightforest.TwilightForestMod;
 import twilightforest.data.tags.compat.ModdedEntityTagGenerator;
 import twilightforest.init.TFEntities;
@@ -25,8 +23,8 @@ public class EntityTagGenerator extends ModdedEntityTagGenerator {
 	public static final TagKey<EntityType<?>> SORTABLE_ENTITIES = create(TwilightForestMod.prefix("sortable_entities"));
 	public static final TagKey<EntityType<?>> MULTIPLAYER_INCLUSIVE_ENTITIES = create(TwilightForestMod.prefix("multiplayer_inclusive_entities"));
 
-	public EntityTagGenerator(PackOutput output, CompletableFuture<HolderLookup.Provider> provider, @Nullable ExistingFileHelper helper) {
-		super(output, provider, helper);
+	public EntityTagGenerator(PackOutput output, CompletableFuture<HolderLookup.Provider> provider) {
+		super(output, provider);
 	}
 
 	@Override

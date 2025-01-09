@@ -11,7 +11,6 @@ import net.minecraft.world.entity.decoration.PaintingVariants;
 import net.minecraft.world.level.block.entity.BannerPattern;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.dimension.DimensionType;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.TFRegistries;
 import twilightforest.TwilightForestMod;
@@ -31,8 +30,8 @@ public class CustomTagGenerator {
 		public static final TagKey<BlockEntityType<?>> RELOCATION_NOT_SUPPORTED = TagKey.create(Registries.BLOCK_ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath("c", "relocation_not_supported"));
 		public static final TagKey<BlockEntityType<?>> IMMOVABLE = TagKey.create(Registries.BLOCK_ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath("c", "immovable"));
 
-		public BlockEntityTagGenerator(PackOutput output, CompletableFuture<HolderLookup.Provider> provider, @Nullable ExistingFileHelper helper) {
-			super(output, Registries.BLOCK_ENTITY_TYPE, provider, TwilightForestMod.ID, helper);
+		public BlockEntityTagGenerator(PackOutput output, CompletableFuture<HolderLookup.Provider> provider) {
+			super(output, Registries.BLOCK_ENTITY_TYPE, provider, TwilightForestMod.ID);
 		}
 
 		@Override
@@ -82,8 +81,8 @@ public class CustomTagGenerator {
 		public static final TagKey<BannerPattern> SNOW_QUEEN_BANNER_PATTERN = create("pattern_item/snow_queen");
 		public static final TagKey<BannerPattern> QUEST_RAM_BANNER_PATTERN = create("pattern_item/quest_ram");
 
-		public BannerPatternTagGenerator(PackOutput output, CompletableFuture<HolderLookup.Provider> provider, @Nullable ExistingFileHelper existingFileHelper) {
-			super(output, Registries.BANNER_PATTERN, provider, TwilightForestMod.ID, existingFileHelper);
+		public BannerPatternTagGenerator(PackOutput output, CompletableFuture<HolderLookup.Provider> provider) {
+			super(output, Registries.BANNER_PATTERN, provider, TwilightForestMod.ID);
 		}
 
 		@Override
@@ -117,8 +116,8 @@ public class CustomTagGenerator {
 		public static final TagKey<WoodPalette> RARE_PALETTES = create("rare");
 		public static final TagKey<WoodPalette> TREASURE_PALETTES = create("treasure");
 
-		public WoodPaletteTagGenerator(PackOutput output, CompletableFuture<HolderLookup.Provider> provider, @Nullable ExistingFileHelper helper) {
-			super(output, TFRegistries.Keys.WOOD_PALETTES, provider, TwilightForestMod.ID, helper);
+		public WoodPaletteTagGenerator(PackOutput output, CompletableFuture<HolderLookup.Provider> provider) {
+			super(output, TFRegistries.Keys.WOOD_PALETTES, provider, TwilightForestMod.ID);
 		}
 
 		@Override
@@ -146,8 +145,8 @@ public class CustomTagGenerator {
 
 		public static final TagKey<DimensionType> ALLOWS_MAGIC_MAP_CHARTING = TagKey.create(Registries.DIMENSION_TYPE, TwilightForestMod.prefix("allows_magic_map_charting"));
 
-		public DimensionTypeTagGenerator(PackOutput output, CompletableFuture<HolderLookup.Provider> provider, @Nullable ExistingFileHelper helper) {
-			super(output, Registries.DIMENSION_TYPE, provider, TwilightForestMod.ID, helper);
+		public DimensionTypeTagGenerator(PackOutput output, CompletableFuture<HolderLookup.Provider> provider) {
+			super(output, Registries.DIMENSION_TYPE, provider, TwilightForestMod.ID);
 		}
 
 		@Override
@@ -165,8 +164,8 @@ public class CustomTagGenerator {
 		public static final TagKey<PaintingVariant> LICH_TOWER_PAINTINGS = TagKey.create(Registries.PAINTING_VARIANT, TwilightForestMod.prefix("tower_paintings"));
 		public static final TagKey<PaintingVariant> LICH_BOSS_PAINTINGS = TagKey.create(Registries.PAINTING_VARIANT, TwilightForestMod.prefix("tower_boss_paintings"));
 
-		public PaintingVariantTagGenerator(PackOutput output, CompletableFuture<HolderLookup.Provider> provider, @Nullable ExistingFileHelper helper) {
-			super(output, Registries.PAINTING_VARIANT, provider, TwilightForestMod.ID, helper);
+		public PaintingVariantTagGenerator(PackOutput output, CompletableFuture<HolderLookup.Provider> provider) {
+			super(output, Registries.PAINTING_VARIANT, provider, TwilightForestMod.ID);
 		}
 
 		@Override

@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
+import net.minecraft.resources.FileToIdConverter;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -29,7 +30,7 @@ public class StalactiteReloadListener extends SimpleJsonResourceReloadListener<J
 	public static final Map<String, List<Stalactite>> STALAGMITES_PER_HILL = new HashMap<>();
 
 	public StalactiteReloadListener() {
-		super(ExtraCodecs.JSON, STALACTITE_DIRECTORY);
+		super(ExtraCodecs.JSON, FileToIdConverter.json(STALACTITE_DIRECTORY));
 	}
 
 	@Override

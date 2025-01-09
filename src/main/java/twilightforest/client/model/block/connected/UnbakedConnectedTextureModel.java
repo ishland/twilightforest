@@ -1,23 +1,11 @@
 package twilightforest.client.model.block.connected;
 
-import com.mojang.math.Transformation;
 import net.minecraft.client.renderer.block.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.client.resources.model.Material;
-import net.minecraft.client.resources.model.ModelBaker;
-import net.minecraft.client.resources.model.ModelState;
+import net.minecraft.client.resources.model.*;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
-import net.neoforged.neoforge.client.RenderTypeGroup;
-import net.neoforged.neoforge.client.model.ExtraFaceData;
-import net.neoforged.neoforge.client.model.SimpleModelState;
-import net.neoforged.neoforge.client.model.geometry.IGeometryBakingContext;
-import net.neoforged.neoforge.client.model.geometry.IUnbakedGeometry;
-import net.neoforged.neoforge.client.model.geometry.UnbakedGeometryHelper;
-import org.apache.commons.lang3.mutable.MutableObject;
 import org.joml.Vector3f;
 
 import java.lang.reflect.Array;
@@ -25,16 +13,14 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 
-public class UnbakedConnectedTextureModel implements IUnbakedGeometry<UnbakedConnectedTextureModel> {
+public class UnbakedConnectedTextureModel implements UnbakedModel {
 
 	private final boolean renderOnDisabledFaces;
 	private final EnumSet<Direction> enabledFaces;
 	private final List<Block> connectableBlocks;
 	private final BlockElement[][] baseElements;
 	private final BlockElement[][][] faceElements;
-	public static final FaceBakery FACE_BAKERY = new FaceBakery();
 
 	public UnbakedConnectedTextureModel(EnumSet<Direction> enabledFaces, boolean renderOnDisabledFaces, List<Block> connectableBlocks, int baseTintIndex, int baseEmissivity, int tintIndex, int emissivity) {
 		//a list of block faces that should have connected textures.
@@ -68,23 +54,23 @@ public class UnbakedConnectedTextureModel implements IUnbakedGeometry<UnbakedCon
 	}
 
 	@Override
-	public BakedModel bake(IGeometryBakingContext context, ModelBaker baker, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelState, List<ItemOverride> overrides) {
-		Transformation transformation = context.getRootTransform();
-		if (!transformation.isIdentity()) {
-			modelState = new SimpleModelState(modelState.getRotation().compose(transformation), modelState.isUvLocked());
-		}
+	public BakedModel bake(TextureSlots textureSlots, ModelBaker baker, ModelState modelState, boolean hasAmbientOcclusion, boolean useBlockLight, ItemTransforms transforms) {
+//		Transformation transformation = context.getRootTransform();
+//		if (!transformation.isIdentity()) {
+//			modelState = new SimpleModelState(modelState.getRotation().compose(transformation), modelState.isUvLocked());
+//		}
 
 		@SuppressWarnings("unchecked") //this is fine, I hope
 		List<BakedQuad>[] baseQuads = (List<BakedQuad>[]) Array.newInstance(List.class, 6);
 
-		if (context.hasMaterial("base_texture")) {
-			TextureAtlasSprite baseTexture = spriteGetter.apply(context.getMaterial("base_texture"));
+		if (textureSlots.getMaterial("base_texture") != null) {
+			TextureAtlasSprite baseTexture = baker.findSprite(textureSlots, "base_texture");
 
 			for (int dir = 0; dir < 6; dir++) {
 				baseQuads[dir] = new ArrayList<>();
 
 				for (BlockElement element : this.baseElements[dir]) {
-					baseQuads[dir].add(FACE_BAKERY.bakeQuad(element.from, element.to, element.faces.values().iterator().next(), baseTexture, Direction.values()[dir], modelState, element.rotation, element.shade, element.lightEmission));
+					baseQuads[dir].add(FaceBakery.bakeQuad(element.from, element.to, element.faces.values().iterator().next(), baseTexture, Direction.values()[dir], modelState, element.rotation, element.shade, element.lightEmission));
 				}
 			}
 		} else {
@@ -93,8 +79,8 @@ public class UnbakedConnectedTextureModel implements IUnbakedGeometry<UnbakedCon
 
 		//we'll use this to figure out which texture to use with the Connected Texture logic
 		//NONE uses the first one, everything else uses the 2nd one
-		TextureAtlasSprite[] sprites = new TextureAtlasSprite[]{spriteGetter.apply(context.getMaterial("overlay_texture")), spriteGetter.apply(context.getMaterial("overlay_connected")), spriteGetter.apply(context.getMaterial("particle"))};
-		if (!context.hasMaterial("particle")) {
+		TextureAtlasSprite[] sprites = new TextureAtlasSprite[]{baker.findSprite(textureSlots, "overlay_texture"), baker.findSprite(textureSlots, "overlay_connected"), baker.findSprite(textureSlots, "particle")};
+		if (textureSlots.getMaterial("particle") == null) {
 			sprites[2] = sprites[0];
 		}
 
@@ -104,13 +90,16 @@ public class UnbakedConnectedTextureModel implements IUnbakedGeometry<UnbakedCon
 			for (int quad = 0; quad < 4; quad++) {
 				for (int type = 0; type < 5; type++) {
 					BlockElement element = this.faceElements[dir][quad][type];
-					quads[dir][quad][type] = FACE_BAKERY.bakeQuad(element.from, element.to, element.faces.values().iterator().next(), ConnectionLogic.values()[type].chooseTexture(sprites), Direction.values()[dir], modelState, element.rotation, element.shade, element.lightEmission);
+					quads[dir][quad][type] = FaceBakery.bakeQuad(element.from, element.to, element.faces.values().iterator().next(), ConnectionLogic.values()[type].chooseTexture(sprites), Direction.values()[dir], modelState, element.rotation, element.shade, element.lightEmission);
 				}
 			}
 		}
 
-		ResourceLocation renderTypeHint = context.getRenderTypeHint();
-		RenderTypeGroup renderTypes = renderTypeHint != null ? context.getRenderType(renderTypeHint) : RenderTypeGroup.EMPTY;
-		return new ConnectedTextureModel(this.enabledFaces, this.renderOnDisabledFaces, this.connectableBlocks, baseQuads, quads, sprites[2], new BakedOverrides(baker, overrides, spriteGetter), context.getTransforms(), renderTypes);
+		return new ConnectedTextureModel(this.enabledFaces, this.renderOnDisabledFaces, this.connectableBlocks, baseQuads, quads, sprites[2], transforms);
+	}
+
+	@Override
+	public void resolveDependencies(Resolver resolver) {
+
 	}
 }

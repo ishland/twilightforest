@@ -85,11 +85,6 @@ public class SinisterSpawnerBlockEntity extends BlockEntity implements Spawner {
 	}
 
 	@Override
-	public boolean onlyOpCanSetNbt() {
-		return true;
-	}
-
-	@Override
 	public void setEntityId(EntityType<?> type, RandomSource random) {
 		this.spawner.setEntityId(type, this.level, random, this.worldPosition);
 		this.setChanged();

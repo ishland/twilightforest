@@ -561,7 +561,7 @@ public class UrGhast extends BaseTFBoss {
 				double x = (this.random.nextDouble() - 0.5D) * 0.05D * i;
 				double y = (this.random.nextDouble() - 0.5D) * 0.05D * i;
 				double z = (this.random.nextDouble() - 0.5D) * 0.05D * i;
-				this.level().addParticle(DustParticleOptions.REDSTONE, false, particlePos.x() + x, particlePos.y() + y, particlePos.z() + z, 0.0D, 0.0D, 0.0D);
+				this.level().addParticle(DustParticleOptions.REDSTONE, particlePos.x() + x, particlePos.y() + y, particlePos.z() + z, 0.0D, 0.0D, 0.0D);
 			}
 		}
 	}

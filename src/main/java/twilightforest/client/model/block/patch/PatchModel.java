@@ -153,7 +153,7 @@ public record PatchModel(TextureAtlasSprite texture, boolean shaggify) implement
 			default -> new BlockFaceUV(new float[]{minX, minZ, maxX, maxZ}, 0);
 		});
 
-		return UnbakedConnectedTextureModel.FACE_BAKERY.bakeQuad(new Vector3f(minX, minY, minZ), new Vector3f(maxX, maxY, maxZ), face, this.texture, direction, new SimpleModelState(Transformation.identity()), null, true, 0);
+		return FaceBakery.bakeQuad(new Vector3f(minX, minY, minZ), new Vector3f(maxX, maxY, maxZ), face, this.texture, direction, new SimpleModelState(Transformation.identity()), null, true, 0);
 	}
 
 	// --- Boilerplating ---------------------------------------------------
@@ -174,8 +174,8 @@ public record PatchModel(TextureAtlasSprite texture, boolean shaggify) implement
 	}
 
 	@Override
-	public boolean isCustomRenderer() {
-		return false;
+	public ItemTransforms getTransforms() {
+		return ItemTransforms.NO_TRANSFORMS;
 	}
 
 	@Override

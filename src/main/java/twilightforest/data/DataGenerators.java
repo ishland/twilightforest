@@ -12,12 +12,10 @@ import net.minecraft.util.InclusiveRange;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.data.DatapackBuiltinEntriesProvider;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import twilightforest.TwilightForestMod;
 import twilightforest.data.custom.QuestGenerator;
 import twilightforest.data.custom.stalactites.StalactiteGenerator;
-import twilightforest.data.recipes.CraftingGenerator;
 import twilightforest.data.recipes.CraftingGeneratorRunner;
 import twilightforest.data.tags.*;
 
@@ -28,52 +26,51 @@ import java.util.concurrent.CompletableFuture;
 public class DataGenerators {
 
 	@SubscribeEvent
-	public static void gatherData(GatherDataEvent event) {
+	public static void gatherData(GatherDataEvent.Client event) {
 		DataGenerator generator = event.getGenerator();
 		PackOutput output = event.getGenerator().getPackOutput();
-		ExistingFileHelper helper = event.getExistingFileHelper();
 
 		//client generators
-		generator.addProvider(event.includeClient(), new BlockstateGenerator(output, helper));
-		generator.addProvider(event.includeClient(), new ItemModelGenerator(output, helper));
-		generator.addProvider(event.includeClient(), new ParticleGenerator(output, helper));
-		generator.addProvider(event.includeClient(), new SoundGenerator(output, helper));
+		//generator.addProvider(true, new BlockstateGenerator(output));
+		//generator.addProvider(true, new ItemModelGenerator(output));
+		generator.addProvider(true, new ParticleGenerator(output));
+		generator.addProvider(true, new SoundGenerator(output));
 
 		//registry-based stuff
 		DatapackBuiltinEntriesProvider datapackProvider = new RegistryDataGenerator(output, event.getLookupProvider());
 		CompletableFuture<HolderLookup.Provider> lookupProvider = datapackProvider.getRegistryProvider();
-		generator.addProvider(event.includeServer(), datapackProvider);
-		generator.addProvider(event.includeServer(), new BiomeTagGenerator(output, lookupProvider, helper));
-		generator.addProvider(event.includeServer(), new CustomTagGenerator.BannerPatternTagGenerator(output, lookupProvider, helper));
-		generator.addProvider(event.includeServer(), new CustomTagGenerator.DimensionTypeTagGenerator(output, lookupProvider, helper));
-		generator.addProvider(event.includeServer(), new CustomTagGenerator.WoodPaletteTagGenerator(output, lookupProvider, helper));
-		generator.addProvider(event.includeServer(), new CustomTagGenerator.PaintingVariantTagGenerator(output, lookupProvider, helper));
-		generator.addProvider(event.includeServer(), new DamageTypeTagGenerator(output, lookupProvider, helper));
-		generator.addProvider(event.includeServer(), new StructureTagGenerator(output, lookupProvider, helper));
-		generator.addProvider(event.includeServer(), new TFAdvancementProvider(output, lookupProvider, helper));
-		generator.addProvider(event.includeServer(), new LootGenerator(output, lookupProvider));
+		generator.addProvider(true, datapackProvider);
+		generator.addProvider(true, new BiomeTagGenerator(output, lookupProvider));
+		generator.addProvider(true, new CustomTagGenerator.BannerPatternTagGenerator(output, lookupProvider));
+		generator.addProvider(true, new CustomTagGenerator.DimensionTypeTagGenerator(output, lookupProvider));
+		generator.addProvider(true, new CustomTagGenerator.WoodPaletteTagGenerator(output, lookupProvider));
+		generator.addProvider(true, new CustomTagGenerator.PaintingVariantTagGenerator(output, lookupProvider));
+		generator.addProvider(true, new DamageTypeTagGenerator(output, lookupProvider));
+		generator.addProvider(true, new StructureTagGenerator(output, lookupProvider));
+		generator.addProvider(true, new TFAdvancementProvider(output, lookupProvider));
+		generator.addProvider(true, new LootGenerator(output, lookupProvider));
 
 		//server generators
-		generator.addProvider(event.includeServer(), new DataMapGenerator(output, lookupProvider));
-		generator.addProvider(event.includeServer(), new StalactiteGenerator(output));
-		generator.addProvider(event.includeServer(), new TFStructureUpdater("structures", output, helper));
+		generator.addProvider(true, new DataMapGenerator(output, lookupProvider));
+		generator.addProvider(true, new StalactiteGenerator(output));
+		generator.addProvider(true, new TFStructureUpdater("structures", output, event.getResourceManager(PackType.SERVER_DATA)));
 
 		//normal tags
-		BlockTagGenerator blocktags = new BlockTagGenerator(output, lookupProvider, helper);
-		generator.addProvider(event.includeServer(), blocktags);
-		generator.addProvider(event.includeServer(), new CustomTagGenerator.BlockEntityTagGenerator(output, lookupProvider, helper));
-		generator.addProvider(event.includeServer(), new FluidTagGenerator(output, lookupProvider, helper));
-		generator.addProvider(event.includeServer(), new ItemTagGenerator(output, lookupProvider, blocktags.contentsGetter(), helper));
-		generator.addProvider(event.includeServer(), new EntityTagGenerator(output, lookupProvider, helper));
-		generator.addProvider(event.includeServer(), new CraftingGeneratorRunner(output, lookupProvider));
-		generator.addProvider(event.includeServer(), new LootModifierGenerator(output, lookupProvider));
+		BlockTagGenerator blocktags = new BlockTagGenerator(output, lookupProvider);
+		generator.addProvider(true, blocktags);
+		generator.addProvider(true, new CustomTagGenerator.BlockEntityTagGenerator(output, lookupProvider));
+		generator.addProvider(true, new FluidTagGenerator(output, lookupProvider));
+		generator.addProvider(true, new ItemTagGenerator(output, lookupProvider, blocktags.contentsGetter()));
+		generator.addProvider(true, new EntityTagGenerator(output, lookupProvider));
+		generator.addProvider(true, new CraftingGeneratorRunner(output, lookupProvider));
+		generator.addProvider(true, new LootModifierGenerator(output, lookupProvider));
 
 		//these have to go last due to magic paintings
 		//when magic paintings are registered their atlas and lang content is too
-		generator.addProvider(event.includeClient(), new AtlasGenerator(output, lookupProvider, helper));
-		generator.addProvider(event.includeClient(), new LangGenerator(output));
+		generator.addProvider(true, new AtlasGenerator(output, lookupProvider));
+		generator.addProvider(true, new LangGenerator(output));
 
-		generator.addProvider(event.includeServer(), new QuestGenerator(output));
+		generator.addProvider(true, new QuestGenerator(output));
 
 		//pack.mcmeta
 		generator.addProvider(true, new PackMetadataGenerator(output).add(PackMetadataSection.TYPE, new PackMetadataSection(

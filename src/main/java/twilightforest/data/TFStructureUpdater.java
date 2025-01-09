@@ -13,10 +13,10 @@ import net.minecraft.nbt.NbtIo;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.MultiPackResourceManager;
 import net.minecraft.server.packs.resources.Resource;
+import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.datafix.DataFixTypes;
 import net.minecraft.util.datafix.DataFixers;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import twilightforest.TwilightForestMod;
 
 import javax.annotation.Nonnull;
@@ -33,18 +33,12 @@ import java.util.concurrent.CompletableFuture;
 public class TFStructureUpdater implements DataProvider {
 	private final String basePath;
 	private final PackOutput output;
-	private final MultiPackResourceManager resources;
+	private final ResourceManager resources;
 
-	public TFStructureUpdater(String basePath, PackOutput output, ExistingFileHelper helper) {
+	public TFStructureUpdater(String basePath, PackOutput output, ResourceManager manager) {
 		this.basePath = basePath;
 		this.output = output;
-		try {
-			Field serverData = ExistingFileHelper.class.getDeclaredField("serverData");
-			serverData.setAccessible(true);
-			this.resources = (MultiPackResourceManager) serverData.get(helper);
-		} catch (NoSuchFieldException | IllegalAccessException e) {
-			throw new RuntimeException(e);
-		}
+		this.resources = manager;
 	}
 
 	@Override

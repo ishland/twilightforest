@@ -89,10 +89,10 @@ public class JarBlock extends BaseEntityBlock implements SimpleWaterloggedBlock 
 	}
 
 	@Override
-	public ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader level, BlockPos pos, Player player) {
+	public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData, Player player) {
 		return level.getBlockEntity(pos) instanceof JarBlockEntity jarBlockEntity
 			? jarBlockEntity.getJarAsItem()
-			: super.getCloneItemStack(state, target, level, pos, player);
+			: super.getCloneItemStack(level, pos, state, includeData, player);
 	}
 
 	@Override

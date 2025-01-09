@@ -17,6 +17,7 @@ import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.client.renderer.entity.state.PlayerRenderState;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.sounds.MusicInfo;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
@@ -27,6 +28,7 @@ import net.minecraft.server.packs.resources.ReloadableResourceManager;
 import net.minecraft.sounds.Music;
 import net.minecraft.sounds.Musics;
 import net.minecraft.util.Mth;
+import net.minecraft.util.random.SimpleWeightedRandomList;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -68,6 +70,7 @@ import java.time.Month;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 public class ClientEvents {
 	private static final VoxelShape GIANT_BLOCK = Shapes.box(0.0D, 0.0D, 0.0D, 4.0D, 4.0D, 4.0D);
@@ -113,13 +116,6 @@ public class ClientEvents {
 	private static void handleGameBootup(ScreenEvent.Init.Post event) {
 		if (firstTitleScreenShown || !(event.getScreen() instanceof TitleScreen)) return;
 
-		// Registering this resource listener earlier than the main screen will cause a crash
-		// Yes, crashing happens if registered to RegisterClientReloadListenersEvent
-		if (Minecraft.getInstance().getResourceManager() instanceof ReloadableResourceManager resourceManager) {
-			resourceManager.registerReloadListener(ISTER.INSTANCE.get());
-			TwilightForestMod.LOGGER.debug("Registered ISTER listener");
-		}
-
 		if (RegistrationEvents.isOptifinePresent() && !TFConfig.disableOptifineNagScreen) {
 			Minecraft.getInstance().setScreen(new OptifineWarningScreen(event.getScreen()));
 		}
@@ -141,9 +137,16 @@ public class ClientEvents {
 	}
 
 	private static void setMusicInDimension(SelectMusicEvent event) {
-		Music music = event.getOriginalMusic();
-		if (Minecraft.getInstance().level != null && Minecraft.getInstance().player != null && (music == Musics.CREATIVE || music == Musics.UNDER_WATER) && TFDimension.isTwilightWorldOnClient(Minecraft.getInstance().level)) {
-			event.setMusic(Minecraft.getInstance().level.getBiomeManager().getNoiseBiomeAtPosition(Minecraft.getInstance().player.blockPosition()).value().getBackgroundMusic().orElse(Musics.GAME));
+		MusicInfo music = event.getOriginalMusic();
+		if (Minecraft.getInstance().level != null && Minecraft.getInstance().player != null && (music.music() == Musics.CREATIVE || music.music() == Musics.UNDER_WATER) && TFDimension.isTwilightWorldOnClient(Minecraft.getInstance().level)) {
+			Optional<SimpleWeightedRandomList<Music>> optional = Minecraft.getInstance().level.getBiomeManager().getNoiseBiomeAtPosition(Minecraft.getInstance().player.blockPosition()).value().getBackgroundMusic();
+
+			if (optional.isPresent()) {
+				Optional<Music> optional1 = optional.get().getRandomValue(Minecraft.getInstance().level.getRandom());
+				event.setMusic(new MusicInfo(optional1.orElse(null), music.volume()));
+			} else {
+				event.setMusic(new MusicInfo(Musics.GAME));
+			}
 		}
 	}
 

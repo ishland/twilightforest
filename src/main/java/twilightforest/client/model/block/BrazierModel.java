@@ -1,7 +1,5 @@
 package twilightforest.client.model.block;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -12,24 +10,9 @@ import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.RenderType;
 
 public class BrazierModel extends Model {
-	private final ModelPart leg1;
-	private final ModelPart leg2;
-	private final ModelPart leg3;
-	private final ModelPart leg4;
-	private final ModelPart basket;
-	private final ModelPart charcoal;
-	private final ModelPart rope;
 
 	public BrazierModel(ModelPart root) {
 		super(root, RenderType::entityCutoutNoCull);
-
-		this.leg1 = root.getChild("leg1");
-		this.leg2 = root.getChild("leg2");
-		this.leg3 = root.getChild("leg3");
-		this.leg4 = root.getChild("leg4");
-		this.basket = root.getChild("basket");
-		this.charcoal = root.getChild("charcoal");
-		this.rope = root.getChild("rope");
 	}
 
 	public static LayerDefinition create() {

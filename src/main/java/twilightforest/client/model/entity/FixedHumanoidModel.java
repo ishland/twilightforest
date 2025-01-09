@@ -23,8 +23,8 @@ public class FixedHumanoidModel<T extends HumanoidRenderState> extends HumanoidM
 	@Override
 	public void setupAnim(T state) {
 		super.setupAnim(state);
-		HumanoidModel.ArmPose leftPose = this.getArmPose(state, HumanoidArm.LEFT);
-		HumanoidModel.ArmPose rightPose = this.getArmPose(state, HumanoidArm.RIGHT);
+		HumanoidModel.ArmPose leftPose = state.leftArmPose;
+		HumanoidModel.ArmPose rightPose = state.rightArmPose;
 		this.head.xRot = state.xRot * Mth.DEG_TO_RAD;
 		this.head.yRot = state.yRot * Mth.DEG_TO_RAD;
 

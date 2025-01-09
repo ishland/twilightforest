@@ -7,8 +7,6 @@ import net.minecraft.data.tags.EntityTypeTagsProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
-import org.jetbrains.annotations.Nullable;
 import twilightforest.TwilightForestMod;
 import twilightforest.data.tags.EntityTagGenerator;
 import twilightforest.init.TFEntities;
@@ -30,8 +28,8 @@ public class ModdedEntityTagGenerator extends EntityTypeTagsProvider {
 
 	public static final TagKey<EntityType<?>> IE_SHADER_BLACKLIST = createTagFor("immersiveengineering", "shaderbag/blacklist");
 
-	public ModdedEntityTagGenerator(PackOutput output, CompletableFuture<HolderLookup.Provider> provider, @Nullable ExistingFileHelper helper) {
-		super(output, provider, TwilightForestMod.ID, helper);
+	public ModdedEntityTagGenerator(PackOutput output, CompletableFuture<HolderLookup.Provider> provider) {
+		super(output, provider, TwilightForestMod.ID);
 	}
 
 	@Override

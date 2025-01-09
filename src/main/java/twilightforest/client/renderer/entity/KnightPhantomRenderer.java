@@ -20,7 +20,7 @@ public class KnightPhantomRenderer extends HumanoidMobRenderer<KnightPhantom, Kn
 
 	public KnightPhantomRenderer(EntityRendererProvider.Context context) {
 		super(context, new KnightPhantomModel(context.bakeLayer(TFModelLayers.KNIGHT_PHANTOM)), 0.625F);
-		this.addLayer(new ItemInHandLayer<>(this, context.getItemRenderer()));
+		this.addLayer(new ItemInHandLayer<>(this));
 		this.addLayer(new HumanoidArmorLayer<>(this, new KnightPhantomModel(context.bakeLayer(ModelLayers.PLAYER_INNER_ARMOR)), new KnightPhantomModel(context.bakeLayer(ModelLayers.PLAYER_OUTER_ARMOR)), context.getEquipmentRenderer()));
 	}
 

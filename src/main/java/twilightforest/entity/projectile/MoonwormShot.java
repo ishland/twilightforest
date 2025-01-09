@@ -67,7 +67,7 @@ public class MoonwormShot extends TFThrowable {
 	public void handleEntityEvent(byte id) {
 		if (id == EntityEvent.DEATH) {
 			for (int i = 0; i < 8; ++i) {
-				this.level().addParticle(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.SLIME_BLOCK.defaultBlockState()), true, this.getX(), this.getY() + 0.1D, this.getZ(), 0.0D, 0.0D, 0.0D);
+				this.level().addParticle(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.SLIME_BLOCK.defaultBlockState()), this.getX(), this.getY() + 0.1D, this.getZ(), 0.0D, 0.0D, 0.0D);
 			}
 		} else {
 			super.handleEntityEvent(id);

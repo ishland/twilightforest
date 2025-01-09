@@ -189,8 +189,8 @@ public class MinoshroomModel extends HumanoidModel<MinoshroomRenderState> implem
 	@Override
 	public void setupAnim(MinoshroomRenderState state) {
 		// copied from HumanoidModel
-		HumanoidModel.ArmPose leftPose = this.getArmPose(state, HumanoidArm.LEFT);
-		HumanoidModel.ArmPose rightPose = this.getArmPose(state, HumanoidArm.RIGHT);
+		HumanoidModel.ArmPose leftPose = state.leftArmPose;
+		HumanoidModel.ArmPose rightPose = state.rightArmPose;
 		this.head.yRot = state.yRot * Mth.DEG_TO_RAD;
 		this.head.xRot = state.xRot * Mth.DEG_TO_RAD;
 		this.hat.yRot = this.head.yRot;

@@ -2,7 +2,6 @@ package twilightforest.data;
 
 import net.minecraft.data.PackOutput;
 import net.minecraft.sounds.SoundEvents;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.common.data.SoundDefinition;
 import twilightforest.TwilightForestMod;
 import twilightforest.data.helpers.TFSoundProvider;
@@ -10,8 +9,8 @@ import twilightforest.init.TFSounds;
 
 public class SoundGenerator extends TFSoundProvider {
 
-	public SoundGenerator(PackOutput output, ExistingFileHelper helper) {
-		super(output, helper);
+	public SoundGenerator(PackOutput output) {
+		super(output);
 	}
 
 	@Override
